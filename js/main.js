@@ -13,7 +13,6 @@ export default class Main {
     constructor() {
         // 维护当前requestAnimationFrame的id
         this.aniId = 0
-        console.log(1)
         this.homePage()
     }
 
@@ -41,7 +40,7 @@ export default class Main {
 
         // 开始游戏按钮事件
         if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
-          
+          console.log("开始游戏")
         }
     }
 
