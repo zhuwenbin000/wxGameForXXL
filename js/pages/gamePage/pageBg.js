@@ -1,4 +1,4 @@
-import Sprite from '../base/sprite'
+import Sprite from '../../base/sprite'
 
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight

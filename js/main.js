@@ -1,71 +1,65 @@
-import BackGround from './homePage/background'
-import PageBtn from './homePage/pageBtn'
-import Music from './runtime/music'
+import HomePage from './pages/homePage/index'
+import GamePage from './pages/gamePage/index'
+import FriendsRank from './pages/friendsRank/index'
+import WorldRank from './pages/worldRank/index'
 import DataBus from './databus'
 
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 
 /**
- * 游戏主函数
+ * 根据场景id渲染页面
  */
 export default class Main {
-    constructor() {
-        // 维护当前requestAnimationFrame的id
-        this.aniId = 0
-        this.homePage()
-    }
+  constructor() {
+    this.renderPage()
+  }
 
-    homePage() {
-        this.bg = new BackGround(ctx)
-        this.pageBtn = new PageBtn(ctx)
-        this.music = new Music()
+  renderPage() {
+    let self = this
+    let pageState = databus.pageState
 
-        this.bindLoop = this.loop.bind(this)
+    self.homePage = new HomePage(ctx)
+    self.gamePage = new GamePage(ctx)
+    self.friendsRank = new FriendsRank(ctx)
+    self.worldRank = new WorldRank(ctx)
 
-        // 清除上一局的动画
-        window.cancelAnimationFrame(this.aniId);
+    //每隔50毫秒判断一次场景是否发生变化
+    let timeLine = setInterval(() => {
 
-        this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
-    }
-
-
-    // 首页按钮事件处理逻辑
-    touchStartHandler(e) {
-        e.preventDefault()
-        let x = e.touches[0].clientX
-        let y = e.touches[0].clientY
-
-        let startBtnArea = this.pageBtn.startBtnArea
-
-        // 开始游戏按钮事件
-        if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
-          console.log("开始游戏")
+      //首页
+      if (databus.scene == 0) {
+        if (!pageState.homePage) {
+          databus.pageStateUpdate('homePage')
+          self.homePage.restart(ctx)
         }
-    }
+      }
 
-    /**
-   * canvas重绘函数
-   * 每一帧重新绘制所有的需要展示的元素
-   */
-    render() {
+      //游戏页
+      if (databus.scene == 1) {
+        if (!pageState.gamePage) {
+          databus.pageStateUpdate('gamePage')
+          self.gamePage.restart(ctx)
+        }
+      }
+      
+      //好友排行榜
+      if (databus.scene == 2) {
+        if (!pageState.friendsRank) {
+          databus.pageStateUpdate('friendsRank')
+          self.friendsRank.restart(ctx)
+        }
+      }
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        
-        this.bg.render(ctx)
-        this.pageBtn.render(ctx)
+      //世界排行榜
+      if (databus.scene == 3) {
+        if (!pageState.worldRank) {
+          databus.pageStateUpdate('worldRank')
+          self.worldRank.restart(ctx)
+        }
+      }
 
-        // 按钮点击事件
-        this.touchHandler = this.touchStartHandler.bind(this)
-        canvas.addEventListener('touchstart', this.touchHandler)
+    },50)
+  }
 
-    }
-
-    // 实现游戏帧循环
-    loop() {
-
-        this.render()
-
-        this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
-    }
 }

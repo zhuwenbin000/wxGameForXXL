@@ -25,10 +25,7 @@ export default class PageBtn {
 
   startBtn(ctx) {
     ctx.drawImage(startBtn, 0, 0, 300, 80, screenWidth / 2 - 150, screenHeight / 2 - 120, 300, 80)
-    /**
-     * 开始游戏按钮区域
-     * 方便简易判断按钮点击
-     */
+    //开始游戏按钮区域
     this.startBtnArea = {
       startX: screenWidth / 2 - 150,
       startY: screenHeight / 2 - 120,
@@ -39,10 +36,24 @@ export default class PageBtn {
 
   friendsRankBtn(ctx) {
     ctx.drawImage(friendsRankBtn, 0, 0, 150, 80, screenWidth / 2 - 150, screenHeight / 2 - 20, 150, 80)
+    //好友排行榜按钮区域
+    this.friendsBtnArea = {
+      startX: screenWidth / 2 - 150,
+      startY: screenHeight / 2 - 20,
+      endX: screenWidth / 2,
+      endY: screenHeight / 2 - 20 + 80
+    }
   }
 
   worldRankBtn(ctx) {
     ctx.drawImage(worldRankBtn, 0, 0, 140, 80, screenWidth / 2 + 10, screenHeight / 2 - 20, 140, 80)
+    //世界排行榜按钮区域
+    this.worldBtnArea = {
+      startX: screenWidth / 2 + 10,
+      startY: screenHeight / 2 - 20,
+      endX: screenWidth / 2 + 150,
+      endY: screenHeight / 2 - 20 + 80
+    }
   }
 
 }

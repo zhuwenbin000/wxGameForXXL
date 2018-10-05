@@ -18,35 +18,36 @@ export default class DataBus {
   }
 
   reset() {
+    this.scene      = 0
     this.frame      = 0
     this.score      = 0
     this.bullets    = []
     this.enemys     = []
     this.animations = []
     this.gameOver   = false
+    this.pageState = {
+      homePage: false,
+      gamePage: false,
+      friendsRank: false,
+      worldRank: false
+    }
   }
 
   /**
-   * 回收敌人，进入对象池
-   * 此后不进入帧循环
+   * 页面状态变化
    */
-  removeEnemey(enemy) {
-    let temp = this.enemys.shift()
+  pageStateUpdate(page) {
+    
+    this.pageState[page] = true
 
-    temp.visible = false
+    //重置其他页面状态
+    for (var i in this.pageState) {
+      if(i != page){
+        this.pageState[i] = false
+      }
+    }
 
-    this.pool.recover('enemy', enemy)
   }
 
-  /**
-   * 回收子弹，进入对象池
-   * 此后不进入帧循环
-   */
-  removeBullets(bullet) {
-    let temp = this.bullets.shift()
-
-    temp.visible = false
-
-    this.pool.recover('bullet', bullet)
-  }
+  
 }
