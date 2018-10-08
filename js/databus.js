@@ -19,18 +19,20 @@ export default class DataBus {
 
   reset() {
     this.scene      = 0
-    this.frame      = 0
-    this.score      = 0
-    this.bullets    = []
-    this.enemys     = []
-    this.animations = []
-    this.gameOver   = false
+    this.rowNum = 6
+    this.colNum = 6
     this.pageState = {
       homePage: false,
       gamePage: false,
       friendsRank: false,
       worldRank: false
     }
+    this.frame      = 0
+    this.score      = 0
+    this.bullets    = []
+    this.enemys     = []
+    this.animations = []
+    this.gameOver   = false
   }
 
   /**

@@ -1,45 +1,156 @@
-import Music from '../../music/music'
-import DataBus from '../../databus'
+import Map from './map'
 
-let databus = new DataBus()
-/**
- * 游戏页
- */
 export default class Index {
-  constructor() {
+  constructor(ctx) {
     // 维护当前requestAnimationFrame的id
     this.aniId = 1
+    //帧编号
+    this.f = 0;
+    //当前游戏状态
+    this.STATE = "爆破检查";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
+
+    //加载所有资源，资源都load之后，定时器开启
+    this.R = {
+      "bg": "images/bg.png",
+      "gameBg": "images/gameBg.png",
+      "icons": "images/icons.png",
+      "baozha": "images/baozha.png"
+    }
+    //把所有的图片放到一个对象中
+    this.Robj = {};	//两个对象有相同的k
+    //图片总数
+    var amount = _.keys(this.R).length;
+    //已经加载好的图片数量
+    var already = 0;
+    //备份
+    var self = this;
+    //是否触发拖拽
+    this.istuozhuai = false;
+
+    // 遍历R对象，把真实image对象，让如this.Robj中
+    for (var k in this.R) {
+      this.Robj[k] = new Image();
+      this.Robj[k].src = this.R[k];
+    }
   }
 
   restart(ctx) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.ctx = ctx
+    //地图，唯一的实例
+    this.map = new Map(ctx)
+    //添加监听
+    // this.bindEvent()
+    this.touchStartHandler = this.touchStart.bind(this)
+    canvas.addEventListener('touchstart', this.touchStartHandler)
 
-    ctx.fillStyle = '#ccc';  //设置填充的背景颜色
-    ctx.fillRect(0, 0, 100, 100); //绘制 800*300 像素的已填充矩形：
-    ctx.fillStyle = '#fff';
-    ctx.strokeStyle = '#fff'; //设置笔触的颜色
-    ctx.font = "bold 40px '字体','字体','微软雅黑','宋体'"; //设置字体
-    ctx.fillText('游戏页', 140, 130); //设置文本内容
-    ctx.fillText('返回', 10, 50); //设置文本内容
+		//主循环开始
+    this.bindLoop = this.loop.bind(this)
 
-    // this.music = new Music()
-    // this.touchEvent = false
-    // this.bindLoop = this.loop.bind(this)
-
-    // // 清除上一帧的动画
-    // window.cancelAnimationFrame(this.aniId);
-    // this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
+    // 清除上一帧的动画
+    window.cancelAnimationFrame(this.aniId)
+    this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
+    
   }
 
-  //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
+  touchStart(e){
+
+    e.preventDefault()
+    let x = e.touches[0].clientX
+    let y = e.touches[0].clientY
+
+    var self = this;
+    // if(x < 15 && y < 150 && x > canvas.width - 30){
+    //   return
+    // }
+    //记录手指按下时候的位置
+    self.col1 = parseInt(x / 40);
+    self.row1 = parseInt((y - 180) / 40);
+    console.log(self.col1,self.row1)
+
+    this.touchMoveHandler = this.touchMove.bind(this)
+    canvas.addEventListener('touchmove', this.touchMoveHandler)
+
+    canvas.addEventListener('touchend', () => {
+      canvas.removeEventListener('touchmove', this.touchMoveHandler)
+    })
+
+  }
+
+  touchMove(e) {
+    e.preventDefault();
+
+    let x = e.touches[0].clientX
+    let y = e.touches[0].clientY
+
+    if (this.STATE != "静稳状态") {
+      return;
+    }
+    //实时记录手指移动的位置
+    this.col2 = parseInt(x / 40);
+    this.row2 = parseInt((y - 180) / 40);
+
+    this.map.createBlocksByQR();
+    //判定谁滑动向谁
+    if (this.col2 != this.col1 || this.row2 != this.row1) {
+      console.log("从" + this.row1 + "," + this.col1 + "滑到了" + this.row2 + "," + this.col2);
+      //删除自己的监听，防止再次触发
+      canvas.removeEventListener('touchmove', this.touchMoveHandler)
+      //命令元素交换位置
+      this.map.blocks[this.row1][this.col1].moveTo(this.row2, this.col2, 6);
+      this.map.blocks[this.row2][this.col2].moveTo(this.row1, this.col1, 6);
+      // //命令试探是否能消除
+
+      //改变标记
+      this.istuozhuai = true;
+      //写当前帧
+      this.starttuozhuai = this.f;
+    }
+
+  }
+
+  //canvas重绘函数,每一帧重新绘制所有的需要展示的元素
   render(ctx) {
-
+    //清屏
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    //帧编号
+    this.f++;
+    //绘制背景。背景没动,也要每帧擦除，重绘
+    ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, 15, 150, canvas.width - 30, canvas.width - 30);
+    //绘制地图
+    this.map.render(ctx, this.Robj);
 
-    this.bg.render(ctx)
-    this.pageBtn.render(ctx)
-
+    //有限状态机！！！
+    if (this.STATE == "爆破检查") {
+      if (this.map.check()) {
+        //打一个标记
+        this.startBomb = this.f;
+        //瞬间变为爆破动画
+        this.STATE = "爆破动画";
+      } else {
+        this.STATE = "静稳状态";
+      }
+      //20帧之后，调用补充新的
+    } else if (this.STATE == "爆破动画" && this.f > this.startBomb + 21) {
+      this.STATE = "下落动画";
+      this.map.dropDown();
+      this.startDropDown = this.f
+    } else if (this.STATE == "下落动画" && this.f > this.startDropDown + 5) {
+      this.STATE = "补充新的";
+      this.map.supplement();
+      this.startSupple = this.f;
+    } else if (this.STATE == "补充新的" && this.f > this.startSupple + 11) {
+      this.STATE = "爆破检查"
+      this.map.check();
+    } else if (this.STATE == "静稳状态") {
+      //console.log(this.istuozhuai , this.starttuozhuai)
+      if (this.istuozhuai && this.f == this.starttuozhuai + 6) {
+        if (this.map.test(this.row1, this.col1, this.row2, this.col2)) {
+          this.STATE = "爆破检查";
+        }
+        this.istuozhuai = false;
+      }
+    } 
   }
 
   // 实现游戏帧循环
