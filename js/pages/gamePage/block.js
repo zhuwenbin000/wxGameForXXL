@@ -4,7 +4,7 @@
 export default class Block {
   constructor(row, col, color) {
     //每个块的宽高
-    this.bl = (canvas.width - 30 - 12*2 - 8*5)/6
+    this.bl = (canvas.width - 15*2 - 12*2 - 8*5)/6
     //行数
     this.row = row;
     //列数
@@ -75,8 +75,8 @@ export default class Block {
     //写标记
     this.isAnimate = true;
     //增量
-    this.dx = (col - this.col) * this.bl / frame;
-    this.dy = (row - this.row) * this.bl / frame;
+    this.dx = ((col - this.col) * this.bl + (col - this.col) * 8)/ frame;
+    this.dy = ((row - this.row) * this.bl + (row - this.row) * 8)/ frame;
     //应该结束动画的帧编号
     this.endf = this.f + frame;
     //更改自己的行、列属性
