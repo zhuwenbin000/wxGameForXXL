@@ -3,7 +3,7 @@ import GamePage from './pages/gamePage/index'
 import FriendsRank from './pages/friendsRank/index'
 import WorldRank from './pages/worldRank/index'
 import DataBus from './databus'
-
+import helper from './base/helper'
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 
@@ -12,21 +12,26 @@ let databus = new DataBus()
  */
 export default class Main {
   constructor() {
-    this.renderPage()
+    let state = helper.getsetting()
+    Promise.all([
+      helper.getsetting()
+    ]).then((options) => {
+      databus.pownstate = options[0] ////是否授权 1同意 2.拒绝 3.未询问
+      this.renderPage()
+    })
   }
-
   renderPage() {
     let self = this
     let pageState = databus.pageState
-
     self.homePage = new HomePage(ctx)
     self.gamePage = new GamePage(ctx)
     self.friendsRank = new FriendsRank(ctx)
     self.worldRank = new WorldRank(ctx)
-
+  
+   
     //每隔50毫秒判断一次场景是否发生变化
     let timeLine = setInterval(() => {
-
+      console.log(111)
       //首页
       if (databus.scene == 0) {
         if (!pageState.homePage) {
@@ -42,7 +47,7 @@ export default class Main {
           self.gamePage.restart(ctx)
         }
       }
-      
+
       //好友排行榜
       if (databus.scene == 2) {
         if (!pageState.friendsRank) {
@@ -59,7 +64,7 @@ export default class Main {
         }
       }
 
-    },50)
+    }, 50)
   }
 
 }

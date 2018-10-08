@@ -8,6 +8,7 @@ let databus = new DataBus()
 export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
+    console.log(wx) 
     this.aniId = 2
   }
 
@@ -17,7 +18,7 @@ export default class Index {
 
     this.touchEvent = false
     this.bindLoop = this.loop.bind(this)
-
+   
     // 清除上一帧的动画
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
@@ -61,14 +62,12 @@ export default class Index {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     ctx.fillStyle = '#ccc';  //设置填充的背景颜色
-    ctx.fillRect(0, 0, 100, 100); //绘制 800*300 像素的已填充矩形：
-    ctx.fillStyle = '#fff';
-    ctx.strokeStyle = '#fff'; //设置笔触的颜色
-    ctx.font = "bold 40px '字体','字体','微软雅黑','宋体'"; //设置字体
-    ctx.fillText('好友排行榜', 140, 130); //设置文本内容
-    ctx.fillText('返回', 10, 50); //设置文本内容
+    ctx.fillRect(0, 0, 100, 80); //绘制 800*300 像素的已填充矩形：
     
-    // 按钮点击事件,只绑定一次
+     let openDataContext = wx.getOpenDataContext()
+    let sharedCanvas = openDataContext.canvas
+    ctx.drawImage(sharedCanvas, 0, 0)
+   // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true
       this.touchHandler = this.touchPage.bind(this)

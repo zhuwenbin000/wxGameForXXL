@@ -53,8 +53,23 @@ export default class Index {
 
     // 好友排行榜按钮事件
     if (x >= friendsBtnArea.startX && x <= friendsBtnArea.endX && y >= friendsBtnArea.startY && y <= friendsBtnArea.endY) {
-      console.log("渲染好友排行榜")
-      databus.scene = 2
+      if (databus.pownstate!=1){
+        wx.authorize({ //获取授权
+          scope: 'scope.userInfo',
+          success(res) {//授权成功
+            databus.scene = 2
+          },
+          fail(res){//授权失败
+            databus.scene = 2
+          }
+        })
+      }else{
+        databus.scene = 2
+      }
+     
+      console.log("渲染好友排行榜", databus.pownstate)
+    
+     
     }
 
     // 世界排行榜按钮事件
@@ -64,7 +79,7 @@ export default class Index {
     }
 
     //页面结束事件
-    if (databus.scene != 0){
+    if (databus.scene != 0) {
       this.finish()
     }
   }
@@ -76,7 +91,9 @@ export default class Index {
 
     this.bg.render(ctx)
     this.pageBtn.render(ctx)
-
+    let openDataContext = wx.getOpenDataContext()
+    
+    
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true

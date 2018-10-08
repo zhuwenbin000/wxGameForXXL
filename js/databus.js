@@ -25,11 +25,13 @@ export default class DataBus {
     this.enemys     = []
     this.animations = []
     this.gameOver   = false
+    this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
     this.pageState = {
       homePage: false,
       gamePage: false,
       friendsRank: false,
-      worldRank: false
+      worldRank: false,
+     
     }
   }
 

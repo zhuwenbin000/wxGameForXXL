@@ -9,6 +9,7 @@ export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 3
+    
   }
 
   restart(ctx) {
@@ -21,6 +22,13 @@ export default class Index {
     // 清除上一帧的动画
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
+    console.log(1231221)
+    let openDataContext = wx.getOpenDataContext()
+    let num = parseInt(Math.random()*1000)
+    openDataContext.postMessage({
+      test: 'hello',
+      year: num
+    })
   }
 
   finish() {
@@ -67,7 +75,7 @@ export default class Index {
     ctx.font = "bold 40px '字体','字体','微软雅黑','宋体'"; //设置字体
     ctx.fillText('世界排行榜', 140, 130); //设置文本内容
     ctx.fillText('返回', 10, 50); //设置文本内容
-
+  
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true
