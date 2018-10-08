@@ -19,6 +19,7 @@ export default class DataBus {
 
   reset() {
     this.scene      = 0
+<<<<<<< HEAD
     this.frame      = 0
     this.score      = 0
     this.bullets    = []
@@ -26,6 +27,10 @@ export default class DataBus {
     this.animations = []
     this.gameOver   = false
     this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
+=======
+    this.rowNum = 6
+    this.colNum = 6
+>>>>>>> e0ddf579ecbd8b3376ef549d8e2a3297f86bc514
     this.pageState = {
       homePage: false,
       gamePage: false,
@@ -33,6 +38,12 @@ export default class DataBus {
       worldRank: false,
      
     }
+    this.frame      = 0
+    this.score      = 0
+    this.bullets    = []
+    this.enemys     = []
+    this.animations = []
+    this.gameOver   = false
   }
 
   /**
