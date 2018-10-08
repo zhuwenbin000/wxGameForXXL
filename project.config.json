@@ -1,33 +1,29 @@
 {
-	"description": "项目配置文件。",
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true
 	},
-<<<<<<< HEAD
-	"compileType": "miniprogram",
-	"libVersion": "2.3.0",
-	"appid": "wxe9d1eb87c49819fa",
-	"projectname": "%E6%B6%88%E6%B6%88%E4%B9%90",
-=======
 	"compileType": "game",
 	"libVersion": "2.3.0",
-	"appid": "wxb23e93e17653dd1e",
-	"projectname": "xxl",
->>>>>>> e0ddf579ecbd8b3376ef549d8e2a3297f86bc514
+	"appid": "wx33c0cd5b97f2b960",
+	"projectname": "%E6%B5%8B%E8%AF%95",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"isGameTourist": false,
 	"condition": {
 		"search": {
 			"current": -1,
 			"list": []
 		},
 		"conversation": {
-			"current": -1,
-			"list": []
-		},
-		"plugin": {
 			"current": -1,
 			"list": []
 		},

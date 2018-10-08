@@ -31,11 +31,7 @@ export default class Main {
    
     //每隔50毫秒判断一次场景是否发生变化
     let timeLine = setInterval(() => {
-<<<<<<< HEAD
-      console.log(111)
-=======
       
->>>>>>> e0ddf579ecbd8b3376ef549d8e2a3297f86bc514
       //首页
       if (databus.scene == 0) {
         if (!pageState.homePage) {
@@ -68,12 +64,11 @@ export default class Main {
         }
       }
 
-<<<<<<< HEAD
-    }, 50)
-=======
-    },50)
 
->>>>>>> e0ddf579ecbd8b3376ef549d8e2a3297f86bc514
+    }, 50)
+
+
+
   }
 
 }
