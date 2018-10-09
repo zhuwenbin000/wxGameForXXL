@@ -3,22 +3,24 @@ import GamePage from './pages/gamePage/index'
 import FriendsRank from './pages/friendsRank/index'
 import WorldRank from './pages/worldRank/index'
 import DataBus from './databus'
-import helper from './base/helper'
+
+import helper from '/base/helper';
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
-
+const screenWidth = window.innerWidth;
+const screenHeight = window.innerHeight;
+const ratio = wx.getSystemInfoSync().pixelRatio;
 /**
  * 根据场景id渲染页面
  */
 export default class Main {
   constructor() {
-    let state = helper.getsetting()
-    Promise.all([
-      helper.getsetting()
-    ]).then((options) => {
-      databus.pownstate = options[0] ////是否授权 1同意 2.拒绝 3.未询问
-      this.renderPage()
-    })
+    let openDataContext = wx.getOpenDataContext();
+    let sharedCanvas = openDataContext.canvas;
+    sharedCanvas.width = screenWidth * ratio;
+    sharedCanvas.height = screenHeight * ratio;
+    helper.getInstance().sharedCanvas = sharedCanvas;  
+    this.renderPage()
   }
   renderPage() {
     let self = this
@@ -27,7 +29,7 @@ export default class Main {
     self.gamePage = new GamePage(ctx)
     self.friendsRank = new FriendsRank(ctx)
     self.worldRank = new WorldRank(ctx)
-  
+    databus.scene = 2 //好友排行测试用
    
     //每隔50毫秒判断一次场景是否发生变化
     let timeLine = setInterval(() => {

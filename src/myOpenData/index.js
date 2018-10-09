@@ -1,96 +1,277 @@
-let sharedCanvas = wx.getSharedCanvas() 
-let context = sharedCanvas.getContext('2d')
-const lineImg = wx.createImage();
-const PAGE_SIZE = 6;
-const ITEM_HEIGHT = 125;
-lineImg.src = 'images/friend.jpg';
-lineImg.onload = () => {
-  context.drawImage(lineImg, 0, 0, sharedCanvas.width, sharedCanvas.height);
-};
-class RankList{
-  constructor() {
-    this.totalPage = 0;
-    this.currPage = 0;
- 
-  }
-  restart(){
-    wx.onMessage(data => {
-      console.log(data)
-      let kvdata = [{ key: "score", value: "12" }]
-      wx.setUserCloudStorage({
-        KVDataList: kvdata,
-        success: res => {
-         
-        }, fail: res => {
-          console.log(res)
-        }
-      })
-    })
-  }
-  getdata(){   
-    wx.getFriendCloudStorage({
-      keyList: ["score"],
-      success: res => {
-        let data = res.data
-        console.log(data,123)
-        for (let i = 0, len = data.length; i < len; i++) {
-          this.drawRankItem(context, i, 1, data[i], 10);
-        }
-      },
-      fail:res=>{
-        console.log(res,1233)
-      }
-    })
-  }
-  drawRankItem(ctx, index, rank, data, pageLen) {
-    
-    const avatarUrl = data.avatarUrl;
-    const nick = data.nickname.length <= 10 ? data.nickname : data.nickname.substr(0, 10) + "...";
-   
-    const grade = 0;
-    const itemGapY = ITEM_HEIGHT * index;
-    //名次
-    ctx.fillStyle = "#D8AD51";
-    ctx.textAlign = "right";
-    ctx.baseLine = "middle";
-    ctx.font = "70px Helvetica";
-    ctx.fillText(`${rank}`, 90, 80 + itemGapY);
+let sharedCanvas = wx.getSharedCanvas();
+let context = sharedCanvas.getContext('2d');
 
-    //头像
-    const avatarImg = wx.createImage();
-    avatarImg.src = avatarUrl;
-    avatarImg.onload = () => {
-      if (index + 1 > pageLen) {
-        return;
-      }
-      ctx.drawImage(avatarImg, 50, 100 + itemGapY, 30, 30);
-    };
+const screenWidth = wx.getSystemInfoSync().screenWidth;
+const screenHeight = wx.getSystemInfoSync().screenHeight;
+const ratio = wx.getSystemInfoSync().pixelRatio;
 
-    //名字
-    ctx.fillStyle = "#777063";
-    ctx.textAlign = "left";
-    ctx.baseLine = "middle";
-    ctx.font = "20px Helvetica";
-    ctx.fillText(nick, 235, 80 + itemGapY);
+ sharedCanvas.width = screenWidth * ratio;
+ sharedCanvas.height = screenHeight * ratio;
+let itemCanvas = wx.createCanvas();
+let ctx = itemCanvas.getContext('2d');
 
-    //分数
-    ctx.fillStyle = "#777063";
-    ctx.textAlign = "left";
-    ctx.baseLine = "middle";
-    ctx.font = "30px Helvetica";
-    ctx.fillText(`${grade}分`, 620, 80 + itemGapY);
+let myScore = undefined;
+let myInfo = {};
+let myRank = undefined;
+initEle();
+getUserInfo();
 
-    //分隔线
-    const lineImg = wx.createImage();
-    lineImg.src = 'images/bullet.png';
-    lineImg.onload = () => {
-      
-      ctx.drawImage(lineImg, 14, 120 + itemGapY, 720, 1);
-    };
-  }
+// 初始化标题返回按钮等元素
+function initEle() {
+  context.restore();
+  context.scale(ratio, ratio);
+  context.clearRect(0, 0, screenWidth * ratio, screenHeight * ratio);
+
+  // 画背景
+  context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+  context.fillRect(0, 0, screenWidth * ratio, screenHeight * ratio);
+
+  // 按照 750的尺寸绘制
+  let scales = screenWidth / 750;
+  context.scale(scales, scales);
+
+  // 画标题
+  context.fillStyle = '#fff';
+  context.font = '50px Arial';
+  context.textAlign = 'center';
+  context.fillText('好友排行榜', 750 / 2, 220);
+
+  // 排名列表外框
+  context.fillStyle = '#302F30';
+  context.fillRect(80, 290, 750 - 80 * 2, 650);
+
+  // 排行榜提示
+  context.fillStyle = '#8D8D8D';
+  context.font = '20px Arial';
+  context.textAlign = 'left';
+  context.fillText('每周一凌晨刷新', 100, 330);
+
+  // 自己排名外框
+  context.fillStyle = '#302F30';
+  context.fillRect(80, 960, 750 - 80 * 2, 120);
+
+  // 返回按钮
+  let returnImage = wx.createImage();
+  returnImage.src = 'images/icon1.png';
+  returnImage.onload = () => {
+    context.drawImage(returnImage, 80, 1120, 100, 100);
+  };
 }
 
+function initRanklist(list) {
+  // 至少绘制6个
+  let length = Math.max(list.length, 6);
+  let itemHeight = 590 / 6;
 
- 
-const rankList = new RankList();
-rankList.getdata();
+  // itemCanvas.width = screenWidth - 40 * 2;
+  // itemCanvas.height = itemHeight * length;
+  itemCanvas.width = (750 - 80 * 2);
+  itemCanvas.height = itemHeight * length;
+
+  ctx.clearRect(0, 0, itemCanvas.width, itemCanvas.height);
+
+  for (let i = 0; i < length; i++) {
+    if (i % 2 === 0) {
+      ctx.fillStyle = '#393739';
+    } else {
+      ctx.fillStyle = '#302F30';
+    }
+    console.log(itemCanvas.width);
+    ctx.fillRect(0, i * itemHeight, itemCanvas.width, itemHeight);
+  }
+
+  if (list && list.length > 0) {
+    list.map((item, index) => {
+      let avatar = wx.createImage();
+      avatar.src = item.avatarUrl;
+      avatar.onload = function () {
+        ctx.drawImage(avatar, 100, index * itemHeight + 14, 70, 70);
+        reDrawItem(0);
+      }
+      ctx.fillStyle = '#fff';
+      ctx.font = '28px Arial';
+      ctx.textAlign = 'left';
+      ctx.fillText(item.nickname, 190, index * itemHeight + 54);
+      ctx.font = 'bold 36px Arial';
+      ctx.textAlign = 'right';
+      ctx.fillText(item.score || 0, 550, index * itemHeight + 60);
+      ctx.font = 'italic 44px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(index + 1, 46, index * itemHeight + 64)
+    });
+  } else {
+    // 没有数据
+  }
+
+  reDrawItem(0);
+}
+
+// 绘制自己的排名
+function drawMyRank() {
+  if (myInfo.avatarUrl && myScore) {
+    let avatar = wx.createImage();
+    avatar.src = myInfo.avatarUrl;
+    avatar.onload = function () {
+      context.drawImage(avatar, 180, 960 + 24, 70, 70);
+    }
+    context.fillStyle = '#fff';
+    context.font = '28px Arial';
+    context.textAlign = 'left';
+    context.fillText(myInfo.nickName, 270, 960 + 72);
+    context.font = 'bold 36px Arial';
+    context.textAlign = 'right';
+    context.fillText(myScore || 0, 630, 960 + 76);
+    // 自己的名次
+    if (myRank !== undefined) {
+      context.font = 'italic 44px Arial';
+      context.textAlign = 'center';
+      context.fillText(myRank + 1, 126, 960 + 80);
+    }
+  }
+  // context.fillRect(40, 480, screenWidth - 40 * 2, 60);
+}
+// 因为头像绘制异步的问题，需要重新绘制
+function reDrawItem(y) {
+  context.clearRect(80, 350, 750 - 80 * 2, 590);
+  context.fillStyle = '#302F30';
+  context.fillRect(80, 350, 750 - 80 * 2, 590);
+  context.drawImage(itemCanvas, 0, y, 750 - 80 * 2, 590, 80, 350, 750 - 80 * 2, 590);
+  //
+  // context.drawImage(itemCanvas, 40, y+175, screenWidth - 40 * 2, 295);
+}
+function sortByScore(data) {
+  let array = [];
+  data.map(item => {
+
+    array.push({
+      avatarUrl: item.avatarUrl,
+      nickname: item.nickname,
+      openid: item.openid,
+      score: item['KVDataList'][1] && item['KVDataList'][1].value != 'undefined' ? item['KVDataList'][1].value : (item['KVDataList'][0] ? item['KVDataList'][0].value : 0) // 取最高分
+    })
+
+  })
+  array.sort((a, b) => {
+    return a['score'] < b['score'];
+  });
+  myRank = array.findIndex((item) => {
+    return item.nickname === myInfo.nickName && item.avatarUrl === myInfo.avatarUrl;
+  });
+  if (myRank === -1)
+    myRank = array.length;
+
+  return array;
+}
+// 开放域的getUserInfo 不能获取到openId, 可以在主域获取，并从主域传送
+function getUserInfo() {
+  wx.getUserInfo({
+    openIdList: ['selfOpenId'],
+    lang: 'zh_CN',
+    success: res => {
+      myInfo = res.data[0];
+    },
+    fail: res => {
+
+    }
+  })
+}
+
+// 获取自己的分数
+function getMyScore() {
+  wx.getUserCloudStorage({
+    keyList: ['score', 'maxScore'],
+    success: res => {
+      let data = res;
+      console.log(data);
+      let lastScore = data.KVDataList[0].value || 0;
+      if (!data.KVDataList[1]) {
+        saveMaxScore(lastScore);
+        myScore = lastScore;
+      } else if (lastScore > data.KVDataList[1].value) {
+        saveMaxScore(lastScore);
+        myScore = lastScore;
+      } else {
+        myScore = data.KVDataList[1].value;
+      }
+    }
+  });
+}
+
+function saveMaxScore(maxScore) {
+  wx.setUserCloudStorage({
+    KVDataList: [{ 'key': 'maxScore', 'value': ('' + maxScore) }],
+    success: res => {
+      console.log(res);
+    },
+    fail: res => {
+      console.log(res);
+    }
+  });
+}
+
+function getFriendsRanking() {
+  wx.getFriendCloudStorage({
+    keyList: ['score', 'maxScore'],
+    success: res => {
+      let data = res.data;
+      console.log(res.data);
+      // drawRankList(data);
+      initRanklist(sortByScore(data));
+      drawMyRank();
+    }
+  });
+}
+
+function getGroupRanking(ticket) {
+  wx.getGroupCloudStorage({
+    shareTicket: ticket,
+    keyList: ['score', 'maxScore'],
+    success: res => {
+      console.log('getGroupCloudStorage:success');
+      console.log(res.data);
+      let data = res.data;
+      initRanklist(sortByScore(data));
+      drawMyRank();
+    },
+    fail: res => {
+      console.log('getGroupCloudStorage:fail');
+      console.log(res.data);
+    }
+  });
+}
+// getGroupRanking();
+wx.onMessage(data => {
+  if (data.type === 'friends') {
+    // sharedCanvas.height = screenHeight;
+    getFriendsRanking();
+    getMyScore();
+  } else if (data.type === 'group') {
+    getGroupRanking(data.text);
+    getMyScore();
+  } else if (data.type === 'updateMaxScore') {
+    // 更新最高分
+    console.log('更新最高分');
+    getMyScore();
+  }
+});
+
+let startY = undefined, moveY = 0;
+// 触摸移动事件
+wx.onTouchMove(e => {
+  let touch = e.touches[0];
+  // 触摸移动第一次触发的位置
+  if (startY === undefined) {
+    startY = touch.clientY + moveY;
+  }
+  moveY = startY - touch.clientY;
+  reDrawItem(moveY);
+});
+wx.onTouchEnd(e => {
+  startY = undefined;
+  if (moveY < 0) { // 到顶
+    moveY = 0;
+  } else if (moveY > itemCanvas.height - 590) { // 到底
+    moveY = itemCanvas.height - 590;
+  }
+  reDrawItem(moveY);
+});

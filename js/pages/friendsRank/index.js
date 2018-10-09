@@ -2,23 +2,34 @@ import Music from '../../music/music'
 import DataBus from '../../databus'
 
 let databus = new DataBus()
+const ratio = wx.getSystemInfoSync().pixelRatio;//获取设备像素比
+const screenWidth = window.innerWidth;
+const screenHeight = window.innerHeight;
 /**
  * 游戏页
  */
 export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
-    console.log(wx) 
     this.aniId = 2
+    
   }
-
+  messageSharecanvas(type, text) {
+    // 排行榜也应该是实时的，所以需要sharedCanvas 绘制新的排行榜
+    let openDataContext = wx.getOpenDataContext();
+    openDataContext.postMessage({
+      type: type || 'friends',
+      text: text,
+    });
+    this.ranking = true;
+  }
   restart(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.ctx = ctx
-
+    console.log(999)
     this.touchEvent = false
     this.bindLoop = this.loop.bind(this)
-   
+    this.messageSharecanvas()
     // 清除上一帧的动画
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
@@ -27,7 +38,6 @@ export default class Index {
   finish() {
     //清除定时动画和绑定事件
     window.cancelAnimationFrame(this.aniId)
-
     canvas.removeEventListener('touchstart', this.touchHandler)
   }
 
@@ -58,16 +68,11 @@ export default class Index {
 
   //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
   render(ctx) {
-
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-
     ctx.fillStyle = '#ccc';  //设置填充的背景颜色
     ctx.fillRect(0, 0, 100, 80); //绘制 800*300 像素的已填充矩形：
-    
-     let openDataContext = wx.getOpenDataContext()
-    let sharedCanvas = openDataContext.canvas
-    ctx.drawImage(sharedCanvas, 0, 0)
-   // 按钮点击事件,只绑定一次
+    ctx.drawImage(sharedCanvas, 0, 0, screenWidth, screenHeight)
+    // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true
       this.touchHandler = this.touchPage.bind(this)
@@ -78,6 +83,7 @@ export default class Index {
 
   // 实现游戏帧循环
   loop() {
+
     this.render(this.ctx)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
   }
