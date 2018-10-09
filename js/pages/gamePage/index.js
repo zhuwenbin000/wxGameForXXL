@@ -1,4 +1,8 @@
 import Map from './map'
+import DataBus from '../../databus'
+
+
+let databus = new DataBus()
 
 export default class Index {
   constructor(ctx) {
@@ -32,6 +36,10 @@ export default class Index {
       this.Robj[k] = new Image();
       this.Robj[k].src = this.R[k];
     }
+
+
+    //块的宽 
+    this.bl = ((canvas.width - 30 - 12 * 2 - 8 * 5) / 6)
   }
 
   restart(ctx) {
@@ -54,19 +62,24 @@ export default class Index {
 
   touchStart(e){
 
+    var self = this;
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
 
-    var self = this;
-    // if(x < 15 && y < 150 && x > canvas.width - 30){
-    //   return
-    // }
-    //记录手指按下时候的位置
-    self.col1 = parseInt(x / 40);
-    self.row1 = parseInt((y - 180) / 40);
-    console.log(self.col1,self.row1)
+    //判断手指落下的坐标
+    let rc = this.getRC(x,y)
 
+    //如果落在砖块上
+    if(rc){
+      console.log(rc)
+      databus.selectBlocks.push(rc)
+      console.log(this.map.blocks[rc.row][rc.col])
+      
+    }else{
+      return
+    }
+    
     this.touchMoveHandler = this.touchMove.bind(this)
     canvas.addEventListener('touchmove', this.touchMoveHandler)
 
@@ -85,6 +98,13 @@ export default class Index {
     if (this.STATE != "静稳状态") {
       return;
     }
+
+    this.x = x;
+    this.y = y;
+    //判断手指落下的坐标
+    let rc = this.getRC(x, y)
+    console.log(rc)
+    return
     //实时记录手指移动的位置
     this.col2 = parseInt(x / 40);
     this.row2 = parseInt((y - 180) / 40);
@@ -98,13 +118,38 @@ export default class Index {
       //命令元素交换位置
       this.map.blocks[this.row1][this.col1].moveTo(this.row2, this.col2, 6);
       this.map.blocks[this.row2][this.col2].moveTo(this.row1, this.col1, 6);
-      // //命令试探是否能消除
 
       //改变标记
       this.istuozhuai = true;
       //写当前帧
       this.starttuozhuai = this.f;
     }
+
+  }
+
+  getRC(x,y){
+    //判断是否在游戏区域内  不是就return
+    if ((x < 15 || y < 150) || (x > canvas.width - 30 + 15 || y > canvas.width - 30 + 150)) {
+      return false
+    }
+
+    //判断在哪一个区块 包括边框 
+    let rx = parseInt((x - 15 - 12) / (this.bl + 8));
+    let ry = parseInt((y - 150 - 12) / (this.bl + 8));
+
+    if (((x - 15 - 12) < ((rx + 1) * this.bl + rx * 8)) && ((y - 150 - 12) < ((ry + 1) * this.bl + ry * 8))) {
+      //记录手指按下时候的位置
+      return {
+        row: ry,
+        col: rx
+      }
+    } else {
+      return false
+    }
+    
+  }
+
+  drawLine(start,end){
 
   }
 
@@ -151,6 +196,17 @@ export default class Index {
         this.istuozhuai = false;
       }
     } 
+
+
+    let row = 0;
+    let col = 0;
+
+    this.ctx.moveTo(row * (this.bl + 8) + this.bl / 2 + 15 + 12, col * (this.bl + 8) + this.bl / 2 + 150 + 12);
+    this.ctx.lineTo(this.x, this.y);
+    this.ctx.lineWidth = 6;
+    this.ctx.strokeStyle = "#ff0000";
+    this.ctx.stroke();
+
   }
 
   // 实现游戏帧循环

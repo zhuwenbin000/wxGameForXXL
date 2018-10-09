@@ -13,7 +13,11 @@
 	"compileType": "game",
 	"libVersion": "2.3.0",
 	"appid": "wxb23e93e17653dd1e",
+<<<<<<< HEAD
 	"projectname": "%E6%B5%8B%E8%AF%95",
+=======
+	"projectname": "xxl",
+>>>>>>> 416fd52a7bf4a63b98ffc2b1d2c379d410b1ee47
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
