@@ -5,6 +5,7 @@ let databus = new DataBus()
 const ratio = wx.getSystemInfoSync().pixelRatio;//获取设备像素比
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
+import DataStore from '../../base/helper';
 /**
  * 游戏页
  */
@@ -71,7 +72,8 @@ export default class Index {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = '#ccc';  //设置填充的背景颜色
     ctx.fillRect(0, 0, 100, 80); //绘制 800*300 像素的已填充矩形：
-    ctx.drawImage(sharedCanvas, 0, 0, screenWidth, screenHeight)
+   // ctx.drawImage(sharedCanvas, 0, 0, screenWidth, screenHeight)
+    DataStore.getInstance().ctx.drawImage(DataStore.getInstance().sharedCanvas, 0, 0, screenWidth, screenHeight);
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true

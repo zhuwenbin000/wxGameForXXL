@@ -125,13 +125,6 @@ export default class Map {
     return result;
   }
 
-  //清除连线的砖块  入参为砖块数组
-  blocksClear (arr) {
-    for (var i = 0; i < arr.length; i++) {
-      //爆
-      this.blocks[arr[i].row][arr[i].col].bomb();
-    }
-  }
 
   //规整
   dropDown () {

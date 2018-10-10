@@ -18,18 +18,31 @@ export default class DataBus {
   }
 
   reset() {
-    this.scene = 0 //场景id 0：首页，2：游戏页，3：好友排行榜，4：世界排行榜
-    this.rowNum = 6 //行数
-    this.colNum = 6 //列数
-    this.pageState = { //当前页面状态
+    this.scene      = 0
+
+    this.frame      = 0
+    this.score      = 0
+    this.bullets    = []
+    this.enemys     = []
+    this.animations = []
+    this.gameOver   = false
+    this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
+
+    this.rowNum = 6
+    this.colNum = 6
+    this.pageState = {
       homePage: false,
       gamePage: false,
       friendsRank: false,
       worldRank: false,
      
     }
-    this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
-    this.selectBlocks = [] //当前连线的砖块
+    this.frame      = 0
+    this.score      = 0
+    this.bullets    = []
+    this.enemys     = []
+    this.animations = []
+    this.gameOver   = false
   }
 
   /**

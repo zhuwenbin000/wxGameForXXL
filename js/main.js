@@ -4,7 +4,7 @@ import FriendsRank from './pages/friendsRank/index'
 import WorldRank from './pages/worldRank/index'
 import DataBus from './databus'
 
-import helper from '/base/helper';
+import DataStore from '/base/helper';
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 const screenWidth = window.innerWidth;
@@ -15,11 +15,16 @@ const ratio = wx.getSystemInfoSync().pixelRatio;
  */
 export default class Main {
   constructor() {
+    canvas.width = screenWidth * ratio;
+    canvas.height = screenHeight * ratio;
+    ctx.scale(ratio, ratio); //加上这个图片清晰的一批
+
     let openDataContext = wx.getOpenDataContext();
     let sharedCanvas = openDataContext.canvas;
     sharedCanvas.width = screenWidth * ratio;
     sharedCanvas.height = screenHeight * ratio;
-    helper.getInstance().sharedCanvas = sharedCanvas;  
+    DataStore.getInstance().sharedCanvas = sharedCanvas;  
+    DataStore.getInstance().ctx = ctx;
     this.renderPage()
   }
   renderPage() {
