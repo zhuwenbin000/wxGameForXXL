@@ -1,5 +1,12 @@
 import Map from './map'
+<<<<<<< HEAD
 
+=======
+import DataBus from '../../databus'
+
+
+let databus = new DataBus()
+>>>>>>> 76d149c2f9513713dc1e3046f761e9bdaf95ed36
 export default class Index {
   constructor(ctx) {
     // 维护当前requestAnimationFrame的id
@@ -18,10 +25,7 @@ export default class Index {
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
-    //图片总数
-    var amount = _.keys(this.R).length;
-    //已经加载好的图片数量
-    var already = 0;
+
     //备份
     var self = this;
     //是否触发拖拽
@@ -32,6 +36,12 @@ export default class Index {
       this.Robj[k] = new Image();
       this.Robj[k].src = this.R[k];
     }
+<<<<<<< HEAD
+=======
+
+    //块的宽 
+    this.bl = ((canvas.width - 30 - 12 * 2 - 8 * 5) / 6)
+>>>>>>> 76d149c2f9513713dc1e3046f761e9bdaf95ed36
   }
 
   restart(ctx) {
@@ -117,6 +127,16 @@ export default class Index {
     //绘制背景。背景没动,也要每帧擦除，重绘
     ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
     ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, 15, 150, canvas.width - 30, canvas.width - 30);
+    
+    let row = 0;
+    let col = 0;
+    ctx.beginPath();
+    ctx.moveTo(row * (this.bl + 8) + this.bl / 2 + 15 + 12, col * (this.bl + 8) + this.bl / 2 + 150 + 12);
+    ctx.lineTo(this.x, this.y);
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = "#ff0000";
+    ctx.stroke();
+    
     //绘制地图
     this.map.render(ctx, this.Robj);
 
@@ -151,6 +171,11 @@ export default class Index {
         this.istuozhuai = false;
       }
     } 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 76d149c2f9513713dc1e3046f761e9bdaf95ed36
   }
 
   // 实现游戏帧循环
