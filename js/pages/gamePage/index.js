@@ -1,4 +1,5 @@
 import Map from './map'
+
 import DataBus from '../../databus'
 
 
@@ -57,7 +58,6 @@ export default class Index {
 
   touchStart(e){
 
-    var self = this;
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
@@ -130,6 +130,7 @@ export default class Index {
       //命令元素交换位置
       this.map.blocks[this.row1][this.col1].moveTo(this.row2, this.col2, 6);
       this.map.blocks[this.row2][this.col2].moveTo(this.row1, this.col1, 6);
+      // //命令试探是否能消除
 
       //改变标记
       this.istuozhuai = true;
@@ -221,8 +222,6 @@ export default class Index {
         this.istuozhuai = false;
       }
     } 
-
-
   }
 
   // 实现游戏帧循环
