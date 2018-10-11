@@ -75,8 +75,8 @@ export default class Block {
     //写标记
     this.isAnimate = true;
     //增量
-    this.dx = (col - this.col) * this.bl / frame;
-    this.dy = (row - this.row) * this.bl / frame;
+    this.dx = (col - this.col) * (this.bl + 8) / frame;
+    this.dy = (row - this.row) * (this.bl + 8) / frame;
     //应该结束动画的帧编号
     this.endf = this.f + frame;
     //更改自己的行、列属性
