@@ -21,7 +21,51 @@ export default class Main {
     sharedCanvas.height = screenHeight * ratio;
     helper.getInstance().sharedCanvas = sharedCanvas;  
     this.renderPage()
+    this.getLogin()
+    wx.getUserInfo({
+      openIdList: ['selfOpenId'],
+      lang: 'zh_CN',
+      success: res => {
+        console.log(res)
+      },
+      fail: res => {
+
+      }
+    })
   }
+
+  getLogin() {
+    wx.login({
+      success:(res)=>{
+        console.log(hex_md5(JSON.stringify({ "user": { "code": res.code } }) + "3123"))
+        wx.request({
+          url: 'https://koba-studio.com/kobaserver/service/json', 
+          method:'POST',
+          data: JSON.stringify({
+            "head": {
+              "tradecode": "sys01", 
+              "traceno": "1539172913783922", 
+              "channel": "3", 
+              "requesttime": "20181010214537839", 
+              "sign": hex_md5(JSON.stringify({"user":{"code":res.code}}) + "3123")
+            }, 
+            "body": {"user":{"code":res.code}}
+          }),
+          header: {
+            'content-type': 'application/json' // 默认值
+          },
+          success(res) {
+            console.log(res)
+          }
+        })
+      },
+      fail: (res) => {
+        console.log(res)
+      }
+    })
+  }
+
+
   renderPage() {
     let self = this
     let pageState = databus.pageState
@@ -29,7 +73,8 @@ export default class Main {
     self.gamePage = new GamePage(ctx)
     self.friendsRank = new FriendsRank(ctx)
     self.worldRank = new WorldRank(ctx)
-    databus.scene = 2 //好友排行测试用
+    // databus.scene = 2 //好友排行测试用
+    // databus.scene = 1 //游戏页测试用
    
     //每隔50毫秒判断一次场景是否发生变化
     let timeLine = setInterval(() => {

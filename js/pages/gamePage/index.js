@@ -67,10 +67,8 @@ export default class Index {
 
     //如果落在砖块上
     if(rc){
-      console.log(rc)
+      databus.selectBlocks = []
       databus.selectBlocks.push(rc)
-      console.log(this.map.blocks[rc.row][rc.col])
-      
     }else{
       return
     }
@@ -96,9 +94,28 @@ export default class Index {
 
     this.x = x;
     this.y = y;
-    //判断手指落下的坐标
+    
+    //判断手指移动中所在的砖块
     let rc = this.getRC(x, y)
-    console.log(rc)
+
+    //如果移动不在砖块内就return
+    if(!rc){
+      return
+    }
+    //已选择的上一个砖块
+    let pb = databus.selectBlocks[databus.selectBlocks.length - 1]
+    //如果当前砖块就是上一个砖块就return
+    if(rc.row == pb.row && rc.col == pb.col){
+      return
+    }
+    //如果移动中的砖块处在已选择的上一个砖块的九宫格内，再判断color,再将color相同的加入连线数组中
+    if (Math.abs(rc.row - pb.row) <= 1 && Math.abs(rc.col - pb.col) <= 1 ){
+      if (this.map.blocks[rc.row][rc.col].color == this.map.blocks[pb.row][pb.col].color){
+        databus.selectBlocks.push(rc)
+      }
+    }
+
+    console.log(databus.selectBlocks)
     return
     //实时记录手指移动的位置
     this.col2 = parseInt(x / 40);
@@ -125,6 +142,7 @@ export default class Index {
   getRC(x,y){
     //判断是否在游戏区域内  不是就return
     if ((x < 15 || y < 150) || (x > canvas.width - 30 + 15 || y > canvas.width - 30 + 150)) {
+      databus.selectBlocks = []
       return false
     }
 
@@ -164,7 +182,7 @@ export default class Index {
     ctx.moveTo(row * (this.bl + 8) + this.bl / 2 + 15 + 12, col * (this.bl + 8) + this.bl / 2 + 150 + 12);
     ctx.lineTo(this.x, this.y);
     ctx.lineWidth = 6;
-    ctx.strokeStyle = "#ff0000";
+    ctx.strokeStyle = "#cccccc";
     ctx.stroke();
     
     //绘制地图
@@ -172,14 +190,16 @@ export default class Index {
 
     //有限状态机！！！
     if (this.STATE == "爆破检查") {
-      if (this.map.check()) {
-        //打一个标记
-        this.startBomb = this.f;
-        //瞬间变为爆破动画
-        this.STATE = "爆破动画";
-      } else {
-        this.STATE = "静稳状态";
-      }
+      // if (this.map.check()) {
+      //   //打一个标记
+      //   this.startBomb = this.f;
+      //   //瞬间变为爆破动画
+      //   this.STATE = "爆破动画";
+      // } else {
+      //   this.STATE = "静稳状态";
+      // }
+
+      this.STATE = "静稳状态";
       //20帧之后，调用补充新的
     } else if (this.STATE == "爆破动画" && this.f > this.startBomb + 21) {
       this.STATE = "下落动画";
@@ -191,7 +211,7 @@ export default class Index {
       this.startSupple = this.f;
     } else if (this.STATE == "补充新的" && this.f > this.startSupple + 11) {
       this.STATE = "爆破检查"
-      this.map.check();
+      // this.map.check();
     } else if (this.STATE == "静稳状态") {
       //console.log(this.istuozhuai , this.starttuozhuai)
       if (this.istuozhuai && this.f == this.starttuozhuai + 6) {
