@@ -73,29 +73,29 @@ export default class Map {
   check () {
     var result = false;
     //按行、列，分别遍历一遍。
-    for (var r = 0; r < rn; r++) {
-      var i = 0;
-      var j = 1;
+    // for (var r = 0; r < rn; r++) {
+    //   var i = 0;
+    //   var j = 1;
 
-      while (i < rn) {
-        if (this.QRcode[r][i] == this.QRcode[r][j]) {
-          j++;
-        } else {
-          //把i和j之前的位，推入结果数组
-          if (j - i >= 3) {
-            for (var m = i; m < j; m++) {
-              //命令该爆炸的矩阵，这一位是X
-              this.needToBomb[r][m] = "X";
-              //爆了
-              this.blocks[r][m].bomb();
-              result = true;
-            }
-          }
-          i = j;
-          j++;
-        }
-      }
-    }
+    //   while (i < rn) {
+    //     if (this.QRcode[r][i] == this.QRcode[r][j]) {
+    //       j++;
+    //     } else {
+    //       //把i和j之前的位，推入结果数组
+    //       if (j - i >= 3) {
+    //         for (var m = i; m < j; m++) {
+    //           //命令该爆炸的矩阵，这一位是X
+    //           this.needToBomb[r][m] = "X";
+    //           //爆了
+    //           this.blocks[r][m].bomb();
+    //           result = true;
+    //         }
+    //       }
+    //       i = j;
+    //       j++;
+    //     }
+    //   }
+    // }
 
     //按行、列，分别遍历一遍。
     for (var c = 0; c < cn; c++) {
@@ -125,6 +125,14 @@ export default class Map {
     return result;
   }
 
+  //炸了
+  blocksBomb (sb) {
+    if (sb.length <= 0) return
+    for (var i = 0; i < sb.length; i++) {
+      this.needToBomb[sb[i].row][sb[i].col] = "X";
+      this.blocks[sb[i].row][sb[i].col].bomb();
+    }
+  }
 
   //规整
   dropDown () {
@@ -175,7 +183,7 @@ export default class Map {
       for (var c = 0; c < cn; c++) {
         if (this.QRcode[r][c] == "*") {
           var color = _.random(0, 5);
-          this.blocks[r][c] = new Block(-9, c, color);
+          this.blocks[r][c] = new Block(0, c, color);
           this.blocks[r][c].moveTo(r, c, 10);
           this.QRcode[r][c] = color;
         }
