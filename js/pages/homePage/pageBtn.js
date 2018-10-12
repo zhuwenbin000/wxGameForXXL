@@ -1,10 +1,12 @@
 const screenWidth  = window.innerWidth
 const screenHeight = window.innerHeight
 
+let logoBtn = new Image();
 let startBtn = new Image();
 let friendsRankBtn = new Image();
 let worldRankBtn = new Image();
 
+logoBtn.src = 'images/logo.png'
 startBtn.src = 'images/startBtn.png'
 friendsRankBtn.src = 'images/friendsRankBtn.png'
 worldRankBtn.src = 'images/worldRankBtn.png'
