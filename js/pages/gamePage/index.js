@@ -1,6 +1,7 @@
 import Map from './map'
 
 import DataBus from '../../databus'
+import ajax from '../../base/ajax'
 
 let databus = new DataBus()
 
@@ -89,11 +90,11 @@ export default class Index {
   finish() {
     //清除定时动画和绑定事件
     window.cancelAnimationFrame(this.aniId)
-    canvas.removeEventListener('touchstart', this.touchHandler)
+    canvas.removeEventListener('touchstart', this.touchStartHandler)
   }
 
-  touchStart(e){
-
+  touchStart(e) {
+    console.log('start')
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
@@ -101,29 +102,25 @@ export default class Index {
     // 首页按钮事件
     if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
       databus.scene = 0
-
+        //请求示例
         wx.login({
           success: (res) => {
-            wx.request({
+            let options = {
+              tradecode:'sys01',
               url: 'https://koba-studio.com/kobaserver/service/json',
               method: 'POST',
-              data: JSON.stringify({
-                "head": {
-                  "tradecode": "sys01",
-                  "traceno": "1539172913783922",
-                  "channel": "3",
-                  "requesttime": "20181010214537839",
-                  "sign": hex_md5(JSON.stringify({ "user": { "code": res.code } }) + "3123").toUpperCase()
-                },
-                "body": { "user": { "code": res.code } }
-              }),
-              header: {
-                'content-type': 'application/json' // 默认值
-              },
+              data: { "user": { "code": res.code } },
               success(res) {
-                // console.log(res)
+                console.log(1)
+              },
+              fail(res) {
+                console.log(2)
+              },
+              complete(res) {
+                console.log(3)
               }
-            })
+            }
+            ajax(options)
           },
           fail: (res) => {
             console.log(res)
@@ -136,6 +133,10 @@ export default class Index {
       this.finish()
     }
 
+    //游戏区域事件
+    if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {
+      return
+    }
     //判断手指落下的坐标
     let rc = this.getRC(x,y)
     //如果落在砖块上
@@ -145,17 +146,15 @@ export default class Index {
     }else{
       return
     }
-    
+    //绑定move和end事件
     this.touchMoveHandler = this.touchMove.bind(this)
+    this.touchEndHandler = this.touchEnd.bind(this)
     canvas.addEventListener('touchmove', this.touchMoveHandler)
-
-    canvas.addEventListener('touchend', () => {
-      this.checkBomb()
-      canvas.removeEventListener('touchmove', this.touchMoveHandler)
-    })
+    canvas.addEventListener('touchend', this.touchEndHandler)
   }
 
   touchMove(e) {
+    console.log('move')
     e.preventDefault();
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
@@ -185,6 +184,11 @@ export default class Index {
       if (this.map.blocks[rc.row][rc.col].color == this.map.blocks[pb.row][pb.col].color){
         if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1){
           databus.selectBlocks.push(rc)
+        }else{
+          //如果回退
+          if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])){
+            databus.selectBlocks.splice(databus.selectBlocks.length - 1, 1)
+          }
         }
       }
     }
@@ -192,6 +196,13 @@ export default class Index {
     // this.istuozhuai = true;
     // //写当前帧
     // this.starttuozhuai = this.f;
+  }
+
+  touchEnd() {
+    console.log('end')
+    this.checkBomb()
+    canvas.removeEventListener('touchmove', this.touchMoveHandler)
+    canvas.removeEventListener('touchend', this.touchEndHandler)
   }
 
   getRC(x,y){
