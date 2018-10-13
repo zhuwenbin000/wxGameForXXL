@@ -28,7 +28,6 @@ export default class Main {
     DataStore.getInstance().sharedCanvas = sharedCanvas;
     DataStore.getInstance().ctx = ctx;
     this.renderPage()
-    this.getLogin()
     wx.getUserInfo({
       openIdList: ['selfOpenId'],
       lang: 'zh_CN',
@@ -41,35 +40,6 @@ export default class Main {
     })
   }
 
-  getLogin() {
-    wx.login({
-      success:(res)=>{
-        wx.request({
-          url: 'https://koba-studio.com/kobaserver/service/json', 
-          method:'POST',
-          data: JSON.stringify({
-            "head": {
-              "tradecode": "sys01", 
-              "traceno": "1539172913783922", 
-              "channel": "3", 
-              "requesttime": "20181010214537839", 
-              "sign": hex_md5(JSON.stringify({"user":{"code":res.code}}) + "3123").toUpperCase()
-            }, 
-            "body": {"user":{"code":res.code}}
-          }),
-          header: {
-            'content-type': 'application/json' // 默认值
-          },
-          success(res) {
-            // console.log(res)
-          }
-        })
-      },
-      fail: (res) => {
-        console.log(res)
-      }
-    })
-  }
 
 
   renderPage() {

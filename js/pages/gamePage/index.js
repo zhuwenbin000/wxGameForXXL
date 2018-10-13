@@ -101,6 +101,34 @@ export default class Index {
     // 首页按钮事件
     if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
       databus.scene = 0
+
+        wx.login({
+          success: (res) => {
+            wx.request({
+              url: 'https://koba-studio.com/kobaserver/service/json',
+              method: 'POST',
+              data: JSON.stringify({
+                "head": {
+                  "tradecode": "sys01",
+                  "traceno": "1539172913783922",
+                  "channel": "3",
+                  "requesttime": "20181010214537839",
+                  "sign": hex_md5(JSON.stringify({ "user": { "code": res.code } }) + "3123").toUpperCase()
+                },
+                "body": { "user": { "code": res.code } }
+              }),
+              header: {
+                'content-type': 'application/json' // 默认值
+              },
+              success(res) {
+                // console.log(res)
+              }
+            })
+          },
+          fail: (res) => {
+            console.log(res)
+          }
+        })
     }
 
     //页面结束事件
@@ -110,7 +138,6 @@ export default class Index {
 
     //判断手指落下的坐标
     let rc = this.getRC(x,y)
-
     //如果落在砖块上
     if(rc){
       databus.selectBlocks = []
