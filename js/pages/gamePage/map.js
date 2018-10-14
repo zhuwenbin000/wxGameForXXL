@@ -2,6 +2,8 @@ import Block from './block'
 import DataBus from '../../databus'
 
 let databus = new DataBus()
+
+//棋盘的宽数和列数
 let rn = databus.rowNum
 let cn = databus.colNum
 
@@ -60,16 +62,16 @@ export default class Map {
         this.blocks[r][c].update();
         //渲染所有转块
         this.blocks[r][c].render(ctx, Robj);
-        //打印地图矩阵
-        ctx.fillText(this.QRcode[r][c], c * 10, 60 + r * 10);
-        //打印自己needToBomb阵
-        if (this.needToBomb[r][c]) {
-          ctx.fillText(this.needToBomb[r][c], 100 + c * 10, 60 + r * 10);
-        }
-        //打印自己的downRow阵
-        if (this.downRow[r][c]) {
-          ctx.fillText(this.downRow[r][c], 200 + c * 10, 60 + r * 10);
-        }
+        // //打印地图矩阵
+        // ctx.fillText(this.QRcode[r][c], c * 10, 60 + r * 10);
+        // //打印自己needToBomb阵
+        // if (this.needToBomb[r][c]) {
+        //   ctx.fillText(this.needToBomb[r][c], 100 + c * 10, 60 + r * 10);
+        // }
+        // //打印自己的downRow阵
+        // if (this.downRow[r][c]) {
+        //   ctx.fillText(this.downRow[r][c], 200 + c * 10, 60 + r * 10);
+        // }
       }
     }
   }

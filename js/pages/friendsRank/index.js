@@ -10,9 +10,7 @@ import DataStore from '../../base/helper';
  * 游戏页
  */
 export default class Index {
-  constructor(ctx) {
-    console.log(ctx,'123')
-   
+  constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 2
     
@@ -27,7 +25,6 @@ export default class Index {
     this.ranking = true;
   }
   restart(ctx) {
-   
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.ctx = ctx
     console.log(999)
@@ -76,7 +73,6 @@ export default class Index {
     ctx.fillStyle = '#ccc';  //设置填充的背景颜色
     ctx.fillRect(0, 0, 100, 80); //绘制 800*300 像素的已填充矩形：
    // ctx.drawImage(sharedCanvas, 0, 0, screenWidth, screenHeight)
-   
     DataStore.getInstance().ctx.drawImage(DataStore.getInstance().sharedCanvas, 0, 0, screenWidth, screenHeight);
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
