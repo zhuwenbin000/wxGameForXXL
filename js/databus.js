@@ -7,7 +7,7 @@ let instance
  */
 export default class DataBus {
   constructor() {
-    if ( instance )
+    if (instance)
       return instance
 
     instance = this
@@ -18,6 +18,7 @@ export default class DataBus {
   }
 
   reset() {
+    this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
     this.score = 0 //每次开始默认分数
     this.piecesType = 3 //棋子种类
     this.mt = 210; //头像到顶部的距离
@@ -42,26 +43,26 @@ export default class DataBus {
       gamePage: false,
       friendsRank: false,
       worldRank: false,
-     
+
     }
-    this.frame      = 0
-    this.score      = 0
-    this.bullets    = []
-    this.enemys     = []
+    this.frame = 0
+    this.score = 0
+    this.bullets = []
+    this.enemys = []
     this.animations = []
-    this.gameOver   = false
+    this.gameOver = false
   }
 
   /**
    * 页面状态变化
    */
   pageStateUpdate(page) {
-    
+
     this.pageState[page] = true
 
     //重置其他页面状态
     for (var i in this.pageState) {
-      if(i != page){
+      if (i != page) {
         this.pageState[i] = false
       }
     }
@@ -87,9 +88,9 @@ export default class DataBus {
       factor += arr2[i];
       if (random <= factor)
         hasLevel = true
-        return arr1[i];
+      return arr1[i];
     };
-    if(!hasLevel){
+    if (!hasLevel) {
       this.getPiecesLevel()
     }
   }

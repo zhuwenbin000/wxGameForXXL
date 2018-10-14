@@ -1,263 +1,161 @@
-import Map from './map'
-import DataBus from '../../databus'
+import Pool from './base/pool'
 
+let instance
+let ratio = canvas.width / 828 //设计稿宽度
+/**
+ * 全局状态管理器
+ */
+export default class DataBus {
+  constructor() {
+    if (instance)
+      return instance
 
-let databus = new DataBus()
-export default class Index {
-  constructor(ctx) {
-    // 维护当前requestAnimationFrame的id
-    this.aniId = 1;
-    this.f = 0;
-    //当前游戏状态
-    this.STATE = "爆破检查";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
-
-    //加载所有资源，资源都load之后，定时器开启
-    this.R = {
-      "bg": "images/bg.png",
-      "gameBg": "images/gameBg.png",
-      "icons": "images/icons.png",
-      "baozha": "images/baozha.png"
-    }
-    //把所有的图片放到一个对象中
-    this.Robj = {};	//两个对象有相同的k
-    // 遍历R对象，把真实image对象，放入this.Robj中
-    for (var k in this.R) {
-      this.Robj[k] = new Image();
-      this.Robj[k].src = this.R[k];
-    }
-
-    //是否触发拖拽
-    this.istuozhuai = false;
+    instance = this
+    this.pool = new Pool()
+    this.reset()
   }
 
-  restart(ctx) {
-    this.ctx = ctx
-    //地图，唯一的实例
-    this.map = new Map(ctx)
-    //添加监听
-    // this.bindEvent()
-    this.touchStartHandler = this.touchStart.bind(this)
-    canvas.addEventListener('touchstart', this.touchStartHandler)
+  reset() {
+    this.score = 0 //每次开始默认分数
+    this.piecesType = 3 //棋子种类
+    this.piecesLevelProbblt = { //棋子对应等级的生成概率
+      piecesLevel: ['level1', 'level2', 'level3'],
+      piecesProbblt: [1 / 3, 1 / 3, 1 / 3]
+    }
+    this.piecesLevelScore = {//棋子对应等级的分数
+      level1: 1,
+      level2: 2,
+      level3: 3
+    }
+    this.scene = 0 //场景id
+    this.rowNum = 6 //行数
+    this.colNum = 6 //列数
+    this.pageState = { //页面状态
+      homePage: false,
+      gamePage: false,
+      friendsRank: false,
+      worldRank: false,
 
-		//主循环开始
-    this.bindLoop = this.loop.bind(this)
+    }
+    this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
 
-    // 清除上一帧的动画
-    window.cancelAnimationFrame(this.aniId)
-    this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
+    //游戏页的UI值（比如：宽高，边距）
+    this.GameUI = {
+      boardToTOP: 475 * ratio,//棋盘到顶部的距离
+      boardToLR: 75 * ratio,//棋盘左右两边间距
+      boardInner: 20 * ratio,//棋盘内边框
+      piecesMargin: 12 * ratio,//棋子边距
+      boardWH: 0,//棋盘宽高
+      piecesWH: 0,//棋子宽高
+      cupCoordinates: {//奖杯坐标宽高
+        x: 20 * ratio,
+        y: 44 * ratio,
+        w: 110 * ratio,
+        h: 100 * ratio,
+      },
+      scoreBgCoordinates: {//积分背景坐标宽高
+        x: 128 * ratio,
+        y: 85 * ratio,
+        w: 220 * ratio,
+        h: 60 * ratio,
+      },
+      stepsCoordinates: {//步数坐标宽高
+        x: 658 * ratio,
+        y: 74 * ratio,
+        w: 124 * ratio,
+        h: 100 * ratio,
+      },
+      progressEmptyCoordinates: {//空进度条坐标宽高
+        x: 252 * ratio,
+        y: 214 * ratio,
+        w: 300 * ratio,
+        h: 28 * ratio,
+      },
+      progressFullCoordinates: {//满进度条坐标宽高
+        x: 254 * ratio,
+        y: 216 * ratio,
+        w: 220 * ratio,
+        h: 24 * ratio,
+      },
+      fruitCoordinates: {//水果icon坐标宽高
+        x: 184 * ratio,
+        y: 273 * ratio,
+        w: 467 * ratio,
+        h: 186 * ratio,
+      },
+      homeCoordinates: {//首页坐标宽高
+        x: 75 * ratio,
+        y: 1215 * ratio,
+        w: 74 * ratio,
+        h: 74 * ratio,
+      },
+      musicCoordinates: {//音乐坐标宽高
+        x: 175 * ratio,
+        y: 1215 * ratio,
+        w: 74 * ratio,
+        h: 74 * ratio,
+      },
+      addStepsCoordinates: {//增加步数坐标宽高
+        x: 300 * ratio,
+        y: 1160 * ratio,
+        w: 152 * ratio,
+        h: 152 * ratio,
+      },
+      colorToolCoordinates: {//彩色道具坐标宽高
+        x: 475 * ratio,
+        y: 1160 * ratio,
+        w: 152 * ratio,
+        h: 152 * ratio,
+      },
+      coinCoordinates: {//金币坐标宽高
+        x: 665 * ratio,
+        y: 1190 * ratio,
+        w: 90 * ratio,
+        h: 90 * ratio,
+      },
+    }
+    //棋盘宽高
+    this.GameUI.boardWH = canvas.width - 2 * this.GameUI.boardToLR
+    //棋子宽高
+    this.GameUI.piecesWH = ((canvas.width - 2 * this.GameUI.boardToLR - 2 * this.GameUI.boardInner - this.rowNum * this.GameUI.piecesMargin) / this.rowNum)//棋子宽高
   }
 
-  touchStart(e){
-
-  touchStart(e) {
-    e.preventDefault()
-    let x = e.touches[0].clientX
-    let y = e.touches[0].clientY
-    
-    let backBtnArea = {
-      startX: 0,
-      startY: 0,
-      endX: 100,
-      endY: 100
-    }
-
-    // 开始游戏按钮事件
-    if (x >= backBtnArea.startX && x <= backBtnArea.endX && y >= backBtnArea.startY && y <= backBtnArea.endY) {
-      databus.scene = 0
-    }
-
-    //页面结束事件
-    if (databus.scene != 1) {
-      this.finish()
-    }
-
-    //判断手指落下的坐标
-    let rc = this.getRC(x,y)
-
-    //如果落在砖块上
-    if(rc){
-      databus.selectBlocks = []
-      databus.selectBlocks.push(rc)
-    }else{
-      return
-    }
-    
-    this.touchMoveHandler = this.touchMove.bind(this)
-    canvas.addEventListener('touchmove', this.touchMoveHandler)
-
-    canvas.addEventListener('touchend', () => {
-      if (databus.selectBlocks.length >= 3) {
-        this.map.blocksBomb(databus.selectBlocks)
-        //打一个标记
-        this.startBomb = this.f;
-        //瞬间变为爆破动画
-        this.STATE = "爆破动画";
-      }
-      databus.selectBlocks = []
-      canvas.removeEventListener('touchmove', this.touchMoveHandler)
-    })
-
-  }
-
-  touchMove(e) {
-    e.preventDefault();
-
-    let x = e.touches[0].clientX
-    let y = e.touches[0].clientY
-
-    if (this.STATE != "静稳状态") {
-      return;
-    }
-
-    this.x = x;
-    this.y = y;
-    
-    //判断手指移动中所在的砖块
-    let rc = this.getRC(x, y)
-
-    //如果移动不在砖块内就return
-    if(!rc){
-      return
-    }
-    //已选择的上一个砖块
-    let pb = databus.selectBlocks[databus.selectBlocks.length - 1]
-    //如果当前砖块就是上一个砖块就return
-    if(rc.row == pb.row && rc.col == pb.col){
-      return
-    }
-    //如果移动中的砖块处在已选择的上一个砖块的九宫格内，再判断color,再将color相同的加入连线数组中
-    if (Math.abs(rc.row - pb.row) <= 1 && Math.abs(rc.col - pb.col) <= 1 ){
-      if (this.map.blocks[rc.row][rc.col].color == this.map.blocks[pb.row][pb.col].color){
-        if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1){
-          databus.selectBlocks.push(rc)
-        }else{
-          //如果回退,则连线回退，即去除之前连线的棋子
-          if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])){
-            databus.selectBlocks.splice(databus.selectBlocks.length - 1, 1)
-          }
-        }
+  /**
+   * 页面状态变化
+   */
+  pageStateUpdate(page) {
+    this.pageState[page] = true
+    //重置其他页面状态
+    for (var i in this.pageState) {
+      if (i != page) {
+        this.pageState[i] = false
       }
     }
-
-  touchEnd() {
-    this.checkBomb()
-    canvas.removeEventListener('touchmove', this.touchMoveHandler)
-    canvas.removeEventListener('touchend', this.touchEndHandler)
   }
 
-  getRC(x,y){
-    //判断是否在游戏区域内  不是就检查爆炸并return
-    if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {
-      this.checkBomb()
-      return false
+  /**
+   * 根据配置棋子level随机生成函数
+   */
+  getPiecesLevel() {
+    var arr1 = this.piecesLevelProbblt.piecesLevel;
+    var arr2 = this.piecesLevelProbblt.piecesProbblt;
+    var sum = 0,
+      factor = 0,
+      hasLevel = false,
+      random = Math.random();
+
+    for (var i = arr2.length - 1; i >= 0; i--) {
+      sum += arr2[i]; // 统计概率总和
+    };
+    random *= sum; // 生成概率随机数
+    for (var i = arr2.length - 1; i >= 0; i--) {
+      factor += arr2[i];
+      if (random <= factor)
+        hasLevel = true
+      return arr1[i];
+    };
+    if (!hasLevel) {
+      this.getPiecesLevel()
     }
-
-    //判断在哪一个区块 包括边框 
-    let rx = parseInt((x - btlr - bi) / (bl + pm));
-    let ry = parseInt((y - btt - bi) / (bl + pm));
-    //除去边框 判断在哪一个区块
-    if (((x - btlr - bi) < ((rx + 1) * bl + rx * pm)) && ((y - btt - bi) < ((ry + 1) * bl + ry * pm))) {
-      //记录手指移动时候的位置
-      if (ry != databus.rowNum && rx != databus.colNum){
-        return {
-          row: ry,
-          col: rx
-        }
-      } else {
-        return false
-      }
-    } else {
-      return false
-    }
-    
-  }
-
-  //画折线
-  drawLine(){
-    let pointsList = databus.selectBlocks || [];
-    if (pointsList.length == 0){
-      return
-    }
-    this.ctx.beginPath();
-    for (var i = 0; i < pointsList.length; i++) {
-      if (i < pointsList.length - 1){
-        this.ctx.moveTo(pointsList[i].col * (this.bl + 8) + this.bl / 2 + 15 + 12, pointsList[i].row * (this.bl + 8) + this.bl / 2 + 150 + 12);
-        this.ctx.lineTo(pointsList[i + 1].col * (this.bl + 8) + this.bl / 2 + 15 + 12, pointsList[i + 1].row * (this.bl + 8) + this.bl / 2 + 150 + 12);
-      } else {
-        this.ctx.moveTo(pointsList[i].col * (this.bl + 8) + this.bl / 2 + 15 + 12, pointsList[i].row * (this.bl + 8) + this.bl / 2 + 150 + 12);
-        this.ctx.lineTo(this.x, this.y);
-      }
-    }
-    this.ctx.lineWidth = 6;
-    this.ctx.strokeStyle = "#cccccc";
-    this.ctx.stroke();
-  }
-
-  //canvas重绘函数,每一帧重新绘制所有的需要展示的元素
-  render(ctx) {
-    //清屏
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    //帧编号
-    this.f++;
-    //绘制背景。背景没动,也要每帧擦除，重绘
-    ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
-    ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, 15, 150, canvas.width - 30, canvas.width - 30);
-    
-    this.drawLine()
-    //绘制地图
-    this.map.render(ctx, this.Robj);
-
-    //有限状态机！！！
-    if (this.STATE == "爆破检查") {
-      if (this.map.check()) {
-        //打一个标记
-        this.startBomb = this.f;
-        //瞬间变为爆破动画
-        this.STATE = "爆破动画";
-      } else {
-        this.STATE = "静稳状态";
-      }
-    } else if (this.STATE == "爆破动画" && this.f > this.startBomb + 21) {
-      console.log(1)
-      this.STATE = "下落动画";
-      this.map.dropDown();
-      this.startDropDown = this.f
-    } else if (this.STATE == "下落动画" && this.f > this.startDropDown + 5) {
-
-      this.STATE = "补充新的";
-      this.map.supplement();
-      this.startSupple = this.f;
-    } else if (this.STATE == "补充新的" && this.f > this.startSupple + 11) {
-      this.STATE = "爆破检查"
-      // this.map.check();
-    } else if (this.STATE == "静稳状态") {
-      //console.log(this.istuozhuai , this.starttuozhuai)
-      if (this.istuozhuai && this.f == this.starttuozhuai + 6) {
-        if (this.map.test(this.row1, this.col1, this.row2, this.col2)) {
-          this.STATE = "爆破检查";
-        }
-        this.istuozhuai = false;
-      }
-    } 
-
-    ctx.fillStyle = '#ccc';  //设置填充的背景颜色
-    ctx.fillRect(0, 0, 100, 100); //绘制 800*300 像素的已填充矩形：
-    ctx.fillStyle = '#fff';
-    ctx.strokeStyle = '#fff'; //设置笔触的颜色
-    ctx.font = "bold 40px '字体','字体','微软雅黑','宋体'"; //设置字体
-    ctx.fillText('返回', 10, 50); //设置文本内容
-  }
-
-  finish() {
-    //清除定时动画和绑定事件
-    window.cancelAnimationFrame(this.aniId)
-
-    canvas.removeEventListener('touchstart', this.touchHandler)
-  }
-
-  // 实现游戏帧循环
-  loop() {
-    this.render(this.ctx)
-    this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
   }
 }
