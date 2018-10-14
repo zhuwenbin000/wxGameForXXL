@@ -7,7 +7,7 @@ let ratio = canvas.width / 828 //设计稿宽度
  */
 export default class DataBus {
   constructor() {
-    if ( instance )
+    if (instance)
       return instance
 
     instance = this
@@ -16,6 +16,11 @@ export default class DataBus {
   }
 
   reset() {
+    this.mt = 210; //头像到顶部的距离 
+    this.br = 40; //头像的半径 
+    this.nmt = 321; //置灰状态下按钮到顶部的距离 
+    this.pmt = 361;//授权状态下按钮到顶部的距离
+    this.nb = 20; //置灰状态下按钮间距
     this.score = 0 //每次开始默认分数
     this.piecesType = 3 //棋子种类
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
@@ -35,7 +40,7 @@ export default class DataBus {
       gamePage: false,
       friendsRank: false,
       worldRank: false,
-     
+
     }
     this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
 
@@ -127,7 +132,7 @@ export default class DataBus {
     this.pageState[page] = true
     //重置其他页面状态
     for (var i in this.pageState) {
-      if(i != page){
+      if (i != page) {
         this.pageState[i] = false
       }
     }
@@ -152,9 +157,9 @@ export default class DataBus {
       factor += arr2[i];
       if (random <= factor)
         hasLevel = true
-        return arr1[i];
+      return arr1[i];
     };
-    if(!hasLevel){
+    if (!hasLevel) {
       this.getPiecesLevel()
     }
   }

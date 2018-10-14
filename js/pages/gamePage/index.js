@@ -73,7 +73,7 @@ export default class Index {
     this.touchStartHandler = this.touchStart.bind(this)
     canvas.addEventListener('touchstart', this.touchStartHandler)
 
-		//主循环开始
+    //主循环开始
     this.bindLoop = this.loop.bind(this)
 
     // 清除上一帧的动画
@@ -95,30 +95,30 @@ export default class Index {
     // 首页按钮事件
     if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
       databus.scene = 0
-        //请求示例
-        wx.login({
-          success: (res) => {
-            let options = {
-              tradecode:'sys01',
-              url: 'https://koba-studio.com/kobaserver/service/json',
-              method: 'POST',
-              data: { "user": { "code": res.code } },
-              success(res) {
-                console.log(1)
-              },
-              fail(res) {
-                console.log(2)
-              },
-              complete(res) {
-                console.log(3)
-              }
+      //请求示例
+      wx.login({
+        success: (res) => {
+          let options = {
+            tradecode: 'sys01',
+            url: 'https://koba-studio.com/kobaserver/service/json',
+            method: 'POST',
+            data: { "user": { "code": res.code } },
+            success(res) {
+              console.log(1)
+            },
+            fail(res) {
+              console.log(2)
+            },
+            complete(res) {
+              console.log(3)
             }
-            ajax(options)
-          },
-          fail: (res) => {
-            console.log(res)
           }
-        })
+          ajax(options)
+        },
+        fail: (res) => {
+          console.log(res)
+        }
+      })
     }
 
     //页面结束事件
@@ -131,12 +131,12 @@ export default class Index {
       return
     }
     //判断手指落下的坐标
-    let rc = this.getRC(x,y)
+    let rc = this.getRC(x, y)
     //如果落在砖块上
-    if(rc){
+    if (rc) {
       databus.selectBlocks = []
       databus.selectBlocks.push(rc)
-    }else{
+    } else {
       return
     }
     //绑定move和end事件
@@ -157,28 +157,28 @@ export default class Index {
 
     this.x = x;
     this.y = y;
-    
+
     //判断手指移动中所在的砖块
     let rc = this.getRC(x, y)
 
     //如果移动不在砖块内就return
-    if(!rc){
+    if (!rc) {
       return
     }
     //已选择的上一个砖块
     let pb = databus.selectBlocks[databus.selectBlocks.length - 1]
     //如果当前砖块就是上一个砖块就return
-    if(rc.row == pb.row && rc.col == pb.col){
+    if (rc.row == pb.row && rc.col == pb.col) {
       return
     }
     //如果移动中的砖块处在已选择的上一个砖块的九宫格内，再判断color,再将color相同的加入连线数组中
-    if (Math.abs(rc.row - pb.row) <= 1 && Math.abs(rc.col - pb.col) <= 1 ){
-      if (this.map.blocks[rc.row][rc.col].piecesType == this.map.blocks[pb.row][pb.col].piecesType){
-        if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1){
+    if (Math.abs(rc.row - pb.row) <= 1 && Math.abs(rc.col - pb.col) <= 1) {
+      if (this.map.blocks[rc.row][rc.col].color == this.map.blocks[pb.row][pb.col].color) {
+        if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1) {
           databus.selectBlocks.push(rc)
-        }else{
+        } else {
           //如果回退,则连线回退，即去除之前连线的棋子
-          if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])){
+          if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])) {
             databus.selectBlocks.splice(databus.selectBlocks.length - 1, 1)
           }
         }
@@ -196,7 +196,7 @@ export default class Index {
     canvas.removeEventListener('touchend', this.touchEndHandler)
   }
 
-  getRC(x,y){
+  getRC(x, y) {
     //判断是否在游戏区域内  不是就检查爆炸并return
     if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {
       this.checkBomb()
@@ -209,7 +209,7 @@ export default class Index {
     //除去边框 判断在哪一个区块
     if (((x - btlr - bi) < ((rx + 1) * bl + rx * pm)) && ((y - btt - bi) < ((ry + 1) * bl + ry * pm))) {
       //记录手指移动时候的位置
-      if (ry != databus.rowNum && rx != databus.colNum){
+      if (ry != databus.rowNum && rx != databus.colNum) {
         return {
           row: ry,
           col: rx
@@ -220,11 +220,11 @@ export default class Index {
     } else {
       return false
     }
-    
+
   }
 
   //touchmove结束或者手指超出边界 导致本次连线结束 判断是否爆炸
-  checkBomb(){
+  checkBomb() {
     if (databus.selectBlocks.length >= 3) {//如果连线超过3个就爆炸
       this.map.blocksBomb(databus.selectBlocks)
       //打一个标记
@@ -240,14 +240,14 @@ export default class Index {
   }
 
   //画折线
-  drawLine(){
+  drawLine() {
     let pointsList = databus.selectBlocks || [];
-    if (pointsList.length == 0){
+    if (pointsList.length == 0) {
       return
     }
     this.ctx.beginPath();
     for (var i = 0; i < pointsList.length; i++) {
-      if (i < pointsList.length - 1){
+      if (i < pointsList.length - 1) {
         this.ctx.moveTo(this.getPointCenter(pointsList[i]).x, this.getPointCenter(pointsList[i]).y);
         this.ctx.lineTo(this.getPointCenter(pointsList[i + 1]).x, this.getPointCenter(pointsList[i + 1]).y);
       } else {
@@ -256,7 +256,7 @@ export default class Index {
       }
     }
     //如果已经爆炸则return
-    if (this.x == null && this.y == null){
+    if (this.x == null && this.y == null) {
       return
     }
     this.ctx.lineWidth = 6;
@@ -265,7 +265,7 @@ export default class Index {
   }
 
   //获取棋子所在中心的坐标
-  getPointCenter(point){
+  getPointCenter(point) {
     var coordinates = {};
     coordinates.x = point.col * (bl + pm) + bl / 2 + btlr + bi;
     coordinates.y = point.row * (bl + pm) + bl / 2 + btt + bi;
@@ -340,7 +340,7 @@ export default class Index {
         }
         this.istuozhuai = false;
       }
-    } 
+    }
   }
 
   // 实现游戏帧循环

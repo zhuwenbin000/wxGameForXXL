@@ -1,3 +1,4 @@
+
 //发送请求
 export default function ajax(options) {
   wx.request({

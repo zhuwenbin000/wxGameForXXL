@@ -2,8 +2,6 @@ import Block from './block'
 import DataBus from '../../databus'
 
 let databus = new DataBus()
-
-//棋盘的宽数和列数
 let rn = databus.rowNum
 let cn = databus.colNum
 
@@ -29,12 +27,12 @@ export default class Map {
       this.needToBomb[r] = []
       this.downRow[r] = []
       for (var c = 0; c < cn; c++) {
-        // this.QRcode[r][c] = _.random(0, databus.piecesType - 1)
+        this.QRcode[r][c] = _.random(0, databus.piecesType - 1)
 
-        this.QRcode[r][c] = {
-          piecesType: _.random(0, databus.piecesType - 1),
-          piecesLevel: databus.getPiecesLevel()
-        }
+        // this.QRcode[r][c] = {
+        //   piecesType: _.random(0, databus.piecesType - 1),
+        //   piecesLevel: databus.getPiecesLevel()
+        // }
       }
     }
 
@@ -62,16 +60,16 @@ export default class Map {
         this.blocks[r][c].update();
         //渲染所有转块
         this.blocks[r][c].render(ctx, Robj);
-        // //打印地图矩阵
-        // ctx.fillText(this.QRcode[r][c], c * 10, 60 + r * 10);
-        // //打印自己needToBomb阵
-        // if (this.needToBomb[r][c]) {
-        //   ctx.fillText(this.needToBomb[r][c], 100 + c * 10, 60 + r * 10);
-        // }
-        // //打印自己的downRow阵
-        // if (this.downRow[r][c]) {
-        //   ctx.fillText(this.downRow[r][c], 200 + c * 10, 60 + r * 10);
-        // }
+        //打印地图矩阵
+        ctx.fillText(this.QRcode[r][c], c * 10, 60 + r * 10);
+        //打印自己needToBomb阵
+        if (this.needToBomb[r][c]) {
+          ctx.fillText(this.needToBomb[r][c], 100 + c * 10, 60 + r * 10);
+        }
+        //打印自己的downRow阵
+        if (this.downRow[r][c]) {
+          ctx.fillText(this.downRow[r][c], 200 + c * 10, 60 + r * 10);
+        }
       }
     }
   }
@@ -110,7 +108,7 @@ export default class Map {
       var j = 1;
 
       while (i < cn) {
-        if (j < cn && this.QRcode[i][c].piecesType == this.QRcode[j][c].piecesType) {
+        if (j < cn && this.QRcode[i][c] == this.QRcode[j][c]) {
           j++;
         } else {
           //把i和j之前的位，推入结果数组
@@ -166,7 +164,7 @@ export default class Map {
     //整理出新的QR矩阵，清空整个QR矩阵
     for (var r = 0; r < rn; r++) {
       for (var c = 0; c < cn; c++) {
-        this.QRcode[r][c] = '*';
+        this.QRcode[r][c] = "*";
       }
     }
     //从block阵反推QR阵
@@ -175,7 +173,7 @@ export default class Map {
         var theblock = this.blocks[r][c];
         //如果隐藏了
         if (!this.blocks[r][c].hide) {
-          this.QRcode[theblock.row][theblock.col] = theblock;
+          this.QRcode[theblock.row][theblock.col] = theblock.color;
         }
       }
     }
@@ -185,17 +183,14 @@ export default class Map {
   supplement () {
     //规整一下blocks
     this.createBlocksByQR();
-    //遍历QR帧，如果这个位置是*，那么就new出一个新的，从第一行往这一行移动
+    //遍历QR帧，如果这个位置是*，那么就new出一个新的，从-9行往这一行移动
     for (var r = 0; r < rn; r++) {
       for (var c = 0; c < cn; c++) {
         if (this.QRcode[r][c] == "*") {
-          var attr = {
-            piecesType: _.random(0, databus.piecesType - 1),
-            piecesLevel: databus.getPiecesLevel()
-          }
-          this.blocks[r][c] = new Block(0, c, attr);
+          var color = _.random(0, databus.piecesType - 1);
+          this.blocks[r][c] = new Block(0, c, color);
           this.blocks[r][c].moveTo(r, c, 10);
-          this.QRcode[r][c] = attr;
+          this.QRcode[r][c] = color;
         }
 
         //借这个位置，复原一下needToBomb、downRow两个阵

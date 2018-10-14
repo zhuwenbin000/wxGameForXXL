@@ -21,12 +21,10 @@ function initEle() {
   context.restore();
   context.scale(ratio, ratio);
   context.clearRect(0, 0, screenWidth * ratio, screenHeight * ratio);
-
-
   // 按照 750的尺寸绘制
   let scales = screenWidth / 750;
   context.scale(scales, scales);
-
+  
   // 画背景
   // context.fillStyle = 'rgba(0, 0, 0, 0.5)';
   // context.fillRect(0, 0, screenWidth * ratio, screenHeight * ratio);
@@ -225,7 +223,6 @@ function reDrawItem(y) {
 }
 function sortByScore(data) {
   let array = [];
-  debugger
   data.map(item => {
     array.push({
       avatarUrl: item.avatarUrl,
