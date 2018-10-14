@@ -1,5 +1,4 @@
 import Map from './map'
-
 import DataBus from '../../databus'
 import ajax from '../../base/ajax'
 
@@ -28,7 +27,7 @@ let cc = databus.GameUI.coinCoordinates //金币坐标宽高
 export default class Index {
   constructor(ctx) {
     // 维护当前requestAnimationFrame的id
-    this.ani
+    this.aniId = 1;
     this.f = 0;
     //当前游戏状态
     this.STATE = "爆破检查";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
@@ -55,18 +54,14 @@ export default class Index {
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
-
-    //备份
-    var self = this;
-    //是否触发拖拽
-    this.istuozhuai = false;
-
-    // 遍历R对象，把真实image对象，让如this.Robj中
+    // 遍历R对象，把真实image对象，放入this.Robj中
     for (var k in this.R) {
       this.Robj[k] = new Image();
       this.Robj[k].src = this.R[k];
     }
 
+    //是否触发拖拽
+    this.istuozhuai = false;
   }
 
   restart(ctx) {
@@ -84,7 +79,6 @@ export default class Index {
     // 清除上一帧的动画
     window.cancelAnimationFrame(this.aniId)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
-    
   }
 
   finish() {
@@ -94,7 +88,6 @@ export default class Index {
   }
 
   touchStart(e) {
-    console.log('start')
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
@@ -154,7 +147,6 @@ export default class Index {
   }
 
   touchMove(e) {
-    console.log('move')
     e.preventDefault();
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
@@ -185,7 +177,7 @@ export default class Index {
         if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1){
           databus.selectBlocks.push(rc)
         }else{
-          //如果回退
+          //如果回退,则连线回退，即去除之前连线的棋子
           if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])){
             databus.selectBlocks.splice(databus.selectBlocks.length - 1, 1)
           }
@@ -199,17 +191,14 @@ export default class Index {
   }
 
   touchEnd() {
-    console.log('end')
     this.checkBomb()
     canvas.removeEventListener('touchmove', this.touchMoveHandler)
     canvas.removeEventListener('touchend', this.touchEndHandler)
   }
 
   getRC(x,y){
-    //判断是否在游戏区域内  不是就return
-
+    //判断是否在游戏区域内  不是就检查爆炸并return
     if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {
-      // databus.selectBlocks = []
       this.checkBomb()
       return false
     }
@@ -217,7 +206,7 @@ export default class Index {
     //判断在哪一个区块 包括边框 
     let rx = parseInt((x - btlr - bi) / (bl + pm));
     let ry = parseInt((y - btt - bi) / (bl + pm));
-
+    //除去边框 判断在哪一个区块
     if (((x - btlr - bi) < ((rx + 1) * bl + rx * pm)) && ((y - btt - bi) < ((ry + 1) * bl + ry * pm))) {
       //记录手指移动时候的位置
       if (ry != databus.rowNum && rx != databus.colNum){

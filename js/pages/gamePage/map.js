@@ -29,7 +29,12 @@ export default class Map {
       this.needToBomb[r] = []
       this.downRow[r] = []
       for (var c = 0; c < cn; c++) {
-        this.QRcode[r][c] = _.random(0, 2)
+        this.QRcode[r][c] = _.random(0, databus.piecesType - 1)
+
+        // this.QRcode[r][c] = {
+        //   piecesType: _.random(0, databus.piecesType - 1),
+        //   piecesLevel: databus.getPiecesLevel()
+        // }
       }
     }
 
@@ -184,7 +189,7 @@ export default class Map {
     for (var r = 0; r < rn; r++) {
       for (var c = 0; c < cn; c++) {
         if (this.QRcode[r][c] == "*") {
-          var color = _.random(0, 2);
+          var color = _.random(0, databus.piecesType - 1);
           this.blocks[r][c] = new Block(0, c, color);
           this.blocks[r][c].moveTo(r, c, 10);
           this.QRcode[r][c] = color;
