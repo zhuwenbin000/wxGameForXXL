@@ -1,19 +1,30 @@
+
+import DataBus from '../../databus'
+
+let databus = new DataBus()
+
+//统一配置UI值
+let bl = databus.GameUI.piecesWH //棋子宽高  
+let btt = databus.GameUI.boardToTOP //棋盘到顶部的距离  
+let btlr = databus.GameUI.boardToLR //棋盘左右两边间距  
+let bi = databus.GameUI.boardInner //棋盘内边框  
+let pm = databus.GameUI.piecesMargin //棋子边距 
+
 /**
  * 砖块类
  */
 export default class Block {
-  constructor(row, col, color) {
-    //每个块的宽高
-    this.bl = (canvas.width - 30 - 12*2 - 8*5)/6
+  constructor(row, col, attr) {
+
     //行数
     this.row = row;
     //列数
     this.col = col;
-    //icon类型
-    this.color = color;
+    //棋子类型
+    this.piecesType = attr.piecesType;
     //自己的位置
-    this.x = 15 + 12 + this.col * 8 + this.col * this.bl;
-    this.y = 150 + 12 + this.row * 8 + this.row * this.bl;
+    this.x = btlr + bi + this.col * pm + this.col * bl;
+    this.y = btt + bi + this.row * pm + this.row * bl;
     //小帧计数器
     this.f = 0;
     //指示爆炸的小动画
@@ -27,9 +38,7 @@ export default class Block {
   //渲染
   render(ctx,Robj) {
     //渲染在画布的指定位置
-    //图片，切片x，切片y，切片w，切片h，画布位置x，画布位置y，画布位置w，画布位置h
-    var qiepianx = this.color % 3 * 76;
-    var qiepiany = (this.color < 3) ? 0 : 76;
+
     //如果自己已经消失了，那么后面的两条渲染，都不执行
     if (this.hide) {
       return;
@@ -37,10 +46,11 @@ export default class Block {
     //根据是否爆炸来渲染不同的情形
     if (!this.isBomb) {
       //渲染普通小图
-      ctx.drawImage(Robj["icons"], qiepianx, qiepiany, 76, 76, this.x, this.y, this.bl, this.bl);
+      ctx.drawImage(Robj["icon" + this.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
+      // ctx.drawImage(Robj["icon" + this.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
     } else if (this.isBomb) {
       //渲染爆炸图
-      ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, this.bl, this.bl);
+      ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);
     }
   }
 
@@ -75,8 +85,8 @@ export default class Block {
     //写标记
     this.isAnimate = true;
     //增量
-    this.dx = (col - this.col) * (this.bl + 8) / frame;
-    this.dy = (row - this.row) * (this.bl + 8) / frame;
+    this.dx = (col - this.col) * (bl + pm) / frame;
+    this.dy = (row - this.row) * (bl + pm) / frame;
     //应该结束动画的帧编号
     this.endf = this.f + frame;
     //更改自己的行、列属性

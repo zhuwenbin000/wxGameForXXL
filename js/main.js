@@ -9,7 +9,8 @@ let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
- const ratio = wx.getSystemInfoSync().pixelRatio;
+// const ratio = wx.getSystemInfoSync().pixelRatio;
+const ratio = 1;
 console.log(wx.getSystemInfoSync().pixelRatio)
 /**
  * 根据场景id渲染页面
@@ -27,40 +28,7 @@ export default class Main {
     DataStore.getInstance().sharedCanvas = sharedCanvas;
     DataStore.getInstance().ctx = ctx;
     this.renderPage()
-    this.getLogin()
-    
   }
-
-  getLogin() {
-    wx.login({
-      success:(res)=>{
-        wx.request({
-          url: 'https://koba-studio.com/kobaserver/service/json', 
-          method:'POST',
-          data: JSON.stringify({
-            "head": {
-              "tradecode": "sys01", 
-              "traceno": "1539172913783922", 
-              "channel": "3", 
-              "requesttime": "20181010214537839", 
-              "sign": hex_md5(JSON.stringify({"user":{"code":res.code}}) + "3123").toUpperCase()
-            }, 
-            "body": {"user":{"code":res.code}}
-          }),
-          header: {
-            'content-type': 'application/json' // 默认值
-          },
-          success(res) {
-            // console.log(res)
-          }
-        })
-      },
-      fail: (res) => {
-        console.log(res)
-      }
-    })
-  }
-
 
   renderPage() {
     let self = this
@@ -79,6 +47,7 @@ export default class Main {
       if (databus.scene == 0) {
         if (!pageState.homePage) {
           databus.pageStateUpdate('homePage')
+          debugger
           self.homePage.restart(ctx)
         }
       }
@@ -110,5 +79,4 @@ export default class Main {
       }
     }, 50)
   }
-
 }
