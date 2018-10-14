@@ -14,14 +14,14 @@ let pm = databus.GameUI.piecesMargin //棋子边距
  * 砖块类
  */
 export default class Block {
-  constructor(row, col, color) {
+  constructor(row, col, attr) {
 
     //行数
     this.row = row;
     //列数
     this.col = col;
-    //icon类型
-    this.color = color;
+    //棋子类型
+    this.piecesType = attr.piecesType;
     //自己的位置
     this.x = btlr + bi + this.col * pm + this.col * bl;
     this.y = btt + bi + this.row * pm + this.row * bl;
@@ -46,7 +46,8 @@ export default class Block {
     //根据是否爆炸来渲染不同的情形
     if (!this.isBomb) {
       //渲染普通小图
-      ctx.drawImage(Robj["icon" + this.color], 0, 0, 50, 46, this.x, this.y, bl, bl);
+      ctx.drawImage(Robj["icon" + this.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
+      // ctx.drawImage(Robj["icon" + this.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
     } else if (this.isBomb) {
       //渲染爆炸图
       ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);

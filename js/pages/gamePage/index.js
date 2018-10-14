@@ -173,7 +173,7 @@ export default class Index {
     }
     //如果移动中的砖块处在已选择的上一个砖块的九宫格内，再判断color,再将color相同的加入连线数组中
     if (Math.abs(rc.row - pb.row) <= 1 && Math.abs(rc.col - pb.col) <= 1 ){
-      if (this.map.blocks[rc.row][rc.col].color == this.map.blocks[pb.row][pb.col].color){
+      if (this.map.blocks[rc.row][rc.col].piecesType == this.map.blocks[pb.row][pb.col].piecesType){
         if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1){
           databus.selectBlocks.push(rc)
         }else{
