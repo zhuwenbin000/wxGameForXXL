@@ -27,7 +27,7 @@ export default class DataBus {
     this.piecesType = 3 //棋子种类
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
       piecesLevel: ['level1', 'level2', 'level3'],
-      piecesProbblt: [1 / 3, 1 / 3, 1 / 3]
+      piecesProbblt: [0.3, 0.3, 0.3]
     }
     this.piecesLevelScore = {//棋子对应等级的分数
       level1: 1,
@@ -42,7 +42,6 @@ export default class DataBus {
       gamePage: false,
       friendsRank: false,
       worldRank: false,
-
     }
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
@@ -52,6 +51,7 @@ export default class DataBus {
       piecesMargin: 12 * ratio,//棋子边距
       boardWH: 0,//棋盘宽高
       piecesWH: 0,//棋子宽高
+      levelWH: 30 * ratio,//棋子等级标志宽高
       cupCoordinates: {//奖杯坐标宽高
         x: 20 * ratio,
         y: 44 * ratio,
@@ -155,9 +155,10 @@ export default class DataBus {
     random *= sum; // 生成概率随机数
     for (var i = arr2.length - 1; i >= 0; i--) {
       factor += arr2[i];
-      if (random <= factor)
+      if (random <= factor) {
         hasLevel = true
-      return arr1[i];
+        return arr1[i];
+      }
     };
     if (!hasLevel) {
       this.getPiecesLevel()

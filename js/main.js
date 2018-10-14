@@ -47,13 +47,12 @@ export default class Main {
       if (databus.scene == 0) {
         if (!pageState.homePage) {
           databus.pageStateUpdate('homePage')
-          debugger
           self.homePage.restart(ctx)
         }
       }
 
       //游戏页
-      console.log(databus.scene)
+      // console.log(databus.scene)
       if (databus.scene == 1) {
         if (!pageState.gamePage) {
           

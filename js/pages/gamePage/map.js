@@ -108,9 +108,9 @@ export default class Map {
     for (var c = 0; c < cn; c++) {
       var i = 0;
       var j = 1;
-
       while (i < cn) {
-        if (j < cn && this.QRcode[i][c].piecesType == this.QRcode[j][c].piecesType) {
+        if (j < cn && (this.QRcode[i][c].piecesType == this.QRcode[j][c].piecesType)) {
+          console.log(this.QRcode[i][c], this.QRcode[j][c])
           j++;
         } else {
           //把i和j之前的位，推入结果数组
@@ -175,7 +175,7 @@ export default class Map {
         var theblock = this.blocks[r][c];
         //如果隐藏了
         if (!this.blocks[r][c].hide) {
-          this.QRcode[theblock.row][theblock.col] = theblock;
+          this.QRcode[theblock.row][theblock.col] = theblock.attr;
         }
       }
     }
@@ -189,7 +189,8 @@ export default class Map {
     for (var r = 0; r < rn; r++) {
       for (var c = 0; c < cn; c++) {
         if (this.QRcode[r][c] == "*") {
-          var attr = {
+          var attr = {};
+          attr = {
             piecesType: _.random(0, databus.piecesType - 1),
             piecesLevel: databus.getPiecesLevel()
           }
@@ -205,7 +206,8 @@ export default class Map {
     }
   }
 
-  test (row1, col1, row2, col2) {
+
+  test(row1, col1, row2, col2) {
     //备份当前的QRcode阵
     var oldQRcode = [[], [], [], [], [], [], [], []];
     for (var i = 0; i < rn; i++) {

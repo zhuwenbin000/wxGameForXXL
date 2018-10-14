@@ -30,7 +30,7 @@ export default class Index {
     this.aniId = 1;
     this.f = 0;
     //当前游戏状态
-    this.STATE = "爆破检查";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
+    this.STATE = "静稳状态";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
 
     //加载所有资源，资源都load之后，定时器开启
     this.R = {
@@ -50,7 +50,10 @@ export default class Index {
       "progressFull": "images/progress_full.png",
       "fruit": "images/icon_fruit.png",
       "scoreBg": "images/score_bg.png",
-      "steps": "images/steps.png"
+      "steps": "images/steps.png",
+      "pieceslevel1": "images/pieceslevel1.png",
+      "pieceslevel2": "images/pieceslevel2.png",
+      "pieceslevel3": "images/pieceslevel3.png"
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
@@ -173,7 +176,7 @@ export default class Index {
     }
     //如果移动中的砖块处在已选择的上一个砖块的九宫格内，再判断color,再将color相同的加入连线数组中
     if (Math.abs(rc.row - pb.row) <= 1 && Math.abs(rc.col - pb.col) <= 1 ){
-      if (this.map.blocks[rc.row][rc.col].piecesType == this.map.blocks[pb.row][pb.col].piecesType){
+      if (this.map.blocks[rc.row][rc.col].attr.piecesType == this.map.blocks[pb.row][pb.col].attr.piecesType){
         if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1){
           databus.selectBlocks.push(rc)
         }else{
