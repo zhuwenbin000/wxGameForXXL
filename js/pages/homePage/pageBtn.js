@@ -11,10 +11,10 @@ let kobeBtn = wx.createImage();
 let authorBtn = wx.createImage();
 let bg = wx.createImage();
 let loginfriendsRankBtn = wx.createImage();
-let loginworldRankBtn = new Image();
-let loginkobeBtn = new Image();
-let loginauthorBtn = new Image();
-let loginstartBtn = new Image();
+let loginworldRankBtn = wx.createImage();
+let loginkobeBtn = wx.createImage();
+let loginauthorBtn = wx.createImage();
+let loginstartBtn = wx.createImage();
 
 let mt = databus.mt; //头像到顶部的距离
 let br = databus.br; //头像的半径

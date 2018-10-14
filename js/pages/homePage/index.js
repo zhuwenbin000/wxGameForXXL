@@ -2,7 +2,7 @@
 import PageBtn from './pageBtn'
 import Music from '../../music/music'
 import DataBus from '../../databus'
-
+const ratio = wx.getSystemInfoSync().pixelRatio;
 let databus = new DataBus()
 /**
  * 首页

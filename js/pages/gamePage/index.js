@@ -1,5 +1,4 @@
 import Map from './map'
-
 import DataBus from '../../databus'
 
 
@@ -7,8 +6,12 @@ let databus = new DataBus()
 export default class Index {
   constructor(ctx) {
     // 维护当前requestAnimationFrame的id
+<<<<<<< HEAD
     this.aniId = 1
     //帧编号
+=======
+    this.aniId = 1;
+>>>>>>> 767d34b748eca40f42b00ffbc63898a6b4d75475
     this.f = 0;
     //当前游戏状态
     this.STATE = "爆破检查";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
@@ -22,6 +25,7 @@ export default class Index {
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
+<<<<<<< HEAD
     //图片总数
     var amount = _.keys(this.R).length;
     //已经加载好的图片数量
@@ -32,13 +36,21 @@ export default class Index {
     this.istuozhuai = false;
 
     // 遍历R对象，把真实image对象，让如this.Robj中
+=======
+    // 遍历R对象，把真实image对象，放入this.Robj中
+>>>>>>> 767d34b748eca40f42b00ffbc63898a6b4d75475
     for (var k in this.R) {
       this.Robj[k] = new Image();
       this.Robj[k].src = this.R[k];
     }
 
+<<<<<<< HEAD
     //块的宽 
     this.bl = ((canvas.width - 30 - 12 * 2 - 8 * 5) / 6)
+=======
+    //是否触发拖拽
+    this.istuozhuai = false;
+>>>>>>> 767d34b748eca40f42b00ffbc63898a6b4d75475
   }
 
   restart(ctx) {
@@ -56,11 +68,14 @@ export default class Index {
     // 清除上一帧的动画
     window.cancelAnimationFrame(this.aniId)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
-    
   }
 
   touchStart(e){
 
+<<<<<<< HEAD
+=======
+  touchStart(e) {
+>>>>>>> 767d34b748eca40f42b00ffbc63898a6b4d75475
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
@@ -141,10 +156,19 @@ export default class Index {
       if (this.map.blocks[rc.row][rc.col].color == this.map.blocks[pb.row][pb.col].color){
         if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1){
           databus.selectBlocks.push(rc)
+<<<<<<< HEAD
+=======
+        }else{
+          //如果回退,则连线回退，即去除之前连线的棋子
+          if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])){
+            databus.selectBlocks.splice(databus.selectBlocks.length - 1, 1)
+          }
+>>>>>>> 767d34b748eca40f42b00ffbc63898a6b4d75475
         }
       }
     }
 
+<<<<<<< HEAD
     console.log(databus.selectBlocks)
     return
     //实时记录手指移动的位置
@@ -174,10 +198,23 @@ export default class Index {
     //判断是否在游戏区域内  不是就return
     if ((x < 15 || y < 150) || (x > canvas.width - 30 + 15 || y > canvas.width - 30 + 150)) {
       databus.selectBlocks = []
+=======
+  touchEnd() {
+    this.checkBomb()
+    canvas.removeEventListener('touchmove', this.touchMoveHandler)
+    canvas.removeEventListener('touchend', this.touchEndHandler)
+  }
+
+  getRC(x,y){
+    //判断是否在游戏区域内  不是就检查爆炸并return
+    if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {
+      this.checkBomb()
+>>>>>>> 767d34b748eca40f42b00ffbc63898a6b4d75475
       return false
     }
 
     //判断在哪一个区块 包括边框 
+<<<<<<< HEAD
     let rx = parseInt((x - 15 - 12) / (this.bl + 8));
     let ry = parseInt((y - 150 - 12) / (this.bl + 8));
 
@@ -186,6 +223,20 @@ export default class Index {
       return {
         row: ry,
         col: rx
+=======
+    let rx = parseInt((x - btlr - bi) / (bl + pm));
+    let ry = parseInt((y - btt - bi) / (bl + pm));
+    //除去边框 判断在哪一个区块
+    if (((x - btlr - bi) < ((rx + 1) * bl + rx * pm)) && ((y - btt - bi) < ((ry + 1) * bl + ry * pm))) {
+      //记录手指移动时候的位置
+      if (ry != databus.rowNum && rx != databus.colNum){
+        return {
+          row: ry,
+          col: rx
+        }
+      } else {
+        return false
+>>>>>>> 767d34b748eca40f42b00ffbc63898a6b4d75475
       }
     } else {
       return false
