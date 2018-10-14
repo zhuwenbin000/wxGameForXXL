@@ -18,30 +18,13 @@ export default class DataBus {
   }
 
   reset() {
-<<<<<<< HEAD
-    this.scene      = 0
-
-    this.frame      = 0
-    this.score      = 0
-    this.bullets    = []
-    this.enemys     = []
-    this.animations = []
-    this.gameOver   = false
-    this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
+    this.score = 0 //每次开始默认分数
+    this.piecesType = 3 //棋子种类
     this.mt = 210; //头像到顶部的距离
     this.br = 40; //头像的半径
     this.nmt = 321; //置灰状态下按钮到顶部的距离
     this.pmt = 361;//授权状态下按钮到顶部的距离
     this.nb = 20; //置灰状态下按钮间距
-   
-
-
-    this.rowNum = 6
-    this.colNum = 6
-    this.pageState = {
-=======
-    this.score = 0 //每次开始默认分数
-    this.piecesType = 3 //棋子种类
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
       piecesLevel: ['level1', 'level2', 'level3'],
       piecesProbblt: [1 / 3, 1 / 3, 1 / 3]
@@ -55,7 +38,6 @@ export default class DataBus {
     this.rowNum = 6 //行数
     this.colNum = 6 //列数
     this.pageState = { //页面状态
->>>>>>> 767d34b748eca40f42b00ffbc63898a6b4d75475
       homePage: false,
       gamePage: false,
       friendsRank: false,
@@ -86,9 +68,6 @@ export default class DataBus {
 
   }
 
-<<<<<<< HEAD
-  
-=======
   /**
    * 根据配置棋子level随机生成函数
    */
@@ -114,5 +93,4 @@ export default class DataBus {
       this.getPiecesLevel()
     }
   }
->>>>>>> 767d34b748eca40f42b00ffbc63898a6b4d75475
 }
