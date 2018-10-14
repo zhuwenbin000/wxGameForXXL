@@ -1,4 +1,4 @@
-import BackGround from './pageBg'
+
 import PageBtn from './pageBtn'
 import Music from '../../music/music'
 import DataBus from '../../databus'
@@ -13,18 +13,39 @@ export default class Index {
     this.aniId = 0
   }
 
-  restart(ctx) {
+  restart(ctx) {  
+    var me = this; 
     this.ctx = ctx
-    this.bg = new BackGround(ctx)
+   
     this.pageBtn = new PageBtn(ctx)
     this.music = new Music()
     this.touchEvent = false
     this.bindLoop = this.loop.bind(this)
-
     // 清除上一帧的动画
     window.cancelAnimationFrame(this.aniId)
-
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
+
+    //渲染按钮之前先获取用户的登录状态
+    wx.getSetting({
+      success: function (res) {
+        var authSetting = res.authSetting
+        if (authSetting['scope.userInfo'] === true) {
+          // 用户已授权，可以直接调用相关 API
+          databus.pownstate = 1
+          me.render(me.ctx) //首页不需要循环移到这里
+        } else if (authSetting['scope.userInfo'] === false) {
+          databus.pownstate = 2
+          me.render(me.ctx) //首页不需要循环移到这里
+          // 用户已拒绝授权
+        } else {
+          databus.pownstate = 3
+          me.render(me.ctx) //首页不需要循环移到这里
+          // 未询问过用户授权，
+        }
+      }
+    })
+  
+   
   }
 
   finish() {
@@ -89,7 +110,7 @@ export default class Index {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-    this.bg.render(ctx)
+   
     this.pageBtn.render(ctx)
     let openDataContext = wx.getOpenDataContext()
     
@@ -105,7 +126,7 @@ export default class Index {
   // 实现游戏帧循环
   loop() {
 
-    this.render(this.ctx)
+   
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
 
   }

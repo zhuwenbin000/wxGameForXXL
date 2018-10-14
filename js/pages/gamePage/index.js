@@ -1,12 +1,9 @@
 import Map from './map'
 
-<<<<<<< HEAD
-=======
 import DataBus from '../../databus'
 
 
 let databus = new DataBus()
->>>>>>> 5a04b631b00d14b8c0780a92a079e278c3a35aee
 export default class Index {
   constructor(ctx) {
     // 维护当前requestAnimationFrame的id
@@ -39,12 +36,9 @@ export default class Index {
       this.Robj[k] = new Image();
       this.Robj[k].src = this.R[k];
     }
-<<<<<<< HEAD
-=======
 
     //块的宽 
     this.bl = ((canvas.width - 30 - 12 * 2 - 8 * 5) / 6)
->>>>>>> 5a04b631b00d14b8c0780a92a079e278c3a35aee
   }
 
   restart(ctx) {
@@ -229,11 +223,8 @@ export default class Index {
     //绘制背景。背景没动,也要每帧擦除，重绘
     ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
     ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, 15, 150, canvas.width - 30, canvas.width - 30);
-<<<<<<< HEAD
-=======
     
     this.drawLine()
->>>>>>> 5a04b631b00d14b8c0780a92a079e278c3a35aee
     //绘制地图
     this.map.render(ctx, this.Robj);
 
@@ -269,8 +260,6 @@ export default class Index {
         this.istuozhuai = false;
       }
     } 
-<<<<<<< HEAD
-=======
 
     ctx.fillStyle = '#ccc';  //设置填充的背景颜色
     ctx.fillRect(0, 0, 100, 100); //绘制 800*300 像素的已填充矩形：
@@ -285,7 +274,6 @@ export default class Index {
     window.cancelAnimationFrame(this.aniId)
 
     canvas.removeEventListener('touchstart', this.touchHandler)
->>>>>>> 5a04b631b00d14b8c0780a92a079e278c3a35aee
   }
 
   // 实现游戏帧循环
