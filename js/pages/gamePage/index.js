@@ -149,6 +149,8 @@ export default class Index {
     if(rc){
       databus.selectBlocks = []
       databus.selectBlocks.push(rc)
+      //震动效果
+      wx.vibrateShort()
     }else{
       return
     }
@@ -189,6 +191,8 @@ export default class Index {
       if (this.map.blocks[rc.row][rc.col].attr.piecesType == this.map.blocks[pb.row][pb.col].attr.piecesType){
         if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1){
           databus.selectBlocks.push(rc)
+          //震动效果
+          wx.vibrateShort()
         }else{
           //如果回退,则连线回退，即去除之前连线的棋子
           if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])){

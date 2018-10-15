@@ -104,7 +104,7 @@ export default class Map {
     //   }
     // }
 
-    //按行、列，分别遍历一遍。
+    //按列遍历。
     for (var c = 0; c < cn; c++) {
       var i = 0;
       var j = 1;
