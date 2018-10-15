@@ -1,7 +1,8 @@
 import Pool from './base/pool'
 
 let instance
-let ratio = canvas.width / 828 //设计稿宽度
+let uiWidth = 828;
+let ratio = canvas.width / uiWidth //设计稿宽度
 /**
  * 全局状态管理器
  */
@@ -24,6 +25,12 @@ export default class DataBus {
     this.nb = 20; //置灰状态下按钮间距
 
     this.score = 0 //每次开始默认分数
+    this.steps = 13 //剩余步数
+    this.combo = 0 //combo数
+    this.checkPoint = 1 //当前关卡  默认为1
+    this.passScore = 100 //当前关卡过关分数
+    this.selfHighScore = 0 //个人历史最高分
+    this.highestScore = 0 //世界最高分
     this.piecesType = 3 //棋子种类
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
       piecesLevel: ['level1', 'level2', 'level3'],
@@ -79,7 +86,7 @@ export default class DataBus {
       progressFullCoordinates: {//满进度条坐标宽高
         x: 254 * ratio,
         y: 216 * ratio,
-        w: 220 * ratio,
+        w: (this.score / this.passScore) * 296 * ratio,
         h: 24 * ratio,
       },
       fruitCoordinates: {//水果icon坐标宽高
@@ -118,6 +125,41 @@ export default class DataBus {
         w: 90 * ratio,
         h: 90 * ratio,
       },
+      checkPointCoordinates: {//关卡坐标
+        x: (uiWidth/2) * ratio,
+        y: 195 * ratio,
+        font: 24 * ratio + 'px Arial'
+      },
+      selfHighScoreCoordinates: {//个人最高分数坐标
+        x: 40 * ratio,
+        y: 195 * ratio,
+        font: 26 * ratio + 'px Arial'
+      },
+      highestScoreCoordinates: {//世界最高分数坐标
+        x: 235 * ratio,
+        y: 130 * ratio,
+        font: 'bold ' + 40 * ratio + 'px Arial'
+      },
+      stepsNumCoordinates: {//步数坐标
+        x: 720 * ratio,
+        y: 125 * ratio,
+        font: 'bold ' + 40 * ratio + 'px Arial'
+      },
+      stepsTxtCoordinates: {//步数文字坐标
+        x: 720 * ratio,
+        y: 160 * ratio,
+        font: 26 * ratio + 'px Arial'
+      },
+      passScoreCoordinates: {//当前过关分数坐标
+        x: 585 * ratio,
+        y: 236 * ratio,
+        font: 24 * ratio + 'px Arial'
+      },
+      currentScoreCoordinates: {//当前分数坐标
+        x: (uiWidth / 2) * ratio,
+        y: 236 * ratio,
+        font: 24 * ratio + 'px Arial'
+      }
     }
     //棋盘宽高
     this.GameUI.boardWH = canvas.width - 2 * this.GameUI.boardToLR

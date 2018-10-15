@@ -110,7 +110,6 @@ export default class Map {
       var j = 1;
       while (i < cn) {
         if (j < cn && (this.QRcode[i][c].piecesType == this.QRcode[j][c].piecesType)) {
-          console.log(this.QRcode[i][c], this.QRcode[j][c])
           j++;
         } else {
           //把i和j之前的位，推入结果数组
@@ -135,9 +134,13 @@ export default class Map {
   //炸了
   blocksBomb (sb) {
     if (sb.length <= 0) return
+    //减去1步
+    databus.steps--
     for (var i = 0; i < sb.length; i++) {
       this.needToBomb[sb[i].row][sb[i].col] = "X";
       this.blocks[sb[i].row][sb[i].col].bomb();
+      //计算分数
+      databus.score = databus.score + this.blocks[sb[i].row][sb[i].col].attr.piecesType
     }
   }
 

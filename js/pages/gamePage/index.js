@@ -22,6 +22,16 @@ let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
 let asc = databus.GameUI.addStepsCoordinates //增加步数按钮坐标宽高
 let ctc = databus.GameUI.colorToolCoordinates //彩色道具坐标宽高
 let cc = databus.GameUI.coinCoordinates //金币坐标宽高
+let cpc = databus.GameUI.checkPointCoordinates //关卡文字坐标宽高
+let shsc = databus.GameUI.selfHighScoreCoordinates //个人最高分数坐标
+let hsc = databus.GameUI.highestScoreCoordinates //世界最高分数坐标
+let snc = databus.GameUI.stepsNumCoordinates //步数坐标
+let stc = databus.GameUI.stepsTxtCoordinates //步数文字坐标
+let csc = databus.GameUI.currentScoreCoordinates //当前分数坐标
+let psc = databus.GameUI.passScoreCoordinates //当前过关分数坐标
+
+
+
 
 //游戏页主函数
 export default class Index {
@@ -307,6 +317,34 @@ export default class Index {
     ctx.drawImage(this.Robj["colorTool"], 0, 0, this.Robj["colorTool"].width, this.Robj["colorTool"].height, ctc.x, ctc.y, ctc.w, ctc.h);
     //绘制金币图标
     ctx.drawImage(this.Robj["coin"], 0, 0, this.Robj["coin"].width, this.Robj["coin"].height, cc.x, cc.y, cc.w, cc.h);
+
+
+    // 关卡
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.font = cpc.font;
+    ctx.fillText('第' + databus.checkPoint + '关', cpc.x, cpc.y);
+    //世界最高分数
+    ctx.font = hsc.font;
+    ctx.fillText(databus.highestScore, hsc.x, hsc.y);
+    //步数
+    ctx.font = snc.font;
+    ctx.fillText(databus.steps, snc.x, snc.y);
+    //步数文字
+    ctx.font = stc.font;
+    ctx.fillText('步数', stc.x, stc.y);
+    //当前分数
+    ctx.font = csc.font;
+    ctx.fillText(databus.score, csc.x, csc.y);
+    //当前过关分数
+    ctx.font = psc.font;
+    ctx.fillText(databus.passScore, psc.x, psc.y);
+    // 个人最高分
+    ctx.fillStyle = '#f9c152';
+    ctx.textAlign = 'left';
+    ctx.font = shsc.font;
+    ctx.fillText('最好记录：' + databus.selfHighScore, shsc.x, shsc.y);
+
 
     //根据手指移动绘制连线
     this.drawLine()
