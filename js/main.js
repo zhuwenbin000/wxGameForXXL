@@ -10,8 +10,11 @@ let databus = new DataBus()
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
 const ratio = wx.getSystemInfoSync().pixelRatio;
+<<<<<<< HEAD
 //const ratio = 1;
 console.log(wx.getSystemInfoSync().pixelRatio)
+=======
+>>>>>>> c22d2b881beb1c5661850077a6e687323b9ec22d
 /**
  * 根据场景id渲染页面
  */
@@ -46,13 +49,20 @@ export default class Main {
       if (databus.scene == 0) {
         if (!pageState.homePage) {
           databus.pageStateUpdate('homePage')
+<<<<<<< HEAD
           
+=======
+>>>>>>> c22d2b881beb1c5661850077a6e687323b9ec22d
           self.homePage.restart(ctx)
         }
       }
 
       //游戏页
+<<<<<<< HEAD
      // console.log(databus.scene)
+=======
+      // console.log(databus.scene)
+>>>>>>> c22d2b881beb1c5661850077a6e687323b9ec22d
       if (databus.scene == 1) {
         if (!pageState.gamePage) {
           

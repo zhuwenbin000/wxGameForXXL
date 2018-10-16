@@ -104,13 +104,12 @@ export default class Map {
     //   }
     // }
 
-    //按行、列，分别遍历一遍。
+    //按列遍历。
     for (var c = 0; c < cn; c++) {
       var i = 0;
       var j = 1;
-
       while (i < cn) {
-        if (j < cn && this.QRcode[i][c].piecesType == this.QRcode[j][c].piecesType) {
+        if (j < cn && (this.QRcode[i][c].piecesType == this.QRcode[j][c].piecesType)) {
           j++;
         } else {
           //把i和j之前的位，推入结果数组
@@ -135,9 +134,13 @@ export default class Map {
   //炸了
   blocksBomb (sb) {
     if (sb.length <= 0) return
+    //减去1步
+    databus.steps--
     for (var i = 0; i < sb.length; i++) {
       this.needToBomb[sb[i].row][sb[i].col] = "X";
       this.blocks[sb[i].row][sb[i].col].bomb();
+      //计算分数
+      databus.score = databus.score + this.blocks[sb[i].row][sb[i].col].attr.piecesType
     }
   }
 
@@ -175,7 +178,7 @@ export default class Map {
         var theblock = this.blocks[r][c];
         //如果隐藏了
         if (!this.blocks[r][c].hide) {
-          this.QRcode[theblock.row][theblock.col] = theblock;
+          this.QRcode[theblock.row][theblock.col] = theblock.attr;
         }
       }
     }
@@ -189,7 +192,8 @@ export default class Map {
     for (var r = 0; r < rn; r++) {
       for (var c = 0; c < cn; c++) {
         if (this.QRcode[r][c] == "*") {
-          var attr = {
+          var attr = {};
+          attr = {
             piecesType: _.random(0, databus.piecesType - 1),
             piecesLevel: databus.getPiecesLevel()
           }
@@ -205,7 +209,8 @@ export default class Map {
     }
   }
 
-  test (row1, col1, row2, col2) {
+
+  test(row1, col1, row2, col2) {
     //备份当前的QRcode阵
     var oldQRcode = [[], [], [], [], [], [], [], []];
     for (var i = 0; i < rn; i++) {

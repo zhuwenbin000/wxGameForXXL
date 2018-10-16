@@ -22,6 +22,16 @@ let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
 let asc = databus.GameUI.addStepsCoordinates //增加步数按钮坐标宽高
 let ctc = databus.GameUI.colorToolCoordinates //彩色道具坐标宽高
 let cc = databus.GameUI.coinCoordinates //金币坐标宽高
+let cpc = databus.GameUI.checkPointCoordinates //关卡文字坐标宽高
+let shsc = databus.GameUI.selfHighScoreCoordinates //个人最高分数坐标
+let hsc = databus.GameUI.highestScoreCoordinates //世界最高分数坐标
+let snc = databus.GameUI.stepsNumCoordinates //步数坐标
+let stc = databus.GameUI.stepsTxtCoordinates //步数文字坐标
+let csc = databus.GameUI.currentScoreCoordinates //当前分数坐标
+let psc = databus.GameUI.passScoreCoordinates //当前过关分数坐标
+
+
+
 
 //游戏页主函数
 export default class Index {
@@ -30,7 +40,7 @@ export default class Index {
     this.aniId = 1;
     this.f = 0;
     //当前游戏状态
-    this.STATE = "爆破检查";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
+    this.STATE = "静稳状态";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
 
     //加载所有资源，资源都load之后，定时器开启
     this.R = {
@@ -50,7 +60,10 @@ export default class Index {
       "progressFull": "images/progress_full.png",
       "fruit": "images/icon_fruit.png",
       "scoreBg": "images/score_bg.png",
-      "steps": "images/steps.png"
+      "steps": "images/steps.png",
+      "pieceslevel1": "images/pieceslevel1.png",
+      "pieceslevel2": "images/pieceslevel2.png",
+      "pieceslevel3": "images/pieceslevel3.png"
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
@@ -136,6 +149,8 @@ export default class Index {
     if(rc){
       databus.selectBlocks = []
       databus.selectBlocks.push(rc)
+      //震动效果
+      wx.vibrateShort()
     }else{
       return
     }
@@ -173,9 +188,11 @@ export default class Index {
     }
     //如果移动中的砖块处在已选择的上一个砖块的九宫格内，再判断color,再将color相同的加入连线数组中
     if (Math.abs(rc.row - pb.row) <= 1 && Math.abs(rc.col - pb.col) <= 1 ){
-      if (this.map.blocks[rc.row][rc.col].piecesType == this.map.blocks[pb.row][pb.col].piecesType){
+      if (this.map.blocks[rc.row][rc.col].attr.piecesType == this.map.blocks[pb.row][pb.col].attr.piecesType){
         if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1){
           databus.selectBlocks.push(rc)
+          //震动效果
+          wx.vibrateShort()
         }else{
           //如果回退,则连线回退，即去除之前连线的棋子
           if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])){
@@ -304,6 +321,34 @@ export default class Index {
     ctx.drawImage(this.Robj["colorTool"], 0, 0, this.Robj["colorTool"].width, this.Robj["colorTool"].height, ctc.x, ctc.y, ctc.w, ctc.h);
     //绘制金币图标
     ctx.drawImage(this.Robj["coin"], 0, 0, this.Robj["coin"].width, this.Robj["coin"].height, cc.x, cc.y, cc.w, cc.h);
+
+
+    // 关卡
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.font = cpc.font;
+    ctx.fillText('第' + databus.checkPoint + '关', cpc.x, cpc.y);
+    //世界最高分数
+    ctx.font = hsc.font;
+    ctx.fillText(databus.highestScore, hsc.x, hsc.y);
+    //步数
+    ctx.font = snc.font;
+    ctx.fillText(databus.steps, snc.x, snc.y);
+    //步数文字
+    ctx.font = stc.font;
+    ctx.fillText('步数', stc.x, stc.y);
+    //当前分数
+    ctx.font = csc.font;
+    ctx.fillText(databus.score, csc.x, csc.y);
+    //当前过关分数
+    ctx.font = psc.font;
+    ctx.fillText(databus.passScore, psc.x, psc.y);
+    // 个人最高分
+    ctx.fillStyle = '#f9c152';
+    ctx.textAlign = 'left';
+    ctx.font = shsc.font;
+    ctx.fillText('最好记录：' + databus.selfHighScore, shsc.x, shsc.y);
+
 
     //根据手指移动绘制连线
     this.drawLine()

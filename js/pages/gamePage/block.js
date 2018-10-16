@@ -5,26 +5,29 @@ let databus = new DataBus()
 
 //统一配置UI值
 let bl = databus.GameUI.piecesWH //棋子宽高  
-let btt = databus.GameUI.boardToTOP //棋盘到顶部的距离  
-let btlr = databus.GameUI.boardToLR //棋盘左右两边间距  
-let bi = databus.GameUI.boardInner //棋盘内边框  
-let pm = databus.GameUI.piecesMargin //棋子边距 
+let btt = databus.GameUI.boardToTOP //棋盘到顶部的距离
+let btlr = databus.GameUI.boardToLR //棋盘左右两边间距
+let bi = databus.GameUI.boardInner //棋盘内边框
+let pm = databus.GameUI.piecesMargin //棋子边距
+let lwh = databus.GameUI.levelWH //level标志的宽高
 
 /**
  * 砖块类
  */
 export default class Block {
   constructor(row, col, attr) {
-
     //行数
     this.row = row;
     //列数
     this.col = col;
-    //棋子类型
-    this.piecesType = attr.piecesType;
+    //棋子的属性
+    this.attr = attr;
     //自己的位置
     this.x = btlr + bi + this.col * pm + this.col * bl;
     this.y = btt + bi + this.row * pm + this.row * bl;
+    //level标志的位置
+    this.levelX = btlr + bi + this.col * pm + this.col * bl;
+    this.levelY = btt + bi + this.row * pm + this.row * bl;
     //小帧计数器
     this.f = 0;
     //指示爆炸的小动画
@@ -46,8 +49,13 @@ export default class Block {
     //根据是否爆炸来渲染不同的情形
     if (!this.isBomb) {
       //渲染普通小图
-      ctx.drawImage(Robj["icon" + this.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
-      // ctx.drawImage(Robj["icon" + this.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
+      ctx.drawImage(Robj["icon" + this.attr.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
+      // ctx.drawImage(Robj["pieces" + this.attr.piecesLevel], 0, 0, 73, 73, this.x, this.y, lwh, lwh);
+
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'right';
+      ctx.font = '20px Arial';
+      ctx.fillText(this.attr.piecesType + 1, this.x + bl, this.y + bl);
     } else if (this.isBomb) {
       //渲染爆炸图
       ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);
