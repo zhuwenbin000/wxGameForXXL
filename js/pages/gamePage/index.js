@@ -78,6 +78,7 @@ export default class Index {
   }
 
   restart(ctx) {
+    databus.gameInfoReset()
     this.ctx = ctx
     //地图，唯一的实例
     this.map = new Map(ctx)
@@ -308,7 +309,7 @@ export default class Index {
     //绘制空进度条
     ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
     //绘制满进度条
-    ctx.drawImage(this.Robj["progressFull"], 0, 0, this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, pfc.w, pfc.h);
+    ctx.drawImage(this.Robj["progressFull"], 0, 0, this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.score / databus.passScore) * pfc.w, pfc.h);
     //绘制水果icon
     ctx.drawImage(this.Robj["fruit"], 0, 0, this.Robj["fruit"].width, this.Robj["fruit"].height, fc.x, fc.y, fc.w, fc.h);
     //绘制首页按钮

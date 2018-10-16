@@ -29,8 +29,6 @@ export default class Map {
       this.needToBomb[r] = []
       this.downRow[r] = []
       for (var c = 0; c < cn; c++) {
-        // this.QRcode[r][c] = _.random(0, databus.piecesType - 1)
-
         this.QRcode[r][c] = {
           piecesType: _.random(0, databus.piecesType - 1),
           piecesLevel: databus.getPiecesLevel()
@@ -136,11 +134,59 @@ export default class Map {
     if (sb.length <= 0) return
     //减去1步
     databus.steps--
+    var bombScore = 0;//本次爆炸分数
+    var scorePrev = 0;//上一个连线分数
+    var scoreList = [];//相同连线分数的集合
+    var doubleHit = 0;//连击次数
     for (var i = 0; i < sb.length; i++) {
       this.needToBomb[sb[i].row][sb[i].col] = "X";
       this.blocks[sb[i].row][sb[i].col].bomb();
+
       //计算分数
-      databus.score = databus.score + this.blocks[sb[i].row][sb[i].col].attr.piecesType
+      var piecesLevelScore = databus.piecesLevelScore[this.blocks[sb[i].row][sb[i].col].attr.piecesLevel];
+      if (scorePrev == 0){
+        scorePrev = piecesLevelScore;
+        scoreList.push(piecesLevelScore)
+      } else if(piecesLevelScore == scorePrev){
+        scoreList.push(piecesLevelScore)
+      } else {
+        scorePrev = piecesLevelScore;
+        bombScore = bombScore + this.getScoreForList(scoreList)
+        //连击加1
+        if (scoreList.length >= 3){
+          doubleHit++
+        }
+        scoreList = []
+        scoreList.push(piecesLevelScore)
+      }
+      if (i == sb.length - 1) {
+        //连击加1
+        if (scoreList.length >= 3) {
+          doubleHit++
+        }
+        bombScore = bombScore + this.getScoreForList(scoreList)
+      }
+    }
+    //连击得分
+    if (doubleHit == 0){
+      doubleHit = 1
+    }
+    databus.score = databus.score + bombScore * doubleHit
+  }
+
+  //计算相同分数相连得分
+  getScoreForList(list) {
+    if (list.length <= 0){
+      return 0
+    }
+    if (list.length >= 3){
+      return (list[0] * (list.length - 2) * 10) * list.length
+    }else{
+      var totalScore = 0;
+      for (var i = 0; i < list.length; i++) {
+        totalScore = totalScore + list[i]
+      }
+      return totalScore
     }
   }
 

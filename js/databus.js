@@ -24,23 +24,7 @@ export default class DataBus {
     this.pmt = 361;//授权状态下按钮到顶部的距离
     this.nb = 20; //置灰状态下按钮间距
 
-    this.score = 0 //每次开始默认分数
-    this.steps = 13 //剩余步数
-    this.combo = 0 //combo数
-    this.checkPoint = 1 //当前关卡  默认为1
-    this.passScore = 100 //当前关卡过关分数
-    this.selfHighScore = 0 //个人历史最高分
-    this.highestScore = 0 //世界最高分
-    this.piecesType = 3 //棋子种类
-    this.piecesLevelProbblt = { //棋子对应等级的生成概率
-      piecesLevel: ['level1', 'level2', 'level3'],
-      piecesProbblt: [0.3, 0.3, 0.3]
-    }
-    this.piecesLevelScore = {//棋子对应等级的分数
-      level1: 1,
-      level2: 2,
-      level3: 3
-    }
+    
     this.scene = 0 //场景id
     this.rowNum = 6 //行数
     this.colNum = 6 //列数
@@ -86,7 +70,7 @@ export default class DataBus {
       progressFullCoordinates: {//满进度条坐标宽高
         x: 254 * ratio,
         y: 216 * ratio,
-        w: (this.score / this.passScore) * 296 * ratio,
+        w: 296 * ratio,
         h: 24 * ratio,
       },
       fruitCoordinates: {//水果icon坐标宽高
@@ -165,6 +149,8 @@ export default class DataBus {
     this.GameUI.boardWH = canvas.width - 2 * this.GameUI.boardToLR
     //棋子宽高
     this.GameUI.piecesWH = ((canvas.width - 2 * this.GameUI.boardToLR - 2 * this.GameUI.boardInner - this.rowNum * this.GameUI.piecesMargin) / this.rowNum)//棋子宽高
+
+    
   }
 
   /**
@@ -206,4 +192,51 @@ export default class DataBus {
       this.getPiecesLevel()
     }
   }
+
+  /**
+   * 游戏页数据初始化
+   */
+  gameInfoReset() {
+    this.score = 0 //每次开始默认分数
+    this.steps = 13 //剩余步数
+    this.combo = 0 //combo数
+    this.checkPoint = 1 //当前关卡  默认为1
+    this.passScore = 100 //当前关卡过关分数
+    this.selfHighScore = 0 //个人历史最高分
+    this.highestScore = 0 //世界最高分
+    this.piecesType = 3 //棋子种类
+    this.piecesLevelProbblt = { //棋子对应等级的生成概率
+      piecesLevel: ['level1', 'level2', 'level3'],
+      piecesProbblt: [0.3, 0.3, 0.3]
+    }
+    this.piecesLevelScore = {//棋子对应等级的分数
+      level1: 1,
+      level2: 2,
+      level3: 3
+    }
+
+    this.guanka = [
+      {
+        checkPoint: 1,
+        passScore: 100,
+        steps: 13
+      },
+      {
+        checkPoint: 2,
+        passScore: 300,
+        steps: 13
+      },
+      {
+        checkPoint: 3,
+        passScore: 500,
+        steps: 13
+      },
+      {
+        checkPoint: 4,
+        passScore: 700,
+        steps: 13
+      }
+    ]
+  }
 }
+
