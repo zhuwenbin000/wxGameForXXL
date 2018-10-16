@@ -1,5 +1,6 @@
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
+let ratio = canvas.width / 414 //设计稿宽度
 import DataBus from '../../databus'
 let databus = new DataBus()
 
@@ -16,24 +17,21 @@ let loginkobeBtn = wx.createImage();
 let loginauthorBtn = wx.createImage();
 let loginstartBtn = wx.createImage();
 
-let mt = databus.mt; //头像到顶部的距离
-let br = databus.br; //头像的半径
-let nmt = databus.nmt; //置灰状态下按钮到顶部的距离
-let pmt = databus.pmt;//授权状态下按钮到顶部的距离
-let nb = databus.nb; //置灰状态下按钮间距
-let ml = (window.innerWidth - 291) / 2
+let mt = databus.mt * ratio; //头像到顶部的距离
+let br = databus.br * ratio; //头像的半径
+let nmt = databus.nmt * ratio; //置灰状态下按钮到顶部的距离
+let pmt = screenHeight/2+30*ratio;//授权状态下按钮到顶部的距离
+let nb = databus.nb * ratio; //置灰状态下按钮间距
+let ml = (window.innerWidth - 291 * ratio) / 2
 
 bg.src = 'images/background.png'
-bg.width = 413
-bg.height = 734
-
 logoBtn.src = 'images/logo.png'
+
 startBtn.src = 'images/startBtn.png'
 friendsRankBtn.src = 'images/friendsRankBtn.png'
 worldRankBtn.src = 'images/world.png'
 kobeBtn.src = "images/kobe.png"
 authorBtn.src = "images/author.png"
-
 
 loginstartBtn.src = 'images/loginstart.png'
 loginfriendsRankBtn.src = 'images/loginfriends.png'
@@ -55,13 +53,7 @@ export default class PageBtn {
     this.drawlogo(ctx)//画logo
     if (databus.pownstate == 1) { //已授权
       this.drawhead(ctx)//画头像
-      this.drawscore(ctx)
-      //画按钮
-      this.loginstartBtn(ctx)
-      this.loginfriendsRankBtn(ctx)
-      this.loginworldRankBtn(ctx)
-      this.loginkobe(ctx)
-      this.loginauthor(ctx)
+     
     } else { //未授权
       this.startBtn(ctx)
       this.friendsRankBtn(ctx)
@@ -84,7 +76,7 @@ export default class PageBtn {
         me.circleName(ctx, name)
         img.src = res.userInfo.avatarUrl
         img.onload = function () {
-          me.circleImg(ctx, img, (screenWidth / 2) - br, mt, br)
+          me.circleImg(ctx, img, (screenWidth / 2) - br, mt, br,name)
         }
       }
     })
@@ -95,16 +87,18 @@ export default class PageBtn {
     ctx.fillStyle = '#fff';
     ctx.font = '16px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(name, screenWidth / 2, mt + (br * 2) + 21);
+    ctx.fillText(name, screenWidth / 2, mt + (br * 2) + 25 * ratio);
   }
   drawscore(ctx) {//预留加载最高分接口
     var score = 2999;//假设分数
     ctx.fillStyle = '#fff';
     ctx.font = '20px Arial';
     ctx.textAlign = 'center';
-    ctx.fillText(score + '分', screenWidth / 2, mt + (br * 2) + 45);
+    ctx.fillText(score + '分', screenWidth / 2, mt + (br * 2) + 55 * ratio);
   }
-  circleImg(ctx, img, x, y, r) {//画一个带边框的头像圆
+  circleImg(ctx, img, x, y, r,name) {//画一个带边框的头像圆
+   ctx.drawImage(bg, 0, 0, screenWidth, screenHeight)
+    this.drawlogo(ctx)//画logo
     ctx.save();
     var d = 2 * r;
     var cx = x + r;
@@ -120,20 +114,28 @@ export default class PageBtn {
     ctx.clip();
     ctx.drawImage(img, x, y, d, d);
     ctx.restore()
+    this.drawscore(ctx)
+    //画按钮
+    this.circleName(ctx, name)
+    this.loginstartBtn(ctx)
+    this.loginfriendsRankBtn(ctx)
+    this.loginworldRankBtn(ctx)
+    this.loginkobe(ctx)
+    this.loginauthor(ctx)
   }
   drawlogo(ctx) {
-    ctx.drawImage(logoBtn, 0, 0, 296, 192, screenWidth / 2 - 148, 30, 296, 192)
+    ctx.drawImage(logoBtn, 0, 0, 296, 192, screenWidth / 2 - 148 * ratio, 20 * ratio, 296 * ratio, 192 * ratio)
     //开始游戏按钮区域
 
   }
   loginstartBtn(ctx) {
 
-    ctx.drawImage(loginstartBtn, 0, 0, 291, 91, ml, pmt, 291, 91)
+    ctx.drawImage(loginstartBtn, 0, 0, 291, 91, ml, pmt, 291*ratio, 91*ratio)
     this.startBtnArea = {
       startX: ml,
       startY: pmt,
-      endX: ml+291,
-      endY: pmt + 91
+      endX: ml + 291 * ratio,
+      endY: pmt + 91 * ratio
     }
   }
   cleanRect(ctx) {
@@ -147,8 +149,8 @@ export default class PageBtn {
       style: {
         left: ml,
         top: nmt,
-        width: 291,
-        height: 91,
+        width: 291 * ratio,
+        height: 91 * ratio,
         lineHeight: 40,
         backgroundColor: '#ff0000',
         color: '#ffffff',
@@ -166,12 +168,12 @@ export default class PageBtn {
     })
   }
   loginfriendsRankBtn(ctx) { //好友排行榜
-    ctx.drawImage(loginfriendsRankBtn, 0, 0, 163, 71, ml, pmt + 91 + nb, 163, 71)
+    ctx.drawImage(loginfriendsRankBtn, 0, 0, 163, 71, ml, pmt + 91 * ratio + nb, 163 * ratio, 71 * ratio)
     this.friendsBtnArea = {
       startX:ml,
       startY: pmt + 91 + nb,
-      endX: ml+ 163,
-      endY: pmt + 91 + nb + 71
+      endX: ml + 163 * ratio,
+      endY: pmt + 91 * ratio + nb + 71 * ratio
     }
   }
   friendsRankBtn(ctx) { //好友排行榜
@@ -180,9 +182,9 @@ export default class PageBtn {
       image: 'images/friends.png',
       style: {
         left: ml,
-        top: nmt + 91 + nb,
-        width: 163,
-        height: 71,
+        top: nmt + 91*ratio + nb,
+        width: 163*ratio,
+        height: 71 * ratio,
         lineHeight: 40,
         backgroundColor: '#ff0000',
         color: '#ffffff',
@@ -198,22 +200,22 @@ export default class PageBtn {
   }
 
   loginkobe(ctx) {
-    ctx.drawImage(loginkobeBtn, 0, 0, 155, 60, screenWidth - ml - 155, pmt + 91 + 72 + nb * 2, 155, 60)
+    ctx.drawImage(loginkobeBtn, 0, 0, 155, 60, screenWidth - ml - 155 * ratio, pmt + 91 * ratio + 72 * ratio + nb * 2, 155 * ratio, 60 * ratio)
   }
   kobe(ctx) {
-    ctx.drawImage(kobeBtn, 0, 0, 155, 60, screenWidth - ml - 155, nmt + 91 + 72 + nb * 2, 155, 60)
+    ctx.drawImage(kobeBtn, 0, 0, 155, 60, screenWidth - ml - 155 * ratio, nmt + 91 * ratio + 72 * ratio + nb * 2, 155 * ratio, 60 * ratio)
 
   }
   author(ctx) {
-    ctx.drawImage(authorBtn, 0, 0, 122, 60, ml, nmt + 91 + 72 + nb * 2, 122, 60)
+    ctx.drawImage(authorBtn, 0, 0, 122, 60, ml, nmt + 91 * ratio + 72 * ratio + nb * 2, 122 * ratio, 60 * ratio)
 
   }
   loginauthor(ctx) {
-    ctx.drawImage(loginauthorBtn, 0, 0, 122, 60, ml, pmt + 91 + 72 + nb * 2, 122, 60)
+    ctx.drawImage(loginauthorBtn, 0, 0, 122, 60, ml, pmt + 91 * ratio + 72 * ratio + nb * 2, 122 * ratio, 60 * ratio)
 
   }
   loginworldRankBtn(ctx) {
-    ctx.drawImage(loginworldRankBtn, 0, 0, 110, 72, screenWidth - ml - 110, pmt + 91 + nb, 110, 72)
+    ctx.drawImage(loginworldRankBtn, 0, 0, 110, 72, screenWidth - ml - 110 * ratio, pmt + 91 * ratio + nb, 110 * ratio, 72 * ratio)
     //世界排行榜按钮区域
     this.worldBtnArea = {
       startX: screenWidth - ml - 110,
@@ -224,7 +226,7 @@ export default class PageBtn {
   }
 
   worldRankBtn(ctx) {
-    ctx.drawImage(worldRankBtn, 0, 0, 110, 72, screenWidth - ml - 110, nmt + 91 + nb, 110, 72)
+    ctx.drawImage(worldRankBtn, 0, 0, 110, 72, screenWidth - ml - 110 * ratio, nmt + 91 * ratio + nb, 110 * ratio, 72 * ratio)
     //世界排行榜按钮区域
     this.worldBtnArea = {
       startX: screenWidth - ml - 110,

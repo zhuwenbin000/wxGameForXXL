@@ -1,6 +1,17 @@
 let sharedCanvas = wx.getSharedCanvas();
 let context = sharedCanvas.getContext('2d');
 
+const lineImg = wx.createImage();
+lineImg.src = 'images/ph_bg.jpg';
+const ownbg = wx.createImage();
+ownbg.src = 'images/ph_selfown.png';
+const picImg = wx.createImage();
+picImg.src = 'images/ph_jb.png';
+const titleImg = wx.createImage();
+titleImg.src = 'images/ph_title.png';
+const backImg = wx.createImage();
+backImg.src = 'images/ph_back.png';
+
 const screenWidth = wx.getSystemInfoSync().screenWidth;
 const screenHeight = wx.getSystemInfoSync().screenHeight;
 const ratio = wx.getSystemInfoSync().pixelRatio;
@@ -13,8 +24,11 @@ let ctx = itemCanvas.getContext('2d');
 let myScore = undefined;
 let myInfo = {};
 let myRank = undefined;
+
 initEle();
+drawpic();
 getUserInfo();
+
 
 // 初始化标题返回按钮等元素
 function initEle() {
@@ -23,64 +37,9 @@ function initEle() {
   context.clearRect(0, 0, screenWidth * ratio, screenHeight * ratio);
   // 按照 750的尺寸绘制
   let scales = screenWidth / 750;
-  context.scale(scales, scales);
-  
+  context.scale(scales, scales); 
   // 画背景
-  // context.fillStyle = 'rgba(0, 0, 0, 0.5)';
-  // context.fillRect(0, 0, screenWidth * ratio, screenHeight * ratio);
-  const lineImg = wx.createImage();
-  lineImg.src = 'images/ph_bg.jpg';
-  lineImg.onload = () => {
-    context.drawImage(lineImg, 0, 0, screenWidth * ratio, screenHeight * ratio);
-  };
-  //画返回按钮
-
-  const backImg = wx.createImage();
-  backImg.src = 'images/ph_back.png';
-  backImg.onload = () => {
-    context.drawImage(backImg, 20, 28, 54, 54);
-  };
-
-  //画标题
   
-  const titleImg = wx.createImage();
-  titleImg.src = 'images/ph_title.png';
-  titleImg.onload = () => {
-    context.drawImage(titleImg,210 , 98, 332, 61);
-  };
-  
-  //画奖杯
-  const picImg = wx.createImage();
-  picImg.src = 'images/ph_jb.png';
-  picImg.onload = () => {
-    
-    context.drawImage(picImg, 530, 20, 188, 173);
-  };
-  // 自己的背景
-  const ownbg = wx.createImage();
-  ownbg.src = 'images/ph_selfown.png';
-  ownbg.onload = () => {
-    context.drawImage(ownbg, 20, 213, 710, 146);
-  };
-  // 画标题
-  context.fillStyle = '#fff';
-  context.font = '50px Arial';
-  context.textAlign = 'center';
-  context.fillText('好友排行榜', 750 / 2, 220);
-
-  // 排名列表外框
-  context.fillStyle = '#302F30';
-  context.fillRect(80, 290, 750 - 80 * 2, 650);
-
-  // 排行榜提示
-  context.fillStyle = '#8D8D8D';
-  context.font = '20px Arial';
-  context.textAlign = 'left';
-  context.fillText('每周一凌晨刷新', 100, 330);
-
-  // 自己排名外框
-  context.fillStyle = '#302F30';
-  context.fillRect(80, 960, 750 - 80 * 2, 120);
 
   // 返回按钮
   // let returnImage = wx.createImage();
@@ -90,8 +49,41 @@ function initEle() {
   // };
 }
 
+function drawpic(){
+ 
+  lineImg.onload = () => {
+    context.drawImage(lineImg, 0, 0, screenWidth * ratio, screenHeight * ratio);
+  };
+  //画返回按钮
+  console.log(123)
+
+  backImg.onload = () => {
+    context.drawImage(backImg, 20, 28, 54, 54);
+  };
+  //画标题
+
+  
+  titleImg.onload = () => {
+    context.drawImage(titleImg, 210, 98, 332, 61);
+  };
+
+  //画奖杯
+  
+  picImg.onload = () => {
+
+    context.drawImage(picImg, 530, 20, 188, 173);
+  };
+  // 自己的背景
+  
+  ownbg.onload = () => {
+    context.drawImage(ownbg, 20, 213, 710, 146);
+  };
+  // 画标题
+}
+
 function initRanklist(list) {
   // 至少绘制7个
+  
   let length = Math.max(list.length, 7);
   let itemHeight = 882 / 7;
 
@@ -158,16 +150,21 @@ function initRanklist(list) {
       }
      
       ctx.stroke()
+     
     });
+    drawpic()
+    drawMyRank();
   } else {
     // 没有数据
   }
 
   reDrawItem(0);
+ 
 }
 
 // 绘制自己的排名
 function drawMyRank() {
+  console.log("开始绘制自己")
   if (myInfo.avatarUrl && myScore) {
     var avatarurl_width = 100;    //绘制的头像宽度
     var avatarurl_heigth = 100;   //绘制的头像高度
@@ -212,6 +209,7 @@ function drawMyRank() {
       context.fillText(myRank + 1, 126, 288);
     }
   }
+  console.log("结束绘制自己")
   // context.fillRect(40, 480, screenWidth - 40 * 2, 60);
 }
 // 因为头像绘制异步的问题，需要重新绘制
@@ -296,8 +294,8 @@ function getFriendsRanking() {
     keyList: ['score', 'maxScore', 'checkpoint','maxcheckpoint'],
     success: res => {
       let data = [...res.data, ...res.data, ...res.data, ...res.data, ...res.data, ...res.data];     
-      initRanklist(sortByScore(data));
-      drawMyRank();
+      initRanklist(sortByScore(data));   
+      //drawMyRank();
     }
   });
 }
@@ -311,7 +309,7 @@ function getGroupRanking(ticket) {
       console.log(res.data);
       let data = res.data;
       initRanklist(sortByScore(data));
-      drawMyRank();
+      
     },
     fail: res => {
       console.log('getGroupCloudStorage:fail');

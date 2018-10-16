@@ -9,15 +9,14 @@ let ctx = canvas.getContext('2d')
 let databus = new DataBus()
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
-// const ratio = wx.getSystemInfoSync().pixelRatio;
-const ratio = 1;
+const ratio = wx.getSystemInfoSync().pixelRatio;
+//const ratio = 1;
 console.log(wx.getSystemInfoSync().pixelRatio)
 /**
  * 根据场景id渲染页面
  */
 export default class Main {
   constructor() {
-    
     canvas.width = screenWidth * ratio;
     canvas.height = screenHeight * ratio;
     ctx.scale(ratio, ratio); //加上这个图片清晰的一批
@@ -37,8 +36,8 @@ export default class Main {
     self.gamePage = new GamePage(ctx)
     self.friendsRank = new FriendsRank(ctx)
     self.worldRank = new WorldRank(ctx)
-    // databus.scene = 2 //好友排行测试用
-    // databus.scene = 1 //游戏页测试用
+     databus.scene = 2 //好友排行测试用
+  // databus.scene = 1 //游戏页测试用
    
     //每隔50毫秒判断一次场景是否发生变化
     let timeLine = setInterval(() => {
@@ -47,13 +46,13 @@ export default class Main {
       if (databus.scene == 0) {
         if (!pageState.homePage) {
           databus.pageStateUpdate('homePage')
-          debugger
+          
           self.homePage.restart(ctx)
         }
       }
 
       //游戏页
-      console.log(databus.scene)
+     // console.log(databus.scene)
       if (databus.scene == 1) {
         if (!pageState.gamePage) {
           
