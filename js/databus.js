@@ -1,3 +1,4 @@
+
 import Pool from './base/pool'
 
 let instance
@@ -200,6 +201,7 @@ export default class DataBus {
     this.score = 0 //每次开始默认分数
     this.steps = 13 //剩余步数
     this.combo = 0 //combo数
+    this.prevSelectBlocks = [] //上次爆炸棋子数组
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 100 //当前关卡过关分数
     this.selfHighScore = 0 //个人历史最高分

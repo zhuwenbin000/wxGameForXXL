@@ -77,31 +77,29 @@ export default class Map {
   //检测是否爆炸
   check () {
     var result = false;
-    //按行、列，分别遍历一遍。
-    // for (var r = 0; r < rn; r++) {
-    //   var i = 0;
-    //   var j = 1;
+    //遍历上次消除的棋子来获取能够combo的棋子位置
+    var psb = databus.prevSelectBlocks;
+    var comboBlocks = [];
+    for (var i = 0; i < psb.length; i++) {
+      if (JSON.stringify(comboBlocks).indexOf(JSON.stringify(psb[i])) >= 0){
+        for (var j = 0; j < comboBlocks.length; j++) {
+          if (JSON.stringify(comboBlocks[j]) == JSON.stringify(psb[i])){
+            if (comboBlocks[j].row < 4){
+              comboBlocks[j].row = comboBlocks[j].row + 1
+            }else{
+              comboBlocks.splice(j,1)
+            }
+          }
+        }
+      }else{
+        if (psb[i].row < 5) {
+          psb[i].row = psb[i].row + 1
+          comboBlocks.push(psb[i])
+        }
+      }
+    }
 
-    //   while (i < rn) {
-    //     if (this.QRcode[r][i] == this.QRcode[r][j]) {
-    //       j++;
-    //     } else {
-    //       //把i和j之前的位，推入结果数组
-    //       if (j - i >= 3) {
-    //         for (var m = i; m < j; m++) {
-    //           //命令该爆炸的矩阵，这一位是X
-    //           this.needToBomb[r][m] = "X";
-    //           //爆了
-    //           this.blocks[r][m].bomb();
-    //           result = true;
-    //         }
-    //       }
-    //       i = j;
-    //       j++;
-    //     }
-    //   }
-    // }
-
+    var checkComboBlocks = [];
     //按列遍历。
     for (var c = 0; c < cn; c++) {
       var i = 0;
@@ -113,12 +111,20 @@ export default class Map {
           //把i和j之前的位，推入结果数组
           if (j - i >= 3) {
             for (var m = i; m < j; m++) {
-              //命令该爆炸的矩阵，这一位是X
+              // 命令该爆炸的矩阵，这一位是X
               this.needToBomb[m][c] = "X";
-              //爆了
+              // 爆了
               this.blocks[m][c].bomb();
               result = true;
+              // checkComboBlocks.push({row:m,col:c})
             }
+            // for (var k = 0; k < comboBlocks.length; k++) {
+            //   if (JSON.stringify(checkComboBlocks).indexOf(JSON.stringify(comboBlocks[k])) >= 0) {
+            //     this.comboBlocksBomb(checkComboBlocks)
+            //   }
+            // }
+            // checkComboBlocks = []
+            // result = true;
           }
           i = j;
           j++;
@@ -129,11 +135,20 @@ export default class Map {
     return result;
   }
 
-  //炸了
+  //连线消除并且计算积分
+  comboBlocksBomb(cb) {
+    if (cb.length <= 0) return
+    for (var i = 0; i < cb.length; i++) {
+      this.needToBomb[cb[i].row][cb[i].col] = "X";
+      this.blocks[cb[i].row][cb[i].col].bomb();
+    }
+  }
+  //连线消除并且计算积分
   blocksBomb (sb) {
     if (sb.length <= 0) return
     //减去1步
-    databus.steps--
+    databus.steps--;
+    databus.prevSelectBlocks = sb;
     var bombScore = 0;//本次爆炸分数
     var scorePrev = 0;//上一个连线分数
     var scoreList = [];//相同连线分数的集合
