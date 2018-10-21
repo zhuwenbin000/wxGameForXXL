@@ -29,8 +29,6 @@ export default class Map {
       this.needToBomb[r] = []
       this.downRow[r] = []
       for (var c = 0; c < cn; c++) {
-        // this.QRcode[r][c] = _.random(0, databus.piecesType - 1)
-
         this.QRcode[r][c] = {
           piecesType: _.random(0, databus.piecesType - 1),
           piecesLevel: databus.getPiecesLevel()
@@ -72,38 +70,43 @@ export default class Map {
         // if (this.downRow[r][c]) {
         //   ctx.fillText(this.downRow[r][c], 200 + c * 10, 60 + r * 10);
         // }
+        ctx.fillText(databus.combo, 200 , 60);
       }
     }
   }
 
-  //检测是否爆炸
+  //检测是否combo
   check () {
     var result = false;
-    //按行、列，分别遍历一遍。
-    // for (var r = 0; r < rn; r++) {
-    //   var i = 0;
-    //   var j = 1;
-
-    //   while (i < rn) {
-    //     if (this.QRcode[r][i] == this.QRcode[r][j]) {
-    //       j++;
-    //     } else {
-    //       //把i和j之前的位，推入结果数组
-    //       if (j - i >= 3) {
-    //         for (var m = i; m < j; m++) {
-    //           //命令该爆炸的矩阵，这一位是X
-    //           this.needToBomb[r][m] = "X";
-    //           //爆了
-    //           this.blocks[r][m].bomb();
-    //           result = true;
-    //         }
-    //       }
-    //       i = j;
-    //       j++;
-    //     }
-    //   }
-    // }
-
+    //遍历上次消除的棋子来获取能够combo的棋子位置
+    var psb = databus.prevSelectBlocks; //上次消除的棋子包括combod的
+    var comboBlocks = []; //能combo的棋子数组
+    for (var i = 0; i < psb.length; i++) {
+      //如果当前棋子在comboBlocks中，那就找到相同位置的棋子然后往下顺延，如果顺延到5则无法combo，判断方向向下
+      if (JSON.stringify(comboBlocks).indexOf(JSON.stringify(psb[i])) >= 0){
+        for (var j = 0; j < comboBlocks.length; j++) {
+          if (JSON.stringify(comboBlocks[j]) == JSON.stringify(psb[i])){
+            if (comboBlocks[j].row < 5){
+              comboBlocks[j].row = comboBlocks[j].row + 1
+            }else{
+              comboBlocks.splice(j,1)
+            }
+          }
+        }
+      } else {//如果当前棋子不在comboBlocks中，并且不在最后一行，并且顺延棋子不在上次消除的棋子中，判断方向向上
+        if (psb[i].row < 5) {
+          var rc = {
+            row: psb[i].row + 1,
+            col: psb[i].col
+          }
+          if (JSON.stringify(psb).indexOf(JSON.stringify(rc)) < 0) {
+            comboBlocks.push(rc)
+          }
+        }
+      }
+    }
+    var checkComboBlocks = [];//当前屏幕棋子竖方向相连大于2的数组
+    var isCombo = 0;//当前屏幕棋子是否符合combo
     //按列遍历。
     for (var c = 0; c < cn; c++) {
       var i = 0;
@@ -113,34 +116,169 @@ export default class Map {
           j++;
         } else {
           //把i和j之前的位，推入结果数组
-          if (j - i >= 3) {
+          if (j - i >= 2) {
             for (var m = i; m < j; m++) {
-              //命令该爆炸的矩阵，这一位是X
-              this.needToBomb[m][c] = "X";
-              //爆了
-              this.blocks[m][c].bomb();
-              result = true;
+              checkComboBlocks.push({row:m,col:c})
             }
+            //利用上面得出当前屏幕棋子竖方向相连大于2的数组，判断能combo的棋子数组是否存在相连大于2的情况
+            for (var k = 0; k < comboBlocks.length; k++) {
+              if (JSON.stringify(checkComboBlocks).indexOf(JSON.stringify(comboBlocks[k])) > 1) {
+                if (databus.combo == 0) {
+                  databus.prevSelectBlocks = []
+                }else{
+                  databus.prevSelectBlocks = databus.prevSelectBlocks.concat(checkComboBlocks)
+                }
+                databus.combo = databus.combo + 1
+                isCombo = isCombo + 1
+                this.comboBlocksBomb(checkComboBlocks)
+                result = true;
+              }
+            }
+            checkComboBlocks = []
           }
           i = j;
           j++;
         }
       }
     }
-
+    //重置能combo的棋子数组
+    comboBlocks = []
+    //如果当前页没有combo，则combo连击清0，上一次消除也清0,可以进行手指连线消除
+    if (isCombo == 0) {
+      databus.combo = 0
+      databus.prevSelectBlocks = []
+      //判断是否过关
+      // this.checkPassStage()
+    }
     return result;
   }
 
-  //炸了
+  //combo消除并且计算积分
+  comboBlocksBomb(cb) {
+    if (cb.length <= 0) return;
+    for (var i = 0; i < cb.length; i++) {
+      this.needToBomb[cb[i].row][cb[i].col] = "X";
+      this.blocks[cb[i].row][cb[i].col].bomb();
+    }
+    //计算消除得分
+    this.getScoreForBomb(cb)
+  }
+
+  //连线消除
   blocksBomb (sb) {
     if (sb.length <= 0) return
     //减去1步
-    databus.steps--
+    databus.steps--;
+    //存储当前消除的棋子数组
+    databus.prevSelectBlocks = sb;
+    //消除棋子
     for (var i = 0; i < sb.length; i++) {
       this.needToBomb[sb[i].row][sb[i].col] = "X";
       this.blocks[sb[i].row][sb[i].col].bomb();
+    }
+    //计算消除得分
+    this.getScoreForBomb(sb)
+  }
+
+  //根据棋子消除序列计算得分
+  getScoreForBomb(sb) {
+    if (sb.length <= 0) return
+    var bombScore = 0;//本次爆炸分数
+    var scorePrev = 0;//上一个连线分数
+    var scoreList = [];//相同连线分数的集合
+    var doubleHit = 0;//连击次数
+    for (var i = 0; i < sb.length; i++) {
       //计算分数
-      databus.score = databus.score + this.blocks[sb[i].row][sb[i].col].attr.piecesType
+      var piecesLevelScore = databus.piecesLevelScore[this.blocks[sb[i].row][sb[i].col].attr.piecesLevel];
+      if (scorePrev == 0) {
+        scorePrev = piecesLevelScore;
+        scoreList.push(piecesLevelScore)
+      } else if (piecesLevelScore == scorePrev) {
+        scoreList.push(piecesLevelScore)
+      } else {
+        scorePrev = piecesLevelScore;
+        bombScore = bombScore + this.getScoreForList(scoreList)
+        //连击加1
+        if (scoreList.length >= 3) {
+          doubleHit++
+        }
+        scoreList = []
+        scoreList.push(piecesLevelScore)
+      }
+      if (i == sb.length - 1) {
+        //连击加1
+        if (scoreList.length >= 3) {
+          doubleHit++
+        }
+        bombScore = bombScore + this.getScoreForList(scoreList)
+      }
+    }
+
+    //连击得分
+    if (doubleHit == 0) {
+      doubleHit = 1
+    }
+    databus.score = databus.score + bombScore * doubleHit
+  }
+
+  //判断是否过关
+  checkPassStage() {
+    //当前关卡获得分数大于当前关卡过关分数
+    if (databus.score >= databus.passScore){
+      var self = this;
+      let options = {
+        tradecode: 'game02',
+        apiType: 'user',
+        method: 'POST',
+        data: { 
+          'user': { 
+            'stagecore': databus.score,//当前关卡过关分数
+            'usestep': databus.usestep,//过关使用步数
+            'stagegold': databus.stagegold,//过关所得金币
+            'gameid': databus.gameid,//游戏id
+            'gamescore': databus.gamescore,//本轮游戏的总得分
+            'gamegold': databus.gamegold,//本次游戏获得总金币数
+            'currstage': databus.currstage,//当前关卡
+          } 
+        },
+        success(data) {
+          databus.passScore = data.body.game.stagescore //第一关过关所需分数
+          databus.gameId = data.body.game.gameid //本轮游戏id
+          databus.steps = data.body.game.stagestep //第一关过关所需步数
+          databus.rewardstep = data.body.game.rewardstep //过关奖励步数
+
+          let piecesConfig = data.body.game.numberifno.split(',');
+          let piecesLevel = [];
+          let piecesProbblt = [];
+          for (var i = 0; i < piecesConfig.length; i++) {
+            piecesLevel.push('level' + piecesConfig[i].split(':')[0])
+            piecesProbblt.push(parseFloat(piecesConfig[i].split(':')[1]))
+          }
+          databus.piecesType = piecesConfig.length //棋子种类
+          databus.piecesLevelProbblt = { //棋子对应等级的生成概率
+            piecesLevel: piecesLevel,
+            piecesProbblt: piecesProbblt
+          }
+
+        }
+      }
+      ajax(options)
+    }
+  }
+
+  //计算相同分数相连得分
+  getScoreForList(list) {
+    if (list.length <= 0){
+      return 0
+    }
+    if (list.length >= 3){
+      return (list[0] * (list.length - 2) * 10) * list.length
+    }else{
+      var totalScore = 0;
+      for (var i = 0; i < list.length; i++) {
+        totalScore = totalScore + list[i]
+      }
+      return totalScore
     }
   }
 

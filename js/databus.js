@@ -1,3 +1,4 @@
+
 import Pool from './base/pool'
 
 let instance
@@ -59,6 +60,7 @@ export default class DataBus {
       h: 130 * ratio
     }
 
+<<<<<<< HEAD
     this.score = 0 //每次开始默认分数
     this.steps = 13 //剩余步数
     this.combo = 0 //combo数
@@ -76,6 +78,9 @@ export default class DataBus {
       level2: 2,
       level3: 3
     }
+=======
+    
+>>>>>>> 113b2c79b09c6bacf49b0ac9e7055e29538a5547
     this.scene = 0 //场景id
     this.rowNum = 6 //行数
     this.colNum = 6 //列数
@@ -121,7 +126,7 @@ export default class DataBus {
       progressFullCoordinates: { //满进度条坐标宽高
         x: 254 * ratio,
         y: 216 * ratio,
-        w: (this.score / this.passScore) * 296 * ratio,
+        w: 296 * ratio,
         h: 24 * ratio,
       },
       fruitCoordinates: { //水果icon坐标宽高
@@ -199,7 +204,13 @@ export default class DataBus {
     //棋盘宽高
     this.GameUI.boardWH = canvas.width - 2 * this.GameUI.boardToLR
     //棋子宽高
+<<<<<<< HEAD
     this.GameUI.piecesWH = ((canvas.width - 2 * this.GameUI.boardToLR - 2 * this.GameUI.boardInner - this.rowNum * this.GameUI.piecesMargin) / this.rowNum) //棋子宽高
+=======
+    this.GameUI.piecesWH = ((canvas.width - 2 * this.GameUI.boardToLR - 2 * this.GameUI.boardInner - this.rowNum * this.GameUI.piecesMargin) / this.rowNum)//棋子宽高
+
+    
+>>>>>>> 113b2c79b09c6bacf49b0ac9e7055e29538a5547
   }
 
   /**
@@ -241,4 +252,41 @@ export default class DataBus {
       this.getPiecesLevel()
     }
   }
+<<<<<<< HEAD
 }
+=======
+
+  /**
+   * 游戏页数据初始化
+   */
+  gameInfoReset() {
+    this.combo = 0 //combo数
+    this.prevSelectBlocks = [] //上次爆炸棋子数组
+    this.selectBlocks = [] //连线棋子数组
+    this.selfHighScore = 0 //个人历史最高分
+    this.highestScore = 0 //世界最高分
+    this.isguide = 0 //是否需要引导 1 需要
+
+    this.score = 0 //每次开始默认分数、当前关卡获得分数
+    this.gameScore = 0 //本轮游戏总分
+    this.checkPoint = 1 //当前关卡  默认为1
+    this.passScore = 0 //当前关卡过关分数
+    this.gameId = '' //本轮游戏id
+    this.steps = 0 //总步步数
+    this.useSteps = 0 //使用步数
+    this.rewardstep = 0 //过关奖励步数
+    this.piecesType = 0 //棋子种类
+    this.piecesLevelProbblt = { //棋子对应等级的生成概率
+      piecesLevel: [],
+      piecesProbblt: []
+    }
+    this.piecesLevelScore = {//棋子对应等级的分数
+      level1: 1,
+      level2: 2,
+      level3: 3
+    }
+
+  }
+}
+
+>>>>>>> 113b2c79b09c6bacf49b0ac9e7055e29538a5547

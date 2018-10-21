@@ -1,6 +1,6 @@
 import Map from './map'
 import DataBus from '../../databus'
-import ajax from '../../base/ajax'
+import {ajax} from '../../base/ajax'
 
 let databus = new DataBus()
 
@@ -29,9 +29,6 @@ let snc = databus.GameUI.stepsNumCoordinates //步数坐标
 let stc = databus.GameUI.stepsTxtCoordinates //步数文字坐标
 let csc = databus.GameUI.currentScoreCoordinates //当前分数坐标
 let psc = databus.GameUI.passScoreCoordinates //当前过关分数坐标
-
-
-
 
 //游戏页主函数
 export default class Index {
@@ -79,19 +76,51 @@ export default class Index {
 
   restart(ctx) {
     this.ctx = ctx
-    //地图，唯一的实例
-    this.map = new Map(ctx)
-    //添加监听
-    // this.bindEvent()
-    this.touchStartHandler = this.touchStart.bind(this)
-    canvas.addEventListener('touchstart', this.touchStartHandler)
+    databus.gameInfoReset()
+    this.getGameInfo()
+  }
 
-		//主循环开始
-    this.bindLoop = this.loop.bind(this)
+  //获取初始关卡数据
+  getGameInfo(){
+    var self = this;
+    let options = {
+      tradecode: 'game01',
+      apiType:'user',
+      method: 'POST',
+      success(data) {
+        databus.passScore = data.body.game.stagescore //第一关过关所需分数
+        databus.gameId = data.body.game.gameid //本轮游戏id
+        databus.steps = data.body.game.stagestep //第一关过关所需步数
+        databus.rewardstep = data.body.game.rewardstep //过关奖励步数
 
-    // 清除上一帧的动画
-    window.cancelAnimationFrame(this.aniId)
-    this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
+        let piecesConfig = data.body.game.numberifno.split(',');
+        let piecesLevel = [];
+        let piecesProbblt = [];
+        for (var i = 0; i < piecesConfig.length;i++){
+          piecesLevel.push('level' + piecesConfig[i].split(':')[0])
+          piecesProbblt.push(parseFloat(piecesConfig[i].split(':')[1]))
+        }
+        databus.piecesType = piecesConfig.length //棋子种类
+        databus.piecesLevelProbblt = { //棋子对应等级的生成概率
+          piecesLevel: piecesLevel,
+          piecesProbblt: piecesProbblt
+        }
+
+        //地图，唯一的实例
+        self.map = new Map(self.ctx)
+        //添加监听
+        self.touchStartHandler = self.touchStart.bind(self)
+        canvas.addEventListener('touchstart', self.touchStartHandler)
+
+        //主循环开始
+        self.bindLoop = self.loop.bind(self)
+
+        // 清除上一帧的动画
+        window.cancelAnimationFrame(self.aniId)
+        self.aniId = window.requestAnimationFrame(self.bindLoop, canvas)
+      }
+    }
+    ajax(options)
   }
 
   finish() {
@@ -108,30 +137,7 @@ export default class Index {
     // 首页按钮事件
     if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
       databus.scene = 0
-        //请求示例
-        wx.login({
-          success: (res) => {
-            let options = {
-              tradecode:'sys01',
-              url: 'https://koba-studio.com/kobaserver/service/json',
-              method: 'POST',
-              data: { "user": { "code": res.code } },
-              success(res) {
-                console.log(1)
-              },
-              fail(res) {
-                console.log(2)
-              },
-              complete(res) {
-                console.log(3)
-              }
-            }
-            ajax(options)
-          },
-          fail: (res) => {
-            console.log(res)
-          }
-        })
+        
     }
 
     //页面结束事件
@@ -309,7 +315,7 @@ export default class Index {
     //绘制空进度条
     ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
     //绘制满进度条
-    ctx.drawImage(this.Robj["progressFull"], 0, 0, this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, pfc.w, pfc.h);
+    ctx.drawImage(this.Robj["progressFull"], 0, 0, this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.score / databus.passScore) * pfc.w, pfc.h);
     //绘制水果icon
     ctx.drawImage(this.Robj["fruit"], 0, 0, this.Robj["fruit"].width, this.Robj["fruit"].height, fc.x, fc.y, fc.w, fc.h);
     //绘制首页按钮

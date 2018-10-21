@@ -51,11 +51,11 @@ export default class Block {
       //渲染普通小图
       ctx.drawImage(Robj["icon" + this.attr.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
       // ctx.drawImage(Robj["pieces" + this.attr.piecesLevel], 0, 0, 73, 73, this.x, this.y, lwh, lwh);
-
       ctx.fillStyle = '#fff';
       ctx.textAlign = 'right';
       ctx.font = '20px Arial';
-      ctx.fillText(this.attr.piecesType + 1, this.x + bl, this.y + bl);
+      ctx.fillText(databus.piecesLevelScore[this.attr.piecesLevel], this.x + bl, this.y + bl);
+
     } else if (this.isBomb) {
       //渲染爆炸图
       ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);
