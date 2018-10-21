@@ -198,18 +198,25 @@ export default class DataBus {
    * 游戏页数据初始化
    */
   gameInfoReset() {
-    this.score = 0 //每次开始默认分数
-    this.steps = 13 //剩余步数
     this.combo = 0 //combo数
     this.prevSelectBlocks = [] //上次爆炸棋子数组
-    this.checkPoint = 1 //当前关卡  默认为1
-    this.passScore = 100 //当前关卡过关分数
+    this.selectBlocks = [] //连线棋子数组
     this.selfHighScore = 0 //个人历史最高分
     this.highestScore = 0 //世界最高分
-    this.piecesType = 3 //棋子种类
+    this.isguide = 0 //是否需要引导 1 需要
+
+    this.score = 0 //每次开始默认分数、当前关卡获得分数
+    this.gameScore = 0 //本轮游戏总分
+    this.checkPoint = 1 //当前关卡  默认为1
+    this.passScore = 0 //当前关卡过关分数
+    this.gameId = '' //本轮游戏id
+    this.steps = 0 //总步步数
+    this.useSteps = 0 //使用步数
+    this.rewardstep = 0 //过关奖励步数
+    this.piecesType = 0 //棋子种类
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
-      piecesLevel: ['level1', 'level2', 'level3'],
-      piecesProbblt: [0.3, 0.3, 0.3]
+      piecesLevel: [],
+      piecesProbblt: []
     }
     this.piecesLevelScore = {//棋子对应等级的分数
       level1: 1,
@@ -217,28 +224,6 @@ export default class DataBus {
       level3: 3
     }
 
-    this.guanka = [
-      {
-        checkPoint: 1,
-        passScore: 100,
-        steps: 13
-      },
-      {
-        checkPoint: 2,
-        passScore: 300,
-        steps: 13
-      },
-      {
-        checkPoint: 3,
-        passScore: 500,
-        steps: 13
-      },
-      {
-        checkPoint: 4,
-        passScore: 700,
-        steps: 13
-      }
-    ]
   }
 }
 
