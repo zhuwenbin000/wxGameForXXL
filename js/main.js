@@ -15,6 +15,7 @@ const ratio = wx.getSystemInfoSync().pixelRatio;
  */
 export default class Main {
   constructor() {
+    var me = this;
     canvas.width = screenWidth * ratio;
     canvas.height = screenHeight * ratio;
     ctx.scale(ratio, ratio); //加上这个图片清晰的一批
@@ -24,7 +25,32 @@ export default class Main {
     sharedCanvas.height = screenHeight * ratio;
     DataStore.getInstance().sharedCanvas = sharedCanvas;
     DataStore.getInstance().ctx = ctx;
-    this.renderPage()
+    wx.getSetting({
+      success: function (res) {
+        var authSetting = res.authSetting
+        if (authSetting['scope.userInfo'] === true) {
+          // 用户已授权，可以直接调用相关 API
+          console.log("获取了授权状态")
+           wx.getUserInfo({ //获取用户基本信息
+            success: function (res) {
+              databus.userinfo = res;
+              me.renderPage() //开始判断路由
+            }
+          })
+          databus.pownstate = 1
+         
+        } else if (authSetting['scope.userInfo'] === false) {
+          databus.pownstate = 2
+          me.renderPage()
+          // 用户已拒绝授权
+        } else {
+          databus.pownstate = 3
+          me.renderPage()
+          // 未询问过用户授权，
+        }
+      }
+    })
+   
   }
 
   renderPage() {
@@ -34,7 +60,7 @@ export default class Main {
     self.gamePage = new GamePage(ctx)
     self.friendsRank = new FriendsRank(ctx)
     self.worldRank = new WorldRank(ctx)
-     databus.scene = 2 //好友排行测试用
+   //  databus.scene = 3 //好友排行测试用
   // databus.scene = 1 //游戏页测试用
    
     //每隔50毫秒判断一次场景是否发生变化

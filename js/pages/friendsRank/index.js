@@ -11,8 +11,7 @@ import DataStore from '../../base/helper';
  */
 export default class Index {
   constructor(ctx) {
-    console.log(ctx,'123')
-   
+    console.log("好友排行加载了")
     // 维护当前requestAnimationFrame的id
     this.aniId = 2
     
@@ -30,7 +29,6 @@ export default class Index {
    
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.ctx = ctx
-    console.log(999)
     this.touchEvent = false
     this.bindLoop = this.loop.bind(this)
     this.messageSharecanvas()
@@ -41,8 +39,10 @@ export default class Index {
 
   finish() {
     //清除定时动画和绑定事件
+    console.log("清除定时动画和绑定事件")
+   // wx.offTouchStart()
     window.cancelAnimationFrame(this.aniId)
-    canvas.removeEventListener('touchstart', this.touchHandler)
+    canvas.removeEventListener('touchstart', this.touchHandler) 
   }
 
   //页面触摸事件处理
@@ -52,10 +52,10 @@ export default class Index {
     let y = e.touches[0].clientY
 
     let backBtnArea = {
-      startX: 0,
-      startY: 0,
-      endX: 100,
-      endY: 100
+      startX: databus.backbtn.x,
+      startY: databus.backbtn.y,
+      endX: databus.backbtn.x + databus.backbtn.w,
+      endY: databus.backbtn.y + databus.backbtn.h
     }
 
     // 开始游戏按钮事件
@@ -69,15 +69,28 @@ export default class Index {
       this.finish()
     }
   }
-
+  
   //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
   render(ctx) {
+    console.log("好友排行在循环")
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.fillStyle = '#ccc';  //设置填充的背景颜色
-    ctx.fillRect(0, 0, 100, 80); //绘制 800*300 像素的已填充矩形：
-   // ctx.drawImage(sharedCanvas, 0, 0, screenWidth, screenHeight)
+    const lineImg = wx.createImage();
+    lineImg.src = 'images/ph_bg.jpg';
+    ctx.drawImage(lineImg, 0, 0, screenWidth * ratio, screenHeight * ratio);
+
+    const ngpng = wx.createImage();
+    ngpng.src = 'images/bgpic.png';
+    ctx.drawImage(ngpng, 0, 0, databus.bgpic.w, databus.bgpic.h);
+
+    const homeimg = wx.createImage();
+    homeimg.src = 'images/home.png';
+    ctx.drawImage(homeimg, databus.backbtn.x, databus.backbtn.y, databus.backbtn.w, databus.backbtn.h);
+
+    
+
+     DataStore.getInstance().ctx.drawImage(DataStore.getInstance().sharedCanvas, 0, 0, screenWidth, screenHeight);
+
    
-    DataStore.getInstance().ctx.drawImage(DataStore.getInstance().sharedCanvas, 0, 0, screenWidth, screenHeight);
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true

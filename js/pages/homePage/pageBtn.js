@@ -69,17 +69,42 @@ export default class PageBtn {
   }
   drawhead(ctx) {
     var me = this
-    wx.getUserInfo({ //获取用户基本信息
+    if(!databus.userinfo){
+      wx.getUserInfo({ //获取用户基本信息
       success: function (res) {
         var img = wx.createImage();
+        databus.userinfo = res
         var name = res.userInfo.nickName
         me.circleName(ctx, name)
         img.src = res.userInfo.avatarUrl
-        img.onload = function () {
+       
           me.circleImg(ctx, img, (screenWidth / 2) - br, mt, br,name)
-        }
+        
       }
     })
+    }else{
+      var img = wx.createImage();
+      
+      var name = databus.userinfo.userInfo.nickName
+      
+      me.circleName(ctx, name)
+      img.src = databus.userinfo.userInfo.avatarUrl
+      
+    
+        me.circleImg(ctx, img, (screenWidth / 2) - br, mt, br, name)
+      
+    }
+    // wx.getUserInfo({ //获取用户基本信息
+    //   success: function (res) {
+    //     var img = wx.createImage();
+    //     var name = res.userInfo.nickName
+    //     me.circleName(ctx, name)
+    //     img.src = res.userInfo.avatarUrl
+    //     img.onload = function () {
+    //       me.circleImg(ctx, img, (screenWidth / 2) - br, mt, br,name)
+    //     }
+    //   }
+    // })
 
   }
   circleName(ctx, name) {
@@ -143,29 +168,36 @@ export default class PageBtn {
     return;
   }
   startBtn(ctx) { //开始游戏按钮
-    this.createbutton = wx.createUserInfoButton({
-      type: 'image',
-      image: 'images/start.png',
-      style: {
-        left: ml,
-        top: nmt,
-        width: 291 * ratio,
-        height: 91 * ratio,
-        lineHeight: 40,
-        backgroundColor: '#ff0000',
-        color: '#ffffff',
-        textAlign: 'center',
-        fontSize: 16,
-        borderRadius: 4
-      }
-    })
-    this.createbutton.onTap((res) => {
-      this.createbutton.destroy()
-      this.friendbutton.destroy()
-      databus.pownstate = 1;
-      this.render(ctx)
-      console.log(res)
-    })
+    if (!this.createbutton){
+      this.createbutton = wx.createUserInfoButton({
+        type: 'image',
+        image: 'images/start.png',
+        style: {
+          left: ml,
+          top: nmt,
+          width: 291 * ratio,
+          height: 91 * ratio,
+          lineHeight: 40,
+          backgroundColor: '#ff0000',
+          color: '#ffffff',
+          textAlign: 'center',
+          fontSize: 16,
+          borderRadius: 4
+        }
+      })
+      this.createbutton.onTap((res) => {
+        if (res.rawData)//授权成功
+        {
+          this.createbutton.destroy()
+          this.friendbutton.destroy()
+          databus.pownstate = 1;
+          this.render(ctx)
+         
+        }
+        
+      })
+    }
+    
   }
   loginfriendsRankBtn(ctx) { //好友排行榜
     ctx.drawImage(loginfriendsRankBtn, 0, 0, 163, 71, ml, pmt + 91 * ratio + nb, 163 * ratio, 71 * ratio)
@@ -177,26 +209,33 @@ export default class PageBtn {
     }
   }
   friendsRankBtn(ctx) { //好友排行榜
-    this.friendbutton = wx.createUserInfoButton({
-      type: 'image',
-      image: 'images/friends.png',
-      style: {
-        left: ml,
-        top: nmt + 91*ratio + nb,
-        width: 163*ratio,
-        height: 71 * ratio,
-        lineHeight: 40,
-        backgroundColor: '#ff0000',
-        color: '#ffffff',
-        textAlign: 'center',
-        fontSize: 16,
-        borderRadius: 4
-      }
-    })
-    this.friendbutton.onTap((res) => {
-      this.friendbutton.destroy()
-      console.log(res)
-    })
+    if (!this.friendbutton){
+      this.friendbutton = wx.createUserInfoButton({
+        type: 'image',
+        image: 'images/friends.png',
+        style: {
+          left: ml,
+          top: nmt + 91 * ratio + nb,
+          width: 163 * ratio,
+          height: 71 * ratio,
+          lineHeight: 40,
+          backgroundColor: '#ff0000',
+          color: '#ffffff',
+          textAlign: 'center',
+          fontSize: 16,
+          borderRadius: 4
+        }
+      })
+      this.friendbutton.onTap((res) => {      
+        if (res.rawData)//授权成功
+        {
+          this.createbutton.destroy()
+          this.friendbutton.destroy()
+          databus.pownstate = 1;
+          this.render(ctx)
+        }            
+      })
+    }   
   }
 
   loginkobe(ctx) {

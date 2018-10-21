@@ -41,7 +41,7 @@ export default class Index {
     this.f = 0;
     //当前游戏状态
     this.STATE = "静稳状态";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
-
+    console.log("游戏页加载了")
     //加载所有资源，资源都load之后，定时器开启
     this.R = {
       "bg": "images/bg.png",
@@ -292,6 +292,7 @@ export default class Index {
   //canvas重绘函数,每一帧重新绘制所有的需要展示的元素
   render(ctx) {
     //清屏
+    console.log("游戏页在循环")
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     //帧编号
     this.f++;

@@ -1,4 +1,3 @@
-
 import PageBtn from './pageBtn'
 import Music from '../../music/music'
 import DataBus from '../../databus'
@@ -11,12 +10,16 @@ export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
+    console.log("初始化")
+//    wx.offTouchStart()
+   
   }
 
-  restart(ctx) {  
-    var me = this; 
+  restart(ctx) {
+    
+    var me = this;
     this.ctx = ctx
-   
+
     this.pageBtn = new PageBtn(ctx)
     this.music = new Music()
     this.touchEvent = false
@@ -26,26 +29,9 @@ export default class Index {
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
 
     //渲染按钮之前先获取用户的登录状态
-    wx.getSetting({
-      success: function (res) {
-        var authSetting = res.authSetting
-        if (authSetting['scope.userInfo'] === true) {
-          // 用户已授权，可以直接调用相关 API
-          databus.pownstate = 1
-          me.render(me.ctx) //首页不需要循环移到这里
-        } else if (authSetting['scope.userInfo'] === false) {
-          databus.pownstate = 2
-          me.render(me.ctx) //首页不需要循环移到这里
-          // 用户已拒绝授权
-        } else {
-          databus.pownstate = 3
-          me.render(me.ctx) //首页不需要循环移到这里
-          // 未询问过用户授权，
-        }
-      }
-    })
-  
    
+
+
   }
 
   finish() {
@@ -57,6 +43,7 @@ export default class Index {
 
   // 首页按钮事件处理逻辑
   touchHomePage(e) {
+    //wx.offTouchStart();
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
@@ -74,23 +61,23 @@ export default class Index {
 
     // 好友排行榜按钮事件
     if (x >= friendsBtnArea.startX && x <= friendsBtnArea.endX && y >= friendsBtnArea.startY && y <= friendsBtnArea.endY) {
-      if (databus.pownstate!=1){
+      if (databus.pownstate != 1) {
         wx.authorize({ //获取授权
           scope: 'scope.userInfo',
           success(res) {//授权成功
             databus.scene = 2
           },
-          fail(res){//授权失败
+          fail(res) {//授权失败
             databus.scene = 2
           }
         })
-      }else{
+      } else {
         databus.scene = 2
       }
-     
+
       console.log("渲染好友排行榜", databus.pownstate)
-    
-     
+
+
     }
 
     // 世界排行榜按钮事件
@@ -110,11 +97,11 @@ export default class Index {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-   
+
     this.pageBtn.render(ctx)
     let openDataContext = wx.getOpenDataContext()
-    
-    
+
+
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true
@@ -125,8 +112,7 @@ export default class Index {
 
   // 实现游戏帧循环
   loop() {
-
-   
+    this.render(this.ctx)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
 
   }
