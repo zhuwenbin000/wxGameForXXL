@@ -60,11 +60,7 @@ export default class Main {
     self.gamePage = new GamePage(ctx)
     self.friendsRank = new FriendsRank(ctx)
     self.worldRank = new WorldRank(ctx)
-<<<<<<< HEAD
-   //  databus.scene = 3 //好友排行测试用
-=======
     //  databus.scene = 2 //好友排行测试用
->>>>>>> 113b2c79b09c6bacf49b0ac9e7055e29538a5547
   // databus.scene = 1 //游戏页测试用
    
     //每隔50毫秒判断一次场景是否发生变化

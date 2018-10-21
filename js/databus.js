@@ -60,27 +60,7 @@ export default class DataBus {
       h: 130 * ratio
     }
 
-<<<<<<< HEAD
-    this.score = 0 //每次开始默认分数
-    this.steps = 13 //剩余步数
-    this.combo = 0 //combo数
-    this.checkPoint = 1 //当前关卡  默认为1
-    this.passScore = 100 //当前关卡过关分数
-    this.selfHighScore = 0 //个人历史最高分
-    this.highestScore = 0 //世界最高分
-    this.piecesType = 3 //棋子种类
-    this.piecesLevelProbblt = { //棋子对应等级的生成概率
-      piecesLevel: ['level1', 'level2', 'level3'],
-      piecesProbblt: [0.3, 0.3, 0.3]
-    }
-    this.piecesLevelScore = { //棋子对应等级的分数
-      level1: 1,
-      level2: 2,
-      level3: 3
-    }
-=======
     
->>>>>>> 113b2c79b09c6bacf49b0ac9e7055e29538a5547
     this.scene = 0 //场景id
     this.rowNum = 6 //行数
     this.colNum = 6 //列数
@@ -204,13 +184,9 @@ export default class DataBus {
     //棋盘宽高
     this.GameUI.boardWH = canvas.width - 2 * this.GameUI.boardToLR
     //棋子宽高
-<<<<<<< HEAD
-    this.GameUI.piecesWH = ((canvas.width - 2 * this.GameUI.boardToLR - 2 * this.GameUI.boardInner - this.rowNum * this.GameUI.piecesMargin) / this.rowNum) //棋子宽高
-=======
     this.GameUI.piecesWH = ((canvas.width - 2 * this.GameUI.boardToLR - 2 * this.GameUI.boardInner - this.rowNum * this.GameUI.piecesMargin) / this.rowNum)//棋子宽高
 
     
->>>>>>> 113b2c79b09c6bacf49b0ac9e7055e29538a5547
   }
 
   /**
@@ -252,9 +228,6 @@ export default class DataBus {
       this.getPiecesLevel()
     }
   }
-<<<<<<< HEAD
-}
-=======
 
   /**
    * 游戏页数据初始化
@@ -289,4 +262,3 @@ export default class DataBus {
   }
 }
 
->>>>>>> 113b2c79b09c6bacf49b0ac9e7055e29538a5547
