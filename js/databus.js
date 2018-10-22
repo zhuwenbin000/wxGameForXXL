@@ -247,6 +247,8 @@ export default class DataBus {
     this.gameId = '' //本轮游戏id
     this.steps = 0 //总步步数
     this.useSteps = 0 //使用步数
+    this.stagegold = 0 //过关所得金币
+    this.gamegold = 0 //本次游戏获得总金币数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 0 //棋子种类
     this.piecesLevelProbblt = { //棋子对应等级的生成概率

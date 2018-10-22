@@ -1,5 +1,6 @@
 import Block from './block'
 import DataBus from '../../databus'
+import { ajax } from '../../base/ajax'
 
 let databus = new DataBus()
 
@@ -105,8 +106,10 @@ export default class Map {
         }
       }
     }
+    // debugger
     var checkComboBlocks = [];//当前屏幕棋子竖方向相连大于2的数组
     var isCombo = 0;//当前屏幕棋子是否符合combo
+    databus.prevSelectBlocks = []
     //按列遍历。
     for (var c = 0; c < cn; c++) {
       var i = 0;
@@ -123,11 +126,8 @@ export default class Map {
             //利用上面得出当前屏幕棋子竖方向相连大于2的数组，判断能combo的棋子数组是否存在相连大于2的情况
             for (var k = 0; k < comboBlocks.length; k++) {
               if (JSON.stringify(checkComboBlocks).indexOf(JSON.stringify(comboBlocks[k])) > 1) {
-                if (databus.combo == 0) {
-                  databus.prevSelectBlocks = []
-                }else{
-                  databus.prevSelectBlocks = databus.prevSelectBlocks.concat(checkComboBlocks)
-                }
+                
+                databus.prevSelectBlocks = databus.prevSelectBlocks.concat(checkComboBlocks)
                 databus.combo = databus.combo + 1
                 isCombo = isCombo + 1
                 this.comboBlocksBomb(checkComboBlocks)
@@ -148,7 +148,7 @@ export default class Map {
       databus.combo = 0
       databus.prevSelectBlocks = []
       //判断是否过关
-      // this.checkPassStage()
+      this.checkPassStage()
     }
     return result;
   }
@@ -169,6 +169,8 @@ export default class Map {
     if (sb.length <= 0) return
     //减去1步
     databus.steps--;
+    //当前关卡使用步数
+    databus.useSteps++;
     //存储当前消除的棋子数组
     databus.prevSelectBlocks = sb;
     //消除棋子
@@ -226,6 +228,8 @@ export default class Map {
     //当前关卡获得分数大于当前关卡过关分数
     if (databus.score >= databus.passScore){
       var self = this;
+      databus.gameScore = databus.gameScore + databus.score;
+      databus.gamegold = databus.gamegold + databus.stagegold
       let options = {
         tradecode: 'game02',
         apiType: 'user',
@@ -233,20 +237,21 @@ export default class Map {
         data: { 
           'user': { 
             'stagecore': databus.score,//当前关卡过关分数
-            'usestep': databus.usestep,//过关使用步数
+            'usestep': databus.useSteps,//过关使用步数
             'stagegold': databus.stagegold,//过关所得金币
-            'gameid': databus.gameid,//游戏id
-            'gamescore': databus.gamescore,//本轮游戏的总得分
+            'gameid': databus.gameId,//游戏id
+            'gamescore': databus.gameScore,//本轮游戏的总得分
             'gamegold': databus.gamegold,//本次游戏获得总金币数
-            'currstage': databus.currstage,//当前关卡
+            'currstage': databus.checkPoint,//当前关卡
           } 
         },
         success(data) {
-          databus.passScore = data.body.game.stagescore //第一关过关所需分数
+          databus.passScore = data.body.game.passscore //第一关过关所需分数
           databus.gameId = data.body.game.gameid //本轮游戏id
-          databus.steps = data.body.game.stagestep //第一关过关所需步数
+          databus.steps = databus.steps + parseInt(data.body.game.rewardstep) //剩余步数加上奖励步数
           databus.rewardstep = data.body.game.rewardstep //过关奖励步数
-
+          databus.checkPoint = data.body.game.stageno //下一关关卡编号
+          //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
           let piecesConfig = data.body.game.numberifno.split(',');
           let piecesLevel = [];
           let piecesProbblt = [];
@@ -260,6 +265,9 @@ export default class Map {
             piecesProbblt: piecesProbblt
           }
 
+          databus.score = 0 //重置当前关卡获得分数
+          databus.useSteps = 0 //重置当前关卡使用步数
+          databus.stagegold = 0 //重置当前关卡所得金币
         }
       }
       ajax(options)
