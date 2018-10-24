@@ -15,8 +15,8 @@ let rcc = databus.GameUI.cupCoordinates //奖杯坐标宽高
 let sbc = databus.GameUI.scoreBgCoordinates //积分背景坐标宽高
 let sc = databus.GameUI.stepsCoordinates //步数坐标宽高
 let pec = databus.GameUI.progressEmptyCoordinates //空进度条坐标宽高
+let pec2 = databus.GameUI.progressEmpty2Coordinates //空进度条坐标宽高
 let pfc = databus.GameUI.progressFullCoordinates //满进度条坐标宽高
-let fc = databus.GameUI.fruitCoordinates //水果icon坐标宽高
 let hc = databus.GameUI.homeCoordinates //首页按钮坐标宽高
 let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
 let asc = databus.GameUI.addStepsCoordinates //增加步数按钮坐标宽高
@@ -41,26 +41,26 @@ export default class Index {
     // console.log("游戏页加载了")
     //加载所有资源，资源都load之后，定时器开启
     this.R = {
-      "bg": "images/bg.png",
-      "gameBg": "images/gameBg.png",
-      "icon0": "images/icon1.png",
-      "icon1": "images/icon2.png",
-      "icon2": "images/icon3.png",
+      "bg": "images/gamePage/bg.png",
+      "gameBg": "images/gamePage/gameBg.png",
+      "icon0": "images/gamePage/fruit_icon1.png",
+      "icon1": "images/gamePage/fruit_icon2.png",
+      "icon2": "images/gamePage/fruit_icon3.png",
+      "icon3": "images/gamePage/fruit_icon4.png",
       "baozha": "images/baozha.png",
-      "addSteps": "images/icon_addSteps.png",
+      "addSteps": "images/gamePage/icon_addSteps.png",
       "cup": "images/icon_cup.png",
       "coin": "images/icon_coin.png",
-      "home": "images/icon_home.png",
-      "music": "images/icon_music.png",
-      "colorTool": "images/icon_tool.png",
-      "progressEmpty": "images/progress_empty.png",
-      "progressFull": "images/progress_full.png",
-      "fruit": "images/icon_fruit.png",
+      "home": "images/gamePage/icon_home.png",
+      "music": "images/gamePage/icon_music.png",
+      "colorTool": "images/gamePage/icon_tool.png",
+      "progressEmpty": "images/gamePage/progress_empty.png",
+      "progressEmpty2": "images/gamePage/progress_empty2.png",
+      "progressFull": "images/gamePage/progress_full.png",
       "scoreBg": "images/score_bg.png",
-      "steps": "images/steps.png",
-      "pieceslevel1": "images/pieceslevel1.png",
-      "pieceslevel2": "images/pieceslevel2.png",
-      "pieceslevel3": "images/pieceslevel3.png"
+      "steps": "images/gamePage/steps.png",
+      "pieceslevel2": "images/gamePage/pieceslevel2.png",
+      "pieceslevel3": "images/gamePage/pieceslevel3.png"
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
@@ -100,18 +100,14 @@ export default class Index {
     ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
     //绘制棋盘
     ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, btlr, btt, bwh, bwh);
-    //绘制奖杯图标
-    ctx.drawImage(this.Robj["cup"], 0, 0, this.Robj["cup"].width, this.Robj["cup"].height, rcc.x, rcc.y, rcc.w, rcc.h);
-    //绘制分数背景
-    ctx.drawImage(this.Robj["scoreBg"], 0, 0, this.Robj["scoreBg"].width, this.Robj["scoreBg"].height, sbc.x, sbc.y, sbc.w, sbc.h);
     //绘制步数图标
     ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
     //绘制空进度条
     ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
+    //绘制空进度条
+    ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, pec2.w, pec2.h);
     //绘制满进度条
-    ctx.drawImage(this.Robj["progressFull"], 0, 0, this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * pfc.w, pfc.h);
-    //绘制水果icon
-    ctx.drawImage(this.Robj["fruit"], 0, 0, this.Robj["fruit"].width, this.Robj["fruit"].height, fc.x, fc.y, fc.w, fc.h);
+    ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * pfc.w, pfc.h);
     //绘制首页按钮
     ctx.drawImage(this.Robj["home"], 0, 0, this.Robj["home"].width, this.Robj["home"].height, hc.x, hc.y, hc.w, hc.h);
     //绘制音乐按钮
@@ -125,30 +121,35 @@ export default class Index {
 
 
     // 关卡
+    ctx.textAlign = 'left';
     ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
     ctx.font = cpc.font;
     ctx.fillText('第' + databus.checkPoint + '关', cpc.x, cpc.y);
     //世界最高分数
-    ctx.font = hsc.font;
-    ctx.fillText(databus.highestScore, hsc.x, hsc.y);
-    //步数
+    // ctx.font = hsc.font;
+    // ctx.textAlign = 'center';
+    // ctx.fillText(databus.highestScore, hsc.x, hsc.y);
+    // 步数
+
+    ctx.textAlign = 'center';
     ctx.font = snc.font;
     ctx.fillText(databus.steps, snc.x, snc.y);
     //步数文字
-    ctx.font = stc.font;
-    ctx.fillText('步数', stc.x, stc.y);
+    // ctx.font = stc.font;
+    // ctx.fillText('步数', stc.x, stc.y);
+    // 本轮分数
+    ctx.font = shsc.font;
+    ctx.fillText(databus.gameScore, shsc.x, shsc.y);
     //当前分数
+    ctx.fillStyle = '#ffd35f';
     ctx.font = csc.font;
     ctx.fillText(databus.score, csc.x, csc.y);
+
     //当前过关分数
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'right';
     ctx.font = psc.font;
     ctx.fillText(databus.passScore, psc.x, psc.y);
-    // 个人最高分
-    ctx.fillStyle = '#f9c152';
-    ctx.textAlign = 'left';
-    ctx.font = shsc.font;
-    ctx.fillText('最好记录：' + databus.selfHighScore, shsc.x, shsc.y);
 
 
     //根据手指移动绘制连线
@@ -209,7 +210,6 @@ export default class Index {
       success(data) {
         databus.passScore = data.body.game.stagescore //第一关过关所需分数
         databus.gameId = data.body.game.gameid //本轮游戏id
-        databus.steps = data.body.game.stagestep //第一关过关所需步数
         databus.rewardstep = data.body.game.rewardstep //过关奖励步数
 
         //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
