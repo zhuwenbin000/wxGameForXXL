@@ -1,7 +1,8 @@
 import Music from '../../music/music'
 import DataBus from '../../databus'
-
+import { ajax } from '../../base/ajax'
 let databus = new DataBus()
+let mt = 240;
 /**
  * 游戏页
  */
@@ -10,10 +11,13 @@ export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 3
+    this.userList = []
     console.log("排行榜加载完了")
+
   }
 
   restart(ctx) {
+    var me =this;
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.ctx = ctx
 
@@ -23,22 +27,26 @@ export default class Index {
     // 清除上一帧的动画
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
-   
-    let openDataContext = wx.getOpenDataContext()
-    let num = parseInt(Math.random()*1000)
-    openDataContext.postMessage({
-      test: 'hello',
-      year: num
-    })
 
-    wx.request({
-      url: 'https://www.easy-mock.com/mock/5a5c408ee990076261beed88/example/getranklist',
-      method:'GET',
-      data:{},
-      success:function(res){
-        console.log(res)
+    let options = {
+      tradecode: 'rank02',
+      apiType: 'user',
+      method: 'POST',
+      data:{
+        user:{
+          start: 0,
+          limit: 10
+        }  
+      },
+      success(data) {
+        var newlist = data.body.user_list
+        newlist.map(item=>{
+          item.logopath = 'https://img2.woyaogexing.com/2018/10/19/13ff6071a10f497d!400x400_big.jpg'
+        })
+        me.userList = newlist
       }
-    })
+    }
+    ajax(options)
   }
 
  drawnextbtn(ctx) {
@@ -80,11 +88,56 @@ export default class Index {
       this.finish()
     }
   }
+  initRanklist(list,page,ctx) {
+  // 至少绘制6个
+  list = list.slice(6 * (page - 1), 6 * (page))
+  
+  let length = 7
+  let itemHeight = 897 / 7;
+  var w = (750 - 60 * 2);
+  var h = itemHeight * length;
+  ctx.clearRect(0, 0, sharedCanvas.width, sharedCanvas.height);
+  //drawnextbtn();
 
+  for (let i = 0; i < length; i++) {
+    let threeImage = wx.createImage();
+    threeImage.src = 'images/firstthree.png';
+    let lessIamge = wx.createImage()
+    lessIamge.src = "images/icon_three.png"
+    let meIamge = wx.createImage()
+    meIamge.src = "images/me.png"
+    if(page == 1){
+      if (i < 3) {
+        threeImage.onload = function () {
+          ctx.drawImage(threeImage, 60, i * itemHeight + mt, w, itemHeight);
+        }
+      }
+      if (i >= 3 && i < 6) {
+        lessIamge.onload = function () {
+          ctx.drawImage(lessIamge, 60, i * itemHeight + mt, w, itemHeight);
+        }
+
+      }
+    }else{
+      lessIamge.onload = function () {
+        ctx.drawImage(lessIamge, 60, i * itemHeight + mt, w, itemHeight);
+      }
+    }
+    
+    if (i == 6) {
+      meIamge.onload = function() {
+        ctx.drawImage(meIamge, 33, i * itemHeight + mt, w * 1.09, itemHeight);
+        console.log("绿色渲染完了")
+       // drawrank(list,page)
+      }
+    }
+  }
+}
   //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
   render(ctx) {
-
+    console.log(this.userList)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    this.initRanklist(this.userList,1,ctx)
     const lineImg = wx.createImage();
     lineImg.src = 'images/ph_bg.jpg';
     ctx.drawImage(lineImg, 0, 0, canvas.width, canvas.height);

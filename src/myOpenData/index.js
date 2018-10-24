@@ -1,6 +1,6 @@
 let sharedCanvas = wx.getSharedCanvas();
 let context = sharedCanvas.getContext('2d');
-const mt = 240;
+const mt = 255;
 
 const screenWidth = wx.getSystemInfoSync().screenWidth;
 const screenHeight = wx.getSystemInfoSync().screenHeight;
@@ -64,8 +64,8 @@ function initRanklist(list,page) {
   list = list.slice(6 * (page - 1), 6 * (page))
   
   let length = 7
-  let itemHeight = 897 / 7;
-  var w = (750 - 60 * 2);
+  let itemHeight = 917 / 7;
+  var w = (750 - 40 * 2);
   var h = itemHeight * length;
   context.clearRect(0, 0, sharedCanvas.width, sharedCanvas.height);
   drawnextbtn();
@@ -79,27 +79,25 @@ function initRanklist(list,page) {
     meIamge.src = "images/me.png"
     if(page == 1){
       if (i < 3) {
-
         threeImage.onload = function () {
-          context.drawImage(threeImage, 60, i * itemHeight + mt, w, itemHeight);
+          context.drawImage(threeImage, 40, i * itemHeight + mt, w, itemHeight);
         }
-
       }
       if (i >= 3 && i < 6) {
         lessIamge.onload = function () {
-          context.drawImage(lessIamge, 60, i * itemHeight + mt, w, itemHeight);
+          context.drawImage(lessIamge, 40, i * itemHeight + mt, w, itemHeight);
         }
 
       }
     }else{
       lessIamge.onload = function () {
-        context.drawImage(lessIamge, 60, i * itemHeight + mt, w, itemHeight);
+        context.drawImage(lessIamge, 40, i * itemHeight + mt, w, itemHeight);
       }
     }
     
     if (i == 6) {
       meIamge.onload = function() {
-        context.drawImage(meIamge, 33, i * itemHeight + mt, w * 1.09, itemHeight);
+        context.drawImage(meIamge, 33, i * itemHeight + mt, w * 1.024, itemHeight);
         console.log("绿色渲染完了")
         drawrank(list,page)
       }
@@ -108,8 +106,8 @@ function initRanklist(list,page) {
 }
 function drawrank(list,page){
   let length = 7
-  let itemHeight = 897 / 7;
-  var w = (750 - 60 * 2);
+  let itemHeight = 917 / 7;
+  var w = (750 - 40 * 2);
   var h = itemHeight * length;
   if (list && list.length > 0) {
     list.map((item, index) => {
@@ -199,16 +197,17 @@ function getMyScore() {
     success: res => {
       let data = res;
       console.log(data);
-      
-      let lastScore = data.KVDataList[0].value || 0;
-      if (!data.KVDataList[1]) {
-        saveMaxScore(lastScore);
-        myScore = lastScore;
-      } else if (lastScore > data.KVDataList[1].value) {
-        saveMaxScore(lastScore);
-        myScore = lastScore;
-      } else {
-        myScore = data.KVDataList[1].value;
+      if(data.KVDataList.length){
+        let lastScore = data.KVDataList[0].value || 0;
+        if (!data.KVDataList[1]) {
+          saveMaxScore(lastScore);
+          myScore = lastScore;
+        } else if (lastScore > data.KVDataList[1].value) {
+          saveMaxScore(lastScore);
+          myScore = lastScore;
+        } else {
+          myScore = data.KVDataList[1].value;
+        }
       }
     }
   });

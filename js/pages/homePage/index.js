@@ -16,10 +16,8 @@ export default class Index {
   }
 
   restart(ctx) {
-    
     var me = this;
     this.ctx = ctx
-
     this.pageBtn = new PageBtn(ctx)
     this.music = new Music()
     this.touchEvent = false
@@ -27,11 +25,7 @@ export default class Index {
     // 清除上一帧的动画
     window.cancelAnimationFrame(this.aniId)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
-
     //渲染按钮之前先获取用户的登录状态
-   
-
-
   }
 
   finish() {
@@ -49,8 +43,8 @@ export default class Index {
     let y = e.touches[0].clientY
 
     let startBtnArea = this.pageBtn.startBtnArea
-    let friendsBtnArea = this.pageBtn.friendsBtnArea
-    let worldBtnArea = this.pageBtn.worldBtnArea
+    let friendsBtnArea = this.pageBtn.friendsBtnArea  
+    let laodaoBtnArea = this.pageBtn.laodaoBtnArea
 
     // 开始游戏按钮事件
     if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
@@ -81,7 +75,7 @@ export default class Index {
     }
 
     // 世界排行榜按钮事件
-    if (x >= worldBtnArea.startX && x <= worldBtnArea.endX && y >= worldBtnArea.startY && y <= worldBtnArea.endY) {
+    if (x >= laodaoBtnArea.startX && x <= laodaoBtnArea.endX && y >= laodaoBtnArea.startY && y <= laodaoBtnArea.endY) {
       console.log("渲染世界排行榜")
       databus.scene = 3
     }

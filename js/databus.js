@@ -3,7 +3,9 @@ import Pool from './base/pool'
 
 let instance
 let uiWidth = 828;
+let uiWidth2 = 1242;//第二版的宽度
 let ratio = canvas.width / uiWidth //设计稿宽度
+let ratio2 = canvas.width / uiWidth2 //设计稿宽度
 /**
  * 全局状态管理器
  */
@@ -20,11 +22,11 @@ export default class DataBus {
   reset() {
     this.userinfo = null;//用户的头像等信息
     this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
-    this.mt = 210; //头像到顶部的距离 
-    this.br = 40; //头像的半径 
-    this.nmt = 321; //置灰状态下按钮到顶部的距离 
+    this.mt = 610; //头像到顶部的距离 
+    this.br = 80; //头像的半径 
+    this.nmt = 900; //置灰状态下按钮到顶部的距离 
     this.pmt = 361; //授权状态下按钮到顶部的距离
-    this.nb = 20; //置灰状态下按钮间距
+    this.nb = 10; //置灰状态下按钮间距
     this.toptxt = {
       w: 718 * ratio,
       h: 260 * ratio,
@@ -45,7 +47,31 @@ export default class DataBus {
     }
     this.bgpic = {
       w: 828 * ratio,
-      h: 1427 * ratio,
+      h: 1472 * ratio,
+    }
+    this.friendbtn = {
+      x: 65 * ratio2,
+      y: 188 * ratio2,
+      w: 382 * ratio2,
+      h: 165 * ratio2
+    }
+    this.worldbtn = {
+      x: 440 * ratio2,
+      y: 188 * ratio2,
+      w: 382 * ratio2,
+      h: 104 * ratio2
+    }
+    this.friendbtn_world = {
+      x: 65 * ratio2,
+      y: 188 * ratio2,
+      w: 382 * ratio2,
+      h: 104 * ratio2
+    }
+    this.worldbtn_world = {
+      x: 440 * ratio2,
+      y: 188 * ratio2,
+      w: 382 * ratio2,
+      h: 165 * ratio2
     }
     this.share_prev = {
       x: 60 * ratio,

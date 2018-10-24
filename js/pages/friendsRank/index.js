@@ -6,11 +6,23 @@ const ratio = wx.getSystemInfoSync().pixelRatio;//获取设备像素比
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
 import DataStore from '../../base/helper';
+const ngpng = wx.createImage();
+ngpng.src = 'images/2.png';
+const friend_table = wx.createImage();
+friend_table.src = 'images/friend_light.png';
+const world_table_dark = wx.createImage();
+world_table_dark.src = 'images/24.png';
+
+const world_table = wx.createImage();
+world_table.src = 'images/world_light.png';
+const friend_table_dark = wx.createImage();
+friend_table_dark.src = 'images/12.png';
 /**
  * 游戏页
  */
 export default class Index {
   constructor(ctx) {
+    this.module_type = 1;
     console.log("好友排行加载了")
     // 维护当前requestAnimationFrame的id
     this.aniId = 2
@@ -26,7 +38,7 @@ export default class Index {
     this.ranking = true;
   }
   restart(ctx) {
-   
+    this.module_type = 1;
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.ctx = ctx
     this.touchEvent = false
@@ -50,7 +62,20 @@ export default class Index {
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
-
+   
+    let friend_area={
+      startX: databus.friendbtn.x,
+      startY: databus.friendbtn.y,
+      endX: databus.friendbtn.w + databus.friendbtn.x,
+      endY: databus.friendbtn.h + databus.friendbtn.y
+    } 
+    let world_area = {
+      startX: databus.worldbtn.x,
+      startY: databus.worldbtn.y,
+      endX: databus.worldbtn.w + databus.worldbtn.x,
+      endY: databus.worldbtn.h + databus.worldbtn.y,
+      }
+    
     let backBtnArea = {
       startX: databus.backbtn.x,
       startY: databus.backbtn.y,
@@ -63,6 +88,16 @@ export default class Index {
       console.log("返回")
       databus.scene = 0
     }
+    if (x >= friend_area.startX && x <= friend_area.endX && y >= friend_area.startY && y <= friend_area.endY) {
+      console.log("好友")
+      this.module_type = 1
+      this.render(this.ctx)
+    }
+    if (x >= world_area.startX && x <= world_area.endX && y >= world_area.startY && y <= world_area.endY) {
+      console.log("世界")
+      this.module_type = 2
+      this.render(this.ctx)
+    }
 
     //页面结束事件
     if (databus.scene != 2) {
@@ -72,25 +107,24 @@ export default class Index {
   
   //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
   render(ctx) {
-    console.log("好友排行在循环")
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    const lineImg = wx.createImage();
-    lineImg.src = 'images/ph_bg.jpg';
-    ctx.drawImage(lineImg, 0, 0, screenWidth * ratio, screenHeight * ratio);
-
-    const ngpng = wx.createImage();
-    ngpng.src = 'images/bgpic.png';
+  //  console.log("好友排行在循环")
+    ctx.clearRect(0, 0, canvas.width, canvas.height)  
     ctx.drawImage(ngpng, 0, 0, databus.bgpic.w, databus.bgpic.h);
-
+    if(this.module_type == 1){ //渲染好友排行样式
+      ctx.drawImage(friend_table, databus.friendbtn.x, databus.friendbtn.y, databus.friendbtn.w, databus.friendbtn.h);
+      ctx.drawImage(world_table_dark, databus.worldbtn.x, databus.worldbtn.y, databus.worldbtn.w, databus.worldbtn.h);  
+    } else { //渲染世界排行样式 
+    console.log("xxx")
+      ctx.drawImage(friend_table_dark, databus.friendbtn_world.x, databus.friendbtn_world.y, databus.friendbtn_world.w, databus.friendbtn_world.h );
+     
+      ctx.drawImage(world_table, databus.worldbtn_world.x, databus.worldbtn_world.y, databus.worldbtn_world.w, databus.worldbtn_world.h  ); 
+    }
     const homeimg = wx.createImage();
     homeimg.src = 'images/home.png';
-    ctx.drawImage(homeimg, databus.backbtn.x, databus.backbtn.y, databus.backbtn.w, databus.backbtn.h);
-
-    
+    ctx.drawImage(homeimg, databus.backbtn.x, databus.backbtn.y, databus.backbtn.w, databus.backbtn.h); 
 
      DataStore.getInstance().ctx.drawImage(DataStore.getInstance().sharedCanvas, 0, 0, screenWidth, screenHeight);
 
-   
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true
