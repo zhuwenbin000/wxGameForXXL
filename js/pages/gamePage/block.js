@@ -52,7 +52,9 @@ export default class Block {
       if (this.attr.piecesLevel != 'level1'){
         ctx.drawImage(Robj["pieces" + this.attr.piecesLevel], 0, 0, 124, 124, this.x, this.y, bl, bl);
       }
-
+      if (this.attr.piecesCoin){
+        ctx.drawImage(Robj["piecesCoin"], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }
     } else if (this.isBomb) {
       //渲染爆炸图
       ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);

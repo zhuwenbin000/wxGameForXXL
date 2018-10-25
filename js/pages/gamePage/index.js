@@ -11,7 +11,7 @@ let btt = databus.GameUI.boardToTOP //棋盘到顶部的距离
 let btlr = databus.GameUI.boardToLR //棋盘左右两边间距  
 let bi = databus.GameUI.boardInner //棋盘内边框  
 let pm = databus.GameUI.piecesMargin //棋子边距 
-let rcc = databus.GameUI.cupCoordinates //奖杯坐标宽高
+let rulec = databus.GameUI.ruleCoordinates //规则按钮坐标宽高
 let sbc = databus.GameUI.scoreBgCoordinates //积分背景坐标宽高
 let sc = databus.GameUI.stepsCoordinates //步数坐标宽高
 let pec = databus.GameUI.progressEmptyCoordinates //空进度条坐标宽高
@@ -20,7 +20,13 @@ let pfc = databus.GameUI.progressFullCoordinates //满进度条坐标宽高
 let hc = databus.GameUI.homeCoordinates //首页按钮坐标宽高
 let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
 let asc = databus.GameUI.addStepsCoordinates //增加步数按钮坐标宽高
+let aspoc = databus.GameUI.addStepsPointCoordinates //增加步数红点坐标宽高
+let asprc = databus.GameUI.addStepsPriceCoordinates //增加步数价格坐标宽高
+let aspbc = databus.GameUI.addStepsPriceBgCoordinates //增加步数价格背景坐标宽高
 let ctc = databus.GameUI.colorToolCoordinates //彩色道具坐标宽高
+let ctpoc = databus.GameUI.colorToolPointCoordinates //彩色道具红点坐标宽高
+let ctprc = databus.GameUI.colorToolPriceCoordinates //彩色道具价格坐标宽高
+let ctpbc = databus.GameUI.colorToolPriceBgCoordinates //彩色道具价格背景坐标宽高
 let cc = databus.GameUI.coinCoordinates //金币坐标宽高
 let cpc = databus.GameUI.checkPointCoordinates //关卡文字坐标宽高
 let shsc = databus.GameUI.selfHighScoreCoordinates //个人最高分数坐标
@@ -49,8 +55,8 @@ export default class Index {
       "icon3": "images/gamePage/fruit_icon4.png",
       "baozha": "images/baozha.png",
       "addSteps": "images/gamePage/icon_addSteps.png",
-      "cup": "images/icon_cup.png",
-      "coin": "images/icon_coin.png",
+      "rule": "images/gamePage/icon_rule.png",
+      "coin": "images/gamePage/icon_coin.png",
       "home": "images/gamePage/icon_home.png",
       "music": "images/gamePage/icon_music.png",
       "colorTool": "images/gamePage/icon_tool.png",
@@ -60,7 +66,10 @@ export default class Index {
       "scoreBg": "images/score_bg.png",
       "steps": "images/gamePage/steps.png",
       "pieceslevel2": "images/gamePage/pieceslevel2.png",
-      "pieceslevel3": "images/gamePage/pieceslevel3.png"
+      "pieceslevel3": "images/gamePage/pieceslevel3.png",
+      "piecesCoin": "images/gamePage/piecesCoin.png",
+      "redPoint": "images/gamePage/redPoint.png",
+      "toolPrice": "images/gamePage/toolPrice.png"
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
@@ -110,12 +119,23 @@ export default class Index {
     ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * pfc.w, pfc.h);
     //绘制首页按钮
     ctx.drawImage(this.Robj["home"], 0, 0, this.Robj["home"].width, this.Robj["home"].height, hc.x, hc.y, hc.w, hc.h);
+    //绘制规则按钮
+    ctx.drawImage(this.Robj["rule"], 0, 0, this.Robj["rule"].width, this.Robj["rule"].height, rulec.x, rulec.y, rulec.w, rulec.h);
     //绘制音乐按钮
     ctx.drawImage(this.Robj["music"], 0, 0, this.Robj["music"].width, this.Robj["music"].height, mc.x, mc.y, mc.w, mc.h);
     //绘制增加步数按钮
     ctx.drawImage(this.Robj["addSteps"], 0, 0, this.Robj["addSteps"].width, this.Robj["addSteps"].height, asc.x, asc.y, asc.w, asc.h);
+    //增加步数红点坐标宽高
+    ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
+    //增加步数价格背景坐标宽高
+    ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, aspbc.x, aspbc.y, aspbc.w, aspbc.h);
     //绘制彩色道具按钮
     ctx.drawImage(this.Robj["colorTool"], 0, 0, this.Robj["colorTool"].width, this.Robj["colorTool"].height, ctc.x, ctc.y, ctc.w, ctc.h);
+    //彩色道具红点坐标宽高
+    ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, ctpoc.x, ctpoc.y, ctpoc.w, ctpoc.h);
+    //彩色道具价格背景坐标宽高
+    ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
+
     //绘制金币图标
     ctx.drawImage(this.Robj["coin"], 0, 0, this.Robj["coin"].width, this.Robj["coin"].height, cc.x, cc.y, cc.w, cc.h);
 

@@ -6,6 +6,7 @@ let uiWidth = 828;
 let uiWidth2 = 1242;//第二版的宽度
 let ratio = canvas.width / uiWidth //设计稿宽度
 let ratio2 = canvas.width / uiWidth2 //设计稿宽度
+
 /**
  * 全局状态管理器
  */
@@ -104,11 +105,11 @@ export default class DataBus {
       piecesMargin: 8 * ratio, //棋子边距
       boardWH: 0, //棋盘宽高
       piecesWH: 0, //棋子宽高
-      cupCoordinates: { //奖杯坐标宽高
-        x: 20 * ratio,
-        y: 44 * ratio,
-        w: 110 * ratio,
-        h: 100 * ratio
+      ruleCoordinates: { //规则坐标宽高
+        x: 40 * ratio,
+        y: 1126 * ratio,
+        w: 180 * ratio,
+        h: 74 * ratio
       },
       scoreBgCoordinates: { //积分背景坐标宽高
         x: 128 * ratio,
@@ -158,17 +159,53 @@ export default class DataBus {
         w: 144 * ratio,
         h: 142 * ratio,
       },
+      addStepsPointCoordinates: { //增加步数红点坐标宽高
+        x: 375 * ratio,
+        y: 1124 * ratio,
+        w: 52 * ratio,
+        h: 52 * ratio,
+      },
+      addStepsPriceCoordinates: { //增加步数价格坐标宽高
+        x: 460 * ratio,
+        y: 1125 * ratio,
+        w: 144 * ratio,
+        h: 142 * ratio,
+      },
+      addStepsPriceBgCoordinates: { //增加步数价格背景坐标宽高
+        x: 270 * ratio,
+        y: 1235 * ratio,
+        w: 148 * ratio,
+        h: 58 * ratio,
+      },
       colorToolCoordinates: { //彩色道具坐标宽高
         x: 460 * ratio,
         y: 1125 * ratio,
         w: 144 * ratio,
         h: 142 * ratio,
       },
+      colorToolPointCoordinates: { //彩色道具红点坐标宽高
+        x: 560 * ratio,
+        y: 1124 * ratio,
+        w: 52 * ratio,
+        h: 52 * ratio,
+      },
+      colorToolPriceCoordinates: { //彩色道具价格坐标宽高
+        x: 460 * ratio,
+        y: 1125 * ratio,
+        w: 144 * ratio,
+        h: 142 * ratio,
+      },
+      colorToolPriceBgCoordinates: { //彩色道具价格背景坐标宽高
+        x: 455 * ratio,
+        y: 1235 * ratio,
+        w: 148 * ratio,
+        h: 58 * ratio,
+      },
       coinCoordinates: { //金币坐标宽高
-        x: 665 * ratio,
-        y: 1190 * ratio,
-        w: 90 * ratio,
-        h: 90 * ratio,
+        x: 630 * ratio,
+        y: 1130 * ratio,
+        w: 172 * ratio,
+        h: 164 * ratio,
       },
       checkPointCoordinates: { //关卡坐标
         x: 32 * ratio,
