@@ -1,5 +1,6 @@
 import Music from '../../music/music'
 import DataBus from '../../databus'
+import { ajax } from '../../base/ajax'
 
 let databus = new DataBus()
 const ratio = wx.getSystemInfoSync().pixelRatio;//获取设备像素比
@@ -26,8 +27,9 @@ export default class Index {
     console.log("好友排行加载了")
     // 维护当前requestAnimationFrame的id
     this.aniId = 2
-    
+   
   }
+  
   messageSharecanvas(type, text) {
     // 排行榜也应该是实时的，所以需要sharedCanvas 绘制新的排行榜
     let openDataContext = wx.getOpenDataContext();
@@ -131,9 +133,7 @@ export default class Index {
       this.touchHandler = this.touchPage.bind(this)
       canvas.addEventListener('touchstart', this.touchHandler)
     }
-
   }
-
   // 实现游戏帧循环
   loop() {
 

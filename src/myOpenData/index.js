@@ -21,12 +21,10 @@ let myInfo = {};
 
 let userArr =[]
 let myScore = undefined;
-
 let myRank = undefined;
 
 initRanklist([], nowpage)
 getUserInfo();
-
 
 wx.onMessage(data => {
   if (data.type === 'friends') { 
@@ -113,8 +111,8 @@ function drawrank(list,page){
     list.map((item, index) => {
       var avatarurl_width = 80;    //绘制的头像宽度
       var avatarurl_heigth = 80;   //绘制的头像高度
-      var avatarurl_x = 140;   //绘制的头像在画布上的位置
-      var avatarurl_y = index * itemHeight + 260;   //绘制的头像在画布上的位置
+      var avatarurl_x = 148;   //绘制的头像在画布上的位置
+      var avatarurl_y = index * itemHeight + 275;   //绘制的头像在画布上的位置
       let avatar = wx.createImage();
       avatar.src = item.avatarUrl;
       avatar.onload = function () {
@@ -126,7 +124,7 @@ function drawrank(list,page){
       context.font = '28px Arial';
       context.textAlign = 'left';
       item.nickname = item.nickname.length > 5 ? item.nickname.substring(0, 6) + '..' : item.nickname
-      context.fillText(item.nickname, 225, index * itemHeight + 310);
+      context.fillText(item.nickname, 235, index * itemHeight + 325);
 
       context.font = '26px Arial';
       context.textAlign = 'left';
@@ -134,14 +132,14 @@ function drawrank(list,page){
         item.score = 0
       }
       
-      context.fillText(`第${item.score}关` || `第0关`, 475, index * itemHeight + 310);
+      context.fillText(`第${item.score}关` || `第0关`, 475, index * itemHeight + 325);
 
       context.font = '26px Arial';
       context.textAlign = 'right';
       if (!item.score || item.score == "undefined"){
         item.score = 0
       }
-      context.fillText(`${item.score}分` || `0分`, 660, index * itemHeight + 310);
+      context.fillText(`${item.score}分` || `0分`, 660, index * itemHeight + 325);
       if (index < 3 && page == 1){
         let firstImage = wx.createImage();
         firstImage.src = 'images/first.png';
@@ -151,17 +149,17 @@ function drawrank(list,page){
         thirdIamge.src = "images/third.png"
         if(index == 0){
           firstImage.onload = function(){
-            context.drawImage(firstImage, 46, index * itemHeight + 240, 100, 100)
+            context.drawImage(firstImage, 46, index * itemHeight + 260, 100, 100)
           }    
         }
         if (index == 1) {
           secondIamge.onload = function () {
-            context.drawImage(secondIamge, 66, index * itemHeight + 260, 80, 80)
+            context.drawImage(secondIamge, 66, index * itemHeight + 280, 80, 80)
           }
         }
         if (index == 2) {
           thirdIamge.onload = function (){
-            context.drawImage(thirdIamge, 66, index * itemHeight + 260, 80, 80)
+            context.drawImage(thirdIamge, 66, index * itemHeight + 280, 80, 80)
           }
         }
       }else{
@@ -180,7 +178,7 @@ function drawrank(list,page){
 }
 function getFriendsRanking() {
   wx.getFriendCloudStorage({
-    keyList: ['score', 'maxScore'],
+    keyList: ['score'],
     success: res => {
       let data = [...res.data, ...res.data,...res.data];
       nowpage = 1
@@ -193,17 +191,17 @@ function getFriendsRanking() {
 
 function getMyScore() {
   wx.getUserCloudStorage({
-    keyList: ['score', 'maxScore'],
+    keyList: ['score'],
     success: res => {
       let data = res;
       console.log(data);
       if(data.KVDataList.length){
         let lastScore = data.KVDataList[0].value || 0;
         if (!data.KVDataList[1]) {
-          saveMaxScore(lastScore);
+         // saveMaxScore(lastScore);
           myScore = lastScore;
         } else if (lastScore > data.KVDataList[1].value) {
-          saveMaxScore(lastScore);
+        //  saveMaxScore(lastScore);
           myScore = lastScore;
         } else {
           myScore = data.KVDataList[1].value;
@@ -213,17 +211,7 @@ function getMyScore() {
   });
 }
 
-function saveMaxScore(maxScore) {
-  wx.setUserCloudStorage({
-    KVDataList: [{ 'key': 'maxScore', 'value': ('' + maxScore) }],
-    success: res => {
-      console.log(res);
-    },
-    fail: res => {
-      console.log(res);
-    }
-  });
-}
+
 
 function sortByScore(data) {
   let array = [];
@@ -268,21 +256,21 @@ function drawMyRank() {
     avatar.src = myInfo.avatarUrl;
     
     avatar.onload = function () {
-      context.drawImage(avatar, 133, 960 + 74, 80, 80);
+      context.drawImage(avatar, 133, 1065, 80, 80);
     }
     context.fillStyle = '#fff';
     context.font = '28px Arial';
     context.textAlign = 'left';
-    context.fillText(myInfo.nickName, 255, 960 + 124);
+    context.fillText(myInfo.nickName, 255, 1120);
     
     context.font = 'bold 26px Arial';
     context.textAlign = 'right';
-    context.fillText(`第${myScore}关` || 0, 630, 960 + 124);
+    context.fillText(`第${myScore}关` || 0, 630, 1120);
     // 自己的名次
     if (myRank !== undefined) {
       context.font = 'italic 44px Arial';
       context.textAlign = 'center';
-      context.fillText(myRank + 1, 96, 960 + 124);
+      context.fillText(myRank + 1, 86, 1120);
     }
     
   }

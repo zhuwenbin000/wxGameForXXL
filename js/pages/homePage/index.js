@@ -2,6 +2,7 @@ import PageBtn from './pageBtn'
 import Music from '../../music/music'
 import DataBus from '../../databus'
 const ratio = wx.getSystemInfoSync().pixelRatio;
+import { ajax } from '../../base/ajax'
 let databus = new DataBus()
 /**
  * 首页
@@ -11,8 +12,28 @@ export default class Index {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
     console.log("初始化")
-//    wx.offTouchStart()
+    if (databus.userinfo){ //如果可以获取到用户信息 直接去获取最高分
+      var signature = databus.userinfo.signature
+      if (signature) {
+        this.getscore(signature)
+      }
+    }
    
+  }
+  getscore(signature) { //获取最高分
+    let me = this;
+    let options = {
+      tradecode: 'sys04',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        loginflag: signature
+      },
+      success(data) {
+        databus.bestscore = data.body.user.bestscore
+      }
+    }
+    ajax(options)
   }
 
   restart(ctx) {
@@ -34,6 +55,7 @@ export default class Index {
 
     canvas.removeEventListener('touchstart', this.touchHomePageHandler)
   }
+
 
   // 首页按钮事件处理逻辑
   touchHomePage(e) {
