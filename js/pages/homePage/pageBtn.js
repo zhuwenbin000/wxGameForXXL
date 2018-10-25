@@ -24,19 +24,19 @@ let pmt = screenHeight / 2 + 30 * ratio;//授权状态下按钮到顶部的距�
 let nb = databus.nb * ratio; //置灰状态下按钮间距
 let ml = (window.innerWidth - 590 * ratio) / 2
 let sml = (window.innerWidth - 282 * ratio) / 2
-bg.src = 'images/background.png'
-logoBtn.src = 'images/logo.png'
+bg.src = 'images/home/background.png'
+logoBtn.src = 'images/home/logo.png'
 
-startBtn.src = 'images/start.png'
-friendsRankBtn.src = 'images/friends.png'
+startBtn.src = 'images/home/start.png'
+friendsRankBtn.src = 'images/home/friends.png'
 
-authorBtn.src = "images/author.png"
+authorBtn.src = "images/home/author.png"
 
-loginstartBtn.src = 'images/start.png'
-loginfriendsRankBtn.src = 'images/friends.png'
+loginstartBtn.src = 'images/home/start.png'
+loginfriendsRankBtn.src = 'images/home/friends.png'
 
 
-loginauthorBtn.src = "images/author.png"
+loginauthorBtn.src = "images/home/author.png"
 
 
 /**

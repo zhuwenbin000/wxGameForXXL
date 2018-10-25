@@ -1,5 +1,6 @@
 import Block from './block'
 import DataBus from '../../databus'
+import { ajax } from '../../base/ajax'
 
 let databus = new DataBus()
 
@@ -50,9 +51,9 @@ export default class Map {
     }
   }
 
-    /**
-   * 渲染
-   */
+  /**
+ * 渲染
+ */
   render(ctx, Robj) {
     //渲染地图就是渲染自己的所有转块
     for (var r = 0; r < rn; r++) {
@@ -71,26 +72,26 @@ export default class Map {
         // if (this.downRow[r][c]) {
         //   ctx.fillText(this.downRow[r][c], 200 + c * 10, 60 + r * 10);
         // }
-        ctx.fillText(databus.combo, 200 , 60);
+        ctx.fillText(databus.combo, 200, 60);
       }
     }
   }
 
   //检测是否combo
-  check () {
+  check() {
     var result = false;
     //遍历上次消除的棋子来获取能够combo的棋子位置
     var psb = databus.prevSelectBlocks; //上次消除的棋子包括combod的
     var comboBlocks = []; //能combo的棋子数组
     for (var i = 0; i < psb.length; i++) {
       //如果当前棋子在comboBlocks中，那就找到相同位置的棋子然后往下顺延，如果顺延到5则无法combo，判断方向向下
-      if (JSON.stringify(comboBlocks).indexOf(JSON.stringify(psb[i])) >= 0){
+      if (JSON.stringify(comboBlocks).indexOf(JSON.stringify(psb[i])) >= 0) {
         for (var j = 0; j < comboBlocks.length; j++) {
-          if (JSON.stringify(comboBlocks[j]) == JSON.stringify(psb[i])){
-            if (comboBlocks[j].row < 5){
+          if (JSON.stringify(comboBlocks[j]) == JSON.stringify(psb[i])) {
+            if (comboBlocks[j].row < 5) {
               comboBlocks[j].row = comboBlocks[j].row + 1
-            }else{
-              comboBlocks.splice(j,1)
+            } else {
+              comboBlocks.splice(j, 1)
             }
           }
         }
@@ -106,8 +107,10 @@ export default class Map {
         }
       }
     }
+    // debugger
     var checkComboBlocks = [];//当前屏幕棋子竖方向相连大于2的数组
     var isCombo = 0;//当前屏幕棋子是否符合combo
+    databus.prevSelectBlocks = []
     //按列遍历。
     for (var c = 0; c < cn; c++) {
       var i = 0;
@@ -119,16 +122,13 @@ export default class Map {
           //把i和j之前的位，推入结果数组
           if (j - i >= 2) {
             for (var m = i; m < j; m++) {
-              checkComboBlocks.push({row:m,col:c})
+              checkComboBlocks.push({ row: m, col: c })
             }
             //利用上面得出当前屏幕棋子竖方向相连大于2的数组，判断能combo的棋子数组是否存在相连大于2的情况
             for (var k = 0; k < comboBlocks.length; k++) {
               if (JSON.stringify(checkComboBlocks).indexOf(JSON.stringify(comboBlocks[k])) > 1) {
-                if (databus.combo == 0) {
-                  databus.prevSelectBlocks = []
-                }else{
-                  databus.prevSelectBlocks = databus.prevSelectBlocks.concat(checkComboBlocks)
-                }
+
+                databus.prevSelectBlocks = databus.prevSelectBlocks.concat(checkComboBlocks)
                 databus.combo = databus.combo + 1
                 isCombo = isCombo + 1
                 this.comboBlocksBomb(checkComboBlocks)
@@ -149,7 +149,7 @@ export default class Map {
       databus.combo = 0
       databus.prevSelectBlocks = []
       //判断是否过关
-      // this.checkPassStage()
+      this.checkPassStage()
     }
     return result;
   }
@@ -166,10 +166,12 @@ export default class Map {
   }
 
   //连线消除
-  blocksBomb (sb) {
+  blocksBomb(sb) {
     if (sb.length <= 0) return
     //减去1步
     databus.steps--;
+    //当前关卡使用步数
+    databus.useSteps++;
     //存储当前消除的棋子数组
     databus.prevSelectBlocks = sb;
     //消除棋子
@@ -225,29 +227,32 @@ export default class Map {
   //判断是否过关
   checkPassStage() {
     //当前关卡获得分数大于当前关卡过关分数
-    if (databus.score >= databus.passScore){
+    if (databus.score >= databus.passScore) {
       var self = this;
+      databus.gameScore = databus.gameScore + databus.score;
+      databus.gamegold = databus.gamegold + databus.stagegold
       let options = {
         tradecode: 'game02',
         apiType: 'user',
         method: 'POST',
-        data: { 
-          'user': { 
+        data: {
+          'user': {
             'stagecore': databus.score,//当前关卡过关分数
-            'usestep': databus.usestep,//过关使用步数
+            'usestep': databus.useSteps,//过关使用步数
             'stagegold': databus.stagegold,//过关所得金币
-            'gameid': databus.gameid,//游戏id
-            'gamescore': databus.gamescore,//本轮游戏的总得分
+            'gameid': databus.gameId,//游戏id
+            'gamescore': databus.gameScore,//本轮游戏的总得分
             'gamegold': databus.gamegold,//本次游戏获得总金币数
-            'currstage': databus.currstage,//当前关卡
-          } 
+            'currstage': databus.checkPoint,//当前关卡
+          }
         },
         success(data) {
-          databus.passScore = data.body.game.stagescore //第一关过关所需分数
+          databus.passScore = data.body.game.passscore //第一关过关所需分数
           databus.gameId = data.body.game.gameid //本轮游戏id
-          databus.steps = data.body.game.stagestep //第一关过关所需步数
+          databus.steps = databus.steps + parseInt(data.body.game.rewardstep) //剩余步数加上奖励步数
           databus.rewardstep = data.body.game.rewardstep //过关奖励步数
-
+          databus.checkPoint = data.body.game.stageno //下一关关卡编号
+          //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
           let piecesConfig = data.body.game.numberifno.split(',');
           let piecesLevel = [];
           let piecesProbblt = [];
@@ -261,6 +266,9 @@ export default class Map {
             piecesProbblt: piecesProbblt
           }
 
+          databus.score = 0 //重置当前关卡获得分数
+          databus.useSteps = 0 //重置当前关卡使用步数
+          databus.stagegold = 0 //重置当前关卡所得金币
         }
       }
       ajax(options)
@@ -269,12 +277,12 @@ export default class Map {
 
   //计算相同分数相连得分
   getScoreForList(list) {
-    if (list.length <= 0){
+    if (list.length <= 0) {
       return 0
     }
-    if (list.length >= 3){
+    if (list.length >= 3) {
       return (list[0] * (list.length - 2) * 10) * list.length
-    }else{
+    } else {
       var totalScore = 0;
       for (var i = 0; i < list.length; i++) {
         totalScore = totalScore + list[i]
@@ -284,7 +292,7 @@ export default class Map {
   }
 
   //规整
-  dropDown () {
+  dropDown() {
     //现在要现提出一个矩阵，这个矩阵表示每一个元素要下落多少行
     for (var r = 0; r < rn - 1; r++) {
       for (var c = 0; c < cn; c++) {
@@ -324,7 +332,7 @@ export default class Map {
   }
 
   //补充新的
-  supplement () {
+  supplement() {
     //规整一下blocks
     this.createBlocksByQR();
     //遍历QR帧，如果这个位置是*，那么就new出一个新的，从第一行往这一行移动

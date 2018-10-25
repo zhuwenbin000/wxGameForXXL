@@ -38,8 +38,8 @@ export default class DataBus {
     this.backbtn = {
       w: 96 * ratio,
       h: 96 * ratio,
-      x: 36 * ratio,
-      y: 36 * ratio
+      x: 16 * ratio,
+      y: 20 * ratio
     }
     this.pagesize = {
       x: 20 * ratio,
@@ -100,26 +100,17 @@ export default class DataBus {
     }
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
-      boardToTOP: 475 * ratio, //棋盘到顶部的距离
-      boardToLR: 75 * ratio, //棋盘左右两边间距
-      boardInner: 20 * ratio, //棋盘内边框
-      piecesMargin: 12 * ratio, //棋子边距
+      boardToTOP: 334 * ratio, //棋盘到顶部的距离
+      boardToLR: 34 * ratio, //棋盘左右两边间距
+      boardInner: 8 * ratio, //棋盘内边框
+      piecesMargin: 8 * ratio, //棋子边距
       boardWH: 0, //棋盘宽高
       piecesWH: 0, //棋子宽高
-<<<<<<< HEAD
-      levelWH: 30 * ratio, //棋子等级标志宽高
-      cupCoordinates: { //奖杯坐标宽高
-        x: 20 * ratio,
-        y: 44 * ratio,
-        w: 110 * ratio,
-        h: 100 * ratio
-=======
       ruleCoordinates: { //规则坐标宽高
         x: 40 * ratio,
         y: 1126 * ratio,
         w: 180 * ratio,
         h: 74 * ratio
->>>>>>> 3e488fea7d6994df00279f10673458c5cf1d82d9
       },
       scoreBgCoordinates: { //积分背景坐标宽高
         x: 128 * ratio,
@@ -128,46 +119,46 @@ export default class DataBus {
         h: 60 * ratio,
       },
       stepsCoordinates: { //步数坐标宽高
-        x: 658 * ratio,
-        y: 74 * ratio,
+        x: 32 * ratio,
+        y: 168 * ratio,
         w: 124 * ratio,
-        h: 100 * ratio,
+        h: 126 * ratio,
       },
       progressEmptyCoordinates: { //空进度条坐标宽高
-        x: 252 * ratio,
-        y: 214 * ratio,
-        w: 300 * ratio,
-        h: 28 * ratio,
+        x: 237 * ratio,
+        y: 265 * ratio,
+        w: 360 * ratio,
+        h: 52 * ratio,
+      },
+      progressEmpty2Coordinates: { //空进度条2坐标宽高
+        x: 243 * ratio,
+        y: 267 * ratio,
+        w: 344 * ratio,
+        h: 44 * ratio,
       },
       progressFullCoordinates: { //满进度条坐标宽高
-        x: 254 * ratio,
-        y: 216 * ratio,
-        w: 296 * ratio,
-        h: 24 * ratio,
-      },
-      fruitCoordinates: { //水果icon坐标宽高
-        x: 184 * ratio,
-        y: 273 * ratio,
-        w: 467 * ratio,
-        h: 186 * ratio,
+        x: 252 * ratio,
+        y: 275 * ratio,
+        w: 330 * ratio,
+        h: 26 * ratio,
       },
       homeCoordinates: { //首页坐标宽高
-        x: 75 * ratio,
-        y: 1215 * ratio,
-        w: 74 * ratio,
-        h: 74 * ratio,
+        x: 44 * ratio,
+        y: 1206 * ratio,
+        w: 82 * ratio,
+        h: 82 * ratio,
       },
       musicCoordinates: { //音乐坐标宽高
-        x: 175 * ratio,
-        y: 1215 * ratio,
-        w: 74 * ratio,
-        h: 74 * ratio,
+        x: 142 * ratio,
+        y: 1206 * ratio,
+        w: 82 * ratio,
+        h: 82 * ratio,
       },
       addStepsCoordinates: { //增加步数坐标宽高
-        x: 300 * ratio,
-        y: 1160 * ratio,
-        w: 152 * ratio,
-        h: 152 * ratio,
+        x: 275 * ratio,
+        y: 1125 * ratio,
+        w: 144 * ratio,
+        h: 142 * ratio,
       },
       addStepsPointCoordinates: { //增加步数红点坐标宽高
         x: 375 * ratio,
@@ -188,10 +179,10 @@ export default class DataBus {
         h: 58 * ratio,
       },
       colorToolCoordinates: { //彩色道具坐标宽高
-        x: 475 * ratio,
-        y: 1160 * ratio,
-        w: 152 * ratio,
-        h: 152 * ratio,
+        x: 460 * ratio,
+        y: 1125 * ratio,
+        w: 144 * ratio,
+        h: 142 * ratio,
       },
       colorToolPointCoordinates: { //彩色道具红点坐标宽高
         x: 560 * ratio,
@@ -218,39 +209,39 @@ export default class DataBus {
         h: 164 * ratio,
       },
       checkPointCoordinates: { //关卡坐标
-        x: (uiWidth / 2) * ratio,
-        y: 195 * ratio,
-        font: 24 * ratio + 'px Arial'
-      },
-      selfHighScoreCoordinates: { //个人最高分数坐标
-        x: 40 * ratio,
-        y: 195 * ratio,
-        font: 26 * ratio + 'px Arial'
-      },
-      highestScoreCoordinates: { //世界最高分数坐标
-        x: 235 * ratio,
+        x: 32 * ratio,
         y: 130 * ratio,
-        font: 'bold ' + 40 * ratio + 'px Arial'
+        font: 46 * ratio + 'px Arial'
       },
+      selfHighScoreCoordinates: { //本轮分数
+        x: (uiWidth / 2) * ratio,
+        y: 135 * ratio,
+        font: 'bold ' + 60 * ratio + 'px Arial'
+      },
+      // highestScoreCoordinates: { //世界最高分数坐标
+      //   x: 235 * ratio,
+      //   y: 130 * ratio,
+      //   font: 'bold ' + 40 * ratio + 'px Arial'
+      // },
       stepsNumCoordinates: { //步数坐标
-        x: 720 * ratio,
-        y: 125 * ratio,
+        x: 92 * ratio,
+        y: 230 * ratio,
         font: 'bold ' + 40 * ratio + 'px Arial'
       },
-      stepsTxtCoordinates: { //步数文字坐标
-        x: 720 * ratio,
-        y: 160 * ratio,
-        font: 26 * ratio + 'px Arial'
-      },
+      // stepsTxtCoordinates: { //步数文字坐标
+      //   x: 90 * ratio,
+      //   y: 230 * ratio,
+      //   font: 26 * ratio + 'px Arial'
+      // },
       passScoreCoordinates: { //当前过关分数坐标
-        x: 585 * ratio,
-        y: 236 * ratio,
+        x: 560 * ratio,
+        y: 300 * ratio,
         font: 24 * ratio + 'px Arial'
       },
       currentScoreCoordinates: { //当前分数坐标
         x: (uiWidth / 2) * ratio,
-        y: 236 * ratio,
-        font: 24 * ratio + 'px Arial'
+        y: 248 * ratio,
+        font: 'bold ' + 60 * ratio + 'px Arial'
       }
     }
     //棋盘宽高

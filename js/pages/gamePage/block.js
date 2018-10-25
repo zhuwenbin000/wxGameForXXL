@@ -1,4 +1,3 @@
-
 import DataBus from '../../databus'
 
 let databus = new DataBus()
@@ -9,11 +8,11 @@ let btt = databus.GameUI.boardToTOP //棋盘到顶部的距离
 let btlr = databus.GameUI.boardToLR //棋盘左右两边间距
 let bi = databus.GameUI.boardInner //棋盘内边框
 let pm = databus.GameUI.piecesMargin //棋子边距
-let lwh = databus.GameUI.levelWH //level标志的宽高
 
 /**
  * 砖块类
  */
+
 export default class Block {
   constructor(row, col, attr) {
     //行数
@@ -39,7 +38,7 @@ export default class Block {
   }
 
   //渲染
-  render(ctx,Robj) {
+  render(ctx, Robj) {
     //渲染在画布的指定位置
 
     //如果自己已经消失了，那么后面的两条渲染，都不执行
@@ -49,23 +48,13 @@ export default class Block {
     //根据是否爆炸来渲染不同的情形
     if (!this.isBomb) {
       //渲染普通小图
-<<<<<<< HEAD
-      ctx.drawImage(Robj["icon" + this.attr.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
-      // ctx.drawImage(Robj["pieces" + this.attr.piecesLevel], 0, 0, 73, 73, this.x, this.y, lwh, lwh);
-      ctx.fillStyle = '#fff';
-      ctx.textAlign = 'right';
-      ctx.font = '20px Arial';
-      ctx.fillText(databus.piecesLevelScore[this.attr.piecesLevel], this.x + bl, this.y + bl);
-
-=======
       ctx.drawImage(Robj["icon" + this.attr.piecesType], 0, 0, 124, 124, this.x, this.y, bl, bl);
-      if (this.attr.piecesLevel != 'level1'){
+      if (this.attr.piecesLevel != 'level1') {
         ctx.drawImage(Robj["pieces" + this.attr.piecesLevel], 0, 0, 124, 124, this.x, this.y, bl, bl);
       }
-      if (this.attr.piecesCoin){
+      if (this.attr.piecesCoin) {
         ctx.drawImage(Robj["piecesCoin"], 0, 0, 124, 124, this.x, this.y, bl, bl);
       }
->>>>>>> 3e488fea7d6994df00279f10673458c5cf1d82d9
     } else if (this.isBomb) {
       //渲染爆炸图
       ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);
@@ -73,7 +62,7 @@ export default class Block {
   }
 
 
-	//更新，这个函数每帧执行
+  //更新，这个函数每帧执行
   update() {
     //小帧计数器++
     this.f++;

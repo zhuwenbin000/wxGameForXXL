@@ -43,13 +43,13 @@ wx.onMessage(data => {
 
 function drawnextbtn(){
   let shareProv = wx.createImage();
-  shareProv.src = 'images/share_prev.png';
+  shareProv.src = 'images/rank/share_prev.png';
   console.log(screenHeight * ratio)
   shareProv.onload=function(){
     context.drawImage(shareProv, 60, 1180, 258, 130);
   }
   let shareNext = wx.createImage();
-  shareNext.src = 'images/share_next.png';
+  shareNext.src = 'images/rank/share_next.png';
   console.log(screenHeight * ratio)
   shareNext.onload = function () {
     context.drawImage(shareNext, 420, 1180, 258, 130);
@@ -70,11 +70,11 @@ function initRanklist(list,page) {
 
   for (let i = 0; i < length; i++) {
     let threeImage = wx.createImage();
-    threeImage.src = 'images/firstthree.png';
+    threeImage.src = 'images/rank/firstthree.png';
     let lessIamge = wx.createImage()
-    lessIamge.src = "images/icon_three.png"
+    lessIamge.src = "images/rank/icon_three.png"
     let meIamge = wx.createImage()
-    meIamge.src = "images/me.png"
+    meIamge.src = "images/rank/me.png"
     if(page == 1){
       if (i < 3) {
         threeImage.onload = function () {
@@ -142,11 +142,11 @@ function drawrank(list,page){
       context.fillText(`${item.score}分` || `0分`, 660, index * itemHeight + 325);
       if (index < 3 && page == 1){
         let firstImage = wx.createImage();
-        firstImage.src = 'images/first.png';
+        firstImage.src = 'images/rank/first.png';
         let secondIamge = wx.createImage()
-        secondIamge.src = "images/second.png"
+        secondIamge.src = "images/rank/second.png"
         let thirdIamge = wx.createImage()
-        thirdIamge.src = "images/third.png"
+        thirdIamge.src = "images/rank/third.png"
         if(index == 0){
           firstImage.onload = function(){
             context.drawImage(firstImage, 46, index * itemHeight + 260, 100, 100)
@@ -254,7 +254,6 @@ function drawMyRank() {
   if (myInfo.avatarUrl) {
     let avatar = wx.createImage();
     avatar.src = myInfo.avatarUrl;
-    
     avatar.onload = function () {
       context.drawImage(avatar, 133, 1065, 80, 80);
     }
