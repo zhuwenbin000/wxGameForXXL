@@ -49,6 +49,7 @@ export default class Block {
     //根据是否爆炸来渲染不同的情形
     if (!this.isBomb) {
       //渲染普通小图
+<<<<<<< HEAD
       ctx.drawImage(Robj["icon" + this.attr.piecesType], 0, 0, 50, 46, this.x, this.y, bl, bl);
       // ctx.drawImage(Robj["pieces" + this.attr.piecesLevel], 0, 0, 73, 73, this.x, this.y, lwh, lwh);
       ctx.fillStyle = '#fff';
@@ -56,6 +57,15 @@ export default class Block {
       ctx.font = '20px Arial';
       ctx.fillText(databus.piecesLevelScore[this.attr.piecesLevel], this.x + bl, this.y + bl);
 
+=======
+      ctx.drawImage(Robj["icon" + this.attr.piecesType], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      if (this.attr.piecesLevel != 'level1'){
+        ctx.drawImage(Robj["pieces" + this.attr.piecesLevel], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }
+      if (this.attr.piecesCoin){
+        ctx.drawImage(Robj["piecesCoin"], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }
+>>>>>>> 3e488fea7d6994df00279f10673458c5cf1d82d9
     } else if (this.isBomb) {
       //渲染爆炸图
       ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);
