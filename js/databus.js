@@ -305,10 +305,12 @@ export default class DataBus {
 
     this.score = 0 //每次开始默认分数、当前关卡获得分数
     this.gameScore = 0 //本轮游戏总分
+    this.stagegold = 0 //过关时的金币
+    this.gamegold = 0 //本轮游戏总金币
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 0 //当前关卡过关分数
     this.gameId = '' //本轮游戏id
-    this.steps = 0 //总步步数
+    this.steps = 20 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 0 //棋子种类
@@ -321,7 +323,19 @@ export default class DataBus {
       level2: 2,
       level3: 3
     }
+  }
 
+  //获取棋子所在中心的坐标
+  getPointCenter(point) {
+    let bl = this.GameUI.piecesWH //棋子宽高  
+    let btt = this.GameUI.boardToTOP //棋盘到顶部的距离  
+    let btlr = this.GameUI.boardToLR //棋盘左右两边间距  
+    let bi = this.GameUI.boardInner //棋盘内边框  
+    let pm = this.GameUI.piecesMargin //棋子边距 
+    var coordinates = {};
+    coordinates.x = point.col * (bl + pm) + bl / 2 + btlr + bi;
+    coordinates.y = point.row * (bl + pm) + bl / 2 + btt + bi;
+    return coordinates
   }
 }
 

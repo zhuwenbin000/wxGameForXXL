@@ -41,6 +41,7 @@ export default class Index {
     this.ctx = ctx
     this.pageBtn = new PageBtn(ctx)
     this.music = new Music()
+    this.music.playIndexBgm()
     this.touchEvent = false
     this.bindLoop = this.loop.bind(this)
     // 清除上一帧的动画

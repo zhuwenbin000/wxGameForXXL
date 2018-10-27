@@ -1,6 +1,8 @@
 import Block from './block'
+import Music from '../../music/music'
 import DataBus from '../../databus'
 import { ajax } from '../../base/ajax'
+
 
 let databus = new DataBus()
 
@@ -13,6 +15,7 @@ let cn = databus.colNum
  */
 export default class Map {
   constructor(ctx) {
+    this.ctx = ctx;
     //二维矩阵
     this.QRcode = [];
     //存放真实block元素的矩阵
@@ -40,6 +43,9 @@ export default class Map {
 
     this.createBlocksByQR();
 
+    this.music = new Music()
+    this.gsl = [];
+    this.gcl = [];
   }
 
   createBlocksByQR() {
@@ -75,6 +81,10 @@ export default class Map {
         ctx.fillText(databus.combo, 200, 60);
       }
     }
+    //渲染得分
+    this.showScore()
+    //渲染combo
+    this.showCombo()
   }
 
   //检测是否combo
@@ -132,6 +142,12 @@ export default class Map {
                 databus.combo = databus.combo + 1
                 isCombo = isCombo + 1
                 this.comboBlocksBomb(checkComboBlocks)
+                //显示combo
+                this.gcl.push({
+                  rc: checkComboBlocks[checkComboBlocks.length - 2],
+                  combo: databus.combo,
+                  t: 0
+                })
                 result = true;
               }
             }
@@ -161,6 +177,8 @@ export default class Map {
       this.needToBomb[cb[i].row][cb[i].col] = "X";
       this.blocks[cb[i].row][cb[i].col].bomb();
     }
+    //combo音效
+    this.music.playMusic('combo')
     //计算消除得分
     this.getScoreForBomb(cb)
   }
@@ -222,8 +240,49 @@ export default class Map {
       doubleHit = 1
     }
     databus.score = databus.score + bombScore * doubleHit
+
+    //显示获得得分
+    this.gsl.push({
+      rc: sb[sb.length - 1],
+      score: bombScore * doubleHit,
+      t:0
+    })
+    //得分音效
+    this.music.playMusic('getScore')
   }
 
+  showScore(){
+    if (this.gsl.length <= 0) return;
+    for (var i = 0; i < this.gsl.length; i++) {
+      if (this.gsl[i].t < 20) {
+        //显示分数
+        this.ctx.textAlign = 'left';
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = 'bold 20px Arial';
+        this.ctx.fillText('+' + this.gsl[i].score + '分', databus.getPointCenter(this.gsl[i].rc).x, databus.getPointCenter(this.gsl[i].rc).y);
+        this.gsl[i].t++
+      }else{
+        this.gsl.splice(i,1)
+      }
+    }
+  }
+
+
+  showCombo() {
+    if (this.gcl.length <= 0) return;
+    for (var i = 0; i < this.gcl.length; i++) {
+      if (this.gcl[i].t < 20) {
+        //显示Combo
+        this.ctx.textAlign = 'left';
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = 'bold 20px Arial';
+        this.ctx.fillText('combo ' + this.gcl[i].combo, databus.getPointCenter(this.gcl[i].rc).x, databus.getPointCenter(this.gcl[i].rc).y);
+        this.gcl[i].t++
+      } else {
+        this.gcl.splice(i, 1)
+      }
+    }
+  }
   //判断是否过关
   checkPassStage() {
     //当前关卡获得分数大于当前关卡过关分数
@@ -247,6 +306,8 @@ export default class Map {
           }
         },
         success(data) {
+          //过关音效
+          self.music.playMusic('passPoint')
           databus.passScore = data.body.game.passscore //第一关过关所需分数
           databus.gameId = data.body.game.gameid //本轮游戏id
           databus.steps = databus.steps + parseInt(data.body.game.rewardstep) //剩余步数加上奖励步数

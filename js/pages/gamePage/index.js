@@ -1,4 +1,5 @@
 import Map from './map'
+import Music from '../../music/music'
 import DataBus from '../../databus'
 import { ajax } from '../../base/ajax'
 
@@ -86,6 +87,8 @@ export default class Index {
   //重置页面
   restart(ctx) {
     this.ctx = ctx
+    this.music = new Music()
+    this.music.playGameBgm()
     databus.gameInfoReset()
     this.getGameInfo()
     this.getUserInfo()
@@ -316,6 +319,12 @@ export default class Index {
     if (rc) {
       databus.selectBlocks = []
       databus.selectBlocks.push(rc)
+      //棋子按下音效
+      this.music.playMusic('piecesDown' + databus.selectBlocks.length)
+      //金币音效
+      if (this.map.blocks[rc.row][rc.col].attr.piecesCoin) {
+        this.music.playMusic('getCoin')
+      }
       //震动效果
       wx.vibrateShort()
     } else {
@@ -358,6 +367,16 @@ export default class Index {
       if (this.map.blocks[rc.row][rc.col].attr.piecesType == this.map.blocks[pb.row][pb.col].attr.piecesType) {
         if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1) {
           databus.selectBlocks.push(rc)
+          //棋子按下音效
+          if (databus.selectBlocks.length > 10){
+            this.music.playMusic('piecesDown10')
+          }else{
+            this.music.playMusic('piecesDown' + databus.selectBlocks.length)
+          }
+          //金币音效
+          if (this.map.blocks[rc.row][rc.col].attr.piecesCoin){
+            this.music.playMusic('getCoin')
+          }
           //震动效果
           wx.vibrateShort()
         } else {
@@ -441,10 +460,10 @@ export default class Index {
     this.ctx.beginPath();
     for (var i = 0; i < pointsList.length; i++) {
       if (i < pointsList.length - 1) {
-        this.ctx.moveTo(this.getPointCenter(pointsList[i]).x, this.getPointCenter(pointsList[i]).y);
-        this.ctx.lineTo(this.getPointCenter(pointsList[i + 1]).x, this.getPointCenter(pointsList[i + 1]).y);
+        this.ctx.moveTo(databus.getPointCenter(pointsList[i]).x, databus.getPointCenter(pointsList[i]).y);
+        this.ctx.lineTo(databus.getPointCenter(pointsList[i + 1]).x, databus.getPointCenter(pointsList[i + 1]).y);
       } else {
-        this.ctx.moveTo(this.getPointCenter(pointsList[i]).x, this.getPointCenter(pointsList[i]).y);
+        this.ctx.moveTo(databus.getPointCenter(pointsList[i]).x, databus.getPointCenter(pointsList[i]).y);
         this.ctx.lineTo(this.x, this.y);
       }
     }
@@ -455,14 +474,6 @@ export default class Index {
     this.ctx.lineWidth = 6;
     this.ctx.strokeStyle = "#cccccc";
     this.ctx.stroke();
-  }
-
-  //获取棋子所在中心的坐标
-  getPointCenter(point) {
-    var coordinates = {};
-    coordinates.x = point.col * (bl + pm) + bl / 2 + btlr + bi;
-    coordinates.y = point.row * (bl + pm) + bl / 2 + btt + bi;
-    return coordinates
   }
 
   /**
