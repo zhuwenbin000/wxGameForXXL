@@ -257,6 +257,7 @@ export default class Map {
     if (gold > 0 ){
       //上报金币
       this.updateGold(gold)
+      this.music.playMusic('getCoin')
     }
   }
 
@@ -267,14 +268,12 @@ export default class Map {
       apiType: 'user',
       method: 'POST',
       data: {
-        'user': {
-          'gold': gold,//当前关卡过关分数
-          'gameid': databus.gameId,//游戏id
-        }
+        'gold': gold,//当前关卡过关分数
+        'gameid': databus.gameId,//游戏id
       },
       success(data) {
-        databus.usergold = databus.usergold + 1;
-        databus.stagegold = databus.stagegold + 1;
+        databus.usergold = parseInt(databus.usergold) + gold;
+        databus.stagegold = parseInt(databus.stagegold) + gold;
       }
     }
     ajax(options)
@@ -324,15 +323,13 @@ export default class Map {
         apiType: 'user',
         method: 'POST',
         data: {
-          'user': {
-            'stagecore': databus.score,//当前关卡过关分数
-            'usestep': databus.useSteps,//过关使用步数
-            'stagegold': databus.stagegold,//过关所得金币
-            'gameid': databus.gameId,//游戏id
-            'gamescore': databus.gameScore,//本轮游戏的总得分
-            'gamegold': databus.gamegold,//本次游戏获得总金币数
-            'currstage': databus.checkPoint,//当前关卡
-          }
+          'stagecore': databus.score,//当前关卡过关分数
+          'usestep': databus.useSteps,//过关使用步数
+          'stagegold': databus.stagegold,//过关所得金币
+          'gameid': databus.gameId,//游戏id
+          'gamescore': databus.gameScore,//本轮游戏的总得分
+          'gamegold': databus.gamegold,//本次游戏获得总金币数
+          'currstage': databus.checkPoint,//当前关卡
         },
         success(data) {
           //过关音效
@@ -365,10 +362,33 @@ export default class Map {
     }else{
       if (databus.steps == 0){
         databus.updateMaxScore()
+        this.gameEnd()
       }
     }
   }
 
+  //游戏结束
+  gameEnd(){
+    var self = this;
+    let options = {
+      tradecode: 'game03',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        'gameid': databus.gameId,//游戏id
+        'stage': databus.checkPoint,//当前关卡
+        'stagescore': databus.score,//当前关卡过关分数
+        'usestep': databus.useSteps,//过关使用步数
+        'stagegold': databus.stagegold,//过关所得金币
+        'gamescore': databus.gameScore,//本轮游戏的总得分
+        'gamegold': databus.gamegold,//本次游戏获得总金币数
+      },
+      success(data) {
+        databus.gameEnd = true
+      }
+    }
+    ajax(options)
+  }
   //计算相同分数相连得分
   getScoreForList(list) {
     if (list.length <= 0) {

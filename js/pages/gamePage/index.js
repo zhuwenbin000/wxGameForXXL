@@ -1,5 +1,6 @@
 import Map from './map'
 import Music from '../../music/music'
+import GameEnd from './gameEnd'
 import DataBus from '../../databus'
 import { ajax } from '../../base/ajax'
 
@@ -39,6 +40,10 @@ let snc = databus.GameUI.stepsNumCoordinates //步数坐标
 let stc = databus.GameUI.stepsTxtCoordinates //步数文字坐标
 let csc = databus.GameUI.currentScoreCoordinates //当前分数坐标
 let psc = databus.GameUI.passScoreCoordinates //当前过关分数坐标
+let shc = databus.GameUI.shareCoordinates //游戏结束分享
+let lvc = databus.GameUI.lookVideoCoordinates //游戏结束看视频
+let ic = databus.GameUI.indexCoordinates //游戏结束首页
+let tac = databus.GameUI.tryAgainCoordinates //游戏结束再来一局
 
 //游戏页主函数
 export default class Index {
@@ -73,7 +78,7 @@ export default class Index {
       "pieceslevel3": "images/gamePage/pieceslevel3.png",
       "piecesCoin": "images/gamePage/piecesCoin.png",
       "redPoint": "images/gamePage/redPoint.png",
-      "toolPrice": "images/gamePage/toolPrice.png"
+      "toolPrice": "images/gamePage/toolPrice.png",
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
@@ -94,7 +99,8 @@ export default class Index {
     this.music.playGameBgm()
     databus.gameInfoReset()
     this.getGameInfo()
-    // this.getUserInfo()
+    this.getUserInfo()
+    this.gameEnd = new GameEnd()
   }
 
   //页面notOnShow 
@@ -145,7 +151,6 @@ export default class Index {
 
     //绘制金币图标
     ctx.drawImage(this.Robj["coin"], 0, 0, this.Robj["coin"].width, this.Robj["coin"].height, cc.x, cc.y, cc.w, cc.h);
-
 
     // 关卡
     ctx.textAlign = 'left';
@@ -200,6 +205,9 @@ export default class Index {
     //绘制棋子
     this.map.render(ctx, this.Robj);
 
+    if (databus.gameEnd) {
+      this.gameEnd.render(ctx)
+    }
     //有限状态机！！！
     if (this.STATE == "爆破检查") {
       if (this.map.check()) {
@@ -299,21 +307,38 @@ export default class Index {
   }
 
   //获取用户信息 最高分数 最高关卡 拥有金币
-  // getUserInfo() {
-  //   var self = this;
-  //   let options = {
-  //     tradecode: 'sys04',
-  //     apiType: 'user',
-  //     method: 'POST',
-  //     success(data) {
+  getUserInfo() {
+    var self = this;
+    let options = {
+      tradecode: 'sys04',
+      apiType: 'user',
+      method: 'POST',
+      success(data) {
+        databus.usergold = data.body.user.glod; //用户拥有金币
+      }
+    }
+    ajax(options)
+  }
 
-  //     }
-  //   }
-  //   ajax(options)
-
-  // }
-
-
+  //续命接口
+  continueGame(type,steps) {
+    var self = this;
+    let options = {
+      tradecode: 'game04',
+      apiType: 'user',
+      method: 'POST',
+      data:{
+        "gameid": databus.gameId, 
+        "continuetype": type, 
+        "stageno": databus.checkPoint
+      },
+      success(data) {
+        databus.gameEnd = false
+        databus.steps = databus.steps + steps
+      }
+    }
+    ajax(options)
+  }
   /**
    * 调用接口结束
    */
@@ -327,44 +352,78 @@ export default class Index {
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
-
-    // 首页按钮事件
-    if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
-      databus.scene = 0
-
-    }
-
-    //页面结束事件
-    if (databus.scene != 1) {
-      this.finish()
-    }
-
-    //游戏区域事件
-    if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {
-      return
-    }
-    //判断手指落下的坐标
-    let rc = this.getRC(x, y)
-    //如果落在砖块上
-    if (rc) {
-      databus.selectBlocks = []
-      databus.selectBlocks.push(rc)
-      //棋子按下音效
-      this.music.playMusic('piecesDown' + databus.selectBlocks.length)
-      //金币音效
-      if (this.map.blocks[rc.row][rc.col].attr.piecesCoin) {
-        this.music.playMusic('getCoin')
+    if(databus.gameEnd){
+      // 首页按钮事件
+      if (x >= ic.x && x <= ic.x + ic.w && y >= ic.y && y <= ic.y + ic.h) {
+        this.finish()
+        databus.scene = 0
+        //按钮按下音效
+        this.music.playMusic('btnDown')
       }
-      //震动效果
-      wx.vibrateShort()
-    } else {
-      return
+      // 再来一局事件
+      if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
+        this.restart(this.ctx)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+      // 分享事件
+      if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
+        wx.shareAppMessage({'title':'莉莉最可爱'})
+        this.continueGame(2, 6)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+      // 看视频事件
+      if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
+        this.continueGame(1, 10)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+    }else{
+      // 首页按钮事件
+      if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
+        databus.scene = 0
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+      // // 增加步数事件
+      // if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
+      //   this.useTool(1)
+      //   //按钮按下音效
+      //   this.music.playMusic('btnDown')
+      // }
+
+      //页面结束事件
+      if (databus.scene != 1) {
+        this.finish()
+      }
+
+      //游戏区域事件
+      if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {
+        return
+      }
+      //判断手指落下的坐标
+      let rc = this.getRC(x, y)
+      //如果落在砖块上
+      if (rc) {
+        databus.selectBlocks = []
+        databus.selectBlocks.push(rc)
+        //棋子按下音效
+        this.music.playMusic('piecesDown' + databus.selectBlocks.length)
+        this.checkDoubleHit(databus.selectBlocks)
+        //震动效果
+        wx.vibrateShort()
+      } else {
+        return
+      }
+      //绑定move和end事件
+      this.touchMoveHandler = this.touchMove.bind(this)
+      this.touchEndHandler = this.touchEnd.bind(this)
+      canvas.addEventListener('touchmove', this.touchMoveHandler)
+      canvas.addEventListener('touchend', this.touchEndHandler)
     }
-    //绑定move和end事件
-    this.touchMoveHandler = this.touchMove.bind(this)
-    this.touchEndHandler = this.touchEnd.bind(this)
-    canvas.addEventListener('touchmove', this.touchMoveHandler)
-    canvas.addEventListener('touchend', this.touchEndHandler)
   }
 
   touchMove(e) {
@@ -372,61 +431,66 @@ export default class Index {
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
 
-    if (this.STATE != "静稳状态") {
-      return;
-    }
+    if (databus.gameEnd) {
 
-    this.x = x;
-    this.y = y;
+    } else {
+      if (this.STATE != "静稳状态") {
+        return;
+      }
 
-    //判断手指移动中所在的砖块
-    let rc = this.getRC(x, y)
+      this.x = x;
+      this.y = y;
 
-    //如果移动不在砖块内就return
-    if (!rc) {
-      return
-    }
-    //已选择的上一个砖块
-    let pb = databus.selectBlocks[databus.selectBlocks.length - 1]
-    //如果当前砖块就是上一个砖块就return
-    if (rc.row == pb.row && rc.col == pb.col) {
-      return
-    }
-    //如果移动中的砖块处在已选择的上一个砖块的九宫格内，再判断color,再将color相同的加入连线数组中
-    if (Math.abs(rc.row - pb.row) <= 1 && Math.abs(rc.col - pb.col) <= 1) {
-      if (this.map.blocks[rc.row][rc.col].attr.piecesType == this.map.blocks[pb.row][pb.col].attr.piecesType) {
-        if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1) {
-          databus.selectBlocks.push(rc)
-          //棋子按下音效
-          if (databus.selectBlocks.length > 10){
-            this.music.playMusic('piecesDown10')
-          }else{
-            this.music.playMusic('piecesDown' + databus.selectBlocks.length)
-          }
-          //金币音效
-          if (this.map.blocks[rc.row][rc.col].attr.piecesCoin){
-            this.music.playMusic('getCoin')
-          }
-          //震动效果
-          wx.vibrateShort()
-        } else {
-          //如果回退,则连线回退，即去除之前连线的棋子
-          if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])) {
-            databus.selectBlocks.splice(databus.selectBlocks.length - 1, 1)
+      //判断手指移动中所在的砖块
+      let rc = this.getRC(x, y)
+
+      //如果移动不在砖块内就return
+      if (!rc) {
+        return
+      }
+      //已选择的上一个砖块
+      let pb = databus.selectBlocks[databus.selectBlocks.length - 1]
+      //如果当前砖块就是上一个砖块就return
+      if (rc.row == pb.row && rc.col == pb.col) {
+        return
+      }
+      //如果移动中的砖块处在已选择的上一个砖块的九宫格内，再判断color,再将color相同的加入连线数组中
+      if (Math.abs(rc.row - pb.row) <= 1 && Math.abs(rc.col - pb.col) <= 1) {
+        if (this.map.blocks[rc.row][rc.col].attr.piecesType == this.map.blocks[pb.row][pb.col].attr.piecesType) {
+          if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1) {
+            databus.selectBlocks.push(rc)
+            //棋子按下音效
+            if (databus.selectBlocks.length > 10) {
+              this.music.playMusic('piecesDown10')
+            } else {
+              this.music.playMusic('piecesDown' + databus.selectBlocks.length)
+            }
+            this.checkDoubleHit(databus.selectBlocks)
+            //震动效果
+            wx.vibrateShort()
+          } else {
+            //如果回退,则连线回退，即去除之前连线的棋子
+            if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])) {
+              databus.selectBlocks.splice(databus.selectBlocks.length - 1, 1)
+            }
           }
         }
       }
-    }
     // //改变标记
     // this.istuozhuai = true;
     // //写当前帧
     // this.starttuozhuai = this.f;
+    }
   }
 
   touchEnd() {
-    this.checkBomb()
-    canvas.removeEventListener('touchmove', this.touchMoveHandler)
-    canvas.removeEventListener('touchend', this.touchEndHandler)
+    if (databus.gameEnd) {
+
+    } else {
+      this.checkBomb()
+      canvas.removeEventListener('touchmove', this.touchMoveHandler)
+      canvas.removeEventListener('touchend', this.touchEndHandler)
+    }
   }
 
   /**
@@ -506,6 +570,15 @@ export default class Index {
     this.ctx.stroke();
   }
 
+  checkDoubleHit(sb) {
+    if(sb.length < 3) return
+    let sb1 = this.map.blocks[sb[sb.length - 1].row][sb[sb.length - 1].col].attr.piecesLevel
+    let sb2 = this.map.blocks[sb[sb.length - 2].row][sb[sb.length - 2].col].attr.piecesLevel
+    let sb3 = this.map.blocks[sb[sb.length - 3].row][sb[sb.length - 3].col].attr.piecesLevel
+    if (sb1 == sb2 && sb2 == sb3){
+      this.music.playMusic('doubleHit')
+    }
+  }
   /**
    * 工具函数结束
    */

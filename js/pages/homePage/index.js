@@ -12,26 +12,20 @@ export default class Index {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
     console.log("初始化")
-    if (databus.userinfo){ //如果可以获取到用户信息 直接去获取最高分
-      var signature = databus.userinfo.signature
-      if (signature) {
-        this.getscore(signature)
-      }
-    }
+    // if (databus.userinfo){ //如果可以获取到用户信息 直接去获取最高分
+    //   this.getscore()
+    // }
    
   }
-  getscore(signature) { //获取最高分
+  getscore() { //获取最高分
     let me = this;
     let options = {
       tradecode: 'sys04',
       apiType: 'user',
       method: 'POST',
-      data: {
-        loginflag: signature
-      },
       success(data) {
-        databus.bestscore = data.body.user.bestscore
-        databus.usergold = data.body.user.glod //用户拥有金币
+        databus.bestscore = data.body.user.bestscore;
+        // databus.usergold = data.body.user.glod; //用户拥有金币
       }
     }
     ajax(options)
@@ -49,6 +43,7 @@ export default class Index {
     window.cancelAnimationFrame(this.aniId)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
     //渲染按钮之前先获取用户的登录状态
+    this.getscore()
   }
 
   finish() {

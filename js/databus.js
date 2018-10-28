@@ -268,6 +268,68 @@ export default class DataBus {
         x: (uiWidth / 2) * ratio,
         y: 248 * ratio,
         font: 'bold ' + 60 * ratio + 'px Arial'
+      },
+      getScoreCoordinates: { //游戏结束得分
+        x: 14 * ratio,
+        y: 280 * ratio,
+        w: 800 * ratio,
+        h: 482 * ratio,
+      },
+      newRecordCoordinates: { //游戏结束新纪录
+        x: 560 * ratio,
+        y: 370 * ratio,
+        w: 278 * ratio,
+        h: 224 * ratio,
+      },
+      tipsCoordinates: { //游戏结束提示
+        x: 68 * ratio,
+        y: 836 * ratio,
+        w: 692 * ratio,
+        h: 248 * ratio,
+      },
+      shareCoordinates: { //游戏结束分享
+        x: 85 * ratio,
+        y: 950 * ratio,
+        w: 318 * ratio,
+        h: 120 * ratio,
+      },
+      lookVideoCoordinates: { //游戏结束看视频
+        x: 425 * ratio,
+        y: 950 * ratio,
+        w: 318 * ratio,
+        h: 120 * ratio,
+      },
+      indexCoordinates: { //游戏结束首页
+        x: 95 * ratio,
+        y: 1150 * ratio,
+        w: 166 * ratio,
+        h: 166 * ratio,
+      },
+      tryAgainCoordinates: { //游戏结束再来一局
+        x: 300 * ratio,
+        y: 1135 * ratio,
+        w: 496 * ratio,
+        h: 200 * ratio,
+      },
+      stageScoreCoordinates: { //游戏结束分数
+        x: 325 * ratio,
+        y: 330 * ratio,
+        font: 'bold ' + 40 * ratio + 'px Arial'
+      },
+      avatarCoordinates: { //游戏结束头像
+        x: 105 * ratio,
+        y: 170 * ratio,
+        r: 95 * ratio,//头像的半径
+      },
+      userNameCoordinates: { //游戏结束昵称
+        x: 325 * ratio,
+        y: 245 * ratio,
+        font: 'bold ' + 40 * ratio + 'px Arial'
+      },
+      bestScoreCoordinates: { //游戏结束最高得分
+        x: (uiWidth / 2) * ratio,
+        y: 660 * ratio,
+        font: 'bold ' + 55 * ratio + 'px Arial'
       }
     }
     //棋盘宽高
@@ -345,6 +407,7 @@ export default class DataBus {
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 0 //棋子种类
+    this.gameEnd = false //游戏是否结束
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
       piecesLevel: [],
       piecesProbblt: []
@@ -376,6 +439,22 @@ export default class DataBus {
       type: 'updateMaxScore',
       text: score
     });
+  }
+
+  circleImg(ctx, img, x, y, r) {//画一个带边框的头像圆
+    var d = 2 * r;
+    var cx = x + r;
+    var cy = y + r;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r + 3, 0, 2 * Math.PI);
+    ctx.fillStyle = "#fff"
+    ctx.fill();
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.clip();
+    ctx.drawImage(img, x, y, d, d);
+    ctx.restore()
   }
 }
 

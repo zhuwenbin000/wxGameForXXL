@@ -11,7 +11,6 @@ export function ajax(options) {
     }else{
       //如果是user类型
       if (options.apiType == 'user'){
-        
         options.data = {
           user: {
             ...options.data,
