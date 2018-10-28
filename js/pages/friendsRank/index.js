@@ -18,6 +18,9 @@ const world_table = wx.createImage();
 world_table.src = 'images/rank/world_light.png';
 const friend_table_dark = wx.createImage();
 friend_table_dark.src = 'images/rank/12.png';
+let openDataContext = wx.getOpenDataContext();
+
+let pageindex = 1;
 /**
  * 游戏页
  */
@@ -29,10 +32,41 @@ export default class Index {
     this.aniId = 2
    
   }
-  
+  getWorldData() { //获取世界排行榜数据
+    let me = this;
+    let options = {
+      tradecode: 'rank02',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        user: true,
+        start: 0,
+        limit: 100
+      },
+      success(data) {
+        data.body.user_list = [...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list,...data.body.user_list]
+        openDataContext.postMessage({
+          type: 'world',
+          text: data.body.user_list
+        });
+      }
+    }
+    ajax(options)
+  }
+  drawnextbtn(ctx) {
+    let shareProv = wx.createImage();
+    shareProv.src = 'images/rank/share_prev.png';   
+    
+    ctx.drawImage(shareProv, databus.shareProv.x, databus.shareProv.y, databus.shareProv.w, databus.shareProv.h);
+    
+    let shareNext = wx.createImage();
+    shareNext.src = 'images/rank/share_next.png';
+    
+    ctx.drawImage(shareNext, databus.shareNext.x, databus.shareNext.y, databus.shareNext.w, databus.shareNext.h);
+    
+  }
   messageSharecanvas(type, text) {
     // 排行榜也应该是实时的，所以需要sharedCanvas 绘制新的排行榜
-    let openDataContext = wx.getOpenDataContext();
     openDataContext.postMessage({
       type: type || 'friends',
       text: text,
@@ -54,9 +88,9 @@ export default class Index {
   finish() {
     //清除定时动画和绑定事件
     console.log("清除定时动画和绑定事件")
-   // wx.offTouchStart()
+    // wx.offTouchStart()
     window.cancelAnimationFrame(this.aniId)
-    canvas.removeEventListener('touchstart', this.touchHandler) 
+    canvas.removeEventListener('touchstart', this.touchHandler)
   }
 
   //页面触摸事件处理
@@ -64,20 +98,20 @@ export default class Index {
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
-   
-    let friend_area={
+
+    let friend_area = {
       startX: databus.friendbtn.x,
       startY: databus.friendbtn.y,
       endX: databus.friendbtn.w + databus.friendbtn.x,
       endY: databus.friendbtn.h + databus.friendbtn.y
-    } 
+    }
     let world_area = {
       startX: databus.worldbtn.x,
       startY: databus.worldbtn.y,
       endX: databus.worldbtn.w + databus.worldbtn.x,
       endY: databus.worldbtn.h + databus.worldbtn.y,
-      }
-    
+    }
+
     let backBtnArea = {
       startX: databus.backbtn.x,
       startY: databus.backbtn.y,
@@ -92,13 +126,43 @@ export default class Index {
     }
     if (x >= friend_area.startX && x <= friend_area.endX && y >= friend_area.startY && y <= friend_area.endY) {
       console.log("好友")
+      this.messageSharecanvas()
       this.module_type = 1
       this.render(this.ctx)
     }
     if (x >= world_area.startX && x <= world_area.endX && y >= world_area.startY && y <= world_area.endY) {
       console.log("世界")
+      this.getWorldData()
       this.module_type = 2
       this.render(this.ctx)
+    }
+    if (x >= databus.shareProv.x && x <= databus.shareProv.x + databus.shareProv.w && y >= databus.shareProv.y && y <= databus.shareProv.h + databus.shareProv.y ) {
+      console.log("上一页") 
+      if (this.module_type == 1) { //好友翻页
+        openDataContext.postMessage({
+          type: 'provfriend',
+          text: ''
+        });
+      } else { //世界翻页
+        openDataContext.postMessage({
+          type: 'provworld',
+          text: ''
+        });
+      }
+    }
+    if (x >= databus.shareNext.x && x <= databus.shareNext.x + databus.shareNext.w && y >= databus.shareNext.y && y <= databus.shareNext.h + databus.shareNext.y) {
+    
+      if (this.module_type == 1) { //好友翻页
+        openDataContext.postMessage({
+          type: 'nextfriend',
+          text: ''
+        });
+      } else { //世界翻页
+        openDataContext.postMessage({
+          type: 'nextworld',
+          text: ''
+        });
+      }
     }
 
     //页面结束事件
@@ -106,27 +170,28 @@ export default class Index {
       this.finish()
     }
   }
-  
+
   //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
   render(ctx) {
-  //  console.log("好友排行在循环")
-    ctx.clearRect(0, 0, canvas.width, canvas.height)  
+    //  console.log("好友排行在循环")
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.drawImage(ngpng, 0, 0, databus.bgpic.w, databus.bgpic.h);
-    if(this.module_type == 1){ //渲染好友排行样式
+    if (this.module_type == 1) { //渲染好友排行样式
       ctx.drawImage(friend_table, databus.friendbtn.x, databus.friendbtn.y, databus.friendbtn.w, databus.friendbtn.h);
-      ctx.drawImage(world_table_dark, databus.worldbtn.x, databus.worldbtn.y, databus.worldbtn.w, databus.worldbtn.h);  
+      ctx.drawImage(world_table_dark, databus.worldbtn.x, databus.worldbtn.y, databus.worldbtn.w, databus.worldbtn.h);
     } else { //渲染世界排行样式 
-   
-      ctx.drawImage(friend_table_dark, databus.friendbtn_world.x, databus.friendbtn_world.y, databus.friendbtn_world.w, databus.friendbtn_world.h );
-     
-      ctx.drawImage(world_table, databus.worldbtn_world.x, databus.worldbtn_world.y, databus.worldbtn_world.w, databus.worldbtn_world.h  ); 
+
+      ctx.drawImage(friend_table_dark, databus.friendbtn_world.x, databus.friendbtn_world.y, databus.friendbtn_world.w, databus.friendbtn_world.h);
+
+      ctx.drawImage(world_table, databus.worldbtn_world.x, databus.worldbtn_world.y, databus.worldbtn_world.w, databus.worldbtn_world.h);
     }
     const homeimg = wx.createImage();
     homeimg.src = 'images/rank/home.png';
-    ctx.drawImage(homeimg, databus.backbtn.x, databus.backbtn.y, databus.backbtn.w, databus.backbtn.h); 
+    this.drawnextbtn(ctx)
+    ctx.drawImage(homeimg, databus.backbtn.x, databus.backbtn.y, databus.backbtn.w, databus.backbtn.h);
 
-     DataStore.getInstance().ctx.drawImage(DataStore.getInstance().sharedCanvas, 0, 0, screenWidth, screenHeight);
-
+    DataStore.getInstance().ctx.drawImage(DataStore.getInstance().sharedCanvas, 0, 0, screenWidth, screenHeight);
+    
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true

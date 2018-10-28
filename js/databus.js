@@ -41,6 +41,19 @@ export default class DataBus {
       x: 16 * ratio,
       y: 20 * ratio
     }
+    this.shareProv ={
+      x: 60 * ratio,
+      y: 1320 * ratio,
+      w: 258 * ratio,
+      h: 130 * ratio
+    }
+    this.shareNext = {
+      x: 500 * ratio,
+      y: 1320 * ratio,
+      w: 258 * ratio,
+      h: 130 * ratio
+    }
+  
     this.pagesize = {
       x: 20 * ratio,
       y: 250 * ratio,
