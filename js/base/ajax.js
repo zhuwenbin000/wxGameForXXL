@@ -41,7 +41,7 @@ export function ajax(options) {
     success(res) {//成功回调
       console.log(res)
       if (res.data.result.code == '0') {//处理成功
-        options.success(res.data)
+        options.success && options.success(res.data)
       } else if (res.data.result.code == '10010'){//登录超时
         userLogin(options)
       }else{//其他

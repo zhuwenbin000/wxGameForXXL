@@ -78,7 +78,7 @@ export default class Map {
         // if (this.downRow[r][c]) {
         //   ctx.fillText(this.downRow[r][c], 200 + c * 10, 60 + r * 10);
         // }
-        ctx.fillText(databus.combo, 200, 60);
+        // ctx.fillText(databus.combo, 200, 60);
       }
     }
     //渲染得分
@@ -208,7 +208,12 @@ export default class Map {
     var scorePrev = 0;//上一个连线分数
     var scoreList = [];//相同连线分数的集合
     var doubleHit = 0;//连击次数
+    var gold = 0;//棋子所带金币
     for (var i = 0; i < sb.length; i++) {
+      //计算金币
+      if (this.blocks[sb[i].row][sb[i].col].attr.piecesCoin){
+        gold++
+      }
       //计算分数
       var piecesLevelScore = databus.piecesLevelScore[this.blocks[sb[i].row][sb[i].col].attr.piecesLevel];
       if (scorePrev == 0) {
@@ -249,6 +254,30 @@ export default class Map {
     })
     //得分音效
     this.music.playMusic('getScore')
+    if (gold > 0 ){
+      //上报金币
+      this.updateGold(gold)
+    }
+  }
+
+  updateGold(gold) {
+    var self = this;
+    let options = {
+      tradecode: 'acct03',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        'user': {
+          'gold': gold,//当前关卡过关分数
+          'gameid': databus.gameId,//游戏id
+        }
+      },
+      success(data) {
+        databus.usergold = databus.usergold + 1;
+        databus.stagegold = databus.stagegold + 1;
+      }
+    }
+    ajax(options)
   }
 
   showScore(){
@@ -285,11 +314,11 @@ export default class Map {
   }
   //判断是否过关
   checkPassStage() {
+    databus.gameScore = databus.gameScore + databus.score;
+    databus.gamegold = databus.gamegold + databus.stagegold;
     //当前关卡获得分数大于当前关卡过关分数
     if (databus.score >= databus.passScore) {
       var self = this;
-      databus.gameScore = databus.gameScore + databus.score;
-      databus.gamegold = databus.gamegold + databus.stagegold
       let options = {
         tradecode: 'game02',
         apiType: 'user',
@@ -333,6 +362,10 @@ export default class Map {
         }
       }
       ajax(options)
+    }else{
+      if (databus.steps == 0){
+        databus.updateMaxScore()
+      }
     }
   }
 

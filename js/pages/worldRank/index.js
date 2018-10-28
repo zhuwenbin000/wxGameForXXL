@@ -13,7 +13,7 @@ export default class Index {
     this.aniId = 3
     this.userList = []
     console.log("排行榜加载完了")
-    this.saveMaxScore()
+    // this.saveMaxScore()
   }
 
   restart(ctx) {

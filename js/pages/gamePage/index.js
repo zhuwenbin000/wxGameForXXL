@@ -23,12 +23,15 @@ let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
 let asc = databus.GameUI.addStepsCoordinates //增加步数按钮坐标宽高
 let aspoc = databus.GameUI.addStepsPointCoordinates //增加步数红点坐标宽高
 let asprc = databus.GameUI.addStepsPriceCoordinates //增加步数价格坐标宽高
+let asuc = databus.GameUI.addStepsUserCoordinates //增加步数拥有数量坐标宽高
 let aspbc = databus.GameUI.addStepsPriceBgCoordinates //增加步数价格背景坐标宽高
 let ctc = databus.GameUI.colorToolCoordinates //彩色道具坐标宽高
 let ctpoc = databus.GameUI.colorToolPointCoordinates //彩色道具红点坐标宽高
 let ctprc = databus.GameUI.colorToolPriceCoordinates //彩色道具价格坐标宽高
+let ctuc = databus.GameUI.colorToolUserCoordinates //增加步数拥有数量坐标宽高
 let ctpbc = databus.GameUI.colorToolPriceBgCoordinates //彩色道具价格背景坐标宽高
 let cc = databus.GameUI.coinCoordinates //金币坐标宽高
+let cnc = databus.GameUI.coinNumCoordinates //金币数量坐标宽高
 let cpc = databus.GameUI.checkPointCoordinates //关卡文字坐标宽高
 let shsc = databus.GameUI.selfHighScoreCoordinates //个人最高分数坐标
 let hsc = databus.GameUI.highestScoreCoordinates //世界最高分数坐标
@@ -91,7 +94,7 @@ export default class Index {
     this.music.playGameBgm()
     databus.gameInfoReset()
     this.getGameInfo()
-    this.getUserInfo()
+    // this.getUserInfo()
   }
 
   //页面notOnShow 
@@ -165,6 +168,21 @@ export default class Index {
     // 本轮分数
     ctx.font = shsc.font;
     ctx.fillText(databus.gameScore, shsc.x, shsc.y);
+    //增加步数价格
+    ctx.font = asprc.font;
+    ctx.fillText(databus.stepprice, asprc.x, asprc.y);
+    //增加步数拥有数量
+    ctx.font = asuc.font;
+    ctx.fillText(databus.usersteps, asuc.x, asuc.y);
+    //彩色道具价格
+    ctx.font = ctprc.font;
+    ctx.fillText(databus.hammerprice, ctprc.x, ctprc.y);
+    //彩色道具拥有数量
+    ctx.font = ctuc.font;
+    ctx.fillText(databus.userhammer, ctuc.x, ctuc.y);
+    //金币拥有数量
+    ctx.font = cnc.font;
+    ctx.fillText(databus.usergold, cnc.x, cnc.y);
     //当前分数
     ctx.fillStyle = '#ffd35f';
     ctx.font = csc.font;
@@ -236,7 +254,6 @@ export default class Index {
         databus.passScore = data.body.game.stagescore //第一关过关所需分数
         databus.gameId = data.body.game.gameid //本轮游戏id
         databus.rewardstep = data.body.game.rewardstep //过关奖励步数
-
         //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
         let piecesConfig = data.body.game.numberifno.split(',');
         let piecesLevel = [];
@@ -249,6 +266,19 @@ export default class Index {
         databus.piecesLevelProbblt = { //棋子对应等级的生成概率
           piecesLevel: piecesLevel,
           piecesProbblt: piecesProbblt
+        }
+
+        var propList = data.body.prop_list;
+        //道具相关
+        for (var j = 0; j < propList.length; j++) {
+          if (propList[j].proptype == '2'){
+            databus.userhammer = propList[j].propbalance || 0; //用户拥有道具-锤子
+            databus.hammerprice = propList[j].propprice || 0; //用户购买道具-锤子价格
+          } 
+          if (propList[j].proptype == '3'){
+            databus.usersteps = propList[j].propbalance || 0; //用户拥有道具-步数
+            databus.stepprice = propList[j].propprice || 0; //用户购买道具-步数价格
+          }
         }
 
         //地图，唯一的实例
@@ -269,19 +299,19 @@ export default class Index {
   }
 
   //获取用户信息 最高分数 最高关卡 拥有金币
-  getUserInfo() {
-    var self = this;
-    let options = {
-      tradecode: 'sys04',
-      apiType: 'user',
-      method: 'POST',
-      success(data) {
+  // getUserInfo() {
+  //   var self = this;
+  //   let options = {
+  //     tradecode: 'sys04',
+  //     apiType: 'user',
+  //     method: 'POST',
+  //     success(data) {
 
-      }
-    }
-    ajax(options)
+  //     }
+  //   }
+  //   ajax(options)
 
-  }
+  // }
 
 
   /**

@@ -166,11 +166,15 @@ export default class DataBus {
         w: 52 * ratio,
         h: 52 * ratio,
       },
+      addStepsUserCoordinates: { //增加步数拥有数量坐标宽高
+        x: 400 * ratio,
+        y: 1160 * ratio,
+        font: 24 * ratio + 'px Arial'
+      },
       addStepsPriceCoordinates: { //增加步数价格坐标宽高
-        x: 460 * ratio,
-        y: 1125 * ratio,
-        w: 144 * ratio,
-        h: 142 * ratio,
+        x: 355 * ratio,
+        y: 1270 * ratio,
+        font: 24 * ratio + 'px Arial'
       },
       addStepsPriceBgCoordinates: { //增加步数价格背景坐标宽高
         x: 270 * ratio,
@@ -191,10 +195,14 @@ export default class DataBus {
         h: 52 * ratio,
       },
       colorToolPriceCoordinates: { //彩色道具价格坐标宽高
-        x: 460 * ratio,
-        y: 1125 * ratio,
-        w: 144 * ratio,
-        h: 142 * ratio,
+        x: 540 * ratio,
+        y: 1270 * ratio,
+        font: 24 * ratio + 'px Arial'
+      },
+      colorToolUserCoordinates: { //彩色道具拥有数量坐标宽高
+        x: 585 * ratio,
+        y: 1160 * ratio,
+        font: 24 * ratio + 'px Arial'
       },
       colorToolPriceBgCoordinates: { //彩色道具价格背景坐标宽高
         x: 455 * ratio,
@@ -207,6 +215,11 @@ export default class DataBus {
         y: 1130 * ratio,
         w: 172 * ratio,
         h: 164 * ratio,
+      },
+      coinNumCoordinates: { //金币数量坐标宽高
+        x: 715 * ratio,
+        y: 1270 * ratio,
+        font: 24 * ratio + 'px Arial'
       },
       checkPointCoordinates: { //关卡坐标
         x: 32 * ratio,
@@ -307,10 +320,15 @@ export default class DataBus {
     this.gameScore = 0 //本轮游戏总分
     this.stagegold = 0 //过关时的金币
     this.gamegold = 0 //本轮游戏总金币
+    this.usergold = 0 //用户拥有金币
+    this.userhammer = 0 //用户拥有道具-锤子
+    this.hammerprice = 0 //用户道具-锤子购买价格
+    this.stepprice = 0 //用户道具-步数购买价格
+    this.usersteps = 0 //用户拥有道具-步数
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 0 //当前关卡过关分数
     this.gameId = '' //本轮游戏id
-    this.steps = 20 //总步步数
+    this.steps = 1 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 0 //棋子种类
@@ -336,6 +354,15 @@ export default class DataBus {
     coordinates.x = point.col * (bl + pm) + bl / 2 + btlr + bi;
     coordinates.y = point.row * (bl + pm) + bl / 2 + btt + bi;
     return coordinates
+  }
+
+  //更新最高分 如果大于当前的最高分
+  updateMaxScore(score) {
+    let openDataContext = wx.getOpenDataContext();
+    openDataContext.postMessage({
+      type: 'updateMaxScore',
+      text: score
+    });
   }
 }
 

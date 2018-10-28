@@ -37,7 +37,7 @@ wx.onMessage(data => {
   } else if (data.type === 'updateMaxScore') {
     // 更新最高分
     console.log('更新最高分');
-    getMyScore();
+    updateMaxScore(data.text)
   }
 });
 
@@ -211,6 +211,32 @@ function getMyScore() {
   });
 }
 
+function updateMaxScore(maxScore) {
+  wx.getUserCloudStorage({
+    keyList: ['score'],
+    success: res => {
+      console.log(res)
+      let score = res.length > 0 ? JSON.parse(res[0].value).score : 0
+      if (maxScore > score){
+        let KVData = JSON.stringify({
+          "wxgame": {
+            "score": maxScore,
+            "update_time": new Date().getTime()
+          }
+        })
+        wx.setUserCloudStorage({
+          KVDataList: [{
+            key: 'score',
+            value: KVData
+          }],
+          success: res => {
+            console.log(res);
+          }
+        });
+      }
+    }
+  });
+}
 
 
 function sortByScore(data) {
