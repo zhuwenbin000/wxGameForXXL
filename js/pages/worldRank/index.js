@@ -1,3 +1,4 @@
+
 import Music from '../../music/music'
 import DataBus from '../../databus'
 import { ajax } from '../../base/ajax'
@@ -12,7 +13,7 @@ export default class Index {
     // 维护当前requestAnimationFrame的id
     this.aniId = 3
     this.userList = []
-    console.log("排行榜加载完了")
+    
     this.saveMaxScore()
   }
 

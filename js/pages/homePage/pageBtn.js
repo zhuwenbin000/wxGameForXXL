@@ -4,7 +4,7 @@ let ratio = canvas.width / 828 //设计稿宽度
 import DataBus from '../../databus'
 let databus = new DataBus()
 import { ajax } from '../../base/ajax'
-
+let onget = false;//接口正在调用中
 let logoBtn = wx.createImage();
 let startBtn = wx.createImage();
 let friendsRankBtn = wx.createImage();
@@ -55,8 +55,8 @@ export default class PageBtn {
       this.drawhead(ctx)//画头像
     } else { //未授权
       this.startBtn(ctx)
-      this.friendsRankBtn(ctx)    
-      this.render_btn(ctx)     
+      this.friendsRankBtn(ctx)
+      this.render_btn(ctx)
       this.author(ctx)
     }
   }
@@ -64,11 +64,13 @@ export default class PageBtn {
 
   }
   drawhead(ctx) {
-    var me = this   
-    if (!databus.userinfo) {
+    var me = this
+    if (!databus.userinfo && !onget) {
+      onget = true;
       wx.getUserInfo({ //获取用户基本信息
-        success: function (res) {      
+        success: function (res) {
           databus.userinfo = res
+          me.savedata(res)//保存用户数据
           var name = res.userInfo.nickName
           me.getscore(ctx, databus.userinfo.signature)
           me.circleName(ctx, name)
@@ -77,12 +79,13 @@ export default class PageBtn {
         }
       })
     } else {
-      var name = databus.userinfo.userInfo.nickName         
-      var bestscore = databus.bestscore
-      
-      me.circleName(ctx, name)
-      headimg.src = databus.userinfo.userInfo.avatarUrl
-      me.circleImg(ctx, headimg, (screenWidth / 2) - br, mt, br, name, bestscore)
+      if (databus.userinfo) {
+        var name = databus.userinfo.userInfo.nickName
+        var bestscore = databus.bestscore
+        me.circleName(ctx, name)
+        headimg.src = databus.userinfo.userInfo.avatarUrl
+        me.circleImg(ctx, headimg, (screenWidth / 2) - br, mt, br, name, bestscore)
+      }
     }
   }
   getscore(signature) { //获取最高分
@@ -91,13 +94,32 @@ export default class PageBtn {
       tradecode: 'sys04',
       apiType: 'user',
       method: 'POST',
-      data: {
-        loginflag: signature
-      },
       success(data) {
         var bestscore = data.body.user.bestscore;
         databus.bestscore = bestscore;
-       
+
+      }
+    }
+    ajax(options)
+  }
+  savedata(res) {
+    console.log(res)
+
+    let options = {
+      tradecode: 'sys03',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        nickname: res.userInfo.nickName,
+        province: res.userInfo.province,
+        city: res.userInfo.city,
+        country: res.userInfo.country,
+        sex: res.userInfo.gender,
+        logourl: res.userInfo.avatarUrl
+      },
+      success(data) {
+
+        console.log("云同步用户数据成功")
       }
     }
     ajax(options)
@@ -116,16 +138,16 @@ export default class PageBtn {
     ctx.font = '16px Arial';
     ctx.fontWeight = "900"
     ctx.textAlign = 'center';
-    
+
     var bestscore = parseInt(bestscore)
-    if (bestscore){
+    if (bestscore) {
       ctx.fillText(bestscore + '分', screenWidth / 2, mt + (br * 2) + 95 * ratio);
-    }else{
+    } else {
       ctx.fillText('暂无分数', screenWidth / 2, mt + (br * 2) + 95 * ratio);
     }
-   
+
   }
-  circleImg(ctx, img, x, y, r, name,bestscore) {//画一个带边框的头像圆
+  circleImg(ctx, img, x, y, r, name, bestscore) {//画一个带边框的头像圆
     ctx.drawImage(bg, 0, 0, screenWidth, screenHeight)
     this.drawlogo(ctx)//画logo
     ctx.save();
@@ -143,17 +165,17 @@ export default class PageBtn {
     ctx.clip();
     ctx.drawImage(img, x, y, d, d);
     ctx.restore()
-   
+
     //画按钮
     this.circleName(ctx, name)
     this.loginstartBtn(ctx)
     this.loginfriendsRankBtn(ctx)
     this.loginauthor(ctx)
     //画分数
-    if (bestscore){
+    if (bestscore) {
       this.drawscore(ctx, bestscore)
     }
-    
+
   }
   drawlogo(ctx) {
     ctx.drawImage(logoBtn, 0, 0, 668, 510, (window.innerWidth - 668 * ratio) / 2, 120 * ratio, 668 * ratio, 510 * ratio)
@@ -169,12 +191,12 @@ export default class PageBtn {
       endY: nmt + 226 * ratio
     }
   }
-  
+
   startBtn(ctx) { //开始游戏按钮
     if (!this.createbutton) {
       this.createbutton = wx.createUserInfoButton({
         type: 'image',
-        image: 'images/start.png',
+        image: 'images/home/start.png',
         style: {
           left: ml,
           top: nmt,
@@ -213,7 +235,7 @@ export default class PageBtn {
     if (!this.friendbutton) {
       this.friendbutton = wx.createUserInfoButton({
         type: 'image',
-        image: 'images/friends.png',
+        image: 'images/home/friends.png',
         style: {
           left: ml,
           top: nmt + (196 * ratio) + nb,
@@ -258,7 +280,7 @@ export default class PageBtn {
       endX: ml + 282 * ratio,
       endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio
     }
-  } 
-  
+  }
+
 
 }
