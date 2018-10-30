@@ -256,7 +256,7 @@ function sortByScore(data) {
     if (item.nickname && item.avatarUrl) { //过滤世界传过来的没头像昵称的数据
       array.push({
         avatarUrl: item.avatarUrl,
-        nickname: item.nickname,
+        nickname: decodeURIComponent(item.nickname),
         openid: item.openid,
         score: item['KVDataList'][1] && item['KVDataList'][1].value != 'undefined' ? item['KVDataList'][1].value : (item['KVDataList'][0] ? item['KVDataList'][0].value : 0) // 取最高分
         // checkpoint

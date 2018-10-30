@@ -384,7 +384,7 @@ export default class Map {
         'gamegold': databus.gamegold,//本次游戏获得总金币数
       },
       success(data) {
-        databus.gameEnd = true
+        databus.gameState = 2
       }
     }
     ajax(options)

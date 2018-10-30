@@ -1,3 +1,5 @@
+import DataBus from '../databus'
+let databus = new DataBus()
 let instance
 
 /**
@@ -55,11 +57,16 @@ export default class Music {
   }
 
   playGameBgm() {
+    if (!databus.musicBg) return
     this.indexBgmAudio.pause()
     this.gameBgmAudio.play()
   }
 
+  pauseGameBgm() {
+    this.gameBgmAudio.pause()
+  }
   playMusic(musicName) {
+    if (!databus.musicSound) return
     this.Mobj[musicName].currentTime = 0
     this.Mobj[musicName].play()
   }

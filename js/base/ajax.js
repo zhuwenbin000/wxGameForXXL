@@ -21,7 +21,6 @@ export function ajax(options) {
       //如果是...
     }
   }
-
   wx.request({
     url: apiUrl,
     method: options.method,

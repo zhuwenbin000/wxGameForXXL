@@ -111,6 +111,7 @@ export default class DataBus {
       friendsRank: false,
       worldRank: false,
     }
+    this.gameState = 0 //1:游戏中2:游戏结束3:音乐弹框4:彩色道具弹框5:增加步数弹框
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 334 * ratio, //棋盘到顶部的距离
@@ -407,7 +408,8 @@ export default class DataBus {
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 0 //棋子种类
-    this.gameEnd = false //游戏是否结束
+    this.musicBg = true //背景音默认开
+    this.musicSound = true //音效默认开
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
       piecesLevel: [],
       piecesProbblt: []

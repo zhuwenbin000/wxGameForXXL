@@ -81,6 +81,7 @@ export default class Main {
           
           databus.pageStateUpdate('gamePage')
           self.gamePage.restart(ctx)
+          databus.gameState = 1
         }
       }
 

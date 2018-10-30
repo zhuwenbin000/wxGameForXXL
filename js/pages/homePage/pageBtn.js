@@ -110,7 +110,7 @@ export default class PageBtn {
       apiType: 'user',
       method: 'POST',
       data: {
-        nickname: res.userInfo.nickName,
+        nickname: encodeURIComponent(res.userInfo.nickName),
         province: res.userInfo.province,
         city: res.userInfo.city,
         country: res.userInfo.country,
