@@ -17,6 +17,7 @@ let scales = screenWidth / 750;
 context.scale(scales, scales);
 
 let nowpage = 1 //当前页码，点击tab就翻回到第一页所以共用一个page
+let module = 1;//1好友 2世界
 let friendData = []
 let worldData = []
 let myInfo = {}; //用户的基本信息 
@@ -25,16 +26,19 @@ let userArr = []
 let myScore = undefined;
 let myRank = undefined;
 
+
 initRanklist([], nowpage)
 getUserInfo();
 
 wx.onMessage(data => {
   if (data.type === 'friends') {
     nowpage = 1; //点击好友就把页码置换为1
+    module = 1;
     getFriendsRanking();
     getMyScore();
   } else if (data.type === 'world') {
     nowpage = 1; //点击世界就把页码置换为1
+    module = 2;
     data.text.map(item => { //处理世界数据  保持和好友一样
       item.avatarUrl = item.logopath
       item.KVDataList = [{
@@ -50,7 +54,7 @@ wx.onMessage(data => {
   } else if (data.type === 'updateMaxScore') {
     // 更新最高分
     console.log('更新最高分');
-    updateMaxScore(data.text)
+    updateMaxScore(data)
     // getMyScore();
   } else if (data.type === 'nextfriend') {
     console.log("好友下一页")
@@ -109,7 +113,6 @@ function initRanklist(list, page, type) {
           context.drawImage(lessIamge, 40, i * itemHeight + mt, w, itemHeight);
         }
       }
-
       if (i == 6) {
         meIamge.onload = function () {
           context.drawImage(meIamge, 33, i * itemHeight + mt, w * 1.024, itemHeight);
@@ -119,7 +122,6 @@ function initRanklist(list, page, type) {
       }
     }
   }
-
 }
 function drawrank(list, page) {
   let length = 7
@@ -142,8 +144,6 @@ function drawrank(list, page) {
       context.textAlign = 'left';
       item.nickname = item.nickname.length > 5 ? item.nickname.substring(0, 6) + '..' : item.nickname
       context.fillText(item.nickname, 235, index * itemHeight + 325);
-
-
 
       context.font = '26px Arial';
       context.textAlign = 'right';
@@ -191,7 +191,8 @@ function getFriendsRanking() {
   wx.getFriendCloudStorage({
     keyList: ['score'],
     success: res => {
-      let data = [...res.data, ...res.data, ...res.data, ...res.data];
+      
+      let data = [...res.data];
       nowpage = 1
       friendData = sortByScore(data)
       initRanklist(friendData, nowpage);
@@ -221,26 +222,27 @@ function getMyScore() {
   });
 }
 
-function updateMaxScore(maxScore) {
+function updateMaxScore(score) {
+  
   wx.getUserCloudStorage({
     keyList: ['score'],
     success: res => {
-      console.log(res)
-      let score = res.length > 0 ? JSON.parse(res[0].value).score : 0
-      if (maxScore > score){
+      let maxScore = res.KVDataList.length > 0 ? JSON.parse(res.KVDataList[0].value).wxgame.score.text : 0;
+      if (maxScore-0 < score.text-0){
         let KVData = JSON.stringify({
           "wxgame": {
-            "score": maxScore,
+            "score": score,
             "update_time": new Date().getTime()
           }
         })
+        
         wx.setUserCloudStorage({
           KVDataList: [{
             key: 'score',
             value: KVData
           }],
           success: res => {
-            console.log(res);
+           
           }
         });
       }
@@ -250,15 +252,24 @@ function updateMaxScore(maxScore) {
 
 
 function sortByScore(data) {
-
   let array = [];
   data.map(item => {
     if (item.nickname && item.avatarUrl) { //过滤世界传过来的没头像昵称的数据
+      var score = 0;
+      
+      if(module == 1){
+        
+        score = item['KVDataList'][0] ? JSON.parse(item['KVDataList'][0].value).wxgame.score.text:0
+      }else{
+        score = item['KVDataList'][1] && item['KVDataList'][1].value != 'undefined' ? item['KVDataList'][1].value : (item['KVDataList'][0] ? item['KVDataList'][0].value : 0)
+      }
+      score = score-0 //字符串类型转数字
+      console.log(module, score,'666')
       array.push({
         avatarUrl: item.avatarUrl,
         nickname: decodeURIComponent(item.nickname),
         openid: item.openid,
-        score: item['KVDataList'][1] && item['KVDataList'][1].value != 'undefined' ? item['KVDataList'][1].value : (item['KVDataList'][0] ? item['KVDataList'][0].value : 0) // 取最高分
+        score: score // 取最高分
         // checkpoint
       })
     }
@@ -289,6 +300,7 @@ function getUserInfo() {
 }
 // 绘制自己的排名
 function drawMyRank() {
+  var text = myScore ? JSON.parse(myScore).wxgame.score.text : '0'
   console.log("渲染完了自己的数据")
   if (myInfo.avatarUrl) {
     let avatar = wx.createImage();
@@ -303,12 +315,18 @@ function drawMyRank() {
 
     context.font = 'bold 26px Arial';
     context.textAlign = 'right';
-    context.fillText(`${myScore}分` || 0, 630, 1120);
+    
+    
+    context.fillText(`${text}分` || 0, 630, 1120);
     // 自己的名次
     if (myRank !== undefined) {
       context.font = 'italic 44px Arial';
       context.textAlign = 'center';
-      context.fillText(myRank + 1, 86, 1120);
+      if (text != '0'){
+        context.fillText(myRank + 1, 86, 1120);
+      }else{
+        context.fillText('-', 86, 1120);
+      }     
     }
   }
 }

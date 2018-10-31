@@ -361,7 +361,9 @@ export default class Map {
       ajax(options)
     }else{
       if (databus.steps == 0){
-        databus.updateMaxScore()
+        console.log()
+        
+        databus.updateMaxScore(databus.score)
         this.gameEnd()
       }
     }

@@ -44,7 +44,7 @@ export default class Index {
         limit: 100
       },
       success(data) {
-        data.body.user_list = [...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list, ...data.body.user_list,...data.body.user_list]
+       // data.body.user_list = [...data.body.user_list]
         openDataContext.postMessage({
           type: 'world',
           text: data.body.user_list
