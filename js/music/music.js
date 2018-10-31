@@ -52,6 +52,7 @@ export default class Music {
   }
 
   playIndexBgm() {
+    if (!databus.musicBg) return
     this.gameBgmAudio.pause()
     this.indexBgmAudio.play()
   }
@@ -62,9 +63,10 @@ export default class Music {
     this.gameBgmAudio.play()
   }
 
-  pauseGameBgm() {
+  pauseMusicBgm() {
     this.gameBgmAudio.pause()
   }
+  
   playMusic(musicName) {
     if (!databus.musicSound) return
     this.Mobj[musicName].currentTime = 0

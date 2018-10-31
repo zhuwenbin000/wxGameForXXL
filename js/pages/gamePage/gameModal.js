@@ -26,7 +26,7 @@ for (var k in R) {
   Robj[k].src = R[k];
 }
 
-export default class GameEnd {
+export default class GameModal {
   render(ctx) {
     this.ctx = ctx;
     //绘制背景
@@ -39,14 +39,14 @@ export default class GameEnd {
       ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 220 * ratio, 150 * ratio, 162 * ratio);
       //弹框确认
       ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
-      if(!databus.musicBg){
+      if (!databus.musicBgState){
         //背景音乐-关
         ctx.drawImage(Robj["musicBgFalse"], 0, 0, Robj["musicBgFalse"].width, Robj["musicBgFalse"].height, 190 * ratio, 545 * ratio, 238 * ratio, 120 * ratio);
       }else{
         //背景音乐-开
         ctx.drawImage(Robj["musicBgTrue"], 0, 0, Robj["musicBgTrue"].width, Robj["musicBgTrue"].height, 190 * ratio, 545 * ratio, 238 * ratio, 120 * ratio);
       }
-      if (!databus.musicSound) {
+      if (!databus.musicSoundState) {
         //游戏音效-关
         ctx.drawImage(Robj["musicSoundFalse"], 0, 0, Robj["musicSoundFalse"].width, Robj["musicSoundFalse"].height, 190 * ratio, 770 * ratio, 238 * ratio, 120 * ratio);
       } else {
@@ -101,6 +101,22 @@ export default class GameEnd {
       ctx.font = 40 * ratio + 'px Arial';
       ctx.fillText('效果：游戏步数增加3步', 155 * ratio, 865 * ratio);
       ctx.fillText('价格：' + databus.stepprice + '金币', 155 * ratio, 955 * ratio); 
+    }
+
+
+    //6:首页弹框
+    if (databus.gameState == 6) {
+      //弹框背景
+      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 240 * ratio, 824 * ratio, 1072 * ratio);
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 220 * ratio, 150 * ratio, 162 * ratio);
+      //弹框确认
+      ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 50 * ratio + 'px Arial';
+      ctx.fillText('确定返回首页吗', (uiWidth / 2) * ratio, 600 * ratio);
     }
   }
 }

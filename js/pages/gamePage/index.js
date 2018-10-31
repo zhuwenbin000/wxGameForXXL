@@ -121,6 +121,7 @@ export default class Index {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     //帧编号
     this.f++;
+    
     //绘制背景。背景没动,也要每帧擦除，重绘
     ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
     //绘制棋盘
@@ -146,12 +147,12 @@ export default class Index {
     ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
     //增加步数价格背景坐标宽高
     ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, aspbc.x, aspbc.y, aspbc.w, aspbc.h);
-    //绘制彩色道具按钮
-    ctx.drawImage(this.Robj["colorTool"], 0, 0, this.Robj["colorTool"].width, this.Robj["colorTool"].height, ctc.x, ctc.y, ctc.w, ctc.h);
-    //彩色道具红点坐标宽高
-    ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, ctpoc.x, ctpoc.y, ctpoc.w, ctpoc.h);
-    //彩色道具价格背景坐标宽高
-    ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
+    // //绘制彩色道具按钮
+    // ctx.drawImage(this.Robj["colorTool"], 0, 0, this.Robj["colorTool"].width, this.Robj["colorTool"].height, ctc.x, ctc.y, ctc.w, ctc.h);
+    // //彩色道具红点坐标宽高
+    // ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, ctpoc.x, ctpoc.y, ctpoc.w, ctpoc.h);
+    // //彩色道具价格背景坐标宽高
+    // ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
 
     //绘制金币图标
     ctx.drawImage(this.Robj["coin"], 0, 0, this.Robj["coin"].width, this.Robj["coin"].height, cc.x, cc.y, cc.w, cc.h);
@@ -176,19 +177,19 @@ export default class Index {
     // ctx.fillText('步数', stc.x, stc.y);
     // 本轮分数
     ctx.font = shsc.font;
-    ctx.fillText(databus.gameScore, shsc.x, shsc.y);
+    ctx.fillText(databus.gameScore + databus.score, shsc.x, shsc.y);
     //增加步数价格
     ctx.font = asprc.font;
     ctx.fillText(databus.stepprice, asprc.x, asprc.y);
     //增加步数拥有数量
     ctx.font = asuc.font;
     ctx.fillText(databus.usersteps, asuc.x, asuc.y);
-    //彩色道具价格
-    ctx.font = ctprc.font;
-    ctx.fillText(databus.hammerprice, ctprc.x, ctprc.y);
-    //彩色道具拥有数量
-    ctx.font = ctuc.font;
-    ctx.fillText(databus.userhammer, ctuc.x, ctuc.y);
+    // //彩色道具价格
+    // ctx.font = ctprc.font;
+    // ctx.fillText(databus.hammerprice, ctprc.x, ctprc.y);
+    // //彩色道具拥有数量
+    // ctx.font = ctuc.font;
+    // ctx.fillText(databus.userhammer, ctuc.x, ctuc.y);
     //金币拥有数量
     ctx.font = cnc.font;
     ctx.fillText(databus.usergold, cnc.x, cnc.y);
@@ -213,7 +214,7 @@ export default class Index {
       this.gameEnd.render(ctx)
     }
 
-    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5) {
+    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6) {
       this.gameModal.render(ctx)
     }
 
@@ -348,6 +349,54 @@ export default class Index {
     }
     ajax(options)
   }
+  //购买道具
+  buyTool(type) {
+    ajax({
+      tradecode: 'acct01',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        "gameid": databus.gameId,
+        "proptype": type,
+      },
+      success(data) {
+        databus.gameState = 1
+        databus.usergold = data.body.user.glod
+        var propList = data.body.prop_list;
+        //道具相关
+        for (var j = 0; j < propList.length; j++) {
+          if (propList[j].proptype == '2') {
+            databus.userhammer = propList[j].propbalance || 0; //用户拥有道具-锤子
+            databus.hammerprice = propList[j].propprice || 0; //用户购买道具-锤子价格
+          }
+          if (propList[j].proptype == '3') {
+            databus.usersteps = propList[j].propbalance || 0; //用户拥有道具-步数
+            databus.stepprice = propList[j].propprice || 0; //用户购买道具-步数价格
+          }
+        }
+      }
+    })
+  }
+
+  //消耗道具
+  useTool(type) {
+    ajax({
+      tradecode: 'acct02',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        "gameid": databus.gameId,
+        "proptype": type,
+      },
+      success(data) {
+        wx.showToast({ title: '道具使用成功，加油冲关哦~', icon: 'none' })
+        if(type == '3'){//如果类型为3 则使用成功加3步
+          databus.steps = databus.steps + 3
+          databus.usersteps = databus.usersteps - 1
+        }
+      }
+    })
+  }
   /**
    * 调用接口结束
    */
@@ -372,6 +421,7 @@ export default class Index {
       }
       // 再来一局事件
       if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
+        databus.gameState = 1
         this.restart(this.ctx)
         //按钮按下音效
         this.music.playMusic('btnDown')
@@ -391,7 +441,7 @@ export default class Index {
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-    } else if (databus.gameState == 3) {
+    } else if (databus.gameState == 3) {//音乐弹框
       // 关闭弹框事件
       if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (220 * ratio) && y <= ((220 + 162) * ratio)) {
         databus.gameState = 1
@@ -401,20 +451,27 @@ export default class Index {
 
       // 点击背景音事件
       if (x >= (190 * ratio) && x <= ((190 + 238) * ratio) && y >= (545 * ratio) && y <= ((545 + 120) * ratio)) {
-        databus.musicBg = !databus.musicBg
+        databus.musicBgState = !databus.musicBgState
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
 
       // 点击游戏音效事件
       if (x >= (190 * ratio) && x <= ((190 + 238) * ratio) && y >= (770 * ratio) && y <= ((770 + 120) * ratio)) {
-        databus.musicSound = !databus.musicSound
+        databus.musicSoundState = !databus.musicSoundState
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
 
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
+        databus.musicBg = databus.musicBgState
+        databus.musicSound = databus.musicSoundState
+        if(databus.musicBg == true){
+          this.music.playGameBgm()
+        } else {
+          this.music.pauseMusicBgm()
+        }
         databus.gameState = 1
         //按钮按下音效
         this.music.playMusic('btnDown')
@@ -430,31 +487,7 @@ export default class Index {
 
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
-        ajax({
-          tradecode: 'acct01',
-          apiType: 'user',
-          method: 'POST',
-          data: {
-            "gameid": databus.gameId,
-            "proptype": '2',
-          },
-          success(data) {
-            databus.gameState = 1
-            databus.usergold = data.body.user.glod
-            var propList = data.body.prop_list;
-            //道具相关
-            for (var j = 0; j < propList.length; j++) {
-              if (propList[j].proptype == '2') {
-                databus.userhammer = propList[j].propbalance || 0; //用户拥有道具-锤子
-                databus.hammerprice = propList[j].propprice || 0; //用户购买道具-锤子价格
-              }
-              if (propList[j].proptype == '3') {
-                databus.usersteps = propList[j].propbalance || 0; //用户拥有道具-步数
-                databus.stepprice = propList[j].propprice || 0; //用户购买道具-步数价格
-              }
-            }
-          }
-        })
+        this.buyTool('2')
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
@@ -469,61 +502,65 @@ export default class Index {
 
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
-        ajax({
-          tradecode: 'acct01',
-          apiType: 'user',
-          method: 'POST',
-          data: {
-            "gameid": databus.gameId,
-            "proptype": '3',
-          },
-          success(data) {
-            databus.gameState = 1
-            databus.usergold = data.body.user.glod
-            var propList = data.body.prop_list;
-            //道具相关
-            for (var j = 0; j < propList.length; j++) {
-              if (propList[j].proptype == '2') {
-                databus.userhammer = propList[j].propbalance || 0; //用户拥有道具-锤子
-                databus.hammerprice = propList[j].propprice || 0; //用户购买道具-锤子价格
-              }
-              if (propList[j].proptype == '3') {
-                databus.usersteps = propList[j].propbalance || 0; //用户拥有道具-步数
-                databus.stepprice = propList[j].propprice || 0; //用户购买道具-步数价格
-              }
-            }
-          }
-        })
+        this.buyTool('3')
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
 
-    }else{
-      // 首页按钮事件
-      if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
+    } else if (databus.gameState == 6) {//6:返回首页弹框
+      // 关闭弹框事件
+      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (220 * ratio) && y <= ((220 + 162) * ratio)) {
+        databus.gameState = 1
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+      // 点击确认事件
+      if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
+        this.finish()
         databus.scene = 0
         databus.gameState = 0
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+    } else if (databus.gameState == 1){//游戏进行中
+      // 首页按钮事件
+      if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
+        databus.gameState = 6
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
       // 音乐按钮事件
       if (x >= mc.x && x <= mc.x + mc.w && y >= mc.y && y <= mc.y + mc.h) {
         databus.gameState = 3
+        databus.musicBgState = databus.musicBg
+        databus.musicSoundState = databus.musicSound
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-      // 增加步数按钮事件
+      // 增加步数购买按钮事件
       if (x >= (270 * ratio) && x <= ((270 + 50) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 50) * ratio)) {
         databus.gameState = 5
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-      // 彩色道具按钮事件
-      if (x >= (455 * ratio) && x <= ((455 + 50) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 50) * ratio)) {
-        databus.gameState = 4
+      // 增加步数使用按钮事件
+      if (x >= (270 * ratio) && x <= ((270 + 140) * ratio) && y >= (1125 * ratio) && y <= ((1125 + 120) * ratio)) {
+        if (databus.usersteps > 0) {
+          this.useTool('3')
+        }else{
+          wx.showToast({ title: '道具数量不足，请先购买', icon: 'none' })
+        }
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
+      // // 彩色道具购买按钮事件
+      // if (x >= (455 * ratio) && x <= ((455 + 50) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 50) * ratio)) {
+      //   databus.gameState = 4
+      //   //按钮按下音效
+      //   this.music.playMusic('btnDown')
+      // }
 
       //游戏区域事件
       if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {

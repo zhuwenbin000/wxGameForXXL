@@ -112,6 +112,10 @@ export default class DataBus {
       worldRank: false,
     }
     this.gameState = 0 //1:游戏中2:游戏结束3:音乐弹框4:彩色道具弹框5:增加步数弹框
+    this.musicBg = true //背景音默认开
+    this.musicSound = true //音效默认开
+    this.musicBgState = true //背景音状态
+    this.musicSoundState = true //音效默状态
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 334 * ratio, //棋盘到顶部的距离
@@ -404,12 +408,11 @@ export default class DataBus {
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 0 //当前关卡过关分数
     this.gameId = '' //本轮游戏id
-    this.steps = 1 //总步步数
+    this.steps = 2 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 0 //棋子种类
-    this.musicBg = true //背景音默认开
-    this.musicSound = true //音效默认开
+    this.isHighScore = false //是否新纪录
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
       piecesLevel: [],
       piecesProbblt: []

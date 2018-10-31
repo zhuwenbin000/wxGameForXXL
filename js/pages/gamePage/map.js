@@ -313,10 +313,10 @@ export default class Map {
   }
   //判断是否过关
   checkPassStage() {
-    databus.gameScore = databus.gameScore + databus.score;
-    databus.gamegold = databus.gamegold + databus.stagegold;
     //当前关卡获得分数大于当前关卡过关分数
     if (databus.score >= databus.passScore) {
+      databus.gamegold = databus.gamegold + databus.stagegold;
+      databus.gameScore = databus.gameScore + databus.score;
       var self = this;
       let options = {
         tradecode: 'game02',
@@ -361,8 +361,8 @@ export default class Map {
       ajax(options)
     }else{
       if (databus.steps == 0){
-        console.log()
-        
+        databus.gamegold = databus.gamegold + databus.stagegold;
+        databus.gameScore = databus.gameScore + databus.score;
         databus.updateMaxScore(databus.score)
         this.gameEnd()
       }
