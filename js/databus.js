@@ -411,16 +411,16 @@ export default class DataBus {
     this.steps = 2 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
-    this.piecesType = 0 //棋子种类
+    this.piecesType = 4 //棋子种类
     this.isHighScore = false //是否新纪录
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
       piecesLevel: [],
       piecesProbblt: []
     }
     this.piecesLevelScore = {//棋子对应等级的分数
-      level1: 1,
-      level2: 2,
-      level3: 3
+      level1: 0,
+      level2: 0,
+      level3: 0
     }
   }
 

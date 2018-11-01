@@ -341,13 +341,12 @@ export default class Map {
           databus.checkPoint = data.body.game.stageno //下一关关卡编号
           //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
           let piecesConfig = data.body.game.numberifno.split(',');
-          let piecesLevel = [];
+          let piecesLevel = ['level1', 'level2', 'level3'];
           let piecesProbblt = [];
           for (var i = 0; i < piecesConfig.length; i++) {
-            piecesLevel.push('level' + piecesConfig[i].split(':')[0])
             piecesProbblt.push(parseFloat(piecesConfig[i].split(':')[1]))
+            databus.piecesLevelScore['level' + (i + 1)] = parseFloat(piecesConfig[i].split(':')[0])
           }
-          databus.piecesType = piecesConfig.length //棋子种类
           databus.piecesLevelProbblt = { //棋子对应等级的生成概率
             piecesLevel: piecesLevel,
             piecesProbblt: piecesProbblt
@@ -361,8 +360,6 @@ export default class Map {
       ajax(options)
     }else{
       if (databus.steps == 0){
-        databus.gamegold = databus.gamegold + databus.stagegold;
-        databus.gameScore = databus.gameScore + databus.score;
         databus.updateMaxScore(databus.score)
         this.gameEnd()
       }
@@ -382,8 +379,8 @@ export default class Map {
         'stagescore': databus.score,//当前关卡过关分数
         'usestep': databus.useSteps,//过关使用步数
         'stagegold': databus.stagegold,//过关所得金币
-        'gamescore': databus.gameScore,//本轮游戏的总得分
-        'gamegold': databus.gamegold,//本次游戏获得总金币数
+        'gamescore': databus.gameScore + databus.score,//本轮游戏的总得分
+        'gamegold': databus.gamegold + databus.stagegold,//本次游戏获得总金币数
       },
       success(data) {
         databus.gameState = 2

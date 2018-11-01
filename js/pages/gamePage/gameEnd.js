@@ -64,7 +64,7 @@ export default class GameEnd {
     //本局分数
     ctx.textAlign = 'center';
     ctx.font = bsc.font;
-    ctx.fillText(databus.gameScore, bsc.x, bsc.y);
+    ctx.fillText(databus.gameScore + databus.score, bsc.x, bsc.y);
     //头像
     let headimg = wx.createImage();
     headimg.src = databus.userinfo.userInfo.avatarUrl

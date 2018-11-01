@@ -274,13 +274,12 @@ export default class Index {
         databus.rewardstep = data.body.game.rewardstep //过关奖励步数
         //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
         let piecesConfig = data.body.game.numberifno.split(',');
-        let piecesLevel = [];
+        let piecesLevel = ['level1', 'level2','level3'];
         let piecesProbblt = [];
         for (var i = 0; i < piecesConfig.length; i++) {
-          piecesLevel.push('level' + piecesConfig[i].split(':')[0])
           piecesProbblt.push(parseFloat(piecesConfig[i].split(':')[1]))
+          databus.piecesLevelScore['level' + (i + 1)] = parseFloat(piecesConfig[i].split(':')[0])
         }
-        databus.piecesType = piecesConfig.length //棋子种类
         databus.piecesLevelProbblt = { //棋子对应等级的生成概率
           piecesLevel: piecesLevel,
           piecesProbblt: piecesProbblt
