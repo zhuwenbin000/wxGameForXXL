@@ -3,6 +3,7 @@ import GamePage from './pages/gamePage/index'
 import FriendsRank from './pages/friendsRank/index'
 import WorldRank from './pages/worldRank/index'
 import DataBus from './databus'
+import Music from './music/music'
 
 import DataStore from '/base/helper';
 let ctx = canvas.getContext('2d')
@@ -50,7 +51,6 @@ export default class Main {
         }
       }
     })
-   
   }
 
   renderPage() {
@@ -60,6 +60,7 @@ export default class Main {
     self.gamePage = new GamePage(ctx)
     self.friendsRank = new FriendsRank(ctx)
     self.worldRank = new WorldRank(ctx)
+    self.music = new Music()
       //  databus.scene = 2 //好友排行测试用
   // databus.scene = 1 //游戏页测试用
    
@@ -72,6 +73,7 @@ export default class Main {
           databus.pageStateUpdate('homePage')
           self.homePage.restart(ctx)
         }
+        if (self.music.indexBgmAudio.paused) self.music.indexBgmAudio.play()
       }
 
       //游戏页
@@ -83,6 +85,7 @@ export default class Main {
           self.gamePage.restart(ctx)
           databus.gameState = 1
         }
+        if (self.music.gameBgmAudio.paused) self.music.gameBgmAudio.play()
       }
 
       //好友排行榜

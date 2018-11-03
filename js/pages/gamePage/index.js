@@ -121,7 +121,6 @@ export default class Index {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     //帧编号
     this.f++;
-    
     //绘制背景。背景没动,也要每帧擦除，重绘
     ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
     //绘制棋盘
@@ -131,8 +130,10 @@ export default class Index {
     ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
     //绘制空进度条
     ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
-    //绘制空进度条
-    ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, pec2.w, pec2.h);
+    if (databus.isPreAni) {
+      //绘制预获得分数进度条
+      ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, pec2.w, pec2.h);
+    }
     //绘制满进度条
     ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * pfc.w, pfc.h);
     //绘制首页按钮
@@ -421,6 +422,10 @@ export default class Index {
       // 再来一局事件
       if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
         databus.gameState = 1
+        //移除事件重新绑定
+        canvas.removeEventListener('touchstart', this.touchStartHandler)
+        canvas.removeEventListener('touchmove', this.touchMoveHandler)
+        canvas.removeEventListener('touchend', this.touchEndHandler)
         this.restart(this.ctx)
         //按钮按下音效
         this.music.playMusic('btnDown')
@@ -548,8 +553,8 @@ export default class Index {
       if (x >= (270 * ratio) && x <= ((270 + 140) * ratio) && y >= (1125 * ratio) && y <= ((1125 + 120) * ratio)) {
         if (databus.usersteps > 0) {
           this.useTool('3')
-        }else{
-          wx.showToast({ title: '道具数量不足，请先购买', icon: 'none' })
+        } else {
+          databus.gameState = 5
         }
         //按钮按下音效
         this.music.playMusic('btnDown')

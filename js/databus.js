@@ -413,6 +413,8 @@ export default class DataBus {
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 4 //棋子种类
     this.isHighScore = false //是否新纪录
+    this.preScore = 0 //预获得分数
+    this.isPreAni = false //是否在进行预获得分数动画
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
       piecesLevel: [],
       piecesProbblt: []
