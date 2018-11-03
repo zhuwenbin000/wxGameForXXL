@@ -149,10 +149,10 @@ export default class DataBus {
         h: 52 * ratio,
       },
       progressEmpty2Coordinates: { //空进度条2坐标宽高
-        x: 243 * ratio,
-        y: 267 * ratio,
-        w: 344 * ratio,
-        h: 44 * ratio,
+        x: 252 * ratio,
+        y: 275 * ratio,
+        w: 330 * ratio,
+        h: 26 * ratio,
       },
       progressFullCoordinates: { //满进度条坐标宽高
         x: 252 * ratio,
@@ -293,7 +293,7 @@ export default class DataBus {
         h: 248 * ratio,
       },
       shareCoordinates: { //游戏结束分享
-        x: 85 * ratio,
+        x: (uiWidth - 318) / 2 * ratio,
         y: 950 * ratio,
         w: 318 * ratio,
         h: 120 * ratio,
@@ -413,8 +413,11 @@ export default class DataBus {
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 4 //棋子种类
     this.isHighScore = false //是否新纪录
-    this.preScore = 0 //预获得分数
-    this.isPreAni = false //是否在进行预获得分数动画
+    this.preScoreStart = 0 //预获得开始分数
+    this.preScoreEnd = 0 //预获得结束分数
+    this.preScoreAniTime = 0 //预获得分数进度条动画帧时间
+    this.processScore = 0 //进度条分数
+    this.processAniTime = 0 //进度条动画帧时间
     this.piecesLevelProbblt = { //棋子对应等级的生成概率
       piecesLevel: [],
       piecesProbblt: []
@@ -462,6 +465,23 @@ export default class DataBus {
     ctx.clip();
     ctx.drawImage(img, x, y, d, d);
     ctx.restore()
+  }
+
+
+  //计算相同分数相连得分
+  getScoreForList(list) {
+    if (list.length <= 0) {
+      return 0
+    }
+    if (list.length >= 3) {
+      return (list[0] * (list.length - 2) * 10) * list.length
+    } else {
+      var totalScore = 0;
+      for (var i = 0; i < list.length; i++) {
+        totalScore = totalScore + list[i]
+      }
+      return totalScore
+    }
   }
 }
 

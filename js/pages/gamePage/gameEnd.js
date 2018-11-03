@@ -52,7 +52,7 @@ export default class GameEnd {
     //游戏结束分享
     ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, sc.x, sc.y, sc.w, sc.h);
     //游戏结束看视频
-    ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, lvc.x, lvc.y, lvc.w, lvc.h);
+    // ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, lvc.x, lvc.y, lvc.w, lvc.h);
     // 昵称
     ctx.textAlign = 'left';
     ctx.fillStyle = '#fff';

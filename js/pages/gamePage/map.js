@@ -223,7 +223,7 @@ export default class Map {
         scoreList.push(piecesLevelScore)
       } else {
         scorePrev = piecesLevelScore;
-        bombScore = bombScore + this.getScoreForList(scoreList)
+        bombScore = bombScore + databus.getScoreForList(scoreList)
         //连击加1
         if (scoreList.length >= 3) {
           doubleHit++
@@ -236,7 +236,7 @@ export default class Map {
         if (scoreList.length >= 3) {
           doubleHit++
         }
-        bombScore = bombScore + this.getScoreForList(scoreList)
+        bombScore = bombScore + databus.getScoreForList(scoreList)
       }
     }
 
@@ -353,6 +353,7 @@ export default class Map {
           }
 
           databus.score = 0 //重置当前关卡获得分数
+          databus.processScore = 0 //重置得分进度条
           databus.useSteps = 0 //重置当前关卡使用步数
           databus.stagegold = 0 //重置当前关卡所得金币
         }
@@ -387,21 +388,6 @@ export default class Map {
       }
     }
     ajax(options)
-  }
-  //计算相同分数相连得分
-  getScoreForList(list) {
-    if (list.length <= 0) {
-      return 0
-    }
-    if (list.length >= 3) {
-      return (list[0] * (list.length - 2) * 10) * list.length
-    } else {
-      var totalScore = 0;
-      for (var i = 0; i < list.length; i++) {
-        totalScore = totalScore + list[i]
-      }
-      return totalScore
-    }
   }
 
   //规整

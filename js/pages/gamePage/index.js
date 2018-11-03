@@ -126,16 +126,52 @@ export default class Index {
     //绘制棋盘
     ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, btlr, btt, bwh, bwh);
     //绘制步数图标
-    
     ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
+
     //绘制空进度条
     ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
-    if (databus.isPreAni) {
-      //绘制预获得分数进度条
-      ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, pec2.w, pec2.h);
+
+    //绘制预获得分数进度条
+    databus.preScoreStart = databus.preScoreEnd
+    databus.preScoreEnd = this.getScoreBySb(databus.selectBlocks)
+
+    if (databus.preScoreStart != databus.preScoreEnd) {
+      var totalTime = 15
+      databus.preScoreAniTime = databus.preScoreAniTime + 1
+      if (databus.preScoreAniTime > totalTime) {
+        databus.preScoreStart = databus.preScoreEnd
+        databus.preScoreAniTime = 0
+      } else {
+        databus.preScoreStart = databus.preScoreStart + (databus.preScoreEnd - databus.preScoreStart) * (databus.preScoreAniTime / totalTime)
+        if (databus.preScoreStart == databus.preScoreEnd) {
+          databus.processAniTime = 0
+        }
+        ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * pec2.w, pec2.h);
+      }
+    } else {
+      ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * pec2.w, pec2.h);
     }
-    //绘制满进度条
-    ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * pfc.w, pfc.h);
+
+    //绘制得分进度条
+    if (databus.processScore < databus.score) {
+      var totalTime = 15
+      databus.processAniTime = databus.processAniTime + 1
+      if (databus.processAniTime > totalTime) {
+        databus.processScore = databus.score
+        databus.processAniTime = 0
+      } else {
+        databus.processScore = databus.processScore + (databus.score - databus.processScore) * (databus.processAniTime / totalTime)
+        if (databus.processScore == databus.score) {
+          databus.processAniTime = 0
+        }
+        //绘制满进度条
+        ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * pfc.w, pfc.h);
+      }
+    }else{
+      //绘制得分进度条
+      ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * pfc.w, pfc.h);
+    }
+
     //绘制首页按钮
     ctx.drawImage(this.Robj["home"], 0, 0, this.Robj["home"].width, this.Robj["home"].height, hc.x, hc.y, hc.w, hc.h);
     //绘制规则按钮
@@ -741,6 +777,50 @@ export default class Index {
       this.music.playMusic('doubleHit')
     }
   }
+
+
+  //分数计算根据连线棋子
+  getScoreBySb(sb) {
+    if (sb.length <= 0) return
+    var bombScore = 0;//本次爆炸分数
+    var scorePrev = 0;//上一个连线分数
+    var scoreList = [];//相同连线分数的集合
+    var doubleHit = 0;//连击次数
+    for (var i = 0; i < sb.length; i++) {
+      //计算分数
+      var piecesLevelScore = databus.piecesLevelScore[this.map.blocks[sb[i].row][sb[i].col].attr.piecesLevel];
+      if (scorePrev == 0) {
+        scorePrev = piecesLevelScore;
+        scoreList.push(piecesLevelScore)
+      } else if (piecesLevelScore == scorePrev) {
+        scoreList.push(piecesLevelScore)
+      } else {
+        scorePrev = piecesLevelScore;
+        bombScore = bombScore + databus.getScoreForList(scoreList)
+        //连击加1
+        if (scoreList.length >= 3) {
+          doubleHit++
+        }
+        scoreList = []
+        scoreList.push(piecesLevelScore)
+      }
+      if (i == sb.length - 1) {
+        //连击加1
+        if (scoreList.length >= 3) {
+          doubleHit++
+        }
+        bombScore = bombScore + databus.getScoreForList(scoreList)
+      }
+    }
+
+    //连击得分
+    if (doubleHit == 0) {
+      doubleHit = 1
+    }
+
+    return bombScore * doubleHit
+  }
+
   /**
    * 工具函数结束
    */

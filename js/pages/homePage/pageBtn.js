@@ -217,6 +217,8 @@ export default class PageBtn {
           this.friendbutton.destroy()
           databus.pownstate = 1;
           this.render(ctx)
+        } else {
+          wx.showToast({title: '授权才能进入游戏哦～', icon: 'none' })
         }
       })
     }

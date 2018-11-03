@@ -116,7 +116,9 @@ export default class GameModal {
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
       ctx.font = 50 * ratio + 'px Arial';
-      ctx.fillText('确定返回首页吗', (uiWidth / 2) * ratio, 600 * ratio);
+      ctx.fillText('回首页将丢失本关得分，', (uiWidth / 2) * ratio, 700 * ratio);
+      ctx.fillText('是否确认返回？', (uiWidth / 2) * ratio, 800 * ratio);
+      
     }
   }
 }
