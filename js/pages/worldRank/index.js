@@ -29,37 +29,12 @@ export default class Index {
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
 
-    let options = {
-      tradecode: 'rank02',
-      apiType: 'user',
-      method: 'POST',
-      data: {
-        user: {
-          start: 0,
-          limit: 10
-        }
-      },
-      success(data) {
-        var newlist = data.body.user_list
-        newlist.map(item => {
-          item.logopath = 'https://img2.woyaogexing.com/2018/10/19/13ff6071a10f497d!400x400_big.jpg'
-        })
-        me.userList = newlist
-      }
-    }
-    ajax(options)
+   
+   
   }
 
   saveMaxScore() {
-    wx.setUserCloudStorage({
-      KVDataList: [{ 'key': 'score', 'value': ('' + 1) }],
-      success: res => {
-        console.log(res);
-      },
-      fail: res => {
-        console.log(res);
-      }
-    });
+    
   }
 
   drawnextbtn(ctx) {

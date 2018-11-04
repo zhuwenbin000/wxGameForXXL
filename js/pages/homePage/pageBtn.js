@@ -46,6 +46,11 @@ export default class PageBtn {
   /**
    * 首页按钮绘制函数
    */
+  constructor() {
+    if (databus.userinfo) {
+      this.savedata(databus.userinfo)//同步用户数据 每次进来都同步一下昵称头像等数据
+    }
+  }
 
   render(ctx) {
     ctx.clearRect(0, 0, screenWidth, screenHeight)
@@ -80,6 +85,7 @@ export default class PageBtn {
       })
     } else {
       if (databus.userinfo) {
+        
         var name = databus.userinfo.userInfo.nickName
         var bestscore = databus.bestscore
         me.circleName(ctx, name)
@@ -102,7 +108,7 @@ export default class PageBtn {
     }
     ajax(options)
   }
-  savedata(res) {
+  savedata(res) { //完善用户信息成功
     console.log(res)
 
     let options = {
@@ -118,7 +124,6 @@ export default class PageBtn {
         logourl: res.userInfo.avatarUrl
       },
       success(data) {
-
         console.log("云同步用户数据成功")
       }
     }
@@ -217,8 +222,6 @@ export default class PageBtn {
           this.friendbutton.destroy()
           databus.pownstate = 1;
           this.render(ctx)
-        } else {
-          wx.showToast({title: '授权才能进入游戏哦～', icon: 'none' })
         }
       })
     }

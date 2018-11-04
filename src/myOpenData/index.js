@@ -227,7 +227,9 @@ function updateMaxScore(score) {
   wx.getUserCloudStorage({
     keyList: ['score'],
     success: res => {
+      
       let maxScore = res.KVDataList.length > 0 ? JSON.parse(res.KVDataList[0].value).wxgame.score.text : 0;
+      
       if (maxScore-0 < score.text-0){
         let KVData = JSON.stringify({
           "wxgame": {
@@ -252,6 +254,7 @@ function updateMaxScore(score) {
 
 
 function sortByScore(data) {
+  
   let array = [];
   data.map(item => {
     if (item.nickname && item.avatarUrl) { //过滤世界传过来的没头像昵称的数据
