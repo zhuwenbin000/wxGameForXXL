@@ -45,14 +45,16 @@ export default class GameEnd {
     ctx.drawImage(Robj["index"], 0, 0, Robj["index"].width, Robj["index"].height, ic.x, ic.y, ic.w, ic.h);
     //游戏结束提示
     ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
-    //游戏结束新纪录
-    ctx.drawImage(Robj["newRecord"], 0, 0, Robj["newRecord"].width, Robj["newRecord"].height, nrc.x, nrc.y, nrc.w, nrc.h);
+    if(databus.isNewScore){
+      //游戏结束新纪录
+      ctx.drawImage(Robj["newRecord"], 0, 0, Robj["newRecord"].width, Robj["newRecord"].height, nrc.x, nrc.y, nrc.w, nrc.h);
+    }
     //游戏结束再来一局
     ctx.drawImage(Robj["tryAgain"], 0, 0, Robj["tryAgain"].width, Robj["tryAgain"].height, tac.x, tac.y, tac.w, tac.h);
     //游戏结束分享
     ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, sc.x, sc.y, sc.w, sc.h);
     //游戏结束看视频
-    ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, lvc.x, lvc.y, lvc.w, lvc.h);
+    // ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, lvc.x, lvc.y, lvc.w, lvc.h);
     // 昵称
     ctx.textAlign = 'left';
     ctx.fillStyle = '#fff';

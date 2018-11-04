@@ -29,12 +29,9 @@ export default class Index {
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
 
-   
-   
   }
 
   saveMaxScore() {
-    
   }
 
   drawnextbtn(ctx) {

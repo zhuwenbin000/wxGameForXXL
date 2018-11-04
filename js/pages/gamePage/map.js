@@ -199,6 +199,8 @@ export default class Map {
     }
     //计算消除得分
     this.getScoreForBomb(sb)
+    //预获得分数归0
+    databus.preScore = 0;
   }
 
   //根据棋子消除序列计算得分
@@ -223,7 +225,7 @@ export default class Map {
         scoreList.push(piecesLevelScore)
       } else {
         scorePrev = piecesLevelScore;
-        bombScore = bombScore + this.getScoreForList(scoreList)
+        bombScore = bombScore + databus.getScoreForList(scoreList)
         //连击加1
         if (scoreList.length >= 3) {
           doubleHit++
@@ -236,14 +238,18 @@ export default class Map {
         if (scoreList.length >= 3) {
           doubleHit++
         }
-        bombScore = bombScore + this.getScoreForList(scoreList)
+        bombScore = bombScore + databus.getScoreForList(scoreList)
       }
     }
 
     //连击得分
     if (doubleHit == 0) {
+      databus.doubleHit = doubleHit
       doubleHit = 1
+    }else{
+      databus.doubleHit = doubleHit
     }
+    
     databus.score = databus.score + bombScore * doubleHit
 
     //显示获得得分
@@ -353,6 +359,7 @@ export default class Map {
           }
 
           databus.score = 0 //重置当前关卡获得分数
+          databus.processScore = 0 //重置得分进度条
           databus.useSteps = 0 //重置当前关卡使用步数
           databus.stagegold = 0 //重置当前关卡所得金币
         }
@@ -384,24 +391,12 @@ export default class Map {
       },
       success(data) {
         databus.gameState = 2
+        if ((databus.gameScore + databus.score) > databus.bestscore){
+          databus.isNewScore = true
+        }
       }
     }
     ajax(options)
-  }
-  //计算相同分数相连得分
-  getScoreForList(list) {
-    if (list.length <= 0) {
-      return 0
-    }
-    if (list.length >= 3) {
-      return (list[0] * (list.length - 2) * 10) * list.length
-    } else {
-      var totalScore = 0;
-      for (var i = 0; i < list.length; i++) {
-        totalScore = totalScore + list[i]
-      }
-      return totalScore
-    }
   }
 
   //规整

@@ -82,6 +82,16 @@ export default class Index {
       "piecesCoin": "images/gamePage/piecesCoin.png",
       "redPoint": "images/gamePage/redPoint.png",
       "toolPrice": "images/gamePage/toolPrice.png",
+      "doubleHit": "images/gamePage/doubleHit.png",
+      "doubleHit1": "images/gamePage/doubleHit/1.png",
+      "doubleHit2": "images/gamePage/doubleHit/2.png",
+      "doubleHit3": "images/gamePage/doubleHit/3.png",
+      "doubleHit4": "images/gamePage/doubleHit/4.png",
+      "doubleHit5": "images/gamePage/doubleHit/5.png",
+      "doubleHit6": "images/gamePage/doubleHit/6.png",
+      "doubleHit7": "images/gamePage/doubleHit/7.png",
+      "doubleHit8": "images/gamePage/doubleHit/8.png",
+      "doubleHit9": "images/gamePage/doubleHit/9.png",
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
@@ -126,16 +136,52 @@ export default class Index {
     //绘制棋盘
     ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, btlr, btt, bwh, bwh);
     //绘制步数图标
-    
     ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
+
     //绘制空进度条
     ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
-    if (databus.isPreAni) {
-      //绘制预获得分数进度条
-      ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, pec2.w, pec2.h);
+
+    //绘制预获得分数进度条
+    databus.preScoreStart = databus.preScoreEnd
+    databus.preScoreEnd = this.getScoreBySb(databus.selectBlocks)
+
+    if (databus.preScoreStart != databus.preScoreEnd) {
+      var totalTime = 15
+      databus.preScoreAniTime = databus.preScoreAniTime + 1
+      if (databus.preScoreAniTime > totalTime) {
+        databus.preScoreStart = databus.preScoreEnd
+        databus.preScoreAniTime = 0
+      } else {
+        databus.preScoreStart = databus.preScoreStart + (databus.preScoreEnd - databus.preScoreStart) * (databus.preScoreAniTime / totalTime)
+        if (databus.preScoreStart == databus.preScoreEnd) {
+          databus.processAniTime = 0
+        }
+        ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * pec2.w, pec2.h);
+      }
+    } else {
+      ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * pec2.w, pec2.h);
     }
-    //绘制满进度条
-    ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.score >= databus.passScore ? 1 : databus.score / databus.passScore) * pfc.w, pfc.h);
+
+    //绘制得分进度条
+    if (databus.processScore < databus.score) {
+      var totalTime = 15
+      databus.processAniTime = databus.processAniTime + 1
+      if (databus.processAniTime > totalTime) {
+        databus.processScore = databus.score
+        databus.processAniTime = 0
+      } else {
+        databus.processScore = databus.processScore + (databus.score - databus.processScore) * (databus.processAniTime / totalTime)
+        if (databus.processScore == databus.score) {
+          databus.processAniTime = 0
+        }
+        //绘制满进度条
+        ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * pfc.w, pfc.h);
+      }
+    }else{
+      //绘制得分进度条
+      ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * pfc.w, pfc.h);
+    }
+
     //绘制首页按钮
     ctx.drawImage(this.Robj["home"], 0, 0, this.Robj["home"].width, this.Robj["home"].height, hc.x, hc.y, hc.w, hc.h);
     //绘制规则按钮
@@ -154,6 +200,18 @@ export default class Index {
     // ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, ctpoc.x, ctpoc.y, ctpoc.w, ctpoc.h);
     // //彩色道具价格背景坐标宽高
     // ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
+    if (databus.doubleHit > 0){
+      databus.doubleHitTime++
+      if (databus.doubleHitTime > 10){
+        databus.doubleHit = 0
+        databus.doubleHitTime = 0
+        return
+      }
+      //连消图案
+      ctx.drawImage(this.Robj["doubleHit"], 0, 0, this.Robj["doubleHit"].width, this.Robj["doubleHit"].height, 610 * ratio, 240 * ratio, 135 * ratio, 55 * ratio);
+      //连消数字
+      ctx.drawImage(this.Robj["doubleHit" + databus.doubleHit], 0, 0, this.Robj["doubleHit" + databus.doubleHit].width, this.Robj["doubleHit" + databus.doubleHit].height, 740 * ratio, 245 * ratio, 33 * ratio, 47 * ratio);
+    }
 
     //绘制金币图标
     ctx.drawImage(this.Robj["coin"], 0, 0, this.Robj["coin"].width, this.Robj["coin"].height, cc.x, cc.y, cc.w, cc.h);
@@ -344,7 +402,8 @@ export default class Index {
       },
       success(data) {
         databus.gameState = 1
-        databus.steps = databus.steps + steps
+        databus.isNewScore = false
+        databus.steps = parseInt(databus.steps) + parseInt(steps)
       }
     }
     ajax(options)
@@ -439,12 +498,12 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
 
-      // 看视频事件
-      if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
-        this.continueGame(1, 10)
-        //按钮按下音效
-        this.music.playMusic('btnDown')
-      }
+      // // 看视频事件
+      // if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
+      //   this.continueGame(1, 10)
+      //   //按钮按下音效
+      //   this.music.playMusic('btnDown')
+      // }
     } else if (databus.gameState == 3) {//音乐弹框
       // 关闭弹框事件
       if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (220 * ratio) && y <= ((220 + 162) * ratio)) {
@@ -741,6 +800,50 @@ export default class Index {
       this.music.playMusic('doubleHit')
     }
   }
+
+
+  //分数计算根据连线棋子
+  getScoreBySb(sb) {
+    if (sb.length <= 0) return
+    var bombScore = 0;//本次爆炸分数
+    var scorePrev = 0;//上一个连线分数
+    var scoreList = [];//相同连线分数的集合
+    var doubleHit = 0;//连击次数
+    for (var i = 0; i < sb.length; i++) {
+      //计算分数
+      var piecesLevelScore = databus.piecesLevelScore[this.map.blocks[sb[i].row][sb[i].col].attr.piecesLevel];
+      if (scorePrev == 0) {
+        scorePrev = piecesLevelScore;
+        scoreList.push(piecesLevelScore)
+      } else if (piecesLevelScore == scorePrev) {
+        scoreList.push(piecesLevelScore)
+      } else {
+        scorePrev = piecesLevelScore;
+        bombScore = bombScore + databus.getScoreForList(scoreList)
+        //连击加1
+        if (scoreList.length >= 3) {
+          doubleHit++
+        }
+        scoreList = []
+        scoreList.push(piecesLevelScore)
+      }
+      if (i == sb.length - 1) {
+        //连击加1
+        if (scoreList.length >= 3) {
+          doubleHit++
+        }
+        bombScore = bombScore + databus.getScoreForList(scoreList)
+      }
+    }
+
+    //连击得分
+    if (doubleHit == 0) {
+      doubleHit = 1
+    }
+
+    return bombScore * doubleHit
+  }
+
   /**
    * 工具函数结束
    */
