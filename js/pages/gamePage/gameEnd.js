@@ -62,7 +62,11 @@ export default class GameEnd {
     ctx.fillText(databus.userinfo.userInfo.nickName, unc.x, unc.y);
     //历史最高分
     ctx.font = ssc.font;
-    ctx.fillText('最高得分：' + databus.bestscore + '分', ssc.x, ssc.y);
+    if (databus.isNewScore) {
+      ctx.fillText('最高得分：' + databus.gameScore + databus.score + '分', ssc.x, ssc.y);
+    }else{
+      ctx.fillText('最高得分：' + databus.bestscore + '分', ssc.x, ssc.y);
+    }
     //本局分数
     ctx.textAlign = 'center';
     ctx.font = bsc.font;
