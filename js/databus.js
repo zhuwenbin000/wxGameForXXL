@@ -116,6 +116,7 @@ export default class DataBus {
     this.musicSound = true //音效默认开
     this.musicBgState = true //背景音状态
     this.musicSoundState = true //音效默状态
+    this.shareConfig = {} //分享配置
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 334 * ratio, //棋盘到顶部的距离
@@ -335,7 +336,12 @@ export default class DataBus {
         x: (uiWidth / 2) * ratio,
         y: 660 * ratio,
         font: 'bold ' + 55 * ratio + 'px Arial'
-      }
+      },
+      preScoreCoordinates: { //预得分
+        x: (uiWidth / 2 + 40) * ratio,
+        y: 245 * ratio,
+        font: 'bold ' + 40 * ratio + 'px Arial'
+      },
     }
     //棋盘宽高
     this.GameUI.boardWH = canvas.width - 2 * this.GameUI.boardToLR
@@ -408,7 +414,7 @@ export default class DataBus {
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 0 //当前关卡过关分数
     this.gameId = '' //本轮游戏id
-    this.steps = 20 //总步步数
+    this.steps = 2 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 4 //棋子种类

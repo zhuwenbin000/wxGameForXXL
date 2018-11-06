@@ -47,6 +47,7 @@ let shc = databus.GameUI.shareCoordinates //游戏结束分享
 let lvc = databus.GameUI.lookVideoCoordinates //游戏结束看视频
 let ic = databus.GameUI.indexCoordinates //游戏结束首页
 let tac = databus.GameUI.tryAgainCoordinates //游戏结束再来一局
+let psec = databus.GameUI.preScoreCoordinates //游戏结束再来一局
 
 //游戏页主函数
 export default class Index {
@@ -202,7 +203,7 @@ export default class Index {
     // ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
     if (databus.doubleHit > 0){
       databus.doubleHitTime++
-      if (databus.doubleHitTime > 10){
+      if (databus.doubleHitTime > 20){
         databus.doubleHit = 0
         databus.doubleHitTime = 0
         return
@@ -253,9 +254,16 @@ export default class Index {
     ctx.font = cnc.font;
     ctx.fillText(databus.usergold, cnc.x, cnc.y);
     //当前分数
-    ctx.fillStyle = '#ffd35f';
+    ctx.fillStyle = '#7fdc19';
     ctx.font = csc.font;
     ctx.fillText(databus.score, csc.x, csc.y);
+    if (databus.preScoreEnd) {
+      //预得分数
+      ctx.fillStyle = '#ffde44';
+      ctx.textAlign = 'left';
+      ctx.font = psec.font;
+      ctx.fillText('+' + databus.preScoreEnd, (uiWidth / 2 + 20 + 15 * (databus.score + '').split('').length) * ratio , psec.y);
+    }
 
     //当前过关分数
     ctx.fillStyle = '#fff';
@@ -492,8 +500,8 @@ export default class Index {
 
       // 分享事件
       if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
-        wx.shareAppMessage({'title':'莉莉最可爱'})
-        this.continueGame(2, 6)
+        wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url})
+        this.continueGame(2, 3)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }

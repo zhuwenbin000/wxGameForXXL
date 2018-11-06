@@ -4,6 +4,7 @@ import FriendsRank from './pages/friendsRank/index'
 import WorldRank from './pages/worldRank/index'
 import DataBus from './databus'
 import Music from './music/music'
+import { ajax } from '/base/ajax'
 
 import DataStore from '/base/helper';
 let ctx = canvas.getContext('2d')
@@ -51,6 +52,18 @@ export default class Main {
         }
       }
     })
+
+    //分享文案
+
+    let options = {
+      tradecode: 'sys05',
+      apiType: 'user',
+      method: 'POST',
+      success(data) {
+        databus.shareConfig = data.body.share;
+      }
+    }
+    ajax(options)
   }
 
   renderPage() {

@@ -5,11 +5,36 @@ import { ajax } from '../../base/ajax'
 
 
 let databus = new DataBus()
+let uiWidth = 828;
+let ratio = canvas.width / uiWidth //设计稿宽度
 
 //棋盘的宽数和列数
 let rn = databus.rowNum
 let cn = databus.colNum
 
+let R = {
+  "combo": "images/gamePage/combo/combo.png",
+  "combo2": "images/gamePage/combo/combo2.png",
+  "combo3": "images/gamePage/combo/combo3.png",
+  "comboNum0": "images/gamePage/combo/0.png",
+  "comboNum1": "images/gamePage/combo/1.png",
+  "comboNum2": "images/gamePage/combo/2.png",
+  "comboNum3": "images/gamePage/combo/3.png",
+  "comboNum4": "images/gamePage/combo/4.png",
+  "comboNum5": "images/gamePage/combo/5.png",
+  "comboNum6": "images/gamePage/combo/6.png",
+  "comboNum7": "images/gamePage/combo/7.png",
+  "comboNum8": "images/gamePage/combo/8.png",
+  "comboNum9": "images/gamePage/combo/9.png",
+}
+
+//把所有的图片放到一个对象中
+let Robj = {};	//两个对象有相同的k
+// 遍历R对象，把真实image对象，放入this.Robj中
+for (var k in R) {
+  Robj[k] = wx.createImage();
+  Robj[k].src = R[k];
+}
 /**
  * 游戏页
  */
@@ -288,7 +313,7 @@ export default class Map {
   showScore(){
     if (this.gsl.length <= 0) return;
     for (var i = 0; i < this.gsl.length; i++) {
-      if (this.gsl[i].t < 20) {
+      if (this.gsl[i].t < 40) {
         //显示分数
         this.ctx.textAlign = 'left';
         this.ctx.fillStyle = '#fff';
@@ -305,12 +330,15 @@ export default class Map {
   showCombo() {
     if (this.gcl.length <= 0) return;
     for (var i = 0; i < this.gcl.length; i++) {
-      if (this.gcl[i].t < 20) {
+      if (this.gcl[i].t < 40) {
         //显示Combo
-        this.ctx.textAlign = 'left';
-        this.ctx.fillStyle = '#fff';
-        this.ctx.font = 'bold 20px Arial';
-        this.ctx.fillText('combo ' + this.gcl[i].combo, databus.getPointCenter(this.gcl[i].rc).x, databus.getPointCenter(this.gcl[i].rc).y);
+        // this.ctx.textAlign = 'left';
+        // this.ctx.fillStyle = '#fff';
+        // this.ctx.font = 'bold 20px Arial';
+        // this.ctx.fillText('combo ' + this.gcl[i].combo, databus.getPointCenter(this.gcl[i].rc).x, databus.getPointCenter(this.gcl[i].rc).y);
+
+        this.ctx.drawImage(Robj["combo"], 0, 0, Robj["combo"].width, Robj["combo"].height, databus.getPointCenter(this.gcl[i].rc).x, databus.getPointCenter(this.gcl[i].rc).y, 200 * ratio, 54 * ratio);
+
         this.gcl[i].t++
       } else {
         this.gcl.splice(i, 1)
