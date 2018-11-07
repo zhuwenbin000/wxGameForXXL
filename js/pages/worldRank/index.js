@@ -13,7 +13,7 @@ export default class Index {
     // 维护当前requestAnimationFrame的id
     this.aniId = 3
     this.userList = []
-    console.log("排行榜加载完了")
+   
     // this.saveMaxScore()
   }
 
@@ -64,7 +64,7 @@ export default class Index {
 
     // 开始游戏按钮事件
     if (x >= backBtnArea.startX && x <= backBtnArea.endX && y >= backBtnArea.startY && y <= backBtnArea.endY) {
-      console.log("返回")
+    //  console.log("返回")
       databus.scene = 0
     }
 
@@ -112,7 +112,7 @@ export default class Index {
       if (i == 6) {
         meIamge.onload = function () {
           ctx.drawImage(meIamge, 33, i * itemHeight + mt, w * 1.09, itemHeight);
-          console.log("绿色渲染完了")
+         // console.log("绿色渲染完了")
           // drawrank(list,page)
         }
       }
@@ -120,7 +120,7 @@ export default class Index {
   }
   //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
   render(ctx) {
-    console.log(this.userList)
+    //console.log(this.userList)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.initRanklist(this.userList, 1, ctx)
     const lineImg = wx.createImage();

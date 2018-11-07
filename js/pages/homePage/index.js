@@ -11,7 +11,6 @@ export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
-    console.log("初始化")
     // if (databus.userinfo){ //如果可以获取到用户信息 直接去获取最高分
     //   this.getscore()
     // }
@@ -49,7 +48,6 @@ export default class Index {
   finish() {
     //清除定时动画和绑定事件
     window.cancelAnimationFrame(this.aniId)
-
     canvas.removeEventListener('touchstart', this.touchHomePageHandler)
   }
 
@@ -64,41 +62,25 @@ export default class Index {
     let startBtnArea = this.pageBtn.startBtnArea
     let friendsBtnArea = this.pageBtn.friendsBtnArea  
     let laodaoBtnArea = this.pageBtn.laodaoBtnArea
-
-    // 开始游戏按钮事件
-    if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
-      console.log("渲染游戏页")
-      databus.scene = 1
-
-    }
-
-    // 好友排行榜按钮事件
-    if (x >= friendsBtnArea.startX && x <= friendsBtnArea.endX && y >= friendsBtnArea.startY && y <= friendsBtnArea.endY) {
-      if (databus.pownstate != 1) {
-        wx.authorize({ //获取授权
-          scope: 'scope.userInfo',
-          success(res) {//授权成功
-            databus.scene = 2
-          },
-          fail(res) {//授权失败
-            databus.scene = 2
-          }
-        })
-      } else {
-        databus.scene = 2
+    if (startBtnArea){
+      if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+        databus.scene = 1
+        databus.gameClubbutton.destroy() //游戏圈按钮销毁
+        databus.gameClubbutton = null;
       }
-
-      console.log("渲染好友排行榜", databus.pownstate)
-
-
     }
-
-    // 世界排行榜按钮事件
-    if (x >= laodaoBtnArea.startX && x <= laodaoBtnArea.endX && y >= laodaoBtnArea.startY && y <= laodaoBtnArea.endY) {
-      console.log("渲染世界排行榜")
-      databus.scene = 3
+    // 开始游戏按钮事件
+   
+    if (friendsBtnArea){
+      if (x >= friendsBtnArea.startX && x <= friendsBtnArea.endX && y >= friendsBtnArea.startY && y <= friendsBtnArea.endY) {  
+        this.music.playMusic('btnDown')  
+        databus.scene = 2
+        databus.gameClubbutton.destroy()//游戏圈按钮销毁
+        databus.gameClubbutton = null;
+      }
     }
-
     //页面结束事件
     if (databus.scene != 0) {
       this.finish()
@@ -107,14 +89,9 @@ export default class Index {
 
   //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
   render(ctx) {
-
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-
     this.pageBtn.render(ctx)
     let openDataContext = wx.getOpenDataContext()
-
-
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true

@@ -38,7 +38,7 @@ export function ajax(options) {
       'content-type': 'application/json;charset=utf-8' // 默认值
     },
     success(res) {//成功回调
-      console.log(res)
+     //console.log(res)
       if (res.data.result.code == '0') {//处理成功
         options.success && options.success(res.data)
       } else if (res.data.result.code == '10010'){//登录超时
