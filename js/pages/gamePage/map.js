@@ -512,7 +512,7 @@ export default class Map {
     if (this.check()) {
       return true;
     } else {
-      console.log("B", oldQRcode);
+      //console.log("B", oldQRcode);
       //alert("执行了")
       this.QRcode = oldQRcode;
 

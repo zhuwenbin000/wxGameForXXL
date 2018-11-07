@@ -21,6 +21,7 @@ export default class DataBus {
   }
 
   reset() {
+    this.gameClubbutton = null;//游戏圈按钮
     this.userinfo = null;//用户的头像等信息
     this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
     this.bestscore = 0;//最高分数

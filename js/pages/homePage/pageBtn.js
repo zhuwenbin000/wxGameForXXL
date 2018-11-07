@@ -8,7 +8,7 @@ let onget = false;//接口正在调用中
 let logoBtn = wx.createImage();
 let startBtn = wx.createImage();
 let friendsRankBtn = wx.createImage();
-
+let gameClubbutton = null;
 let authorBtn = wx.createImage();
 let bg = wx.createImage();
 let loginfriendsRankBtn = wx.createImage();
@@ -62,7 +62,7 @@ export default class PageBtn {
       this.startBtn(ctx)
       this.friendsRankBtn(ctx)
       this.render_btn(ctx)
-      this.author(ctx)
+      this.loginauthor(ctx)
     }
   }
   render_btn() {
@@ -108,8 +108,6 @@ export default class PageBtn {
     ajax(options)
   }
   savedata(res) {
-    console.log(res)
-
     let options = {
       tradecode: 'sys03',
       apiType: 'user',
@@ -123,8 +121,6 @@ export default class PageBtn {
         logourl: res.userInfo.avatarUrl
       },
       success(data) {
-
-        console.log("云同步用户数据成功")
       }
     }
     ajax(options)
@@ -269,25 +265,20 @@ export default class PageBtn {
   }
 
 
-  author(ctx) {
-    ctx.drawImage(authorBtn, 0, 0, 282, 138, sml, nmt + 91 * ratio + 312 * ratio + nb * 2, 282 * ratio, 138 * ratio)
-    this.laodaoBtnArea = {
-      startX: sml,
-      startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
-      endX: ml + 282 * ratio,
-      endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio
-    }
-
-  }
+  
   loginauthor(ctx) {
-    ctx.drawImage(authorBtn, 0, 0, 282, 138, sml, nmt + 91 * ratio + 312 * ratio + nb * 2, 282 * ratio, 138 * ratio)
-    this.laodaoBtnArea = {
-      startX: sml,
-      startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
-      endX: ml + 282 * ratio,
-      endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio
-    }
+    if (!databus.gameClubbutton){
+      databus.gameClubbutton = wx.createGameClubButton({
+        icon: 'green',
+        type: 'image',
+        image: 'images/home/author.png',
+        style: {
+          left: sml,
+          top: nmt + 91 * ratio + 312 * ratio + nb * 2,
+          width: 282 * ratio,
+          height: 138 * ratio
+        }
+      })
+    } 
   }
-
-
 }

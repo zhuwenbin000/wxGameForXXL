@@ -32,7 +32,6 @@ export default class Main {
         var authSetting = res.authSetting
         if (authSetting['scope.userInfo'] === true) {
           // 用户已授权，可以直接调用相关 API
-          console.log("获取了授权状态")
            wx.getUserInfo({ //获取用户基本信息
             success: function (res) {
               databus.userinfo = res;

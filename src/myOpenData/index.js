@@ -53,21 +53,15 @@ wx.onMessage(data => {
     getMyScore();
   } else if (data.type === 'updateMaxScore') {
     // 更新最高分
-    console.log('更新最高分');
     updateMaxScore(data)
-    // getMyScore();
   } else if (data.type === 'nextfriend') {
-    console.log("好友下一页")
     initRanklist(friendData, nowpage + 1, 'add');
   } else if (data.type === 'provfriend') {
     initRanklist(friendData, nowpage - 1, 'reduce');
-    console.log("好友上一页")
   } else if (data.type === 'nextworld') {
     initRanklist(worldData, nowpage + 1, 'add');
-    console.log("世界下一页")
   } else if (data.type === 'provworld') {
     initRanklist(worldData, nowpage -1 , 'reduce');
-    console.log("世界上一页")
   }
 });
 
@@ -116,7 +110,6 @@ function initRanklist(list, page, type) {
       if (i == 6) {
         meIamge.onload = function () {
           context.drawImage(meIamge, 33, i * itemHeight + mt, w * 1.024, itemHeight);
-          console.log("绿色渲染完了")
           drawrank(list, page)
         }
       }
@@ -205,7 +198,6 @@ function getMyScore() {
     keyList: ['score'],
     success: res => {
       let data = res;
-      console.log(data);
       if (data.KVDataList.length) {
         let lastScore = data.KVDataList[0].value || 0;
         if (!data.KVDataList[1]) {
@@ -264,7 +256,6 @@ function sortByScore(data) {
         score = item['KVDataList'][1] && item['KVDataList'][1].value != 'undefined' ? item['KVDataList'][1].value : (item['KVDataList'][0] ? item['KVDataList'][0].value : 0)
       }
       score = score-0 //字符串类型转数字
-      console.log(module, score,'666')
       array.push({
         avatarUrl: item.avatarUrl,
         nickname: decodeURIComponent(item.nickname),
@@ -301,7 +292,6 @@ function getUserInfo() {
 // 绘制自己的排名
 function drawMyRank() {
   var text = myScore ? JSON.parse(myScore).wxgame.score.text : '0'
-  console.log("渲染完了自己的数据")
   if (myInfo.avatarUrl) {
     let avatar = wx.createImage();
     avatar.src = myInfo.avatarUrl;

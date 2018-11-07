@@ -27,7 +27,6 @@ let pageindex = 1;
 export default class Index {
   constructor(ctx) {
     this.module_type = 1;
-    console.log("好友排行加载了")
     // 维护当前requestAnimationFrame的id
     this.aniId = 2
    
@@ -74,6 +73,7 @@ export default class Index {
     this.ranking = true;
   }
   restart(ctx) {
+    this.music = new Music()
     this.module_type = 1;
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.ctx = ctx
@@ -87,7 +87,6 @@ export default class Index {
 
   finish() {
     //清除定时动画和绑定事件
-    console.log("清除定时动画和绑定事件")
     // wx.offTouchStart()
     window.cancelAnimationFrame(this.aniId)
     canvas.removeEventListener('touchstart', this.touchHandler)
@@ -98,7 +97,7 @@ export default class Index {
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
-
+    
     let friend_area = {
       startX: databus.friendbtn.x,
       startY: databus.friendbtn.y,
@@ -118,26 +117,28 @@ export default class Index {
       endX: databus.backbtn.x + databus.backbtn.w,
       endY: databus.backbtn.y + databus.backbtn.h
     }
-
-    // 开始游戏按钮事件
+    
+    // 返回按钮事件
     if (x >= backBtnArea.startX && x <= backBtnArea.endX && y >= backBtnArea.startY && y <= backBtnArea.endY) {
-      console.log("返回")
+      this.music.playMusic('btnDown')
       databus.scene = 0
     }
     if (x >= friend_area.startX && x <= friend_area.endX && y >= friend_area.startY && y <= friend_area.endY) {
-      console.log("好友")
+      this.music.playMusic('btnDown')
       this.messageSharecanvas()
       this.module_type = 1
       this.render(this.ctx)
     }
+    
     if (x >= world_area.startX && x <= world_area.endX && y >= world_area.startY && y <= world_area.endY) {
-      console.log("世界")
+      this.music.playMusic('btnDown')
       this.getWorldData()
       this.module_type = 2
       this.render(this.ctx)
     }
+    
     if (x >= databus.shareProv.x && x <= databus.shareProv.x + databus.shareProv.w && y >= databus.shareProv.y && y <= databus.shareProv.h + databus.shareProv.y ) {
-      console.log("上一页") 
+      this.music.playMusic('btnDown')
       if (this.module_type == 1) { //好友翻页
         openDataContext.postMessage({
           type: 'provfriend',
@@ -151,7 +152,7 @@ export default class Index {
       }
     }
     if (x >= databus.shareNext.x && x <= databus.shareNext.x + databus.shareNext.w && y >= databus.shareNext.y && y <= databus.shareNext.h + databus.shareNext.y) {
-    
+      this.music.playMusic('btnDown')
       if (this.module_type == 1) { //好友翻页
         openDataContext.postMessage({
           type: 'nextfriend',
@@ -172,9 +173,10 @@ export default class Index {
   }
 
   //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
-  render(ctx) {
-    //  console.log("好友排行在循环")
+  render(ctx) {   
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.fillStyle = '#7b79ff';
+    ctx.fillRect(0, 0, screenWidth, screenHeight)
     ctx.drawImage(ngpng, 0, 0, databus.bgpic.w, databus.bgpic.h);
     if (this.module_type == 1) { //渲染好友排行样式
       ctx.drawImage(friend_table, databus.friendbtn.x, databus.friendbtn.y, databus.friendbtn.w, databus.friendbtn.h);
