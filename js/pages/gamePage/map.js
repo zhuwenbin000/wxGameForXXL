@@ -26,6 +26,16 @@ let R = {
   "comboNum7": "images/gamePage/combo/7.png",
   "comboNum8": "images/gamePage/combo/8.png",
   "comboNum9": "images/gamePage/combo/9.png",
+  "score0": "images/gamePage/comboScore/0.png",
+  "score1": "images/gamePage/comboScore/1.png",
+  "score2": "images/gamePage/comboScore/2.png",
+  "score3": "images/gamePage/comboScore/3.png",
+  "score4": "images/gamePage/comboScore/4.png",
+  "score5": "images/gamePage/comboScore/5.png",
+  "score6": "images/gamePage/comboScore/6.png",
+  "score7": "images/gamePage/comboScore/7.png",
+  "score8": "images/gamePage/comboScore/8.png",
+  "score9": "images/gamePage/comboScore/9.png",
 }
 
 //把所有的图片放到一个对象中
@@ -167,11 +177,19 @@ export default class Map {
                 databus.combo = databus.combo + 1
                 isCombo = isCombo + 1
                 this.comboBlocksBomb(checkComboBlocks)
+
                 //显示combo
+                let x = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).x + (1 - _.random(0, 2)) * _.random(0, 50) * ratio;
+                const y = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).y;
+                if (x > 400 * ratio) {
+                  x = 400 * ratio + (1 - _.random(0, 2)) * _.random(0, 50) * ratio
+                }
                 this.gcl.push({
                   rc: checkComboBlocks[checkComboBlocks.length - 2],
                   combo: databus.combo,
-                  t: 0
+                  t: 0,
+                  x: x,
+                  y: y
                 })
                 result = true;
               }
@@ -189,6 +207,8 @@ export default class Map {
     if (isCombo == 0) {
       databus.combo = 0
       databus.prevSelectBlocks = []
+      this.gcl = []
+      this.gsl = []
       //判断是否过关
       this.checkPassStage()
     }
@@ -278,10 +298,17 @@ export default class Map {
     databus.score = databus.score + bombScore * doubleHit
 
     //显示获得得分
+    let x = databus.getPointCenter(sb[sb.length - 1]).x + (1 - _.random(0, 2)) * _.random(0, 50) * ratio;
+    const y = databus.getPointCenter(sb[sb.length - 1]).y;
+    if (x > 400 * ratio) {
+      x = 400 * ratio + (1 - _.random(0, 2)) * _.random(0, 50) * ratio
+    }
     this.gsl.push({
       rc: sb[sb.length - 1],
       score: bombScore * doubleHit,
-      t:0
+      t:0,
+      x:x,
+      y:y
     })
     //得分音效
     this.music.playMusic('getScore')
@@ -313,15 +340,15 @@ export default class Map {
   showScore(){
     if (this.gsl.length <= 0) return;
     for (var i = 0; i < this.gsl.length; i++) {
-      if (this.gsl[i].t < 40) {
+      if (this.gsl[i].t < 60) {
         //显示分数
-        this.ctx.textAlign = 'left';
-        this.ctx.fillStyle = '#fff';
-        this.ctx.font = 'bold 20px Arial';
-        this.ctx.fillText('+' + this.gsl[i].score + '分', databus.getPointCenter(this.gsl[i].rc).x, databus.getPointCenter(this.gsl[i].rc).y);
+        const score = (this.gsl[i].score + '').split('');
+        const len = score.length;
+        for (let j = 0; j < len; j++) {
+          this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, this.gsl[i].x + 35 * j * ratio, this.gsl[i].y, 45 * ratio, 60 * ratio);
+        }
+
         this.gsl[i].t++
-      }else{
-        this.gsl.splice(i,1)
       }
     }
   }
@@ -330,18 +357,19 @@ export default class Map {
   showCombo() {
     if (this.gcl.length <= 0) return;
     for (var i = 0; i < this.gcl.length; i++) {
-      if (this.gcl[i].t < 40) {
+      if (this.gcl[i].t < 60) {
         //显示Combo
-        // this.ctx.textAlign = 'left';
-        // this.ctx.fillStyle = '#fff';
-        // this.ctx.font = 'bold 20px Arial';
-        // this.ctx.fillText('combo ' + this.gcl[i].combo, databus.getPointCenter(this.gcl[i].rc).x, databus.getPointCenter(this.gcl[i].rc).y);
-
-        this.ctx.drawImage(Robj["combo"], 0, 0, Robj["combo"].width, Robj["combo"].height, databus.getPointCenter(this.gcl[i].rc).x, databus.getPointCenter(this.gcl[i].rc).y, 200 * ratio, 54 * ratio);
-
+        if (i == 0) {
+          this.ctx.drawImage(Robj["combo"], 0, 0, Robj["combo"].width, Robj["combo"].height, this.gcl[i].x, this.gcl[i].y, 200 * ratio, 54 * ratio);
+        } else if (i == 1) {
+          this.ctx.drawImage(Robj["combo2"], 0, 0, Robj["combo2"].width, Robj["combo2"].height, this.gcl[i].x, this.gcl[i].y, 298 * ratio, 54 * ratio);
+        } else {
+          this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, this.gcl[i].x, this.gcl[i].y, 282 * ratio, 60 * ratio);
+          if(i < 10){
+            this.ctx.drawImage(Robj["comboNum" + (i + 1)], 0, 0, Robj["comboNum" + (i + 1)].width, Robj["comboNum" + (i + 1)].height, this.gcl[i].x + 290 * ratio, this.gcl[i].y, 42 * ratio, 66 * ratio);
+          }
+        }
         this.gcl[i].t++
-      } else {
-        this.gcl.splice(i, 1)
       }
     }
   }

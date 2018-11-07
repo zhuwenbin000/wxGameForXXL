@@ -794,8 +794,8 @@ export default class Index {
     if (this.x == null && this.y == null) {
       return
     }
-    this.ctx.lineWidth = 6;
-    this.ctx.strokeStyle = "#cccccc";
+    this.ctx.lineWidth = 10 * ratio;
+    this.ctx.strokeStyle = "#ffffff";
     this.ctx.stroke();
   }
 
