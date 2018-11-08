@@ -79,8 +79,14 @@ export default class Map {
     this.createBlocksByQR();
 
     this.music = new Music()
-    this.gsl = [];
-    this.gcl = [];
+    // this.gsl = [];
+    // this.gcl = [];
+    this.gslScore = 0;
+    this.gclCombo = 0;
+    this.gclTime = 0;
+    this.gslTime = 0;
+    this.ss = false;
+    this.sc = false;
   }
 
   createBlocksByQR() {
@@ -176,21 +182,23 @@ export default class Map {
                 databus.prevSelectBlocks = databus.prevSelectBlocks.concat(checkComboBlocks)
                 databus.combo = databus.combo + 1
                 isCombo = isCombo + 1
-                this.comboBlocksBomb(checkComboBlocks)
 
                 //显示combo
-                let x = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).x + (1 - _.random(0, 2)) * _.random(0, 50) * ratio;
-                const y = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).y;
-                if (x > 400 * ratio) {
-                  x = 400 * ratio + (1 - _.random(0, 2)) * _.random(0, 50) * ratio
-                }
-                this.gcl.push({
-                  rc: checkComboBlocks[checkComboBlocks.length - 2],
-                  combo: databus.combo,
-                  t: 0,
-                  x: x,
-                  y: y
-                })
+                // let x = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).x + (1 - _.random(0, 2)) * _.random(0, 50) * ratio;
+                // const y = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).y;
+                // if (x > 400 * ratio) {
+                //   x = 400 * ratio + (1 - _.random(0, 2)) * _.random(0, 50) * ratio
+                // }
+                // this.gcl.push({
+                  // rc: checkComboBlocks[checkComboBlocks.length - 2],
+                  // combo: databus.combo,
+                  // t: 0,
+                  // x: x,
+                  // y: y
+                // })
+                this.gclCombo++
+                this.comboBlocksBomb(checkComboBlocks)
+
                 result = true;
               }
             }
@@ -205,10 +213,16 @@ export default class Map {
     comboBlocks = []
     //如果当前页没有combo，则combo连击清0，上一次消除也清0,可以进行手指连线消除
     if (isCombo == 0) {
+      if(this.gclCombo > 0){
+        this.sc = true
+      }
+      if (this.gslScore > 0) {
+        this.ss = true
+      }
       databus.combo = 0
       databus.prevSelectBlocks = []
-      this.gcl = []
-      this.gsl = []
+      // this.gcl = []
+      // this.gsl = []
       //判断是否过关
       this.checkPassStage()
     }
@@ -298,18 +312,23 @@ export default class Map {
     databus.score = databus.score + bombScore * doubleHit
 
     //显示获得得分
-    let x = databus.getPointCenter(sb[sb.length - 1]).x + (1 - _.random(0, 2)) * _.random(0, 50) * ratio;
-    const y = databus.getPointCenter(sb[sb.length - 1]).y;
-    if (x > 400 * ratio) {
-      x = 400 * ratio + (1 - _.random(0, 2)) * _.random(0, 50) * ratio
+    // let x = databus.getPointCenter(sb[sb.length - 1]).x + (1 - _.random(0, 2)) * _.random(0, 50) * ratio;
+    // const y = databus.getPointCenter(sb[sb.length - 1]).y;
+    // if (x > 400 * ratio) {
+    //   x = 400 * ratio + (1 - _.random(0, 2)) * _.random(0, 50) * ratio
+    // }
+    // if (this.gcl.length > 0) {
+      // this.gsl.push({
+        // rc: sb[sb.length - 1],
+        // score: bombScore * doubleHit,
+        // t:0,
+        // x:x,
+        // y:y
+      // })
+    // }
+    if (this.gclCombo > 0) {
+      this.gslScore = this.gslScore + bombScore * doubleHit
     }
-    this.gsl.push({
-      rc: sb[sb.length - 1],
-      score: bombScore * doubleHit,
-      t:0,
-      x:x,
-      y:y
-    })
     //得分音效
     this.music.playMusic('getScore')
     if (gold > 0 ){
@@ -338,56 +357,95 @@ export default class Map {
   }
 
   showScore(){
-    if (this.gsl.length <= 0) return;
-    for (var i = 0; i < this.gsl.length; i++) {
-      if (this.gsl[i].t < 60) {
-        //显示分数
-        const score = (this.gsl[i].score + '').split('');
-        const len = score.length;
-        for (let j = 0; j < len; j++) {
-          this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, this.gsl[i].x + 35 * j * ratio, this.gsl[i].y, 45 * ratio, 60 * ratio);
-        }
+    // if (this.gsl.length <= 0) return;
+    // for (var i = 0; i < this.gsl.length; i++) {
+    //   if (this.gsl[i].t < 60) {
+    //     //显示分数
+    //     const score = (this.gsl[i].score + '').split('');
+    //     const len = score.length;
+    //     for (let j = 0; j < len; j++) {
+    //       this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, this.gsl[i].x + 35 * j * ratio, this.gsl[i].y, 30 * ratio, 40 * ratio);
+    //     }
 
-        this.gsl[i].t++
+    //     this.gsl[i].t++
+    //   }
+    // }
+    if (this.gslScore == 0 || !this.ss) return;
+    if (this.gslTime < 60) {
+      //显示分数
+      const score = (this.gslScore + '').split('');
+      const len = score.length;
+      for (let j = 0; j < len; j++) {
+        // if (this.gslTime <= 30) {
+        //   this.ctx.globalAlpha = (1 / 30) * this.gslTime;
+        // } else {
+        //   this.ctx.globalAlpha = 1 - (1 / 30) * (this.gslTime - 30);
+        // }
+        this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, (uiWidth - 30) / 2 * ratio + 35 * j * ratio, 750 * ratio, 30 * ratio, 40 * ratio);
       }
+      this.gslTime++
+    } else {
+      this.gslScore = 0
+      this.gslTime = 0
+      this.ss = false
     }
   }
 
 
   showCombo() {
-    if (this.gcl.length <= 0) return;
-    for (var i = 0; i < this.gcl.length; i++) {
-      if (this.gcl[i].t < 60) {
-        //显示Combo
-        if (i == 0) {
-          this.ctx.drawImage(Robj["combo"], 0, 0, Robj["combo"].width, Robj["combo"].height, this.gcl[i].x, this.gcl[i].y, 200 * ratio, 54 * ratio);
-        } else if (i == 1) {
-          this.ctx.drawImage(Robj["combo2"], 0, 0, Robj["combo2"].width, Robj["combo2"].height, this.gcl[i].x, this.gcl[i].y, 298 * ratio, 54 * ratio);
-        } else {
-          this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, this.gcl[i].x, this.gcl[i].y, 282 * ratio, 60 * ratio);
-          if(i < 10){
-            this.ctx.drawImage(Robj["comboNum" + (i + 1)], 0, 0, Robj["comboNum" + (i + 1)].width, Robj["comboNum" + (i + 1)].height, this.gcl[i].x + 290 * ratio, this.gcl[i].y, 42 * ratio, 66 * ratio);
-          }
-        }
-        this.gcl[i].t++
-      }
+    // if (this.gcl.length <= 0) return;
+    // for (var i = 0; i < this.gcl.length; i++) {
+    //   if (this.gcl[i].t < 60) {
+    //     //显示Combo
+    //     if (i == 0) {
+    //       this.ctx.drawImage(Robj["combo"], 0, 0, Robj["combo"].width, Robj["combo"].height, this.gcl[i].x, this.gcl[i].y, 200 * ratio, 54 * ratio);
+    //     } else if (i == 1) {
+    //       this.ctx.drawImage(Robj["combo2"], 0, 0, Robj["combo2"].width, Robj["combo2"].height, this.gcl[i].x, this.gcl[i].y, 298 * ratio, 54 * ratio);
+    //     } else {
+    //       this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, this.gcl[i].x, this.gcl[i].y, 282 * ratio, 60 * ratio);
+    //       if(i < 10){
+    //         this.ctx.drawImage(Robj["comboNum" + (i + 1)], 0, 0, Robj["comboNum" + (i + 1)].width, Robj["comboNum" + (i + 1)].height, this.gcl[i].x + 290 * ratio, this.gcl[i].y, 42 * ratio, 66 * ratio);
+    //       }
+    //     }
+    //     this.gcl[i].t++
+    //   }
+    // }
+    if (this.gclCombo == 0 || !this.sc) return;
+    if (this.gclTime < 60) {
+      // if (this.gclTime <= 30){
+      //   this.ctx.globalAlpha = (1 / 30) * this.gclTime;
+      // }else{
+      //   this.ctx.globalAlpha = 1 - (1 / 30) * (this.gclTime - 30);
+      // }
+      //显示Combo
+      this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, (uiWidth - 225) / 2 * ratio, 680 * ratio, 225 * ratio, 48 * ratio);
+      this.ctx.drawImage(Robj["comboNum" + this.gclCombo], 0, 0, Robj["comboNum" + this.gclCombo].width, Robj["comboNum" + this.gclCombo].height, (uiWidth - 225) / 2 * ratio + 230 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
+      this.gclTime++
+    }else{
+      this.gclCombo = 0
+      this.gclTime = 0
+      this.sc = false
     }
   }
   //判断是否过关
   checkPassStage() {
     //当前关卡获得分数大于当前关卡过关分数
     if (databus.score >= databus.passScore) {
+      const curstagegold = databus.stagegold;
+      const curscore = databus.score;
       databus.gamegold = databus.gamegold + databus.stagegold;
       databus.gameScore = databus.gameScore + databus.score;
+      databus.stagegold = 0;
+      databus.score = 0;
       var self = this;
       let options = {
         tradecode: 'game02',
         apiType: 'user',
         method: 'POST',
         data: {
-          'stagecore': databus.score,//当前关卡过关分数
+          'stagecore': curscore,//当前关卡过关分数
           'usestep': databus.useSteps,//过关使用步数
-          'stagegold': databus.stagegold,//过关所得金币
+          'stagegold': curstagegold,//过关所得金币
           'gameid': databus.gameId,//游戏id
           'gamescore': databus.gameScore,//本轮游戏的总得分
           'gamegold': databus.gamegold,//本次游戏获得总金币数
