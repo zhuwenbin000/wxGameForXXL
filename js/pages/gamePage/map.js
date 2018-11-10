@@ -209,15 +209,25 @@ export default class Map {
         }
       }
     }
+    if (this.gclCombo > 0) {
+      this.sc = true
+    }
+    if (this.gslScore > 0) {
+      this.ss = true
+    }
     //重置能combo的棋子数组
     comboBlocks = []
     //如果当前页没有combo，则combo连击清0，上一次消除也清0,可以进行手指连线消除
     if (isCombo == 0) {
-      if(this.gclCombo > 0){
-        this.sc = true
-      }
       if (this.gslScore > 0) {
-        this.ss = true
+        this.gslScore = 0
+        this.gslTime = 0
+        this.ss = false
+      }
+      if (this.gclCombo > 0) {
+        this.gclCombo = 0
+        this.gclTime = 0
+        this.sc = false
       }
       databus.combo = 0
       databus.prevSelectBlocks = []
@@ -371,7 +381,7 @@ export default class Map {
     //   }
     // }
     if (this.gslScore == 0 || !this.ss) return;
-    if (this.gslTime < 60) {
+    if (this.ss) {
       //显示分数
       const score = (this.gslScore + '').split('');
       const len = score.length;
@@ -384,10 +394,6 @@ export default class Map {
         this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, (uiWidth - 30) / 2 * ratio + 35 * j * ratio, 750 * ratio, 30 * ratio, 40 * ratio);
       }
       this.gslTime++
-    } else {
-      this.gslScore = 0
-      this.gslTime = 0
-      this.ss = false
     }
   }
 
@@ -411,7 +417,7 @@ export default class Map {
     //   }
     // }
     if (this.gclCombo == 0 || !this.sc) return;
-    if (this.gclTime < 60) {
+    if (this.sc) {
       // if (this.gclTime <= 30){
       //   this.ctx.globalAlpha = (1 / 30) * this.gclTime;
       // }else{
@@ -421,10 +427,6 @@ export default class Map {
       this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, (uiWidth - 225) / 2 * ratio, 680 * ratio, 225 * ratio, 48 * ratio);
       this.ctx.drawImage(Robj["comboNum" + this.gclCombo], 0, 0, Robj["comboNum" + this.gclCombo].width, Robj["comboNum" + this.gclCombo].height, (uiWidth - 225) / 2 * ratio + 230 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
       this.gclTime++
-    }else{
-      this.gclCombo = 0
-      this.gclTime = 0
-      this.sc = false
     }
   }
   //判断是否过关
@@ -481,7 +483,7 @@ export default class Map {
       ajax(options)
     }else{
       if (databus.steps == 0){
-        databus.updateMaxScore(databus.score)
+        databus.updateMaxScore(databus.gameScore + databus.score)
         this.gameEnd()
       }
     }

@@ -63,7 +63,7 @@ export default class GameEnd {
     //历史最高分
     ctx.font = ssc.font;
     if (databus.isNewScore) {
-      ctx.fillText('最高得分：' + databus.gameScore + databus.score + '分', ssc.x, ssc.y);
+      ctx.fillText('最高得分：' + parseInt(databus.gameScore + databus.score) + '分', ssc.x, ssc.y);
     }else{
       ctx.fillText('最高得分：' + databus.bestscore + '分', ssc.x, ssc.y);
     }

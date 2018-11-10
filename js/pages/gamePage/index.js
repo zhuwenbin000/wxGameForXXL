@@ -477,6 +477,9 @@ export default class Index {
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
+    if (this.STATE != "静稳状态") {
+      return;
+    }
     if (databus.gameState == 2){
       // 首页按钮事件
       if (x >= ic.x && x <= ic.x + ic.w && y >= ic.y && y <= ic.y + ic.h) {
