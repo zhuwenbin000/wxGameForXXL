@@ -15,7 +15,9 @@ let R = {
   "musicBgTrue": "images/gameModal/music_bg_true.png",
   "musicSoundFalse": "images/gameModal/music_sound_false.png",
   "musicSoundTrue": "images/gameModal/music_sound_true.png",
-  "ruleBg": "images/gameModal/rule_bg.png"
+  "passState": "images/gamePage/passState.png",
+  "ruleBg": "images/gameModal/rule_bg.png",
+  "passStateBg": "images/gamePage/passStateBg.png",
 }
 
 //把所有的图片放到一个对象中
@@ -37,8 +39,15 @@ export default class GameModal {
       ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 240 * ratio, 824 * ratio, 1072 * ratio);
       //弹框关闭
       ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 220 * ratio, 150 * ratio, 162 * ratio);
-      //弹框确认
-      ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
+      if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+        databus.btnPlus++
+        //弹框确认
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1080 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
+      } else {
+        databus.btnPlus = 0
+        //弹框确认
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
+      }
       if (!databus.musicBgState){
         //背景音乐-关
         ctx.drawImage(Robj["musicBgFalse"], 0, 0, Robj["musicBgFalse"].width, Robj["musicBgFalse"].height, 190 * ratio, 545 * ratio, 238 * ratio, 120 * ratio);
@@ -119,6 +128,29 @@ export default class GameModal {
       ctx.fillText('回首页将丢失本关得分，', (uiWidth / 2) * ratio, 700 * ratio);
       ctx.fillText('是否确认返回？', (uiWidth / 2) * ratio, 800 * ratio);
       
+    }
+    //7:过关
+    if (databus.gameState == 7) {
+      if (databus.passStateTime > 120){
+        databus.passStateTime = 0
+        databus.gameState = 1
+        return
+      }
+      databus.passStateTime++ 
+      //过关光图
+      ctx.drawImage(Robj["passStateBg"], 0, 0, Robj["passStateBg"].width, Robj["passStateBg"].height, 0, 0, 828 * ratio, 1100 * ratio);
+      //过关
+      ctx.drawImage(Robj["passState"], 0, 0, Robj["passState"].width, Robj["passState"].height, (828 - 540) / 2 * ratio, 370 * ratio, 540 * ratio, 562 * ratio);
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 80 * ratio + 'px Arial';
+      ctx.fillText(databus.checkPoint, (uiWidth / 2) * ratio, 640 * ratio);
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#f76001';
+      ctx.font = 50 * ratio + 'px Arial';
+      ctx.fillText(databus.rewardstep, 430 * ratio, 770 * ratio);
+
     }
   }
 }

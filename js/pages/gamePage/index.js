@@ -281,7 +281,7 @@ export default class Index {
       this.gameEnd.render(ctx)
     }
 
-    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6) {
+    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7) {
       this.gameModal.render(ctx)
     }
 
@@ -539,14 +539,18 @@ export default class Index {
 
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
-        databus.musicBg = databus.musicBgState
-        databus.musicSound = databus.musicSoundState
-        if(databus.musicBg == true){
-          this.music.playGameBgm()
-        } else {
-          this.music.pauseMusicBgm()
-        }
-        databus.gameState = 1
+        databus.btnPlus = 1
+        setTimeout(() => {
+          databus.musicBg = databus.musicBgState
+          databus.musicSound = databus.musicSoundState
+          if (databus.musicBg == true) {
+            this.music.playGameBgm()
+          } else {
+            this.music.pauseMusicBgm()
+          }
+          databus.gameState = 1
+          databus.btnPlus = 0
+        }, 100)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }

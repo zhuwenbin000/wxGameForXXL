@@ -79,9 +79,9 @@ export default class Map {
     this.createBlocksByQR();
 
     this.music = new Music()
-    // this.gsl = [];
+    this.gsl = [];
     // this.gcl = [];
-    this.gslScore = 0;
+    // this.gslScore = 0;
     this.gclCombo = 0;
     this.gclTime = 0;
     this.gslTime = 0;
@@ -212,18 +212,18 @@ export default class Map {
     if (this.gclCombo > 0) {
       this.sc = true
     }
-    if (this.gslScore > 0) {
-      this.ss = true
-    }
+    // if (this.gslScore > 0) {
+    //   this.ss = true
+    // }
     //重置能combo的棋子数组
     comboBlocks = []
     //如果当前页没有combo，则combo连击清0，上一次消除也清0,可以进行手指连线消除
     if (isCombo == 0) {
-      if (this.gslScore > 0) {
-        this.gslScore = 0
-        this.gslTime = 0
-        this.ss = false
-      }
+      // if (this.gslScore > 0) {
+      //   this.gslScore = 0
+      //   this.gslTime = 0
+      //   this.ss = false
+      // }
       if (this.gclCombo > 0) {
         this.gclCombo = 0
         this.gclTime = 0
@@ -322,23 +322,19 @@ export default class Map {
     databus.score = databus.score + bombScore * doubleHit
 
     //显示获得得分
-    // let x = databus.getPointCenter(sb[sb.length - 1]).x + (1 - _.random(0, 2)) * _.random(0, 50) * ratio;
-    // const y = databus.getPointCenter(sb[sb.length - 1]).y;
-    // if (x > 400 * ratio) {
-    //   x = 400 * ratio + (1 - _.random(0, 2)) * _.random(0, 50) * ratio
+    const x = databus.getPointCenter(sb[sb.length - 1]).x;
+    const y = databus.getPointCenter(sb[sb.length - 1]).y;
+
+    this.gsl.push({
+      rc: sb[sb.length - 1],
+      score: bombScore * doubleHit,
+      t:0,
+      x:x,
+      y:y
+    })
+    // if (this.gclCombo > 0) {
+    //   this.gslScore = this.gslScore + bombScore * doubleHit
     // }
-    // if (this.gcl.length > 0) {
-      // this.gsl.push({
-        // rc: sb[sb.length - 1],
-        // score: bombScore * doubleHit,
-        // t:0,
-        // x:x,
-        // y:y
-      // })
-    // }
-    if (this.gclCombo > 0) {
-      this.gslScore = this.gslScore + bombScore * doubleHit
-    }
     //得分音效
     this.music.playMusic('getScore')
     if (gold > 0 ){
@@ -367,34 +363,34 @@ export default class Map {
   }
 
   showScore(){
-    // if (this.gsl.length <= 0) return;
-    // for (var i = 0; i < this.gsl.length; i++) {
-    //   if (this.gsl[i].t < 60) {
-    //     //显示分数
-    //     const score = (this.gsl[i].score + '').split('');
-    //     const len = score.length;
-    //     for (let j = 0; j < len; j++) {
-    //       this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, this.gsl[i].x + 35 * j * ratio, this.gsl[i].y, 30 * ratio, 40 * ratio);
-    //     }
+    if (this.gsl.length <= 0) return;
+    for (var i = 0; i < this.gsl.length; i++) {
+      if (this.gsl[i].t < 50) {
+        //显示分数
+        const score = (this.gsl[i].score + '').split('');
+        const len = score.length;
+        for (let j = 0; j < len; j++) {
+          this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, this.gsl[i].x + 35 * j * ratio, this.gsl[i].y, 30 * ratio, 40 * ratio);
+        }
 
-    //     this.gsl[i].t++
-    //   }
-    // }
-    if (this.gslScore == 0 || !this.ss) return;
-    if (this.ss) {
-      //显示分数
-      const score = (this.gslScore + '').split('');
-      const len = score.length;
-      for (let j = 0; j < len; j++) {
-        // if (this.gslTime <= 30) {
-        //   this.ctx.globalAlpha = (1 / 30) * this.gslTime;
-        // } else {
-        //   this.ctx.globalAlpha = 1 - (1 / 30) * (this.gslTime - 30);
-        // }
-        this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, (uiWidth - 30) / 2 * ratio + 35 * j * ratio, 750 * ratio, 30 * ratio, 40 * ratio);
+        this.gsl[i].t++
       }
-      this.gslTime++
     }
+    // if (this.gslScore == 0 || !this.ss) return;
+    // if (this.ss) {
+    //   //显示分数
+    //   const score = (this.gslScore + '').split('');
+    //   const len = score.length;
+    //   for (let j = 0; j < len; j++) {
+    //     // if (this.gslTime <= 30) {
+    //     //   this.ctx.globalAlpha = (1 / 30) * this.gslTime;
+    //     // } else {
+    //     //   this.ctx.globalAlpha = 1 - (1 / 30) * (this.gslTime - 30);
+    //     // }
+    //     this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, (uiWidth - 30) / 2 * ratio + 35 * j * ratio, 750 * ratio, 30 * ratio, 40 * ratio);
+    //   }
+    //   this.gslTime++
+    // }
   }
 
 
@@ -473,7 +469,7 @@ export default class Map {
             piecesLevel: piecesLevel,
             piecesProbblt: piecesProbblt
           }
-
+          databus.gameState = 7 //过关弹框
           databus.score = 0 //重置当前关卡获得分数
           databus.processScore = 0 //重置得分进度条
           databus.useSteps = 0 //重置当前关卡使用步数
@@ -509,6 +505,11 @@ export default class Map {
         databus.gameState = 2
         if ((databus.gameScore + databus.score) > databus.bestscore){
           databus.isNewScore = true
+          //结束音
+          self.music.playMusic('NewRecord')
+        } else {
+          //结束音
+          self.music.playMusic('noNewRecord')
         }
       }
     }

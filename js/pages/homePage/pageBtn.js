@@ -179,7 +179,7 @@ export default class PageBtn {
 
   }
   drawlogo(ctx) {
-    ctx.drawImage(logoBtn, 0, 0, 668, 510, (window.innerWidth - 668 * ratio) / 2, 120 * ratio, 668 * ratio, 510 * ratio)
+    ctx.drawImage(logoBtn, 0, 0, 796, 538, (window.innerWidth - 796 * ratio) / 2, 120 * ratio, 796 * ratio, 538 * ratio)
     //开始游戏按钮区域
 
   }

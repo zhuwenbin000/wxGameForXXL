@@ -85,7 +85,7 @@ export default class Main {
           databus.pageStateUpdate('homePage')
           self.homePage.restart(ctx)
         }
-        if (self.music.indexBgmAudio.paused) self.music.indexBgmAudio.play()
+        if (self.music.indexBgmAudio.paused && databus.musicBg == true) self.music.indexBgmAudio.play()
       }
 
       //游戏页
@@ -97,7 +97,7 @@ export default class Main {
           self.gamePage.restart(ctx)
           databus.gameState = 1
         }
-        if (self.music.gameBgmAudio.paused) self.music.gameBgmAudio.play()
+        if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()
       }
 
       //好友排行榜
