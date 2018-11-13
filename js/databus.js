@@ -21,6 +21,13 @@ export default class DataBus {
   }
 
   reset() {
+    this.playbtn_state = false;//开始游戏按钮状态
+    this.sharebtn_state = false;//分享按钮状态
+    this.provbtn_state = false;//上一页按钮状态
+    this.nextbtn_state = false;//上一页按钮状态
+    this.friend_back_state = false;//排行榜返回按钮状态
+    this.laterTime = 100;//按钮延时时间
+    this.friendbtn_state = false;//好友排行按钮状态
     this.gameClubbutton = null;//游戏圈按钮
     this.userinfo = null;//用户的头像等信息
     this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问

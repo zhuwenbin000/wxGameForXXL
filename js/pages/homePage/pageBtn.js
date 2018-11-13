@@ -16,20 +16,26 @@ let loginfriendsRankBtn = wx.createImage();
 let loginauthorBtn = wx.createImage();
 let loginstartBtn = wx.createImage();
 let headimg = wx.createImage();
-
+let shareBtn = wx.createImage();
 let mt = databus.mt * ratio; //头像到顶部的距离
 let br = databus.br * ratio; //头像的半径
 let nmt = databus.nmt * ratio; //置灰状态下按钮到顶部的距离
+let nmt_big = (databus.nmt * ratio) - (226 * ratio * 0.1/2);
 let pmt = screenHeight / 2 + 30 * ratio;//授权状态下按钮到顶部的距离
 let nb = databus.nb * ratio; //置灰状态下按钮间距
 let ml = (window.innerWidth - 590 * ratio) / 2
-let sml = (window.innerWidth - 282 * ratio) / 2
+let ml_big = (window.innerWidth - 590 * 1.1 * ratio) / 2
+let sml = (window.innerWidth - 560 * ratio) / 2
+let sml_big = (window.innerWidth - 560 * 1.1 * ratio) / 2
+let sml2 = window.innerWidth / 2
+let smleft = nmt + 91 * ratio + 312 * ratio + nb * 2
+let smleft_big = nmt + 91 * ratio + 312 * ratio + nb * 2 - (138 * ratio * 0.1 / 2)
 bg.src = 'images/home/background.png'
 logoBtn.src = 'images/home/logo.png'
 
 startBtn.src = 'images/home/start.png'
 friendsRankBtn.src = 'images/home/friends.png'
-
+shareBtn.src ='images/home/share.png'
 authorBtn.src = "images/home/author.png"
 
 loginstartBtn.src = 'images/home/start.png'
@@ -50,6 +56,33 @@ export default class PageBtn {
     if (databus.userinfo) {
       this.savedata(databus.userinfo)//同步用户数据 每次进来都同步一下昵称头像等数据
     }
+    if (databus.pownstate == 1){ //按钮位置
+      this.startBtnArea = {
+        startX: ml,
+        startY: nmt,
+        endX: ml + 590 * ratio,
+        endY: nmt + 226 * ratio
+      }
+      this.friendsBtnArea = {
+        startX: ml,
+        startY: nmt + (196 * ratio) + nb,
+        endX: ml + 590 * ratio,
+        endY: nmt + (196 * ratio) + nb + 226 * ratio
+      }
+      this.shareBtnArea = {
+        startX: sml,
+        startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
+        endX: sml2 + 282 * ratio,
+        endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio,
+      }
+    }else{
+      this.shareBtnArea = {
+        startX: sml,
+        startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
+        endX: sml2 + 282 * ratio,
+        endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio,
+      }
+    }
   }
   
   render(ctx) {
@@ -63,6 +96,7 @@ export default class PageBtn {
       this.friendsRankBtn(ctx)
       this.render_btn(ctx)
       this.loginauthor(ctx)
+      this.share_button(ctx)
     }
   }
   render_btn() {
@@ -102,7 +136,6 @@ export default class PageBtn {
       success(data) {
         var bestscore = data.body.user.bestscore;
         databus.bestscore = bestscore;
-
       }
     }
     ajax(options)
@@ -172,6 +205,7 @@ export default class PageBtn {
     this.loginstartBtn(ctx)
     this.loginfriendsRankBtn(ctx)
     this.loginauthor(ctx)
+    this.share_button(ctx)
     //画分数
     if (bestscore) {
       this.drawscore(ctx, bestscore)
@@ -184,13 +218,11 @@ export default class PageBtn {
 
   }
   loginstartBtn(ctx) {
-    ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml, nmt, 590 * ratio, 226 * ratio)
-    this.startBtnArea = {
-      startX: ml,
-      startY: nmt,
-      endX: ml + 590 * ratio,
-      endY: nmt + 226 * ratio
-    }
+    if (!databus.playbtn_state){
+      ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml, nmt, 590 * ratio, 226 * ratio) 
+    }else{
+      ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml_big, nmt_big, 590 * ratio*1.1, 226 * ratio*1.1)
+    } 
   }
 
   startBtn(ctx) { //开始游戏按钮
@@ -226,13 +258,12 @@ export default class PageBtn {
 
   }
   loginfriendsRankBtn(ctx) { //好友排行榜
+    if (!databus.friendbtn_state) {
     ctx.drawImage(loginfriendsRankBtn, 0, 0, 590, 226, ml, nmt + (196 * ratio) + nb, 590 * ratio, 226 * ratio)
-    this.friendsBtnArea = {
-      startX: ml,
-      startY: nmt + (196 * ratio) + nb,
-      endX: ml + 590 * ratio,
-      endY: nmt + (196 * ratio) + nb + 226 * ratio
+    }else{
+      ctx.drawImage(loginfriendsRankBtn, 0, 0, 590, 226, ml_big, nmt_big + (196 * ratio) + nb, 590 * ratio * 1.1, 226 * ratio * 1.1)
     }
+    
   }
   friendsRankBtn(ctx) { //好友排行榜
     if (!this.friendbutton) {
@@ -263,22 +294,28 @@ export default class PageBtn {
       })
     }
   }
-
-
-  
   loginauthor(ctx) {
-    if (!databus.gameClubbutton){
+   
+    if (!databus.gameClubbutton && !databus.playbtn_state){
+     
       databus.gameClubbutton = wx.createGameClubButton({
         icon: 'green',
         type: 'image',
         image: 'images/home/author.png',
         style: {
-          left: sml,
+          left: sml2,
           top: nmt + 91 * ratio + 312 * ratio + nb * 2,
           width: 282 * ratio,
           height: 138 * ratio
         }
       })
     } 
+  }
+  share_button(ctx) {   
+    if (!databus.sharebtn_state) {
+      ctx.drawImage(shareBtn, 0, 0, 282, 138, sml,smleft, 282 * ratio, 138 * ratio)
+    }else{
+      ctx.drawImage(shareBtn, 0, 0, 282, 138, sml_big, smleft_big, 282 * ratio * 1.1, 138 * ratio * 1.1)
+    }
   }
 }

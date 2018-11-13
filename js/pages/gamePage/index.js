@@ -6,6 +6,7 @@ import DataBus from '../../databus'
 import { ajax } from '../../base/ajax'
 
 let databus = new DataBus()
+
 let uiWidth = 828;
 let ratio = canvas.width / uiWidth //设计稿宽度
 
@@ -52,6 +53,7 @@ let psec = databus.GameUI.preScoreCoordinates //游戏结束再来一局
 //游戏页主函数
 export default class Index {
   constructor(ctx) {
+    
     // 维护当前requestAnimationFrame的id
     this.aniId = 1;
     this.f = 0;
@@ -550,7 +552,7 @@ export default class Index {
           }
           databus.gameState = 1
           databus.btnPlus = 0
-        }, 100)
+        }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }

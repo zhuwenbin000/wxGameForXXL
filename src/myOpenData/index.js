@@ -46,7 +46,7 @@ wx.onMessage(data => {
         value: item.score
       }]
     })
-    worldData = sortByScore(data.text)
+    worldData = sortByScore(2,data.text)
     initRanklist(worldData, nowpage)
   } else if (data.type === 'group') {
     getGroupRanking(data.text);
@@ -187,7 +187,7 @@ function getFriendsRanking() {
       
       let data = [...res.data];
       nowpage = 1
-      friendData = sortByScore(data)
+      friendData = sortByScore(1,data)
       initRanklist(friendData, nowpage);
     }
   });
@@ -243,7 +243,7 @@ function updateMaxScore(score) {
 }
 
 
-function sortByScore(data) {
+function sortByScore(type,data) {
   let array = [];
   data.map(item => {
     if (item.nickname && item.avatarUrl) { //过滤世界传过来的没头像昵称的数据
@@ -265,10 +265,11 @@ function sortByScore(data) {
       })
     }
   })
-
+if(type == 1){
   array.sort((a, b) => {
     return a['score'] < b['score'];
   });
+}
   myRank = array.findIndex((item) => {
     return item.nickname === myInfo.nickName && item.avatarUrl === myInfo.avatarUrl;
   });

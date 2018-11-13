@@ -15,6 +15,7 @@ export default class Index {
     //   this.getscore()
     // }
    
+
   }
   getscore() { //获取最高分
     let me = this;
@@ -43,42 +44,63 @@ export default class Index {
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
     //渲染按钮之前先获取用户的登录状态
     this.getscore()
+    databus.playbtn_state = false;
+    databus.friendbtn_state = false;
   }
 
   finish() {
-    //清除定时动画和绑定事件
+    //清除定时动画和绑定事件 
     window.cancelAnimationFrame(this.aniId)
     canvas.removeEventListener('touchstart', this.touchHomePageHandler)
   }
-
-
   // 首页按钮事件处理逻辑
   touchHomePage(e) {
     //wx.offTouchStart();
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
-
     let startBtnArea = this.pageBtn.startBtnArea
-    let friendsBtnArea = this.pageBtn.friendsBtnArea  
+    let friendsBtnArea = this.pageBtn.friendsBtnArea
     let laodaoBtnArea = this.pageBtn.laodaoBtnArea
-    if (startBtnArea){
+    let shareBtnArea = this.pageBtn.shareBtnArea
+
+    if (startBtnArea) {
       if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
         //按钮按下音效
-        this.music.playMusic('btnDown')
-        databus.scene = 1
-        databus.gameClubbutton.destroy() //游戏圈按钮销毁
-        databus.gameClubbutton = null;
+        databus.playbtn_state = true;
+        this.music.playMusic('btnDown')        
+          setTimeout(()=>{
+            this.finish()
+            databus.scene = 1   
+            setTimeout(()=>{
+              databus.gameClubbutton.destroy() //游戏圈按钮销毁
+              databus.gameClubbutton = null;
+            }, 50)        
+          }, databus.laterTime)
       }
     }
     // 开始游戏按钮事件
-   
-    if (friendsBtnArea){
-      if (x >= friendsBtnArea.startX && x <= friendsBtnArea.endX && y >= friendsBtnArea.startY && y <= friendsBtnArea.endY) {  
-        this.music.playMusic('btnDown')  
-        databus.scene = 2
-        databus.gameClubbutton.destroy()//游戏圈按钮销毁
-        databus.gameClubbutton = null;
+    if (friendsBtnArea) {
+      if (x >= friendsBtnArea.startX && x <= friendsBtnArea.endX && y >= friendsBtnArea.startY && y <= friendsBtnArea.endY) {
+        databus.friendbtn_state = true;
+        this.music.playMusic('btnDown')
+        setTimeout(() => {
+          this.finish()
+          databus.scene = 2
+          setTimeout(() => {
+            databus.gameClubbutton.destroy() //游戏圈按钮销毁
+            databus.gameClubbutton = null;
+          })
+        }, databus.laterTime)
+      }
+    }
+    if (shareBtnArea) {
+      if (x >= shareBtnArea.startX && x <= shareBtnArea.endX && y >= shareBtnArea.startY && y <= shareBtnArea.endY) {
+        databus.sharebtn_state = true;
+        setTimeout(()=>{
+          databus.sharebtn_state = false;
+          wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url })
+        },100)     
       }
     }
     //页面结束事件
@@ -102,6 +124,7 @@ export default class Index {
 
   // 实现游戏帧循环
   loop() {
+   
     this.render(this.ctx)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
 

@@ -19,8 +19,13 @@ world_table.src = 'images/rank/world_light.png';
 const friend_table_dark = wx.createImage();
 friend_table_dark.src = 'images/rank/12.png';
 let openDataContext = wx.getOpenDataContext();
-
+let shareProv = wx.createImage();
+shareProv.src = 'images/rank/share_prev.png';
+let shareNext = wx.createImage();
+shareNext.src = 'images/rank/share_next.png';
 let pageindex = 1;
+const homeimg = wx.createImage();
+homeimg.src = 'images/rank/home.png';
 /**
  * 游戏页
  */
@@ -29,7 +34,7 @@ export default class Index {
     this.module_type = 1;
     // 维护当前requestAnimationFrame的id
     this.aniId = 2
-   
+
   }
   getWorldData() { //获取世界排行榜数据
     let me = this;
@@ -43,7 +48,7 @@ export default class Index {
         limit: 100
       },
       success(data) {
-       // data.body.user_list = [...data.body.user_list]
+        // data.body.user_list = [...data.body.user_list]
         openDataContext.postMessage({
           type: 'world',
           text: data.body.user_list
@@ -53,16 +58,16 @@ export default class Index {
     ajax(options)
   }
   drawnextbtn(ctx) {
-    let shareProv = wx.createImage();
-    shareProv.src = 'images/rank/share_prev.png';   
-    
-    ctx.drawImage(shareProv, databus.shareProv.x, databus.shareProv.y, databus.shareProv.w, databus.shareProv.h);
-    
-    let shareNext = wx.createImage();
-    shareNext.src = 'images/rank/share_next.png';
-    
-    ctx.drawImage(shareNext, databus.shareNext.x, databus.shareNext.y, databus.shareNext.w, databus.shareNext.h);
-    
+    if (!databus.provbtn_state) {
+      ctx.drawImage(shareProv, databus.shareProv.x, databus.shareProv.y, databus.shareProv.w, databus.shareProv.h);
+    } else {
+      ctx.drawImage(shareProv, databus.shareProv.x - (databus.shareProv.w * 0.05), databus.shareProv.y - (databus.shareProv.h * 0.05), databus.shareProv.w * 1.1, databus.shareProv.h * 1.1);
+    }
+    if (!databus.nextbtn_state) {
+      ctx.drawImage(shareNext, databus.shareNext.x, databus.shareNext.y, databus.shareNext.w, databus.shareNext.h);
+    } else {
+      ctx.drawImage(shareNext, databus.shareNext.x - (databus.shareNext.w * 0.05), databus.shareNext.y - (databus.shareNext.h * 0.05), databus.shareNext.w * 1.1, databus.shareNext.h * 1.1);
+    }
   }
   messageSharecanvas(type, text) {
     // 排行榜也应该是实时的，所以需要sharedCanvas 绘制新的排行榜
@@ -97,7 +102,7 @@ export default class Index {
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
-    
+
     let friend_area = {
       startX: databus.friendbtn.x,
       startY: databus.friendbtn.y,
@@ -117,11 +122,14 @@ export default class Index {
       endX: databus.backbtn.x + databus.backbtn.w,
       endY: databus.backbtn.y + databus.backbtn.h
     }
-    
+
     // 返回按钮事件
     if (x >= backBtnArea.startX && x <= backBtnArea.endX && y >= backBtnArea.startY && y <= backBtnArea.endY) {
       this.music.playMusic('btnDown')
-      databus.scene = 0
+      databus.friend_back_state = true;
+      setTimeout(() => {
+        databus.scene = 0
+      },databus.laterTime)
     }
     if (x >= friend_area.startX && x <= friend_area.endX && y >= friend_area.startY && y <= friend_area.endY) {
       this.music.playMusic('btnDown')
@@ -129,16 +137,22 @@ export default class Index {
       this.module_type = 1
       this.render(this.ctx)
     }
-    
+
     if (x >= world_area.startX && x <= world_area.endX && y >= world_area.startY && y <= world_area.endY) {
       this.music.playMusic('btnDown')
       this.getWorldData()
       this.module_type = 2
       this.render(this.ctx)
     }
-    
-    if (x >= databus.shareProv.x && x <= databus.shareProv.x + databus.shareProv.w && y >= databus.shareProv.y && y <= databus.shareProv.h + databus.shareProv.y ) {
+
+    if (x >= databus.shareProv.x && x <= databus.shareProv.x + databus.shareProv.w && y >= databus.shareProv.y && y <= databus.shareProv.h + databus.shareProv.y) {
       this.music.playMusic('btnDown')
+      if (!databus.provbtn_state) {
+        databus.provbtn_state = true;
+        setTimeout(() => {
+          databus.provbtn_state = false;
+        }, databus.laterTime)
+      }
       if (this.module_type == 1) { //好友翻页
         openDataContext.postMessage({
           type: 'provfriend',
@@ -153,6 +167,12 @@ export default class Index {
     }
     if (x >= databus.shareNext.x && x <= databus.shareNext.x + databus.shareNext.w && y >= databus.shareNext.y && y <= databus.shareNext.h + databus.shareNext.y) {
       this.music.playMusic('btnDown')
+      if (!databus.nextbtn_state) {
+        databus.nextbtn_state = true;
+        setTimeout(() => {
+          databus.nextbtn_state = false;
+        }, databus.laterTime)
+      }
       if (this.module_type == 1) { //好友翻页
         openDataContext.postMessage({
           type: 'nextfriend',
@@ -173,7 +193,7 @@ export default class Index {
   }
 
   //首页canvas重绘函数,每一帧重新绘制所有的需要展示的元素
-  render(ctx) {   
+  render(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = '#7b79ff';
     ctx.fillRect(0, 0, screenWidth, screenHeight)
@@ -187,13 +207,16 @@ export default class Index {
 
       ctx.drawImage(world_table, databus.worldbtn_world.x, databus.worldbtn_world.y, databus.worldbtn_world.w, databus.worldbtn_world.h);
     }
-    const homeimg = wx.createImage();
-    homeimg.src = 'images/rank/home.png';
+
     this.drawnextbtn(ctx)
-    ctx.drawImage(homeimg, databus.backbtn.x, databus.backbtn.y, databus.backbtn.w, databus.backbtn.h);
+    if (!databus.friend_back_state) {
+      ctx.drawImage(homeimg, databus.backbtn.x, databus.backbtn.y, databus.backbtn.w, databus.backbtn.h);
+    } else {
+      ctx.drawImage(homeimg, databus.backbtn.x - (databus.backbtn.w * 0.05), databus.backbtn.y - (databus.backbtn.h * 0.05), databus.backbtn.w * 1.1, databus.backbtn.h * 1.1);
+    }
 
     DataStore.getInstance().ctx.drawImage(DataStore.getInstance().sharedCanvas, 0, 0, screenWidth, screenHeight);
-    
+
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {
       this.touchEvent = true
