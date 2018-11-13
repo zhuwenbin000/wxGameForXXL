@@ -86,6 +86,7 @@ export default class Index {
     this.bindLoop = this.loop.bind(this)
     this.messageSharecanvas()
     // 清除上一帧的动画
+    databus.friend_back_state = false;
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
   }
@@ -127,6 +128,7 @@ export default class Index {
     if (x >= backBtnArea.startX && x <= backBtnArea.endX && y >= backBtnArea.startY && y <= backBtnArea.endY) {
       this.music.playMusic('btnDown')
       databus.friend_back_state = true;
+      this.finish()
       setTimeout(() => {
         databus.scene = 0
       },databus.laterTime)
