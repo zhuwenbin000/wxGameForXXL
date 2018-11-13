@@ -63,7 +63,7 @@ export default class Index {
     let friendsBtnArea = this.pageBtn.friendsBtnArea
     let laodaoBtnArea = this.pageBtn.laodaoBtnArea
     let shareBtnArea = this.pageBtn.shareBtnArea
-
+    
     if (startBtnArea) {
       if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
         //按钮按下音效

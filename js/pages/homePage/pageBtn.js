@@ -56,33 +56,7 @@ export default class PageBtn {
     if (databus.userinfo) {
       this.savedata(databus.userinfo)//同步用户数据 每次进来都同步一下昵称头像等数据
     }
-    if (databus.pownstate == 1){ //按钮位置
-      this.startBtnArea = {
-        startX: ml,
-        startY: nmt,
-        endX: ml + 590 * ratio,
-        endY: nmt + 226 * ratio
-      }
-      this.friendsBtnArea = {
-        startX: ml,
-        startY: nmt + (196 * ratio) + nb,
-        endX: ml + 590 * ratio,
-        endY: nmt + (196 * ratio) + nb + 226 * ratio
-      }
-      this.shareBtnArea = {
-        startX: sml,
-        startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
-        endX: sml2 + 282 * ratio,
-        endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio,
-      }
-    }else{
-      this.shareBtnArea = {
-        startX: sml,
-        startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
-        endX: sml2 + 282 * ratio,
-        endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio,
-      }
-    }
+    this.getBtnposition()
   }
   
   render(ctx) {
@@ -101,6 +75,35 @@ export default class PageBtn {
   }
   render_btn() {
 
+  }
+  getBtnposition(){
+    if (databus.pownstate == 1) { //按钮位置
+      this.startBtnArea = {
+        startX: ml,
+        startY: nmt,
+        endX: ml + 590 * ratio,
+        endY: nmt + 226 * ratio
+      }
+      this.friendsBtnArea = {
+        startX: ml,
+        startY: nmt + (196 * ratio) + nb,
+        endX: ml + 590 * ratio,
+        endY: nmt + (196 * ratio) + nb + 226 * ratio
+      }
+      this.shareBtnArea = {
+        startX: sml,
+        startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
+        endX: sml2 + 282 * ratio,
+        endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio,
+      }
+    } else {
+      this.shareBtnArea = {
+        startX: sml,
+        startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
+        endX: sml2 + 282 * ratio,
+        endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio,
+      }
+    }
   }
   drawhead(ctx) {
     var me = this
@@ -246,9 +249,11 @@ export default class PageBtn {
       this.createbutton.onTap((res) => {
         if (res.rawData)//授权成功
         {
+         
           this.createbutton.destroy()
           this.friendbutton.destroy()
           databus.pownstate = 1;
+          this.getBtnposition()
           this.render(ctx)
         } else {
           wx.showToast({title: '授权才能进入游戏哦～', icon: 'none' })
@@ -286,9 +291,11 @@ export default class PageBtn {
       this.friendbutton.onTap((res) => {
         if (res.rawData)//授权成功
         {
+          
           this.createbutton.destroy()
           this.friendbutton.destroy()
           databus.pownstate = 1;
+          this.getBtnposition()
           this.render(ctx)
         }
       })
