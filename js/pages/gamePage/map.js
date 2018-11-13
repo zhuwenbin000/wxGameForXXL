@@ -71,7 +71,7 @@ export default class Map {
         this.QRcode[r][c] = {
           piecesType: _.random(0, databus.piecesType - 1),
           piecesLevel: databus.getPiecesLevel(),
-          piecesCoin: _.random(0, 10) > 7 ? true : false
+          piecesCoin: _.random(0, 10) > 9 ? true : false
         }
       }
     }
@@ -567,7 +567,8 @@ export default class Map {
           var attr = {};
           attr = {
             piecesType: _.random(0, databus.piecesType - 1),
-            piecesLevel: databus.getPiecesLevel()
+            piecesLevel: databus.getPiecesLevel(),
+            piecesCoin: _.random(0, 10) > 9 ? true : false
           }
           this.blocks[r][c] = new Block(0, c, attr);
           this.blocks[r][c].moveTo(r, c, 10);

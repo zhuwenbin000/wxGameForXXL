@@ -443,6 +443,8 @@ export default class Index {
             databus.stepprice = propList[j].propprice || 0; //用户购买道具-步数价格
           }
         }
+        databus.gameState = 1
+        databus.btnPlus = 0
       }
     })
   }
@@ -582,7 +584,10 @@ export default class Index {
 
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
-        this.buyTool('3')
+        databus.btnPlus = 1
+        setTimeout(() => {
+          this.buyTool('3')
+        }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
@@ -597,9 +602,13 @@ export default class Index {
 
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
-        this.finish()
-        databus.scene = 0
-        databus.gameState = 0
+        databus.btnPlus = 1
+        setTimeout(() => {
+          this.finish()
+          databus.scene = 0
+          databus.gameState = 0
+          databus.btnPlus = 0
+        }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
