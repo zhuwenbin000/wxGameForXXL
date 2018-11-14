@@ -503,6 +503,10 @@ export default class Map {
       },
       success(data) {
         databus.gameState = 2
+        //暂停音乐
+        self.music.pauseMusicBgm()
+        databus.musicBg = false
+        //判断是否最高分
         if ((databus.gameScore + databus.score) > databus.bestscore){
           databus.isNewScore = true
           //结束音

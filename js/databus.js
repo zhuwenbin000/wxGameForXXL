@@ -109,7 +109,9 @@ export default class DataBus {
       h: 130 * ratio
     }
 
-    
+    this.version = '0.0.0.9';
+    this.shareflag = false;
+    this.showRule = true;
     this.scene = 0 //场景id
     this.rowNum = 6 //行数
     this.colNum = 6 //列数
@@ -119,7 +121,7 @@ export default class DataBus {
       friendsRank: false,
       worldRank: false,
     }
-    this.gameState = 0 //1:游戏中2:游戏结束3:音乐弹框4:彩色道具弹框5:增加步数弹框,6::返回首页,7:游戏过关
+    this.gameState = 0 //1:游戏中2:游戏结束3:音乐弹框4:彩色道具弹框5:增加步数弹框,6::返回首页,7:游戏过关,8:规则弹框
     this.musicBg = true //背景音默认开
     this.musicSound = true //音效默认开
     this.musicBgState = true //背景音状态

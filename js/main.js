@@ -53,16 +53,37 @@ export default class Main {
     })
 
     //分享文案
-
-    let options = {
+    ajax({
       tradecode: 'sys05',
       apiType: 'user',
       method: 'POST',
       success(data) {
         databus.shareConfig = data.body.share;
       }
-    }
-    ajax(options)
+    })
+
+    //版本号
+    ajax({
+      tradecode: 'sys06',
+      apiType: 'version',
+      method: 'POST',
+      data: {
+        'version': databus.version,//版本号
+      },
+      success(data) {
+        const shareflag = data.body.version.shareflag == '1' ? true : false
+        databus.shareflag = shareflag
+      }
+    })
+
+    wx.getStorage({
+      key: 'showRule',
+      success(res) {
+        if (res.data == 'false'){
+          databus.showRule = false
+        }
+      }
+    })
   }
 
   renderPage() {
@@ -95,7 +116,12 @@ export default class Main {
           
           databus.pageStateUpdate('gamePage')
           self.gamePage.restart(ctx)
-          databus.gameState = 1
+          if(databus.showRule){
+            //展示规则页
+            databus.gameState = 8
+          }else{
+            databus.gameState = 1
+          }
         }
         if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()
       }

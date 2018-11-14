@@ -17,6 +17,8 @@ let R = {
   "musicSoundTrue": "images/gameModal/music_sound_true.png",
   "passState": "images/gamePage/passState.png",
   "ruleBg": "images/gameModal/rule_bg.png",
+  "rule": "images/gameModal/rule.png",
+  "iknow": "images/gameModal/iknow.png",
   "passStateBg": "images/gamePage/passStateBg.png",
 }
 
@@ -246,6 +248,23 @@ export default class GameModal {
           ctx.font = 50 * ratio + 'px Arial';
           ctx.fillText(databus.rewardstep, 430 * ratio, 770 * ratio);
         }
+      }
+    }
+
+    //8:规则弹框
+    if (databus.gameState == 8) {
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //弹框背景
+      ctx.drawImage(Robj["rule"], 0, 0, Robj["rule"].width, Robj["rule"].height, (824 - 768) / 2 * ratio, 200 * ratio, 768 * ratio, 1308 * ratio);
+      if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+        databus.btnPlus++
+        //弹框确认
+        ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, (250 - 15.6) * ratio, (1335 - 7.2) * ratio, 312 * 1.1 * ratio, 142 * 1.1 * ratio);
+      } else {
+        databus.btnPlus = 0
+        //弹框确认
+        ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, 250 * ratio, 1335 * ratio, 312 * ratio, 142 * ratio);
       }
     }
   }

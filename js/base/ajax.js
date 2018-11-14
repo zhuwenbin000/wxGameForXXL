@@ -17,6 +17,13 @@ export function ajax(options) {
             loginflag: loginflag
           }
         }
+      } else if (options.apiType == 'version') {
+        options.data = {
+          version: {
+            ...options.data,
+            loginflag: loginflag
+          }
+        }
       }
       //如果是...
     }

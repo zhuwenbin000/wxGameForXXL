@@ -23,6 +23,7 @@ let R = {
   "newRecord": "images/gameEnd/newRecord.png",
   "shareToQun": "images/gameEnd/shareToQun.png",
   "tips": "images/gameEnd/tips.png",
+  "noSharetips": "images/gameEnd/noSharetips.png",
   "tryAgain": "images/gameEnd/tryAgain.png"
 }
 
@@ -43,16 +44,21 @@ export default class GameEnd {
     ctx.drawImage(Robj["getScore"], 0, 0, Robj["getScore"].width, Robj["getScore"].height, gsc.x, gsc.y, gsc.w, gsc.h);
     //游戏结束首页
     ctx.drawImage(Robj["index"], 0, 0, Robj["index"].width, Robj["index"].height, ic.x, ic.y, ic.w, ic.h);
-    //游戏结束提示
-    ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
+    if (databus.shareflag) {
+      //游戏结束提示
+      ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
+      //游戏结束分享
+      ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, sc.x, sc.y, sc.w, sc.h);
+    } else {
+      //游戏结束提示
+      ctx.drawImage(Robj["noSharetips"], 0, 0, Robj["noSharetips"].width, Robj["noSharetips"].height, tc.x, tc.y, tc.w, tc.h);
+    }
     if(databus.isNewScore){
       //游戏结束新纪录
       ctx.drawImage(Robj["newRecord"], 0, 0, Robj["newRecord"].width, Robj["newRecord"].height, nrc.x, nrc.y, nrc.w, nrc.h);
     }
     //游戏结束再来一局
     ctx.drawImage(Robj["tryAgain"], 0, 0, Robj["tryAgain"].width, Robj["tryAgain"].height, tac.x, tac.y, tac.w, tac.h);
-    //游戏结束分享
-    ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, sc.x, sc.y, sc.w, sc.h);
     //游戏结束看视频
     // ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, lvc.x, lvc.y, lvc.w, lvc.h);
     // 昵称

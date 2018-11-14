@@ -283,7 +283,7 @@ export default class Index {
       this.gameEnd.render(ctx)
     }
 
-    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7) {
+    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8) {
       this.gameModal.render(ctx)
     }
 
@@ -490,12 +490,16 @@ export default class Index {
         this.finish()
         databus.scene = 0
         databus.gameState = 0
+        //开启音乐
+        databus.musicBg = true
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
       // 再来一局事件
       if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
         databus.gameState = 1
+        //开启音乐
+        databus.musicBg = true
         //移除事件重新绑定
         canvas.removeEventListener('touchstart', this.touchStartHandler)
         canvas.removeEventListener('touchmove', this.touchMoveHandler)
@@ -613,10 +617,32 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
 
+    } else if (databus.gameState == 8) {//8:规则弹框
+      // 点击确认事件
+      if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (1335 * ratio) && y <= ((1335 + 142) * ratio)) {
+        databus.btnPlus = 1
+        setTimeout(() => {
+          databus.gameState = 1
+          databus.btnPlus = 0
+          databus.showRule = false
+          wx.setStorage({
+            key: "showRule",
+            data: "false"
+          })
+        }, databus.laterTime)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
     } else if (databus.gameState == 1){//游戏进行中
       // 首页按钮事件
       if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
         databus.gameState = 6
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+      // 规则按钮事件
+      if (x >= rulec.x && x <= rulec.x + rulec.w && y >= rulec.y && y <= rulec.y + rulec.h) {
+        databus.gameState = 8
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
