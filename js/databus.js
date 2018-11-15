@@ -412,6 +412,7 @@ export default class DataBus {
     this.selfHighScore = 0 //个人历史最高分
     this.highestScore = 0 //世界最高分
     this.isguide = 0 //是否需要引导 1 需要
+    this.isShare = false //本局游戏是否分享过
 
     this.score = 0 //每次开始默认分数、当前关卡获得分数
     this.gameScore = 0 //本轮游戏总分

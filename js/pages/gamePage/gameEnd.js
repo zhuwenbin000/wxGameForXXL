@@ -45,10 +45,15 @@ export default class GameEnd {
     //游戏结束首页
     ctx.drawImage(Robj["index"], 0, 0, Robj["index"].width, Robj["index"].height, ic.x, ic.y, ic.w, ic.h);
     if (databus.shareflag) {
-      //游戏结束提示
-      ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
-      //游戏结束分享
-      ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, sc.x, sc.y, sc.w, sc.h);
+      if (!databus.isShare) {
+        //游戏结束提示
+        ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
+        //游戏结束分享
+        ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, sc.x, sc.y, sc.w, sc.h);
+      } else {
+        //游戏结束提示
+        ctx.drawImage(Robj["noSharetips"], 0, 0, Robj["noSharetips"].width, Robj["noSharetips"].height, tc.x, tc.y, tc.w, tc.h);
+      }
     } else {
       //游戏结束提示
       ctx.drawImage(Robj["noSharetips"], 0, 0, Robj["noSharetips"].width, Robj["noSharetips"].height, tc.x, tc.y, tc.w, tc.h);

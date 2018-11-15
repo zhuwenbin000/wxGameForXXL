@@ -256,15 +256,15 @@ export default class GameModal {
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
-      ctx.drawImage(Robj["rule"], 0, 0, Robj["rule"].width, Robj["rule"].height, (824 - 768) / 2 * ratio, 200 * ratio, 768 * ratio, 1308 * ratio);
+      ctx.drawImage(Robj["rule"], 0, 0, Robj["rule"].width, Robj["rule"].height, (824 - 768) / 2 * ratio, 100 * ratio, 768 * ratio, 1308 * ratio);
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
         //弹框确认
-        ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, (250 - 15.6) * ratio, (1335 - 7.2) * ratio, 312 * 1.1 * ratio, 142 * 1.1 * ratio);
+        ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, (250 - 15.6) * ratio, (1235 - 7.2) * ratio, 312 * 1.1 * ratio, 142 * 1.1 * ratio);
       } else {
         databus.btnPlus = 0
         //弹框确认
-        ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, 250 * ratio, 1335 * ratio, 312 * ratio, 142 * ratio);
+        ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, 250 * ratio, 1235 * ratio, 312 * ratio, 142 * ratio);
       }
     }
   }

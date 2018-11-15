@@ -513,6 +513,11 @@ export default class Index {
       if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
         wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url})
         this.continueGame(2, 3)
+        //开启音乐
+        databus.musicBg = true
+        setTimeout(() => {
+          databus.isShare = true
+        },1000)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
@@ -619,7 +624,7 @@ export default class Index {
 
     } else if (databus.gameState == 8) {//8:规则弹框
       // 点击确认事件
-      if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (1335 * ratio) && y <= ((1335 + 142) * ratio)) {
+      if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 142) * ratio)) {
         databus.btnPlus = 1
         setTimeout(() => {
           databus.gameState = 1
