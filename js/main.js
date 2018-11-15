@@ -71,7 +71,7 @@ export default class Main {
         'version': databus.version,//版本号
       },
       success(data) {
-        const shareflag = data.body.version.shareflag == '1' ? true : false
+        const shareflag = data.body.version.shareflag == '1' ? false : true
         databus.shareflag = shareflag
       }
     })
