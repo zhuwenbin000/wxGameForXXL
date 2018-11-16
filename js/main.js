@@ -4,7 +4,7 @@ import FriendsRank from './pages/friendsRank/index'
 import WorldRank from './pages/worldRank/index'
 import DataBus from './databus'
 import Music from './music/music'
-import { ajax } from '/base/ajax'
+import { ajax, userLogin } from '/base/ajax'
 
 import DataStore from '/base/helper';
 let ctx = canvas.getContext('2d')
@@ -27,63 +27,18 @@ export default class Main {
     sharedCanvas.height = screenHeight * ratio;
     DataStore.getInstance().sharedCanvas = sharedCanvas;
     DataStore.getInstance().ctx = ctx;
-    wx.getSetting({
-      success: function (res) {
-        var authSetting = res.authSetting
-        if (authSetting['scope.userInfo'] === true) {
-          // 用户已授权，可以直接调用相关 API
-           wx.getUserInfo({ //获取用户基本信息
-            success: function (res) {
-              databus.userinfo = res;
-              me.renderPage() //开始判断路由
-            }
-          })
-          databus.pownstate = 1
-         
-        } else if (authSetting['scope.userInfo'] === false) {
-          databus.pownstate = 2
-          me.renderPage()
-          // 用户已拒绝授权
-        } else {
-          databus.pownstate = 3
-          me.renderPage()
-          // 未询问过用户授权，
+
+    let loginflag = wx.getStorageSync('loginflag')
+
+    if (!loginflag){
+      userLogin({
+        callback:()=>{
+          this.getBaseInfo()
         }
-      }
-    })
-
-    //分享文案
-    ajax({
-      tradecode: 'sys05',
-      apiType: 'user',
-      method: 'POST',
-      success(data) {
-        databus.shareConfig = data.body.share;
-      }
-    })
-
-    //版本号
-    ajax({
-      tradecode: 'sys06',
-      apiType: 'version',
-      method: 'POST',
-      data: {
-        'version': databus.version,//版本号
-      },
-      success(data) {
-        const shareflag = data.body.version.shareflag == '1' ? false : true
-        databus.shareflag = shareflag
-      }
-    })
-
-    wx.getStorage({
-      key: 'showRule',
-      success(res) {
-        if (res.data == 'false'){
-          databus.showRule = false
-        }
-      }
-    })
+      })
+    } else {
+      this.getBaseInfo()
+    }
   }
 
   renderPage() {
@@ -94,8 +49,6 @@ export default class Main {
     self.friendsRank = new FriendsRank(ctx)
     self.worldRank = new WorldRank(ctx)
     self.music = new Music()
-      //  databus.scene = 2 //好友排行测试用
-  // databus.scene = 1 //游戏页测试用
    
     //每隔50毫秒判断一次场景是否发生变化
     let timeLine = setInterval(() => {
@@ -142,5 +95,66 @@ export default class Main {
         }
       }
     }, 50)
+  }
+
+  getBaseInfo() {
+    var me = this;
+    //分享文案
+    ajax({
+      tradecode: 'sys05',
+      apiType: 'user',
+      method: 'POST',
+      success(data) {
+        databus.shareConfig = data.body.share;
+      }
+    })
+
+    //版本号
+    ajax({
+      tradecode: 'sys06',
+      apiType: 'version',
+      method: 'POST',
+      data: {
+        'version': databus.version,//版本号
+      },
+      success(data) {
+        const shareflag = data.body.version.shareflag == '1' ? false : true
+        databus.shareflag = shareflag
+      }
+    })
+
+    wx.getSetting({
+      success: function (res) {
+        var authSetting = res.authSetting
+        if (authSetting['scope.userInfo'] === true) {
+          // 用户已授权，可以直接调用相关 API
+          wx.getUserInfo({ //获取用户基本信息
+            success: function (res) {
+              databus.userinfo = res;
+              me.renderPage() //开始判断路由
+            }
+          })
+          databus.pownstate = 1
+
+        } else if (authSetting['scope.userInfo'] === false) {
+          databus.pownstate = 2
+          me.renderPage()
+          // 用户已拒绝授权
+        } else {
+          databus.pownstate = 3
+          me.renderPage()
+          // 未询问过用户授权，
+        }
+      }
+    })
+
+    wx.getStorage({
+      key: 'showRule',
+      success(res) {
+        if (res.data == 'false') {
+          databus.showRule = false
+        }
+      }
+    })
   }
 }

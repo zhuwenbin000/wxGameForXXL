@@ -145,9 +145,8 @@ export default class Index {
     ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
 
     //绘制预获得分数进度条
-    databus.preScoreStart = databus.preScoreEnd
-    databus.preScoreEnd = this.getScoreBySb(databus.selectBlocks)
-
+    databus.preScoreStart = databus.preScoreEnd;
+    databus.preScoreEnd = this.getScoreBySb(databus.selectBlocks) || 0;
     if (databus.preScoreStart != databus.preScoreEnd) {
       var totalTime = 15
       databus.preScoreAniTime = databus.preScoreAniTime + 1
