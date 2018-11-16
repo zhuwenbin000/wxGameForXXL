@@ -1,3 +1,8 @@
+
+import DataBus from '../databus'
+
+let databus = new DataBus()
+
 let apiUrl = 'https://koba-studio.com/kobaserver/service/json';
 //发送请求
 export function ajax(options) {
@@ -13,6 +18,13 @@ export function ajax(options) {
       if (options.apiType == 'user'){
         options.data = {
           user: {
+            ...options.data,
+            loginflag: loginflag
+          }
+        }
+      } else if (options.apiType == 'version') {
+        options.data = {
+          version: {
             ...options.data,
             loginflag: loginflag
           }
@@ -59,7 +71,6 @@ export function ajax(options) {
 
 // 用户登录
 export function userLogin(options) {
-  //获取code 重新登录 并调用
   wx.login({
     success: (res) => {
       let login = {
@@ -69,7 +80,11 @@ export function userLogin(options) {
         success(data) {
           if (data.result.code == '0') {//处理成功
             wx.setStorageSync('loginflag', data.body.user.loginflag)
-            ajax(options)//再次调用
+            if (options.tradecode) {
+              ajax(options)//再次调用
+            }else{
+              options.callback()
+            }
           }
         }
       }
@@ -77,6 +92,8 @@ export function userLogin(options) {
     },
     fail: (res) => {
       wx.showToast({ title: '登录失败', icon: 'none' })
-    }
+    },
+    complete: (res) => {
+    },
   })
 }

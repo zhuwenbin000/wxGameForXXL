@@ -108,8 +108,10 @@ export default class DataBus {
       w: 258 * ratio,
       h: 130 * ratio
     }
-
     
+    this.version = '0.0.1.0';
+    this.shareflag = false;
+    this.showRule = true;
     this.scene = 0 //场景id
     this.rowNum = 6 //行数
     this.colNum = 6 //列数
@@ -119,7 +121,7 @@ export default class DataBus {
       friendsRank: false,
       worldRank: false,
     }
-    this.gameState = 0 //1:游戏中2:游戏结束3:音乐弹框4:彩色道具弹框5:增加步数弹框,6::返回首页,7:游戏过关
+    this.gameState = 0 //1:游戏中2:游戏结束3:音乐弹框4:彩色道具弹框5:增加步数弹框,6::返回首页,7:游戏过关,8:规则弹框
     this.musicBg = true //背景音默认开
     this.musicSound = true //音效默认开
     this.musicBgState = true //背景音状态
@@ -410,6 +412,7 @@ export default class DataBus {
     this.selfHighScore = 0 //个人历史最高分
     this.highestScore = 0 //世界最高分
     this.isguide = 0 //是否需要引导 1 需要
+    this.isShare = false //本局游戏是否分享过
 
     this.score = 0 //每次开始默认分数、当前关卡获得分数
     this.gameScore = 0 //本轮游戏总分
@@ -423,7 +426,7 @@ export default class DataBus {
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 0 //当前关卡过关分数
     this.gameId = '' //本轮游戏id
-    this.steps = 20 //总步步数
+    this.steps = 10 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 4 //棋子种类

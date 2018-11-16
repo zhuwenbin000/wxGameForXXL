@@ -145,9 +145,8 @@ export default class Index {
     ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
 
     //绘制预获得分数进度条
-    databus.preScoreStart = databus.preScoreEnd
-    databus.preScoreEnd = this.getScoreBySb(databus.selectBlocks)
-
+    databus.preScoreStart = databus.preScoreEnd;
+    databus.preScoreEnd = this.getScoreBySb(databus.selectBlocks) || 0;
     if (databus.preScoreStart != databus.preScoreEnd) {
       console.log("1")
       var totalTime = 15
@@ -292,7 +291,7 @@ export default class Index {
       this.gameEnd.render(ctx)
     }
 
-    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7) {
+    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8) {
       this.gameModal.render(ctx)
     }
 
@@ -452,6 +451,8 @@ export default class Index {
             databus.stepprice = propList[j].propprice || 0; //用户购买道具-步数价格
           }
         }
+        databus.gameState = 1
+        databus.btnPlus = 0
       }
     })
   }
@@ -497,12 +498,16 @@ export default class Index {
         this.finish()
         databus.scene = 0
         databus.gameState = 0
+        //开启音乐
+        databus.musicBg = true
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
       // 再来一局事件
       if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
         databus.gameState = 1
+        //开启音乐
+        databus.musicBg = true
         //移除事件重新绑定
         canvas.removeEventListener('touchstart', this.touchStartHandler)
         canvas.removeEventListener('touchmove', this.touchMoveHandler)
@@ -516,6 +521,11 @@ export default class Index {
       if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
         wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url})
         this.continueGame(2, 3)
+        //开启音乐
+        databus.musicBg = true
+        setTimeout(() => {
+          databus.isShare = true
+        },1000)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
@@ -591,7 +601,10 @@ export default class Index {
 
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
-        this.buyTool('3')
+        databus.btnPlus = 1
+        setTimeout(() => {
+          this.buyTool('3')
+        }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
@@ -606,17 +619,43 @@ export default class Index {
 
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
-        this.finish()
-        databus.scene = 0
-        databus.gameState = 0
+        databus.btnPlus = 1
+        setTimeout(() => {
+          this.finish()
+          databus.scene = 0
+          databus.gameState = 0
+          databus.btnPlus = 0
+        }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
 
+    } else if (databus.gameState == 8) {//8:规则弹框
+      // 点击确认事件
+      if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 142) * ratio)) {
+        databus.btnPlus = 1
+        setTimeout(() => {
+          databus.gameState = 1
+          databus.btnPlus = 0
+          databus.showRule = false
+          wx.setStorage({
+            key: "showRule",
+            data: "false"
+          })
+        }, databus.laterTime)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
     } else if (databus.gameState == 1){//游戏进行中
       // 首页按钮事件
       if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
         databus.gameState = 6
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+      // 规则按钮事件
+      if (x >= rulec.x && x <= rulec.x + rulec.w && y >= rulec.y && y <= rulec.y + rulec.h) {
+        databus.gameState = 8
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
