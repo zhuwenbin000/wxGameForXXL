@@ -163,13 +163,6 @@ export default class Index {
       }
     
     } else {
-      console.log(((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * this.Robj["progressEmpty2"].width)
-      console.log(this.Robj["progressEmpty2"].height)
-      console.log(pec2.x)
-      console.log(pec2.y)
-      console.log(((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * pec2.w)
-      console.log(pec2.h)
-      debugger
       ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * pec2.w, pec2.h);
     }
 
