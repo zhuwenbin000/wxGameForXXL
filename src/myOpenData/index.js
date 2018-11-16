@@ -117,74 +117,85 @@ function initRanklist(list, page, type) {
   }
 }
 function drawrank(list, page) {
-  let length = 7
-  let itemHeight = 917 / 7;
-  var w = (750 - 40 * 2);
-  var h = itemHeight * length;
+  
+  
   if (list && list.length > 0) {
-    list.map((item, index) => {
-      var avatarurl_width = 80;    //绘制的头像宽度
-      var avatarurl_heigth = 80;   //绘制的头像高度
-      var avatarurl_x = 148;   //绘制的头像在画布上的位置
-      var avatarurl_y = index * itemHeight + 275;   //绘制的头像在画布上的位置
-      let avatar = wx.createImage();
-      avatar.src = item.avatarUrl;
-      avatar.onload = function () {
-        context.drawImage(avatar, avatarurl_x, avatarurl_y, avatarurl_width, avatarurl_heigth);
-      }
-      context.fillStyle = '#fff';
-      context.font = '28px Arial';
-      context.textAlign = 'left';
-      item.nickname = item.nickname.length > 5 ? item.nickname.substring(0, 6) + '..' : item.nickname
-      context.fillText(item.nickname, 235, index * itemHeight + 325);
-
-      context.font = '26px Arial';
-      context.textAlign = 'right';
-      if (!item.score || item.score == "undefined") {
-        item.score = 0
-      }
-      context.fillText(`${item.score}分` || `0分`, 660, index * itemHeight + 325);
-      if (index < 3 && page == 1) {
-        let firstImage = wx.createImage();
-        firstImage.src = 'images/rank/first.png';
-        let secondIamge = wx.createImage()
-        secondIamge.src = "images/rank/second.png"
-        let thirdIamge = wx.createImage()
-        thirdIamge.src = "images/rank/third.png"
-        if (index == 0) {
-          firstImage.onload = function () {
-            context.drawImage(firstImage, 46, index * itemHeight + 260, 100, 100)
-          }
+    let allNum = 0;
+    let avatarList = []
+    list.map((item, index) => {   
+      avatarList[index] = wx.createImage();
+      avatarList[index].src = item.avatarUrl;
+      avatarList[index].onload = function () {
+        allNum++
+        if (allNum == list.length) {
+          drawList(avatarList, list,page)
         }
-        if (index == 1) {
-          secondIamge.onload = function () {
-            context.drawImage(secondIamge, 66, index * itemHeight + 280, 80, 80)
-          }
-        }
-        if (index == 2) {
-          thirdIamge.onload = function () {
-            context.drawImage(thirdIamge, 66, index * itemHeight + 280, 80, 80)
-          }
-        }
-      } else {
-        context.font = 'italic 34px Arial';
-        context.textAlign = 'center';
-        context.fillText(index + 1 + ((page - 1) * 6), 100, index * itemHeight + 330)
-      }
-      context.stroke()
-
+      } 
     });
-
-    drawMyRank();
   } else {
     // 没有数据
   }
 }
+
+function drawList(avatarList, list, page){
+  let length = 7
+  let itemHeight = 917 / 7;
+  var w = (750 - 40 * 2);
+  var h = itemHeight * length;
+  var avatarurl_width = 80;    //绘制的头像宽度
+  var avatarurl_heigth = 80;   //绘制的头像高度
+  var avatarurl_x = 148;   //绘制的头像在画布上的位置
+  
+ list.map((item,index)=>{
+   var avatarurl_y = index * itemHeight + 275;   //绘制的头像在画布上的位置
+   context.drawImage(avatarList[index], avatarurl_x, avatarurl_y, avatarurl_width, avatarurl_heigth);
+    context.fillStyle = '#fff';
+    context.font = '28px Arial';
+    context.textAlign = 'left';
+    item.nickname = item.nickname.length > 5 ? item.nickname.substring(0, 6) + '..' : item.nickname
+    context.fillText(item.nickname, 235, index * itemHeight + 325);
+    context.font = '26px Arial';
+    context.textAlign = 'right';
+    if (!item.score || item.score == "undefined") {
+      item.score = 0
+    }
+    context.fillText(`${item.score}分` || `0分`, 660, index * itemHeight + 325);
+    if (index < 3 && page == 1) {
+      let firstImage = wx.createImage();
+      firstImage.src = 'images/rank/first.png';
+      let secondIamge = wx.createImage()
+      secondIamge.src = "images/rank/second.png"
+      let thirdIamge = wx.createImage()
+      thirdIamge.src = "images/rank/third.png"
+      if (index == 0) {
+        firstImage.onload = function () {
+          context.drawImage(firstImage, 46, index * itemHeight + 260, 100, 100)
+        }
+      }
+      if (index == 1) {
+        secondIamge.onload = function () {
+          context.drawImage(secondIamge, 66, index * itemHeight + 280, 80, 80)
+        }
+      }
+      if (index == 2) {
+        thirdIamge.onload = function () {
+          context.drawImage(thirdIamge, 66, index * itemHeight + 280, 80, 80)
+        }
+      }
+    } else {
+      context.font = 'italic 34px Arial';
+      context.textAlign = 'center';
+      context.fillText(index + 1 + ((page - 1) * 6), 100, index * itemHeight + 330)
+    }
+    context.stroke()
+    drawMyRank();
+  })
+}
+
 function getFriendsRanking() {
   wx.getFriendCloudStorage({
     keyList: ['score'],
     success: res => {
-      
       let data = [...res.data];
       nowpage = 1
       friendData = sortByScore(1,data)
@@ -249,8 +260,7 @@ function sortByScore(type,data) {
     if (item.nickname && item.avatarUrl) { //过滤世界传过来的没头像昵称的数据
       var score = 0;
       
-      if(module == 1){
-        
+      if(module == 1){       
         score = item['KVDataList'][0] ? JSON.parse(item['KVDataList'][0].value).wxgame.score.text:0
       }else{
         score = item['KVDataList'][1] && item['KVDataList'][1].value != 'undefined' ? item['KVDataList'][1].value : (item['KVDataList'][0] ? item['KVDataList'][0].value : 0)
@@ -310,7 +320,7 @@ function drawMyRank() {
     
     context.fillText(`${text}分` || 0, 630, 1120);
     // 自己的名次
-    if (myRank !== undefined) {
+    if (myRank != undefined) {
       context.font = 'italic 44px Arial';
       context.textAlign = 'center';
       if (text != '0'){

@@ -123,8 +123,7 @@ export default class Index {
   }
 
   // 实现游戏帧循环
-  loop() {
-   
+  loop() {  
     this.render(this.ctx)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
 

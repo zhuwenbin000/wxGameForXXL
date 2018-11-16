@@ -149,6 +149,7 @@ export default class Index {
     databus.preScoreEnd = this.getScoreBySb(databus.selectBlocks)
 
     if (databus.preScoreStart != databus.preScoreEnd) {
+      console.log("1")
       var totalTime = 15
       databus.preScoreAniTime = databus.preScoreAniTime + 1
       if (databus.preScoreAniTime > totalTime) {
@@ -161,7 +162,15 @@ export default class Index {
         }
         ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * pec2.w, pec2.h);
       }
+    
     } else {
+      console.log(((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * this.Robj["progressEmpty2"].width)
+      console.log(this.Robj["progressEmpty2"].height)
+      console.log(pec2.x)
+      console.log(pec2.y)
+      console.log(((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * pec2.w)
+      console.log(pec2.h)
+      debugger
       ctx.drawImage(this.Robj["progressEmpty2"], 0, 0, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * this.Robj["progressEmpty2"].width, this.Robj["progressEmpty2"].height, pec2.x, pec2.y, ((databus.score + databus.preScoreStart) >= databus.passScore ? 1 : (databus.score + databus.preScoreStart) / databus.passScore) * pec2.w, pec2.h);
     }
 
