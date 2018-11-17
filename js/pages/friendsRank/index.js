@@ -26,6 +26,11 @@ shareNext.src = 'images/rank/share_next.png';
 let pageindex = 1;
 const homeimg = wx.createImage();
 homeimg.src = 'images/rank/home.png';
+
+let friend_loan = false;
+let world_loan = false;
+let prov_loan = false;
+let next_loan = false;
 /**
  * 游戏页
  */
@@ -135,6 +140,13 @@ export default class Index {
     }
     if (x >= friend_area.startX && x <= friend_area.endX && y >= friend_area.startY && y <= friend_area.endY) {
       this.music.playMusic('btnDown')
+      if (friend_loan || world_loan) {
+        return;
+      }
+      friend_loan = true;
+      setTimeout(() => {
+        friend_loan = false;
+      }, 500)
       this.messageSharecanvas()
       this.module_type = 1
       this.render(this.ctx)
@@ -142,6 +154,13 @@ export default class Index {
 
     if (x >= world_area.startX && x <= world_area.endX && y >= world_area.startY && y <= world_area.endY) {
       this.music.playMusic('btnDown')
+      if (world_loan || friend_loan) {
+        return;
+      }
+      world_loan = true;
+      setTimeout(() => {
+        world_loan = false;
+      }, 500)
       this.getWorldData()
       this.module_type = 2
       this.render(this.ctx)
@@ -149,6 +168,14 @@ export default class Index {
 
     if (x >= databus.shareProv.x && x <= databus.shareProv.x + databus.shareProv.w && y >= databus.shareProv.y && y <= databus.shareProv.h + databus.shareProv.y) {
       this.music.playMusic('btnDown')
+      if (prov_loan||next_loan){
+        return;
+      }
+      prov_loan = true;
+      setTimeout(()=>{
+        prov_loan = false;
+      },500)
+     
       if (!databus.provbtn_state) {
         databus.provbtn_state = true;
         setTimeout(() => {
@@ -169,6 +196,14 @@ export default class Index {
     }
     if (x >= databus.shareNext.x && x <= databus.shareNext.x + databus.shareNext.w && y >= databus.shareNext.y && y <= databus.shareNext.h + databus.shareNext.y) {
       this.music.playMusic('btnDown')
+      if (next_loan || prov_loan) {
+        return;
+      }
+      next_loan = true;
+      setTimeout(() => {
+        next_loan = false;
+      }, 500)
+      
       if (!databus.nextbtn_state) {
         databus.nextbtn_state = true;
         setTimeout(() => {

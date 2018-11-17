@@ -327,8 +327,7 @@ function drawMyRank() {
 
     context.font = 'bold 26px Arial';
     context.textAlign = 'right';
-
-
+    
     context.fillText(`${text}分` || 0, 630, 1120);
     // 自己的名次
     if (myRank != undefined) {
