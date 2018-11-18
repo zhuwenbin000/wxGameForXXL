@@ -50,7 +50,7 @@ export default class Index {
       data: {
         user: true,
         start: 0,
-        limit: 200
+        limit: 500
       },
       success(data) {
         // data.body.user_list = [...data.body.user_list]
@@ -94,6 +94,7 @@ export default class Index {
     databus.friend_back_state = false;
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
+    
   }
 
   finish() {

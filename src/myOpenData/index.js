@@ -1,7 +1,7 @@
 let sharedCanvas = wx.getSharedCanvas();
 let context = sharedCanvas.getContext('2d');
 const mt = 255;
-
+let avatar = wx.createImage();
 const screenWidth = wx.getSystemInfoSync().screenWidth;
 const screenHeight = wx.getSystemInfoSync().screenHeight;
 const ratio = wx.getSystemInfoSync().pixelRatio;
@@ -117,8 +117,6 @@ function initRanklist(list, page, type) {
   }
 }
 function drawrank(list, page) {
-
-
   if (list && list.length > 0) {
     let allNum = 0;
     let avatarList = []
@@ -187,9 +185,10 @@ function drawList(avatarList, list, page) {
       context.textAlign = 'center';
       context.fillText(index + 1 + ((page - 1) * 6), 100, index * itemHeight + 330)
     }
+   
     context.stroke()
-    drawMyRank();
   })
+  drawMyRank();
 }
 
 function getFriendsRanking() {
@@ -279,11 +278,11 @@ function sortByScore(type, data) {
     array = bubbleSort(array)
   }
   
-  myRank = array.findIndex((item) => {
-    return item.nickname === myInfo.nickName && item.avatarUrl === myInfo.avatarUrl;
+  myRank = array.findIndex((item) => {  
+    return item.nickname == myInfo.nickName && item.avatarUrl == myInfo.avatarUrl;
   });
-  if (myRank === -1)
-    myRank = array.length;
+  if (myRank == -1)
+  myRank = '-';
   userArr = array
   return array;
 }
@@ -305,6 +304,7 @@ function getUserInfo() {
     lang: 'zh_CN',
     success: res => {
       myInfo = res.data[0];
+      avatar.src = myInfo.avatarUrl;
     },
     fail: res => {
 
@@ -315,11 +315,7 @@ function getUserInfo() {
 function drawMyRank() {
   var text = myScore ? JSON.parse(myScore).wxgame.score.text : '0'
   if (myInfo.avatarUrl) {
-    let avatar = wx.createImage();
-    avatar.src = myInfo.avatarUrl;
-    avatar.onload = function () {
-      context.drawImage(avatar, 133, 1065, 80, 80);
-    }
+    context.drawImage(avatar, 133, 1065, 80, 80);
     context.fillStyle = '#fff';
     context.font = '28px Arial';
     context.textAlign = 'left';
@@ -331,6 +327,7 @@ function drawMyRank() {
     context.fillText(`${text}分` || 0, 630, 1120);
     // 自己的名次
     if (myRank != undefined) {
+
       context.font = 'italic 44px Arial';
       context.textAlign = 'center';
       if (text != '0') {

@@ -148,6 +148,7 @@ export default class Index {
     databus.preScoreStart = databus.preScoreEnd;
     databus.preScoreEnd = this.getScoreBySb(databus.selectBlocks) || 0;
     if (databus.preScoreStart != databus.preScoreEnd) {
+      console.log("1")
       var totalTime = 15
       databus.preScoreAniTime = databus.preScoreAniTime + 1
       if (databus.preScoreAniTime > totalTime) {
@@ -508,23 +509,19 @@ export default class Index {
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-      //有分享按钮才可以触发点击事件
-      if (databus.shareflag) {
-        if (!databus.isShare) {
-          // 分享事件
-          if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
-            wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url })
-            this.continueGame(2, 3)
-            //开启音乐
-            databus.musicBg = true
-            setTimeout(() => {
-              databus.isShare = true
-            }, 1000)
-            //按钮按下音效
-            this.music.playMusic('btnDown')
-          }
-        }
-      } 
+
+      // 分享事件
+      if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
+        wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url})
+        this.continueGame(2, 3)
+        //开启音乐
+        databus.musicBg = true
+        setTimeout(() => {
+          databus.isShare = true
+        },1000)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
 
       // // 看视频事件
       // if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
@@ -729,7 +726,7 @@ export default class Index {
       let rc = this.getRC(x, y)
 
       //如果移动不在砖块内就return
-      if (!rc || databus.selectBlocks.length == 0) {
+      if (!rc) {
         return
       }
       //已选择的上一个砖块

@@ -109,7 +109,7 @@ export default class DataBus {
       h: 130 * ratio
     }
     
-    this.version = '0.0.1.1';
+    this.version = '0.0.1.0';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
