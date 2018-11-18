@@ -267,5 +267,32 @@ export default class GameModal {
         ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, 250 * ratio, 1235 * ratio, 312 * ratio, 142 * ratio);
       }
     }
+
+
+    //9:游戏异常弹框
+    if (databus.gameState == 9) {
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //弹框背景
+      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 240 * ratio, 824 * ratio, 1072 * ratio);
+      
+      //弹框确认
+      if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+        databus.btnPlus++
+        //弹框确认
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1080 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
+      } else {
+        databus.btnPlus = 0
+        //弹框确认
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
+      }
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 50 * ratio + 'px Arial';
+      ctx.fillText('网络异常', (uiWidth / 2) * ratio, 700 * ratio);
+      ctx.fillText('请检查网络设置', (uiWidth / 2) * ratio, 800 * ratio);
+
+    }
   }
 }
