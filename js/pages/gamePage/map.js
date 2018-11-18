@@ -255,6 +255,10 @@ export default class Map {
   //连线消除
   blocksBomb(sb) {
     if (sb.length <= 0) return
+    if (databus.steps <= 0 ){
+      databus.gameState = 9 //游戏异常
+      return
+    }
     //减去1步
     databus.steps--;
     //当前关卡使用步数
@@ -503,12 +507,16 @@ export default class Map {
       },
       success(data) {
         databus.gameState = 2
-        //暂停音乐
-        self.music.pauseMusicBgm()
-        databus.musicBg = false
+        if (databus.musicBg) {
+          //暂停音乐
+          self.music.pauseMusicBgm()
+          databus.musicBg = false
+          databus.musicBgChange = true
+        }
         //判断是否最高分
         if ((databus.gameScore + databus.score) > databus.bestscore){
           databus.isNewScore = true
+          databus.bestscore = databus.gameScore + databus.score
           //结束音
           self.music.playMusic('NewRecord')
         } else {

@@ -283,7 +283,7 @@ export default class Index {
       this.gameEnd.render(ctx)
     }
 
-    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8) {
+    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8 || databus.gameState == 9) {
       this.gameModal.render(ctx)
     }
 
@@ -490,16 +490,22 @@ export default class Index {
         this.finish()
         databus.scene = 0
         databus.gameState = 0
-        //开启音乐
-        databus.musicBg = true
+        if (databus.musicBgChange) {
+          //开启音乐
+          databus.musicBg = true
+          databus.musicBgChange = false
+        }
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
       // 再来一局事件
       if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
         databus.gameState = 1
-        //开启音乐
-        databus.musicBg = true
+        if (databus.musicBgChange) {
+          //开启音乐
+          databus.musicBg = true
+          databus.musicBgChange = false
+        }
         //移除事件重新绑定
         canvas.removeEventListener('touchstart', this.touchStartHandler)
         canvas.removeEventListener('touchmove', this.touchMoveHandler)
@@ -515,8 +521,11 @@ export default class Index {
           if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
             wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url })
             this.continueGame(2, 3)
-            //开启音乐
-            databus.musicBg = true
+            if (databus.musicBgChange) {
+              //开启音乐
+              databus.musicBg = true
+              databus.musicBgChange = false
+            }
             setTimeout(() => {
               databus.isShare = true
             }, 1000)
@@ -613,6 +622,20 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
 
+      // 点击确认事件
+      if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
+        databus.btnPlus = 1
+        setTimeout(() => {
+          this.finish()
+          databus.scene = 0
+          databus.gameState = 0
+          databus.btnPlus = 0
+        }, databus.laterTime)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+    } else if (databus.gameState == 9) {//9:游戏异常返回首页
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
         databus.btnPlus = 1

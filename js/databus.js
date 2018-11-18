@@ -109,7 +109,7 @@ export default class DataBus {
       h: 130 * ratio
     }
     
-    this.version = '0.0.1.1';
+    this.version = '0.0.1.2';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
@@ -126,6 +126,7 @@ export default class DataBus {
     this.musicSound = true //音效默认开
     this.musicBgState = true //背景音状态
     this.musicSoundState = true //音效默状态
+    this.musicBgChange = false //是否结束音效改变
     this.shareConfig = {} //分享配置
     this.btnPlus = 0 //按钮变大效果
     //游戏页的UI值（比如：宽高，边距）
