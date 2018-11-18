@@ -515,21 +515,6 @@ export default class Index {
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-<<<<<<< HEAD
-
-      // 分享事件
-      if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
-        wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url})
-        this.continueGame(2, 3)
-        //开启音乐
-        databus.musicBg = true
-        setTimeout(() => {
-          databus.isShare = true
-        },1000)
-        //按钮按下音效
-        this.music.playMusic('btnDown')
-      }
-=======
       //有分享按钮才可以触发点击事件
       if (databus.shareflag) {
         if (!databus.isShare) {
@@ -550,7 +535,6 @@ export default class Index {
           }
         }
       } 
->>>>>>> 424480d91557917c90a11b6de41f3c8e2316b09e
 
       // // 看视频事件
       // if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
