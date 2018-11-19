@@ -32,18 +32,13 @@ let smleft = nmt + 91 * ratio + 312 * ratio + nb * 2
 let smleft_big = nmt + 91 * ratio + 312 * ratio + nb * 2 - (138 * ratio * 0.1 / 2)
 bg.src = 'images/home/background.png'
 logoBtn.src = 'images/home/logo.png'
-
 startBtn.src = 'images/home/start.png'
 friendsRankBtn.src = 'images/home/friends.png'
 shareBtn.src ='images/home/share.png'
 authorBtn.src = "images/home/author.png"
-
 loginstartBtn.src = 'images/home/start.png'
 loginfriendsRankBtn.src = 'images/home/friends.png'
-
-
 loginauthorBtn.src = "images/home/author.png"
-
 
 /**
  * 游戏首页按钮类
@@ -63,6 +58,7 @@ export default class PageBtn {
     ctx.clearRect(0, 0, screenWidth, screenHeight)
     ctx.drawImage(bg, 0, 0, screenWidth, screenHeight)
     this.drawlogo(ctx)//画logo
+    
     if (databus.pownstate == 1) { //已授权
       this.drawhead(ctx)//画头像
     } else { //未授权
@@ -131,13 +127,16 @@ export default class PageBtn {
     }
   }
   getscore(signature) { //获取最高分
+    
     let me = this;
     let options = {
       tradecode: 'sys04',
       apiType: 'user',
       method: 'POST',
       success(data) {
+        
         var bestscore = data.body.user.bestscore;
+        
         databus.bestscore = bestscore;
       }
     }

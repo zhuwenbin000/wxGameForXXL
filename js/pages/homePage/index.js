@@ -25,7 +25,7 @@ export default class Index {
       method: 'POST',
       success(data) {
         databus.bestscore = data.body.user.bestscore;
-        // databus.usergold = data.body.user.glod; //用户拥有金币
+        databus.updateMaxScore(databus.bestscore)
       }
     }
     ajax(options)

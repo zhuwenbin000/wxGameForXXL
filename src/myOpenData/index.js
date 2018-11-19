@@ -26,10 +26,9 @@ let userArr = []
 let myScore = undefined;
 let myRank = undefined;
 
-
 initRanklist([], nowpage)
 getUserInfo();
-
+getMyScore();
 wx.onMessage(data => {
   if (data.type === 'friends') {
     nowpage = 1; //点击好友就把页码置换为1
@@ -51,9 +50,9 @@ wx.onMessage(data => {
   } else if (data.type === 'group') {
     getGroupRanking(data.text);
     getMyScore();
-  } else if (data.type === 'updateMaxScore') {
-    // 更新最高分
+  } else if (data.type === 'updateMaxScore') {// 更新最高分
     updateMaxScore(data)
+    getMyScore();
   } else if (data.type === 'nextfriend') {
     initRanklist(friendData, nowpage + 1, 'add');
   } else if (data.type === 'provfriend') {
@@ -65,13 +64,9 @@ wx.onMessage(data => {
   }
 });
 
-
-
 function initRanklist(list, page, type) {
-
   // 至少绘制6个
   list = list.slice(6 * (page - 1), 6 * (page))
-
   if (type == 'add' && list.length > 0) { //如果是正向翻页且有数据
     nowpage++
   } else if (type == 'reduce' && list.length > 0 && nowpage > 0) {
@@ -181,9 +176,14 @@ function drawList(avatarList, list, page) {
         }
       }
     } else {
-      context.font = 'italic 34px Arial';
+      context.font = '32px Arial';
       context.textAlign = 'center';
-      context.fillText(index + 1 + ((page - 1) * 6), 100, index * itemHeight + 330)
+      if (item.score){
+        context.fillText(index + 1 + ((page - 1) * 6), 100, index * itemHeight + 330)
+      }else{
+        context.fillText('-', 100, index * itemHeight + 330)
+      }
+      
     }
    
     context.stroke()
@@ -209,23 +209,14 @@ function getMyScore() {
     success: res => {
       let data = res;
       if (data.KVDataList.length) {
-        let lastScore = data.KVDataList[0].value || 0;
-        if (!data.KVDataList[1]) {
-          // saveMaxScore(lastScore);
-          myScore = lastScore;
-        } else if (lastScore > data.KVDataList[1].value) {
-          //  saveMaxScore(lastScore);
-          myScore = lastScore;
-        } else {
-          myScore = data.KVDataList[1].value;
-        }
+        let lastScore = data.KVDataList[0].value || 0;       
+        myScore = lastScore;
       }
     }
   });
 }
 
 function updateMaxScore(score) {
-
   wx.getUserCloudStorage({
     keyList: ['score'],
     success: res => {
@@ -281,8 +272,9 @@ function sortByScore(type, data) {
   myRank = array.findIndex((item) => { 
     return  item.avatarUrl == myInfo.avatarUrl;
   });
-  if (myRank == -1)
-  myRank = '-';
+  if (myRank == -1){
+    myRank = '-';
+  }
   userArr = array
   return array;
 }
@@ -315,7 +307,7 @@ function getUserInfo() {
 function drawMyRank() {
   var text = myScore ? JSON.parse(myScore).wxgame.score.text : '0'
   if (myInfo.avatarUrl) {
-    context.drawImage(avatar, 133, 1065, 80, 80);
+    context.drawImage(avatar, 146, 1065, 80, 80);
     context.fillStyle = '#fff';
     context.font = '28px Arial';
     context.textAlign = 'left';
@@ -327,10 +319,9 @@ function drawMyRank() {
     context.fillText(`${text}分` || 0, 630, 1120);
     // 自己的名次
     if (myRank != undefined) {
-
-      context.font = 'italic 44px Arial';
+      context.font = '36px Arial';
       context.textAlign = 'center';
-      if (text != '0') {
+      if (text != '0' && myScore != '0') {
         context.fillText(myRank + 1, 86, 1120);
       } else {
         context.fillText('-', 86, 1120);
