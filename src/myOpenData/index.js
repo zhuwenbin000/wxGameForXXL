@@ -278,8 +278,8 @@ function sortByScore(type, data) {
     array = bubbleSort(array)
   }
   
-  myRank = array.findIndex((item) => {  
-    return item.nickname == myInfo.nickName && item.avatarUrl == myInfo.avatarUrl;
+  myRank = array.findIndex((item) => { 
+    return  item.avatarUrl == myInfo.avatarUrl;
   });
   if (myRank == -1)
   myRank = '-';
