@@ -676,6 +676,7 @@ export default class Index {
       // 规则按钮事件
       if (x >= rulec.x && x <= rulec.x + rulec.w && y >= rulec.y && y <= rulec.y + rulec.h) {
         databus.gameState = 8
+        databus.fingerAniTime = 0
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
