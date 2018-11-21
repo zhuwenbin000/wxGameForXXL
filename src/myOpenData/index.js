@@ -9,6 +9,7 @@ const ratio = wx.getSystemInfoSync().pixelRatio;
 sharedCanvas.width = screenWidth * ratio;
 sharedCanvas.height = screenHeight * ratio;
 
+
 context.restore();
 context.scale(ratio, ratio);
 context.clearRect(0, 0, screenWidth * ratio, screenHeight * ratio);
@@ -28,7 +29,7 @@ let myRank = undefined;
 
 initRanklist([], nowpage)
 getUserInfo();
-getMyScore();
+
 wx.onMessage(data => {
   if (data.type === 'friends') {
     nowpage = 1; //点击好友就把页码置换为1
@@ -318,10 +319,11 @@ function drawMyRank() {
     
     context.fillText(`${text}分` || 0, 630, 1120);
     // 自己的名次
+    
     if (myRank != undefined) {
       context.font = '36px Arial';
       context.textAlign = 'center';
-      if (text != '0' && myScore != '0') {
+      if (text != '0' && myScore != '0' && myScore != '-') {
         context.fillText(myRank + 1, 86, 1120);
       } else {
         context.fillText('-', 86, 1120);
