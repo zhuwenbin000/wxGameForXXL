@@ -259,26 +259,26 @@ export default class GameModal {
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
       ctx.drawImage(Robj["rule"], 0, 0, Robj["rule"].width, Robj["rule"].height, (824 - 768) / 2 * ratio, 100 * ratio, 768 * ratio, 1308 * ratio);
-      if (databus.fingerAniTime < 350){
+      if (databus.fingerAniTime < 230){
         databus.fingerAniTime++
       }else{
         databus.fingerAniTime = 0
       }
-      if (databus.fingerAniTime < 40) {
+      if (databus.fingerAniTime < 30) {
         //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + databus.fingerAniTime/40 * 140) * ratio, 320 * ratio, 90 * ratio, 92 * ratio);
-      } else if (databus.fingerAniTime >= 40 && databus.fingerAniTime < 80) {
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + databus.fingerAniTime/30 * 140) * ratio, 320 * ratio, 90 * ratio, 92 * ratio);
+      } else if (databus.fingerAniTime >= 30 && databus.fingerAniTime < 60) {
         //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (270 - (1 - (80 - databus.fingerAniTime) / 40) * 140) * ratio, (320 + (1 - (80 - databus.fingerAniTime) / 40) * 100) * ratio, 90 * ratio, 92 * ratio);
-      } else if (databus.fingerAniTime >= 80 && databus.fingerAniTime < 240) {
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (270 - (1 - (60 - databus.fingerAniTime) / 30) * 140) * ratio, (320 + (1 - (60 - databus.fingerAniTime) / 30) * 100) * ratio, 90 * ratio, 92 * ratio);
+      } else if (databus.fingerAniTime >= 60 && databus.fingerAniTime < 140) {
         //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + (databus.fingerAniTime - 80) / 160 * 540) * ratio, 420 * ratio, 90 * ratio, 92 * ratio);
-      } else if (databus.fingerAniTime >= 240 && databus.fingerAniTime < 280) {
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + (databus.fingerAniTime - 60) / 80 * 540) * ratio, 420 * ratio, 90 * ratio, 92 * ratio);
+      } else if (databus.fingerAniTime >= 140 && databus.fingerAniTime < 170) {
         //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + 540) * ratio, (420 - (1 - (280 - databus.fingerAniTime) / 40) * 100) * ratio, 90 * ratio, 92 * ratio);
-      } else if (databus.fingerAniTime >= 280 && databus.fingerAniTime < 320) {
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + 540) * ratio, (420 - (1 - (170 - databus.fingerAniTime) / 30) * 100) * ratio, 90 * ratio, 92 * ratio);
+      } else if (databus.fingerAniTime >= 170 && databus.fingerAniTime < 200) {
         //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + 540 - (1 - (320 - databus.fingerAniTime) / 40) * 140) * ratio, 320 * ratio, 90 * ratio, 92 * ratio);
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + 540 - (1 - (200 - databus.fingerAniTime) / 30) * 140) * ratio, 320 * ratio, 90 * ratio, 92 * ratio);
       }
       
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
