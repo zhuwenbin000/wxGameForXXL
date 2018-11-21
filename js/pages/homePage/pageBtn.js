@@ -48,7 +48,7 @@ export default class PageBtn {
    * 首页按钮绘制函数
    */
   constructor() {
-    if (databus.userinfo) {
+    if (databus.userinfo && databus.userinfo.userInfo && databus.userinfo.userInfo.nickName) {
       this.savedata(databus.userinfo)//同步用户数据 每次进来都同步一下昵称头像等数据
     }
     this.getBtnposition()

@@ -11,11 +11,6 @@ export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
-    // if (databus.userinfo){ //如果可以获取到用户信息 直接去获取最高分
-    //   this.getscore()
-    // }
-   
-
   }
   getscore() { //获取最高分
     let me = this;
