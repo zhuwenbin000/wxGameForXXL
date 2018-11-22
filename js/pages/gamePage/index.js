@@ -154,7 +154,6 @@ export default class Index {
     databus.preScoreStart = databus.preScoreEnd;
     databus.preScoreEnd = this.getScoreBySb(databus.selectBlocks) || 0;
     if (databus.preScoreStart != databus.preScoreEnd) {
-      console.log("1")
       var totalTime = 15
       databus.preScoreAniTime = databus.preScoreAniTime + 1
       if (databus.preScoreAniTime > totalTime) {
@@ -204,8 +203,10 @@ export default class Index {
       //增加步数红点坐标宽高
       ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
     }else{
-      //增加步数购买提示
-      ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
+      if(databus.usergold >= databus.stepprice){
+        //增加步数购买提示
+        ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
+      }
     }
     //增加步数价格背景坐标宽高
     ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, aspbc.x, aspbc.y, aspbc.w, aspbc.h);
@@ -297,7 +298,7 @@ export default class Index {
       this.gameEnd.render(ctx)
     }
 
-    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8 || databus.gameState == 9) {
+    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8 || databus.gameState == 9 || databus.gameState == 10) {
       this.gameModal.render(ctx)
     }
 
@@ -668,7 +669,12 @@ export default class Index {
       if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 142) * ratio)) {
         databus.btnPlus = 1
         setTimeout(() => {
-          databus.gameState = 1
+          if(databus.firstRule){
+            databus.gameState = 10
+            databus.firstRule = false
+          }else{
+            databus.gameState = 1
+          }
           databus.btnPlus = 0
           databus.showRule = false
           wx.setStorage({

@@ -70,8 +70,10 @@ export default class Main {
           if(databus.showRule){
             //展示规则页
             databus.gameState = 8
+            //首次进入规则页
+            databus.firstRule = true
           }else{
-            databus.gameState = 1
+            databus.gameState = 10
           }
         }
         if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()

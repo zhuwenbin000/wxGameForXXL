@@ -168,7 +168,7 @@ export default class GameModal {
       const rotateTime = 120;
       const aniTime = 10;
       // const endTime = 180;
-      if (databus.passStateTime > endTime){
+      if (databus.passStateTime > endTime - 1){
         databus.passStateTime = 0
         databus.gameState = 10
         return
@@ -322,10 +322,8 @@ export default class GameModal {
     //10:闯关动画
     if (databus.gameState == 10) {
       const endTime = 120;
-      const rotateTime = 120;
       const aniTime = 10;
-      // const endTime = 180;
-      if (databus.passStateTime > endTime){
+      if (databus.passStateTime > endTime - 1){
         databus.passStateTime = 0
         databus.gameState = 1
         return
@@ -336,77 +334,46 @@ export default class GameModal {
         ctx.globalAlpha = 1 * databus.passStateTime / aniTime
         //绘制背景
         ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
-        //中心点变化
-        ctx.translate(414 * ratio, 550 * ratio)
-        //旋转
-        ctx.rotate(Math.PI * databus.passStateTime / rotateTime)
-        //过关光图
-        ctx.drawImage(Robj["passStateBg"], 0, 0, Robj["passStateBg"].width, Robj["passStateBg"].height, -414 * ratio, -550 * ratio, 828 * ratio, 1100 * ratio);
-        //复位旋转和中心点以及透明度
-        ctx.rotate(-Math.PI * databus.passStateTime / rotateTime)
-        ctx.translate(-414 * ratio, -550 * ratio)
+        //关卡
+        ctx.drawImage(Robj["nextStage"], 0, 0, Robj["nextStage"].width, Robj["nextStage"].height, (828 - 676) / 2 * ratio + 338 * ratio * (1 - databus.passStateTime / aniTime), 370 * ratio + 208 * ratio * (1 - databus.passStateTime / aniTime), 676 * ratio * databus.passStateTime / aniTime, 416 * ratio * databus.passStateTime / aniTime);
         ctx.globalAlpha = 1
-        //过关
-        ctx.drawImage(Robj["passState"], 0, 0, Robj["passState"].width, Robj["passState"].height, (828 - 540) / 2 * ratio + 270 * ratio * (1 - databus.passStateTime / aniTime), 370 * ratio + 281 * ratio * (1 - databus.passStateTime / aniTime), 540 * ratio * databus.passStateTime / aniTime, 562 * ratio * databus.passStateTime / aniTime);
         if (databus.passStateTime == aniTime) {
           ctx.textAlign = 'center';
           ctx.fillStyle = '#fff';
-          ctx.font = 80 * ratio + 'px Arial';
-          ctx.fillText(databus.checkPoint, (uiWidth / 2) * ratio, 640 * ratio);
-          ctx.textAlign = 'left';
-          ctx.fillStyle = '#f76001';
           ctx.font = 50 * ratio + 'px Arial';
-          ctx.fillText(databus.rewardstep, 430 * ratio, 770 * ratio);
+          //剩余步数
+          ctx.fillText(databus.steps, 390 * ratio, 605 * ratio);
+          //过关分数
+          ctx.fillText(databus.passScore, 440 * ratio, 665 * ratio);
         }
       } else if (databus.passStateTime > aniTime && databus.passStateTime < 100 + aniTime) {
         //绘制背景
         ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
-        //中心点变化
-        ctx.translate(414 * ratio, 550 * ratio)
-        //旋转
-        ctx.rotate(Math.PI * databus.passStateTime / rotateTime)
-        //过关光图
-        ctx.drawImage(Robj["passStateBg"], 0, 0, Robj["passStateBg"].width, Robj["passStateBg"].height, -414 * ratio, -550 * ratio, 828 * ratio, 1100 * ratio);
-        //复位旋转和中心点以及透明度
-        ctx.rotate(-Math.PI * databus.passStateTime / rotateTime)
-        ctx.translate(-414 * ratio, -550 * ratio)
-        //过关
-        ctx.drawImage(Robj["passState"], 0, 0, Robj["passState"].width, Robj["passState"].height, (828 - 540) / 2 * ratio, 370 * ratio, 540 * ratio, 562 * ratio);
-
+        //关卡
+        ctx.drawImage(Robj["nextStage"], 0, 0, Robj["nextStage"].width, Robj["nextStage"].height, (828 - 676) / 2 * ratio, 370 * ratio, 676 * ratio , 416 * ratio);
         ctx.textAlign = 'center';
         ctx.fillStyle = '#fff';
-        ctx.font = 80 * ratio + 'px Arial';
-        ctx.fillText(databus.checkPoint, (uiWidth / 2) * ratio, 640 * ratio);
-        ctx.textAlign = 'left';
-        ctx.fillStyle = '#f76001';
         ctx.font = 50 * ratio + 'px Arial';
-        ctx.fillText(databus.rewardstep, 430 * ratio, 770 * ratio);
+        //剩余步数
+        ctx.fillText(databus.steps, 390 * ratio, 605 * ratio);
+        //过关分数
+        ctx.fillText(databus.passScore, 440 * ratio, 665 * ratio);
       } else {
         //透明度变化
         ctx.globalAlpha = 1 * (endTime - databus.passStateTime) / aniTime
         //绘制背景
         ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
-        //中心点变化
-        ctx.translate(414 * ratio, 550 * ratio)
-        //旋转
-        ctx.rotate(Math.PI * (aniTime + endTime - databus.passStateTime) / rotateTime)
-        //过关光图
-        ctx.drawImage(Robj["passStateBg"], 0, 0, Robj["passStateBg"].width, Robj["passStateBg"].height, -414 * ratio, -550 * ratio, 828 * ratio, 1100 * ratio);
-        //复位旋转和中心点以及透明度
-        ctx.rotate(-Math.PI * (aniTime + endTime - databus.passStateTime) / rotateTime)
-        ctx.translate(-414 * ratio, -550 * ratio)
+        //关卡
+        ctx.drawImage(Robj["nextStage"], 0, 0, Robj["nextStage"].width, Robj["nextStage"].height, (828 - 676) / 2 * ratio + 338 * ratio * (1 - (endTime - databus.passStateTime) / aniTime), 370 * ratio + 208 * ratio * (1 - (endTime - databus.passStateTime) / aniTime), 676 * ratio * (endTime - databus.passStateTime) / aniTime, 416 * ratio * (endTime - databus.passStateTime) / aniTime);
         ctx.globalAlpha = 1
-        //过关
-        ctx.drawImage(Robj["passState"], 0, 0, Robj["passState"].width, Robj["passState"].height, (828 - 540) / 2 * ratio + 270 * ratio * (1 - (endTime - databus.passStateTime) / aniTime), 370 * ratio + 281 * ratio * (1 - (endTime - databus.passStateTime) / aniTime), 540 * ratio * (endTime - databus.passStateTime) / aniTime, 562 * ratio * (endTime - databus.passStateTime) / aniTime);
-        if (databus.passStateTime ==  (100 + aniTime)) {
+        if (databus.passStateTime == (100 + aniTime)) {
           ctx.textAlign = 'center';
           ctx.fillStyle = '#fff';
-          ctx.font = 80 * ratio + 'px Arial';
-          ctx.fillText(databus.checkPoint, (uiWidth / 2) * ratio, 640 * ratio);
-          ctx.textAlign = 'left';
-          ctx.fillStyle = '#f76001';
           ctx.font = 50 * ratio + 'px Arial';
-          ctx.fillText(databus.rewardstep, 430 * ratio, 770 * ratio);
+          //剩余步数
+          ctx.fillText(databus.steps, 390 * ratio, 605 * ratio);
+          //过关分数
+          ctx.fillText(databus.passScore, 440 * ratio, 665 * ratio);
         }
       }
     }

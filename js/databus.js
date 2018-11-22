@@ -130,6 +130,7 @@ export default class DataBus {
     this.shareConfig = {} //分享配置
     this.btnPlus = 0 //按钮变大效果
     this.fingerAniTime = 0 //手指滑动动画
+    this.firstRule = false //首次进入规则页
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 334 * ratio, //棋盘到顶部的距离
