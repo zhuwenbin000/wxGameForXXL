@@ -760,7 +760,7 @@ export default class Index {
       let rc = this.getRC(x, y)
 
       //如果移动不在砖块内就return
-      if (!rc) {
+      if (!rc || databus.selectBlocks.length == 0) {
         return
       }
       //已选择的上一个砖块
