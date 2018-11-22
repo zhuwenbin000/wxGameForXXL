@@ -118,6 +118,12 @@ export default class Index {
     this.getUserInfo()
     this.gameEnd = new GameEnd()
     this.gameModal = new GameModal()
+    //解决点击开始游戏断网情况导致的黑屏，强制返回首页
+    setTimeout(()=>{
+      if (databus.piecesLevelProbblt.piecesLevel.length == 0){
+        databus.scene = 0
+      }
+    },10000)
   }
 
   //页面notOnShow 
@@ -753,7 +759,7 @@ export default class Index {
       let rc = this.getRC(x, y)
 
       //如果移动不在砖块内就return
-      if (!rc) {
+      if (!rc || databus.selectBlocks.length == 0) {
         return
       }
       //已选择的上一个砖块

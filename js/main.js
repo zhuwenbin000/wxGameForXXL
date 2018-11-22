@@ -64,9 +64,9 @@ export default class Main {
       // console.log(databus.scene)
       if (databus.scene == 1) {
         if (!pageState.gamePage) {
-          
           databus.pageStateUpdate('gamePage')
           self.gamePage.restart(ctx)
+          
           if(databus.showRule){
             //展示规则页
             databus.gameState = 8

@@ -257,6 +257,31 @@ export default class GameModal {
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
       ctx.drawImage(Robj["rule"], 0, 0, Robj["rule"].width, Robj["rule"].height, (824 - 768) / 2 * ratio, 100 * ratio, 768 * ratio, 1308 * ratio);
+<<<<<<< HEAD
+=======
+      if (databus.fingerAniTime < 230){
+        databus.fingerAniTime++
+      }else{
+        databus.fingerAniTime = 0
+      }
+      if (databus.fingerAniTime < 30) {
+        //手指动画
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + databus.fingerAniTime/30 * 140) * ratio, 320 * ratio, 90 * ratio, 92 * ratio);
+      } else if (databus.fingerAniTime >= 30 && databus.fingerAniTime < 60) {
+        //手指动画
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (270 - (1 - (60 - databus.fingerAniTime) / 30) * 140) * ratio, (320 + (1 - (60 - databus.fingerAniTime) / 30) * 100) * ratio, 90 * ratio, 92 * ratio);
+      } else if (databus.fingerAniTime >= 60 && databus.fingerAniTime < 140) {
+        //手指动画
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + (databus.fingerAniTime - 60) / 80 * 540) * ratio, 420 * ratio, 90 * ratio, 92 * ratio);
+      } else if (databus.fingerAniTime >= 140 && databus.fingerAniTime < 170) {
+        //手指动画
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + 540) * ratio, (420 - (1 - (170 - databus.fingerAniTime) / 30) * 100) * ratio, 90 * ratio, 92 * ratio);
+      } else if (databus.fingerAniTime >= 170 && databus.fingerAniTime < 200) {
+        //手指动画
+        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + 540 - (1 - (200 - databus.fingerAniTime) / 30) * 140) * ratio, 320 * ratio, 90 * ratio, 92 * ratio);
+      }
+      
+>>>>>>> 557cc546737c550609da47bb0b56c4f2529e29a4
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
         //弹框确认
