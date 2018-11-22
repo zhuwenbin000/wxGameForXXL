@@ -133,10 +133,8 @@ export default class PageBtn {
       tradecode: 'sys04',
       apiType: 'user',
       method: 'POST',
-      success(data) {
-        
-        var bestscore = data.body.user.bestscore;
-        
+      success(data) { 
+        var bestscore = data.body.user.bestscore;    
         databus.bestscore = bestscore;
       }
     }

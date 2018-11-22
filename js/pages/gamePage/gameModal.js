@@ -18,8 +18,6 @@ let R = {
   "passState": "images/gamePage/passState.png",
   "ruleBg": "images/gameModal/rule_bg.png",
   "rule": "images/gameModal/rule.png",
-  "finger": "images/gameModal/finger.png",
-  "nextStage": "images/gameModal/next_stage.png",
   "iknow": "images/gameModal/iknow.png",
   "passStateBg": "images/gamePage/passStateBg.png",
 }
@@ -259,28 +257,6 @@ export default class GameModal {
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
       ctx.drawImage(Robj["rule"], 0, 0, Robj["rule"].width, Robj["rule"].height, (824 - 768) / 2 * ratio, 100 * ratio, 768 * ratio, 1308 * ratio);
-      if (databus.fingerAniTime < 350){
-        databus.fingerAniTime++
-      }else{
-        databus.fingerAniTime = 0
-      }
-      if (databus.fingerAniTime < 40) {
-        //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + databus.fingerAniTime/40 * 140) * ratio, 320 * ratio, 90 * ratio, 92 * ratio);
-      } else if (databus.fingerAniTime >= 40 && databus.fingerAniTime < 80) {
-        //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (270 - (1 - (80 - databus.fingerAniTime) / 40) * 140) * ratio, (320 + (1 - (80 - databus.fingerAniTime) / 40) * 100) * ratio, 90 * ratio, 92 * ratio);
-      } else if (databus.fingerAniTime >= 80 && databus.fingerAniTime < 240) {
-        //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + (databus.fingerAniTime - 80) / 160 * 540) * ratio, 420 * ratio, 90 * ratio, 92 * ratio);
-      } else if (databus.fingerAniTime >= 240 && databus.fingerAniTime < 280) {
-        //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + 540) * ratio, (420 - (1 - (280 - databus.fingerAniTime) / 40) * 100) * ratio, 90 * ratio, 92 * ratio);
-      } else if (databus.fingerAniTime >= 280 && databus.fingerAniTime < 320) {
-        //手指动画
-        ctx.drawImage(Robj["finger"], 0, 0, Robj["finger"].width, Robj["finger"].height, (130 + 540 - (1 - (320 - databus.fingerAniTime) / 40) * 140) * ratio, 320 * ratio, 90 * ratio, 92 * ratio);
-      }
-      
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
         //弹框确认
@@ -291,6 +267,7 @@ export default class GameModal {
         ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, 250 * ratio, 1235 * ratio, 312 * ratio, 142 * ratio);
       }
     }
+
 
     //9:游戏异常弹框
     if (databus.gameState == 9) {
@@ -317,8 +294,5 @@ export default class GameModal {
       ctx.fillText('请检查网络设置', (uiWidth / 2) * ratio, 800 * ratio);
 
     }
-
-    //10:闯关动画
-    
   }
 }

@@ -27,10 +27,8 @@ let pageindex = 1;
 const homeimg = wx.createImage();
 homeimg.src = 'images/rank/home.png';
 
-let friend_loan = false;
-let world_loan = false;
-let prov_loan = false;
-let next_loan = false;
+let friend_loan = false; //按钮重复点击锁
+
 /**
  * 游戏页
  */
@@ -41,6 +39,11 @@ export default class Index {
     this.aniId = 2
 
   }
+  changestate() {
+    setTimeout(() => {
+      friend_loan = true;
+    }, 800)
+  }
   getWorldData() { //获取世界排行榜数据
     let me = this;
     let options = {
@@ -50,13 +53,18 @@ export default class Index {
       data: {
         user: true,
         start: 0,
-        limit: 500
+        limit: 300
       },
       success(data) {
-        // data.body.user_list = [...data.body.user_list]
+        var list = [];
+        data.body.user_list.map(item => {
+          if (item.logopath && list.length < 200) {
+            list.push(item)
+          }
+        })
         openDataContext.postMessage({
           type: 'world',
-          text: data.body.user_list
+          text: list
         });
       }
     }
@@ -83,6 +91,7 @@ export default class Index {
     this.ranking = true;
   }
   restart(ctx) {
+    this.changestate()
     this.music = new Music()
     this.module_type = 1;
     ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -94,7 +103,7 @@ export default class Index {
     databus.friend_back_state = false;
     window.cancelAnimationFrame(this.aniId);
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
-    
+
   }
 
   finish() {
@@ -137,17 +146,19 @@ export default class Index {
       this.finish()
       setTimeout(() => {
         databus.scene = 0
-      },databus.laterTime)
+      }, databus.laterTime)
     }
     if (x >= friend_area.startX && x <= friend_area.endX && y >= friend_area.startY && y <= friend_area.endY) {
       this.music.playMusic('btnDown')
-      if (friend_loan || world_loan) {
+
+      if (friend_loan) {
+        friend_loan = false;
+        setTimeout(() => {
+          friend_loan = true;
+        }, 800)
+      } else {
         return;
       }
-      friend_loan = true;
-      setTimeout(() => {
-        friend_loan = false;
-      }, 500)
       this.messageSharecanvas()
       this.module_type = 1
       this.render(this.ctx)
@@ -155,13 +166,14 @@ export default class Index {
 
     if (x >= world_area.startX && x <= world_area.endX && y >= world_area.startY && y <= world_area.endY) {
       this.music.playMusic('btnDown')
-      if (world_loan || friend_loan) {
+      if (friend_loan) {
+        friend_loan = false;
+        setTimeout(() => {
+          friend_loan = true;
+        }, 800)
+      } else {
         return;
       }
-      world_loan = true;
-      setTimeout(() => {
-        world_loan = false;
-      }, 500)
       this.getWorldData()
       this.module_type = 2
       this.render(this.ctx)
@@ -169,14 +181,15 @@ export default class Index {
 
     if (x >= databus.shareProv.x && x <= databus.shareProv.x + databus.shareProv.w && y >= databus.shareProv.y && y <= databus.shareProv.h + databus.shareProv.y) {
       this.music.playMusic('btnDown')
-      if (prov_loan||next_loan){
+      if (friend_loan) {
+        friend_loan = false;
+        setTimeout(() => {
+          friend_loan = true;
+        }, 600)
+      } else {
         return;
       }
-      prov_loan = true;
-      setTimeout(()=>{
-        prov_loan = false;
-      },500)
-     
+
       if (!databus.provbtn_state) {
         databus.provbtn_state = true;
         setTimeout(() => {
@@ -197,14 +210,16 @@ export default class Index {
     }
     if (x >= databus.shareNext.x && x <= databus.shareNext.x + databus.shareNext.w && y >= databus.shareNext.y && y <= databus.shareNext.h + databus.shareNext.y) {
       this.music.playMusic('btnDown')
-      if (next_loan || prov_loan) {
+      if (friend_loan) {
+        friend_loan = false;
+        setTimeout(() => {
+          friend_loan = true;
+        }, 600)
+      } else {
+
         return;
       }
-      next_loan = true;
-      setTimeout(() => {
-        next_loan = false;
-      }, 500)
-      
+
       if (!databus.nextbtn_state) {
         databus.nextbtn_state = true;
         setTimeout(() => {
