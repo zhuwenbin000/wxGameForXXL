@@ -59,6 +59,7 @@ wx.onMessage(data => {
   } else if (data.type === 'provfriend') {
     initRanklist(friendData, nowpage - 1, 'reduce');
   } else if (data.type === 'nextworld') {
+
     initRanklist(worldData, nowpage + 1, 'add');
   } else if (data.type === 'provworld') {
     initRanklist(worldData, nowpage - 1, 'reduce');
@@ -72,7 +73,7 @@ function initRanklist(list, page, type) {
     nowpage++
   } else if (type == 'reduce' && list.length > 0 && nowpage > 0) {
     nowpage--
-  }
+  } 
   if (list.length > 0) { //有数据才渲染
     let length = 7
     let itemHeight = 917 / 7;
@@ -218,6 +219,7 @@ function getMyScore() {
 }
 
 function updateMaxScore(score) {
+  
   wx.getUserCloudStorage({
     keyList: ['score'],
     success: res => {
@@ -240,7 +242,7 @@ function updateMaxScore(score) {
       });
 
       //判断当前分数是否超过最高分
-      if (maxScore - 0 < score.text - 0) {
+      if (maxScore - 0 <= score.text - 0) {
         let KVData = JSON.stringify({
           "wxgame": {
             "score": score,
@@ -268,7 +270,7 @@ function updateMaxScore(score) {
                 value: KVData
               }]
             });
-
+            
           }
         });
       }
@@ -305,6 +307,7 @@ function sortByScore(type, data) {
   myRank = array.findIndex((item) => { 
     return  item.avatarUrl == myInfo.avatarUrl;
   });
+  
   if (myRank == -1){
     myRank = '-';
   }
