@@ -200,8 +200,13 @@ export default class Index {
     ctx.drawImage(this.Robj["music"], 0, 0, this.Robj["music"].width, this.Robj["music"].height, mc.x, mc.y, mc.w, mc.h);
     //绘制增加步数按钮
     ctx.drawImage(this.Robj["addSteps"], 0, 0, this.Robj["addSteps"].width, this.Robj["addSteps"].height, asc.x, asc.y, asc.w, asc.h);
-    //增加步数红点坐标宽高
-    ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
+    if(databus.usersteps != 0){
+      //增加步数红点坐标宽高
+      ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
+    }else{
+      //增加步数购买提示
+      ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
+    }
     //增加步数价格背景坐标宽高
     ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, aspbc.x, aspbc.y, aspbc.w, aspbc.h);
     // //绘制彩色道具按钮
@@ -252,7 +257,9 @@ export default class Index {
     ctx.fillText(databus.stepprice, asprc.x, asprc.y);
     //增加步数拥有数量
     ctx.font = asuc.font;
-    ctx.fillText(databus.usersteps, asuc.x, asuc.y);
+    if(databus.usersteps != 0){
+      ctx.fillText(databus.usersteps, asuc.x, asuc.y);
+    }
     // //彩色道具价格
     // ctx.font = ctprc.font;
     // ctx.fillText(databus.hammerprice, ctprc.x, ctprc.y);

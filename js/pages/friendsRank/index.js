@@ -48,7 +48,6 @@ export default class Index {
       apiType: 'user',
       method: 'POST',
       data: {
-        user: true,
         start: 0,
         limit: 500
       },

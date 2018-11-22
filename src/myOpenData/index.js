@@ -221,7 +221,25 @@ function updateMaxScore(score) {
   wx.getUserCloudStorage({
     keyList: ['score'],
     success: res => {
+
+      //判断是否最高分
       let maxScore = res.KVDataList.length > 0 ? JSON.parse(res.KVDataList[0].value).wxgame.score.text : 0;
+
+      //最高分bug解决 同步一个新的key:maxScore
+      let KVData = JSON.stringify({
+        "wxgame": {
+          "score": maxScore,
+          "update_time": new Date().getTime()
+        }
+      })
+      wx.setUserCloudStorage({
+        KVDataList: [{
+          key: 'maxScore',
+          value: KVData
+        }]
+      });
+
+      //判断当前分数是否超过最高分
       if (maxScore - 0 < score.text - 0) {
         let KVData = JSON.stringify({
           "wxgame": {
@@ -229,13 +247,27 @@ function updateMaxScore(score) {
             "update_time": new Date().getTime()
           }
         })
-
+        //设置最高分
         wx.setUserCloudStorage({
           KVDataList: [{
             key: 'score',
             value: KVData
           }],
           success: res => {
+
+            //最高分bug解决 如果最高分更新 就更新maxscore的分数
+            let KVData = JSON.stringify({
+              "wxgame": {
+                "score": score.text,
+                "update_time": new Date().getTime()
+              }
+            })
+            wx.setUserCloudStorage({
+              KVDataList: [{
+                key: 'maxScore',
+                value: KVData
+              }]
+            });
 
           }
         });

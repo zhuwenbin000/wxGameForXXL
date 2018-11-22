@@ -9,6 +9,7 @@ export function ajax(options) {
   //如果不是login过来就判断登录标志
   if (options.tradecode != 'sys01') {
     let loginflag = wx.getStorageSync('loginflag') //获取登录标志
+    let userId = wx.getStorageSync('userId') //获取登录标志
     //如果没有登录标志 重新登录并再次调用  如果有参数拼接loginflag传入
     if (!loginflag) {
       userLogin(options)
@@ -16,17 +17,39 @@ export function ajax(options) {
     }else{
       //如果是user类型
       if (options.apiType == 'user'){
-        options.data = {
-          user: {
-            ...options.data,
-            loginflag: loginflag
+        if(!options.data || !options.data.user){
+          options.data = {
+            user: {
+              ...options.data,
+              loginflag: loginflag,
+              userId:userId
+            }
+          }
+        }else{
+          options.data = {
+            user: {
+              ...options.data.user,
+              loginflag: loginflag,
+              userId:userId
+            }
           }
         }
       } else if (options.apiType == 'version') {
-        options.data = {
-          version: {
-            ...options.data,
-            loginflag: loginflag
+        if(!options.data || !options.data.version){
+          options.data = {
+            version: {
+              ...options.data,
+              loginflag: loginflag,
+              userId:userId
+            }
+          }
+        }else{
+          options.data = {
+            version: {
+              ...options.data.version,
+              loginflag: loginflag,
+              userId:userId
+            }
           }
         }
       }
@@ -80,6 +103,7 @@ export function userLogin(options) {
         success(data) {
           if (data.result.code == '0') {//处理成功
             wx.setStorageSync('loginflag', data.body.user.loginflag)
+            wx.setStorageSync('userId', data.body.user.userid)
             if (options.tradecode) {
               ajax(options)//再次调用
             }else{
