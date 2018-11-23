@@ -312,7 +312,7 @@ export default class Index {
       } else {
         this.STATE = "静稳状态";
       }
-    } else if (this.STATE == "爆破动画" && this.f > this.startBomb + 21) {
+    } else if (this.STATE == "爆破动画" && this.f > this.startBomb + 41) {
       this.STATE = "下落动画";
       this.map.dropDown();
       this.startDropDown = this.f
