@@ -1,8 +1,3 @@
-
-import DataBus from '../databus'
-
-let databus = new DataBus()
-
 let apiUrl = 'https://koba-studio.com/kobaserver/service/json';
 //发送请求
 export function ajax(options) {

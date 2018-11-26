@@ -95,6 +95,7 @@ export default class Index {
       "doubleHit7": "images/gamePage/doubleHit/7.png",
       "doubleHit8": "images/gamePage/doubleHit/8.png",
       "doubleHit9": "images/gamePage/doubleHit/9.png",
+      "buyTips": "images/gamePage/buy_tips.png",
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
@@ -106,11 +107,15 @@ export default class Index {
 
     //是否触发拖拽
     this.istuozhuai = false;
+    this.f = 0;
+    this.tipsAni = 0;
   }
 
   //重置页面
   restart(ctx) {
     this.ctx = ctx
+    this.f = 0
+    this.tipsAni = 0
     this.music = new Music()
     this.music.playGameBgm()
     databus.gameInfoReset()
@@ -124,6 +129,18 @@ export default class Index {
         databus.scene = 0
       }
     },10000)
+    
+    //广告位展示
+    // databus.showBannerAd()
+    // let bannerAd = wx.createBannerAd({
+    //   adUnitId: 'adunit-43f5508f47958d6b',
+    //   style: {
+    //       left: 50 * ratio,
+    //       top: 1300 * ratio,
+    //       width: 728 * ratio,
+    //   }
+    // })
+    // bannerAd.show()
   }
 
   //页面notOnShow 
@@ -140,6 +157,9 @@ export default class Index {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     //帧编号
     this.f++;
+    if(this.f % 10 == 0){
+      this.tipsAni++
+    }
     //绘制背景。背景没动,也要每帧擦除，重绘
     ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
     //绘制棋盘
@@ -199,13 +219,21 @@ export default class Index {
     ctx.drawImage(this.Robj["music"], 0, 0, this.Robj["music"].width, this.Robj["music"].height, mc.x, mc.y, mc.w, mc.h);
     //绘制增加步数按钮
     ctx.drawImage(this.Robj["addSteps"], 0, 0, this.Robj["addSteps"].width, this.Robj["addSteps"].height, asc.x, asc.y, asc.w, asc.h);
-    if(databus.usersteps != 0){
+    if(databus.usersteps != 0 || databus.usersteps != '0'){
       //增加步数红点坐标宽高
       ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
     }else{
       if(databus.usergold >= databus.stepprice){
-        //增加步数购买提示
-        ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
+        if(!databus.buyTips){
+          
+          if(this.tipsAni % 2 == 1){
+            //增加步数购买提示
+            ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 325 * ratio, 1090 * ratio, 50 * ratio, 60 * ratio);
+          }else{
+            //增加步数购买提示
+            ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 329 * ratio, 1084 * ratio, 42 * ratio, 52 * ratio);
+          }
+        }
       }
     }
     //增加步数价格背景坐标宽高
@@ -258,7 +286,7 @@ export default class Index {
     ctx.fillText(databus.stepprice, asprc.x, asprc.y);
     //增加步数拥有数量
     ctx.font = asuc.font;
-    if(databus.usersteps != 0){
+    if(databus.usersteps != 0 || databus.usersteps != '0'){
       ctx.fillText(databus.usersteps, asuc.x, asuc.y);
     }
     // //彩色道具价格
@@ -298,7 +326,7 @@ export default class Index {
       this.gameEnd.render(ctx)
     }
 
-    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8 || databus.gameState == 9 || databus.gameState == 10) {
+    if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8 || databus.gameState == 9 || databus.gameState == 10 || databus.gameState == 11) {
       this.gameModal.render(ctx)
     }
 
@@ -413,26 +441,7 @@ export default class Index {
     ajax(options)
   }
 
-  //续命接口
-  continueGame(type,steps) {
-    var self = this;
-    let options = {
-      tradecode: 'game04',
-      apiType: 'user',
-      method: 'POST',
-      data:{
-        "gameid": databus.gameId, 
-        "continuetype": type, 
-        "stageno": databus.checkPoint
-      },
-      success(data) {
-        databus.gameState = 1
-        databus.isNewScore = false
-        databus.steps = parseInt(databus.steps) + parseInt(steps)
-      }
-    }
-    ajax(options)
-  }
+  
   //购买道具
   buyTool(type) {
     ajax({
@@ -535,7 +544,7 @@ export default class Index {
           // 分享事件
           if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
             wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url })
-            this.continueGame(2, 3)
+            databus.continueGame(2, 3)
             if (databus.musicBgChange) {
               //开启音乐
               databus.musicBg = true
@@ -548,11 +557,19 @@ export default class Index {
             this.music.playMusic('btnDown')
           }
         }
-      } 
+      }else{
+        // 视频广告事件
+        if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
+          
+          databus.showVideoAd()
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+        }
+      }
 
       // // 看视频事件
       // if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
-      //   this.continueGame(1, 10)
+      //   databus.continueGame(1, 10)
       //   //按钮按下音效
       //   this.music.playMusic('btnDown')
       // }
@@ -685,7 +702,18 @@ export default class Index {
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-    } else if (databus.gameState == 1){//游戏进行中
+    } else if (databus.gameState == 11) {//8:金币规则弹框
+      // 点击确认事件
+      if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (820 * ratio) && y <= ((820 + 142) * ratio)) {
+        databus.btnPlus = 1
+        setTimeout(() => {
+          databus.gameState = 1
+          databus.btnPlus = 0
+        }, databus.laterTime)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+    }else if (databus.gameState == 1){//游戏进行中
       // 首页按钮事件
       if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
         databus.gameState = 6
@@ -709,6 +737,9 @@ export default class Index {
       }
       // 增加步数购买按钮事件
       if (x >= (270 * ratio) && x <= ((270 + 50) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 50) * ratio)) {
+        if((databus.usersteps == 0 || databus.usersteps == '0') && (databus.usergold >= databus.stepprice)){
+          databus.buyTips = true
+        }
         databus.gameState = 5
         //按钮按下音效
         this.music.playMusic('btnDown')
@@ -718,8 +749,18 @@ export default class Index {
         if (databus.usersteps > 0) {
           this.useTool('3')
         } else {
+          if((databus.usersteps == 0 || databus.usersteps == '0') && (databus.usergold >= databus.stepprice)){
+            databus.buyTips = true
+          }
           databus.gameState = 5
         }
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+      // 金币问号事件
+      if (x >= (760 * ratio) && x <= ((760 + 40) * ratio) && y >= (1119 * ratio) && y <= ((1119 + 40) * ratio)) {
+        databus.gameState = 11
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
@@ -740,6 +781,7 @@ export default class Index {
       if (rc) {
         databus.selectBlocks = []
         databus.selectBlocks.push(rc)
+        databus.selectAniBlocks.push(rc)
         //棋子按下音效
         this.music.playMusic('piecesDown' + databus.selectBlocks.length)
         this.checkDoubleHit(databus.selectBlocks)
@@ -787,6 +829,7 @@ export default class Index {
         if (this.map.blocks[rc.row][rc.col].attr.piecesType == this.map.blocks[pb.row][pb.col].attr.piecesType) {
           if (JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(rc)) == -1) {
             databus.selectBlocks.push(rc)
+            databus.selectAniBlocks.push(rc)
             //棋子按下音效
             if (databus.selectBlocks.length > 10) {
               this.music.playMusic('piecesDown10')

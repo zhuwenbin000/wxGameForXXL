@@ -1,4 +1,4 @@
-
+import { ajax } from './base/ajax'
 import Pool from './base/pool'
 
 let instance
@@ -18,6 +18,7 @@ export default class DataBus {
     instance = this
     this.pool = new Pool()
     this.reset()
+    this.createVideoAd()
   }
 
   reset() {
@@ -131,6 +132,7 @@ export default class DataBus {
     this.btnPlus = 0 //按钮变大效果
     this.fingerAniTime = 0 //手指滑动动画
     this.firstRule = false //首次进入规则页
+    this.videoAdState = false //视频广告状态
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 334 * ratio, //棋盘到顶部的距离
@@ -245,9 +247,9 @@ export default class DataBus {
       },
       coinCoordinates: { //金币坐标宽高
         x: 630 * ratio,
-        y: 1130 * ratio,
-        w: 172 * ratio,
-        h: 164 * ratio,
+        y: 1119 * ratio,
+        w: 171 * ratio,
+        h: 175 * ratio,
       },
       coinNumCoordinates: { //金币数量坐标宽高
         x: 715 * ratio,
@@ -314,7 +316,11 @@ export default class DataBus {
         h: 120 * ratio,
       },
       lookVideoCoordinates: { //游戏结束看视频
-        x: 425 * ratio,
+        // x: 425 * ratio,
+        // y: 950 * ratio,
+        // w: 318 * ratio,
+        // h: 120 * ratio,
+        x: (uiWidth - 318) / 2 * ratio,
         y: 950 * ratio,
         w: 318 * ratio,
         h: 120 * ratio,
@@ -412,10 +418,12 @@ export default class DataBus {
     this.combo = 0 //combo数
     this.prevSelectBlocks = [] //上次爆炸棋子数组
     this.selectBlocks = [] //连线棋子数组
+    this.selectAniBlocks = [] //连线旗子爆炸
     this.selfHighScore = 0 //个人历史最高分
     this.highestScore = 0 //世界最高分
     this.isguide = 0 //是否需要引导 1 需要
     this.isShare = false //本局游戏是否分享过
+    this.buyTips = false //购买提示
 
     this.score = 0 //每次开始默认分数、当前关卡获得分数
     this.gameScore = 0 //本轮游戏总分
@@ -509,5 +517,91 @@ export default class DataBus {
     }
   }
 
+  getWXFunction(name) {
+    if(typeof(wx) == 'undefined' || wx == null) {
+      return null;
+    }
+    return wx[name];
+  }
+  showBannerAd() {
+    var wxFunc = this.getWXFunction('createBannerAd');
+    if(typeof(wxFunc) != 'undefined' && wxFunc != null) {
+      var phone = wx.getSystemInfoSync();
+      var w = phone.screenWidth / 2;
+      var h = phone.screenHeight;
+      let bannerAd = wxFunc({
+        adUnitId: 'adunit-43f5508f47958d6b',
+        style: {
+          width: 828 * ratio,
+          top: 0,
+          left: 0
+        }
+      });
+      bannerAd.onResize(function() {
+        bannerAd.style.left = w - bannerAd.style.realWidth / 2 + 0.1;
+        bannerAd.style.top = h - bannerAd.style.realHeight + 0.1;
+      })
+      bannerAd.show();
+      return bannerAd;
+    } else {
+      return;
+    }
+  }
+
+  //续命接口
+  continueGame(type,steps) {
+    var self = this;
+    let options = {
+      tradecode: 'game04',
+      apiType: 'user',
+      method: 'POST',
+      data:{
+        "gameid": this.gameId, 
+        "continuetype": type, 
+        "stageno": this.checkPoint
+      },
+      success(data) {
+        self.gameState = 1
+        self.isNewScore = false
+        self.steps = parseInt(self.steps) + parseInt(steps)
+      }
+    }
+    ajax(options)
+  }
+
+  createVideoAd(){
+    this.videoAd = wx.createRewardedVideoAd({
+      adUnitId: 'adunit-64e0388ba29c2725'
+    })
+    this.videoAd.onClose(res => {
+      // 用户点击了【关闭广告】按钮
+      // 小于 2.1.0 的基础库版本，res 是一个 undefined
+      if (res && res.isEnded || res === undefined) {
+        // 正常播放结束，可以下发游戏奖励
+        this.videoAdState = true //观看完毕可以获得奖励
+        this.continueGame(1, 5)
+        if (this.musicBgChange) {
+          //开启音乐
+          this.musicBg = true
+          this.musicBgChange = false
+        }
+        // setTimeout(() => {
+        //   databus.isShare = true
+        // }, 1000)
+      }
+      else {
+          // 播放中途退出，不下发游戏奖励
+      }
+    })
+  }
+
+  showVideoAd(){
+    this.videoAd.load()
+    .then(() => this.videoAd.show())
+    .catch(err => {
+      console.log(err)
+      wx.showToast({ title: err.errMsg, icon:'none'})
+    })
+  }
 }
 

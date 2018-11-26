@@ -109,6 +109,13 @@ export default class Map {
         this.blocks[r][c].update();
         //渲染所有转块
         this.blocks[r][c].render(ctx, Robj);
+
+        //判断爆炸动画
+        for (let i = 0; i < databus.selectAniBlocks.length; i++) {
+          if(databus.selectAniBlocks[i].row == r && databus.selectAniBlocks[i].col == c ){
+            this.blocks[r][c].selectAni(ctx,i);
+          }
+        }
         // //打印地图矩阵
         // ctx.fillText(this.QRcode[r][c], c * 10, 60 + r * 10);
         // //打印自己needToBomb阵
@@ -361,6 +368,9 @@ export default class Map {
       success(data) {
         databus.usergold = parseInt(databus.usergold) + gold;
         databus.stagegold = parseInt(databus.stagegold) + gold;
+        if((databus.usersteps == 0 || databus.usersteps == '0') && (databus.usergold >= databus.stepprice) && databus.buyTips){
+          databus.buyTips = false
+        }
       }
     }
     ajax(options)

@@ -23,6 +23,7 @@ let R = {
   "iknow": "images/gameModal/iknow.png",
   "passStateBg": "images/gamePage/passStateBg.png",
   "buy": "images/gameModal/icon_buy.png",
+  "coin": "images/gameModal/coin.png",
 }
 
 //把所有的图片放到一个对象中
@@ -293,6 +294,24 @@ export default class GameModal {
       }
     }
 
+    //11:金币规则弹框
+    if (databus.gameState == 11) {
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //弹框背景
+      ctx.drawImage(Robj["coin"], 0, 0, Robj["coin"].width, Robj["coin"].height, (824 - 768) / 2 * ratio, 300 * ratio, 768 * ratio, 704 * ratio);
+      
+      if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+        databus.btnPlus++
+        //弹框确认
+        ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, (250 - 15.6) * ratio, (820 - 7.2) * ratio, 312 * 1.1 * ratio, 142 * 1.1 * ratio);
+      } else {
+        databus.btnPlus = 0
+        //弹框确认
+        ctx.drawImage(Robj["iknow"], 0, 0, Robj["iknow"].width, Robj["iknow"].height, 250 * ratio, 820 * ratio, 312 * ratio, 142 * ratio);
+      }
+    }
+
     //9:游戏异常弹框
     if (databus.gameState == 9) {
       //绘制背景
@@ -321,7 +340,7 @@ export default class GameModal {
 
     //10:闯关动画
     if (databus.gameState == 10) {
-      const endTime = 120;
+      const endTime = 50;
       const aniTime = 10;
       if (databus.passStateTime > endTime - 1){
         databus.passStateTime = 0
@@ -346,7 +365,7 @@ export default class GameModal {
           //过关分数
           ctx.fillText(databus.passScore, 440 * ratio, 665 * ratio);
         }
-      } else if (databus.passStateTime > aniTime && databus.passStateTime < 100 + aniTime) {
+      } else if (databus.passStateTime > aniTime && databus.passStateTime < 30 + aniTime) {
         //绘制背景
         ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
         //关卡
@@ -366,7 +385,7 @@ export default class GameModal {
         //关卡
         ctx.drawImage(Robj["nextStage"], 0, 0, Robj["nextStage"].width, Robj["nextStage"].height, (828 - 676) / 2 * ratio + 338 * ratio * (1 - (endTime - databus.passStateTime) / aniTime), 370 * ratio + 208 * ratio * (1 - (endTime - databus.passStateTime) / aniTime), 676 * ratio * (endTime - databus.passStateTime) / aniTime, 416 * ratio * (endTime - databus.passStateTime) / aniTime);
         ctx.globalAlpha = 1
-        if (databus.passStateTime == (100 + aniTime)) {
+        if (databus.passStateTime == (30 + aniTime)) {
           ctx.textAlign = 'center';
           ctx.fillStyle = '#fff';
           ctx.font = 50 * ratio + 'px Arial';

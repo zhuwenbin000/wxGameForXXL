@@ -47,6 +47,116 @@ let R = {
   "org_spray8": "images/gamePage/org/spray8.png",
   "org_spray9": "images/gamePage/org/spray9.png",
   "org_spray10": "images/gamePage/org/spray10.png",
+  "apple_cut0": "images/gamePage/apple/cut0.png",
+  "apple_cut1": "images/gamePage/apple/cut1.png",
+  "apple_cut2": "images/gamePage/apple/cut2.png",
+  "apple_cut3": "images/gamePage/apple/cut3.png",
+  "apple_cut4": "images/gamePage/apple/cut5.png",
+  "apple_cut5": "images/gamePage/apple/cut6.png",
+  "apple_cut6": "images/gamePage/apple/cut7.png",
+  "apple_cut7": "images/gamePage/apple/cut8.png",
+  "apple_cut8": "images/gamePage/apple/cut4.png",
+  "apple_piece0": "images/gamePage/apple/piece0.png",
+  "apple_piece1": "images/gamePage/apple/piece1.png",
+  "apple_piece2": "images/gamePage/apple/piece2.png",
+  "apple_piece3": "images/gamePage/apple/piece3.png",
+  "apple_piece4": "images/gamePage/apple/piece4.png",
+  "apple_piece5": "images/gamePage/apple/piece5.png",
+  "apple_piece6": "images/gamePage/apple/piece6.png",
+  "apple_piece7": "images/gamePage/apple/piece7.png",
+  "apple_piece8": "images/gamePage/apple/piece8.png",
+  "apple_piece9": "images/gamePage/apple/piece9.png",
+  "apple_piece10": "images/gamePage/apple/piece10.png",
+  "apple_pos0": "images/gamePage/apple/pos0.png",
+  "apple_pos1": "images/gamePage/apple/pos1.png",
+  "apple_pos2": "images/gamePage/apple/pos2.png",
+  "apple_pos3": "images/gamePage/apple/pos3.png",
+  "apple_pos4": "images/gamePage/apple/pos4.png",
+  "apple_pos5": "images/gamePage/apple/pos5.png",
+  "apple_pos6": "images/gamePage/apple/pos6.png",
+  "apple_pos7": "images/gamePage/apple/pos7.png",
+  "apple_spray0": "images/gamePage/apple/spray0.png",
+  "apple_spray1": "images/gamePage/apple/spray1.png",
+  "apple_spray2": "images/gamePage/apple/spray2.png",
+  "apple_spray3": "images/gamePage/apple/spray3.png",
+  "apple_spray4": "images/gamePage/apple/spray4.png",
+  "apple_spray5": "images/gamePage/apple/spray5.png",
+  "apple_spray6": "images/gamePage/apple/spray6.png",
+  "apple_spray7": "images/gamePage/apple/spray7.png",
+  "apple_spray8": "images/gamePage/apple/spray8.png",
+  "apple_spray9": "images/gamePage/apple/spray9.png",
+  "apple_spray10": "images/gamePage/apple/spray10.png",
+  "cherry_cut0": "images/gamePage/cherry/cut0.png",
+  "cherry_cut1": "images/gamePage/cherry/cut1.png",
+  "cherry_cut2": "images/gamePage/cherry/cut2.png",
+  "cherry_cut3": "images/gamePage/cherry/cut3.png",
+  "cherry_cut4": "images/gamePage/cherry/cut4.png",
+  "cherry_piece0": "images/gamePage/cherry/piece0.png",
+  "cherry_piece1": "images/gamePage/cherry/piece1.png",
+  "cherry_piece2": "images/gamePage/cherry/piece2.png",
+  "cherry_piece3": "images/gamePage/cherry/piece3.png",
+  "cherry_piece4": "images/gamePage/cherry/piece4.png",
+  "cherry_piece5": "images/gamePage/cherry/piece5.png",
+  "cherry_piece6": "images/gamePage/cherry/piece6.png",
+  "cherry_piece7": "images/gamePage/cherry/piece7.png",
+  "cherry_piece8": "images/gamePage/cherry/piece8.png",
+  "cherry_piece9": "images/gamePage/cherry/piece9.png",
+  "cherry_piece10": "images/gamePage/cherry/piece10.png",
+  "cherry_pos0": "images/gamePage/cherry/pos0.png",
+  "cherry_pos1": "images/gamePage/cherry/pos1.png",
+  "cherry_pos2": "images/gamePage/cherry/pos2.png",
+  "cherry_pos3": "images/gamePage/cherry/pos3.png",
+  "cherry_pos4": "images/gamePage/cherry/pos4.png",
+  "cherry_pos5": "images/gamePage/cherry/pos5.png",
+  "cherry_pos6": "images/gamePage/cherry/pos6.png",
+  "cherry_pos7": "images/gamePage/cherry/pos7.png",
+  "cherry_spray0": "images/gamePage/cherry/spray0.png",
+  "cherry_spray1": "images/gamePage/cherry/spray1.png",
+  "cherry_spray2": "images/gamePage/cherry/spray2.png",
+  "cherry_spray3": "images/gamePage/cherry/spray3.png",
+  "cherry_spray4": "images/gamePage/cherry/spray4.png",
+  "cherry_spray5": "images/gamePage/cherry/spray5.png",
+  "cherry_spray6": "images/gamePage/cherry/spray6.png",
+  "cherry_spray7": "images/gamePage/cherry/spray7.png",
+  "cherry_spray8": "images/gamePage/cherry/spray8.png",
+  "cherry_spray9": "images/gamePage/cherry/spray9.png",
+  "cherry_spray10": "images/gamePage/cherry/spray10.png",
+  "blueBerries_cut0": "images/gamePage/blueBerries/cut0.png",
+  "blueBerries_cut1": "images/gamePage/blueBerries/cut1.png",
+  "blueBerries_cut2": "images/gamePage/blueBerries/cut2.png",
+  "blueBerries_cut3": "images/gamePage/blueBerries/cut3.png",
+  "blueBerries_cut4": "images/gamePage/blueBerries/cut4.png",
+  "blueBerries_cut5": "images/gamePage/blueBerries/cut5.png",
+  "blueBerries_piece0": "images/gamePage/blueBerries/piece0.png",
+  "blueBerries_piece1": "images/gamePage/blueBerries/piece1.png",
+  "blueBerries_piece2": "images/gamePage/blueBerries/piece2.png",
+  "blueBerries_piece3": "images/gamePage/blueBerries/piece3.png",
+  "blueBerries_piece4": "images/gamePage/blueBerries/piece4.png",
+  "blueBerries_piece5": "images/gamePage/blueBerries/piece5.png",
+  "blueBerries_piece6": "images/gamePage/blueBerries/piece6.png",
+  "blueBerries_piece7": "images/gamePage/blueBerries/piece7.png",
+  "blueBerries_piece8": "images/gamePage/blueBerries/piece8.png",
+  "blueBerries_piece9": "images/gamePage/blueBerries/piece9.png",
+  "blueBerries_piece10": "images/gamePage/blueBerries/piece10.png",
+  "blueBerries_pos0": "images/gamePage/blueBerries/pos0.png",
+  "blueBerries_pos1": "images/gamePage/blueBerries/pos1.png",
+  "blueBerries_pos2": "images/gamePage/blueBerries/pos2.png",
+  "blueBerries_pos3": "images/gamePage/blueBerries/pos3.png",
+  "blueBerries_pos4": "images/gamePage/blueBerries/pos4.png",
+  "blueBerries_pos5": "images/gamePage/blueBerries/pos5.png",
+  "blueBerries_pos6": "images/gamePage/blueBerries/pos6.png",
+  "blueBerries_pos7": "images/gamePage/blueBerries/pos7.png",
+  "blueBerries_spray0": "images/gamePage/blueBerries/spray0.png",
+  "blueBerries_spray1": "images/gamePage/blueBerries/spray1.png",
+  "blueBerries_spray2": "images/gamePage/blueBerries/spray2.png",
+  "blueBerries_spray3": "images/gamePage/blueBerries/spray3.png",
+  "blueBerries_spray4": "images/gamePage/blueBerries/spray4.png",
+  "blueBerries_spray5": "images/gamePage/blueBerries/spray5.png",
+  "blueBerries_spray6": "images/gamePage/blueBerries/spray6.png",
+  "blueBerries_spray7": "images/gamePage/blueBerries/spray7.png",
+  "blueBerries_spray8": "images/gamePage/blueBerries/spray8.png",
+  "blueBerries_spray9": "images/gamePage/blueBerries/spray9.png",
+  "blueBerries_spray10": "images/gamePage/blueBerries/spray10.png",
 }
 
 let I = {};	
@@ -82,6 +192,9 @@ export default class Block {
     //自己是否正处于运动动画中
     this.isAnimate = false;
     this.staticStep = 0;
+    this.selectAniTime = 0;
+    this.selectAnif = 0;
+    this.isSelectAni = false;
   }
 
   //渲染
@@ -97,9 +210,15 @@ export default class Block {
       if(this.attr.piecesType == 0){
         //橙子
         ctx.drawImage(I["org_pos" + this.staticStep % 8], 0, 0, 124, 124, this.x, this.y, bl, bl);
-      }else{
-        //渲染普通小图
-        ctx.drawImage(Robj["icon" + this.attr.piecesType], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 1){
+        //苹果
+        ctx.drawImage(I["apple_pos" + this.staticStep % 8], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 2){
+        //蓝莓
+        ctx.drawImage(I["blueBerries_pos" + this.staticStep % 8], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 3){
+        //樱桃
+        ctx.drawImage(I["cherry_pos" + this.staticStep % 8], 0, 0, 124, 124, this.x, this.y, bl, bl);
       }
 
       if (this.attr.piecesLevel != 'level1') {
@@ -116,6 +235,27 @@ export default class Block {
         ctx.drawImage(I["org_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
         //橙子切开
         ctx.drawImage(I["org_cut" + this.bombStep % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 1){
+        //苹果碎片
+        ctx.drawImage(I["apple_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+        //苹果喷溅
+        ctx.drawImage(I["apple_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+        //苹果切开
+        ctx.drawImage(I["apple_cut" + this.bombStep % 5], 0, 0, 140, 140, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 2){
+        //蓝莓碎片
+        ctx.drawImage(I["blueBerries_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+        //蓝莓喷溅
+        ctx.drawImage(I["blueBerries_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+        //蓝莓切开
+        ctx.drawImage(I["blueBerries_cut" + this.bombStep % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 3){
+        //樱桃碎片
+        ctx.drawImage(I["cherry_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+        //樱桃喷溅
+        ctx.drawImage(I["cherry_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+        //樱桃切开
+        ctx.drawImage(I["cherry_cut" + this.bombStep % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
       }else{
         //渲染爆炸图
         ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);
@@ -143,7 +283,7 @@ export default class Block {
       }
     }
     //静态动画
-    if (!this.isBomb && this.f % 4 == 0) {
+    if (!this.isBomb && this.f % 8 == 0) {
       this.staticStep++;
     }
   }
@@ -165,6 +305,48 @@ export default class Block {
     //更改自己的行、列属性
     this.row = row;
     this.col = col;
+  }
+
+  selectAni(ctx,i){
+    this.selectAnif++
+    if(this.selectAnif % 4 == 0){
+      this.selectAniTime++
+    }
+    if(this.selectAniTime > 10){
+      this.selectAniTime = 0
+      this.selectAnif = 0
+      databus.selectAniBlocks.splice(i, 1)
+    }else{
+      if(this.attr.piecesType == 0){
+        //橙子碎片
+        ctx.drawImage(I["org_piece" + this.selectAniTime % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+        //橙子喷溅
+        ctx.drawImage(I["org_spray" + this.selectAniTime % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+        //橙子切开
+        ctx.drawImage(I["org_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 1){
+        //苹果碎片
+        ctx.drawImage(I["apple_piece" + this.selectAniTime % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+        //苹果喷溅
+        ctx.drawImage(I["apple_spray" + this.selectAniTime % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+        //苹果切开
+        ctx.drawImage(I["apple_cut" + this.selectAniTime % 5], 0, 0, 140, 140, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 2){
+        //蓝莓碎片
+        ctx.drawImage(I["blueBerries_piece" + this.selectAniTime % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+        //蓝莓喷溅
+        ctx.drawImage(I["blueBerries_spray" + this.selectAniTime % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+        //蓝莓切开
+        ctx.drawImage(I["blueBerries_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 3){
+        //樱桃碎片
+        ctx.drawImage(I["cherry_piece" + this.selectAniTime % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+        //樱桃喷溅
+        ctx.drawImage(I["cherry_spray" + this.selectAniTime % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+        //樱桃切开
+        ctx.drawImage(I["cherry_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }
+    }
   }
 
 }
