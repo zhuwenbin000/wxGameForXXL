@@ -577,7 +577,11 @@ export default class DataBus {
         this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
         this.bannerAd.style.top = h - this.bannerAd.style.realHeight + 0.1;
       })
-      this.bannerAd.show();
+      if(this.gameState == 8){
+        this.bannerAd.hide();
+      }else{
+        this.bannerAd.show();
+      }
     } 
   }
 

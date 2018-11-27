@@ -70,7 +70,6 @@ export default class Main {
       if (databus.scene == 1) {
         if (!pageState.gamePage) {
           databus.pageStateUpdate('gamePage')
-          self.gamePage.restart(gameCon,ctx,gameCanvas)
           if(databus.showRule){
             //展示规则页
             databus.gameState = 8
@@ -79,6 +78,7 @@ export default class Main {
           }else{
             databus.gameState = 10
           }
+          self.gamePage.restart(gameCon,ctx,gameCanvas)
         }
         if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()
       }

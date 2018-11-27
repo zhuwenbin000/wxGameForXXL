@@ -136,15 +136,6 @@ export default class Index {
     
     //广告位展示
     databus.showBannerAd()
-    // let bannerAd = wx.createBannerAd({
-    //   adUnitId: 'adunit-43f5508f47958d6b',
-    //   style: {
-    //       left: 50 * ratio,
-    //       top: 1300 * ratio,
-    //       width: 728 * ratio,
-    //   }
-    // })
-    // bannerAd.show()
   }
 
   //页面notOnShow 
@@ -715,6 +706,9 @@ export default class Index {
             key: "showRule",
             data: "false"
           })
+
+          //显示广告
+          databus.bannerAd && databus.bannerAd.show()
         }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
@@ -741,6 +735,8 @@ export default class Index {
       if (x >= rulec.x && x <= rulec.x + rulec.w && y >= rulec.y && y <= rulec.y + rulec.h) {
         databus.gameState = 8
         databus.fingerAniTime = 0
+        //隐藏广告
+        databus.bannerAd && databus.bannerAd.hide()
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
