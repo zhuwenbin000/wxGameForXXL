@@ -368,9 +368,9 @@ export default class Map {
       success(data) {
         databus.usergold = parseInt(databus.usergold) + gold;
         databus.stagegold = parseInt(databus.stagegold) + gold;
-        if((databus.usersteps == 0 || databus.usersteps == '0') && (databus.usergold >= databus.stepprice) && databus.buyTips){
-          databus.buyTips = false
-        }
+        // if((databus.usersteps == 0 || databus.usersteps == '0') && (databus.usergold >= databus.stepprice) && databus.buyTips){
+        //   databus.buyTips = false
+        // }
       }
     }
     ajax(options)

@@ -207,6 +207,9 @@ export default class Block {
     }
     //根据是否爆炸来渲染不同的情形
     if (!this.isBomb) {
+      if(this.selectAniTime > 0){
+        return
+      }
       if(this.attr.piecesType == 0){
         //橙子
         ctx.drawImage(I["org_pos" + this.staticStep % 8], 0, 0, 124, 124, this.x, this.y, bl, bl);
@@ -312,10 +315,26 @@ export default class Block {
     if(this.selectAnif % 4 == 0){
       this.selectAniTime++
     }
-    if(this.selectAniTime > 10){
+    if(JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(databus.selectAniBlocks[i])) == -1 ){
       this.selectAniTime = 0
       this.selectAnif = 0
       databus.selectAniBlocks.splice(i, 1)
+      return
+    }
+    if(this.selectAniTime > 10){
+      if(this.attr.piecesType == 0){
+        //橙子切开
+        ctx.drawImage(I["org_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 1){
+        //苹果切开
+        ctx.drawImage(I["apple_cut" + this.selectAniTime % 5], 0, 0, 140, 140, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 2){
+        //蓝莓切开
+        ctx.drawImage(I["blueBerries_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else if(this.attr.piecesType == 3){
+        //樱桃切开
+        ctx.drawImage(I["cherry_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }
     }else{
       if(this.attr.piecesType == 0){
         //橙子碎片

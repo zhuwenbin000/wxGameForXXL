@@ -12,6 +12,10 @@ let databus = new DataBus()
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
 const ratio = wx.getSystemInfoSync().pixelRatio;
+
+//游戏页离屏canvas
+let gameCanvas = wx.createCanvas()
+let gameCon = gameCanvas.getContext('2d')
 /**
  * 根据场景id渲染页面
  */
@@ -39,6 +43,7 @@ export default class Main {
     } else {
       this.getBaseInfo()
     }
+    
   }
   renderPage() {
     let self = this
@@ -65,8 +70,7 @@ export default class Main {
       if (databus.scene == 1) {
         if (!pageState.gamePage) {
           databus.pageStateUpdate('gamePage')
-          self.gamePage.restart(ctx)
-          
+          self.gamePage.restart(gameCon,ctx,gameCanvas)
           if(databus.showRule){
             //展示规则页
             databus.gameState = 8

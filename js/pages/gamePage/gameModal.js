@@ -340,7 +340,7 @@ export default class GameModal {
 
     //10:闯关动画
     if (databus.gameState == 10) {
-      const endTime = 50;
+      const endTime = 80;
       const aniTime = 10;
       if (databus.passStateTime > endTime - 1){
         databus.passStateTime = 0
@@ -365,7 +365,7 @@ export default class GameModal {
           //过关分数
           ctx.fillText(databus.passScore, 440 * ratio, 665 * ratio);
         }
-      } else if (databus.passStateTime > aniTime && databus.passStateTime < 30 + aniTime) {
+      } else if (databus.passStateTime > aniTime && databus.passStateTime < 60 + aniTime) {
         //绘制背景
         ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
         //关卡
@@ -385,7 +385,7 @@ export default class GameModal {
         //关卡
         ctx.drawImage(Robj["nextStage"], 0, 0, Robj["nextStage"].width, Robj["nextStage"].height, (828 - 676) / 2 * ratio + 338 * ratio * (1 - (endTime - databus.passStateTime) / aniTime), 370 * ratio + 208 * ratio * (1 - (endTime - databus.passStateTime) / aniTime), 676 * ratio * (endTime - databus.passStateTime) / aniTime, 416 * ratio * (endTime - databus.passStateTime) / aniTime);
         ctx.globalAlpha = 1
-        if (databus.passStateTime == (30 + aniTime)) {
+        if (databus.passStateTime == (60 + aniTime)) {
           ctx.textAlign = 'center';
           ctx.fillStyle = '#fff';
           ctx.font = 50 * ratio + 'px Arial';

@@ -19,6 +19,18 @@ export default class DataBus {
     this.pool = new Pool()
     this.reset()
     this.createVideoAd()
+    //判断是否是哪种设备 
+    wx.getSystemInfo({
+      success: res=>{
+        // console.log('手机信息res'+res.model)
+        let modelmes = res.model;
+        if (modelmes.search('iPhone X') != -1) {
+          //适配iphonex 刘海屏
+          this.offsetTop = 0
+        }
+      }
+    })
+
   }
 
   reset() {
@@ -133,6 +145,7 @@ export default class DataBus {
     this.fingerAniTime = 0 //手指滑动动画
     this.firstRule = false //首次进入规则页
     this.videoAdState = false //视频广告状态
+    this.offsetTop = 50 * ratio //游戏页上移高度
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 334 * ratio, //棋盘到顶部的距离
@@ -423,6 +436,7 @@ export default class DataBus {
     this.highestScore = 0 //世界最高分
     this.isguide = 0 //是否需要引导 1 需要
     this.isShare = false //本局游戏是否分享过
+    this.isLookVideo = false //本局游戏是否观看过视频
     this.buyTips = false //购买提示
 
     this.score = 0 //每次开始默认分数、当前关卡获得分数
@@ -517,37 +531,6 @@ export default class DataBus {
     }
   }
 
-  getWXFunction(name) {
-    if(typeof(wx) == 'undefined' || wx == null) {
-      return null;
-    }
-    return wx[name];
-  }
-  showBannerAd() {
-    var wxFunc = this.getWXFunction('createBannerAd');
-    if(typeof(wxFunc) != 'undefined' && wxFunc != null) {
-      var phone = wx.getSystemInfoSync();
-      var w = phone.screenWidth / 2;
-      var h = phone.screenHeight;
-      let bannerAd = wxFunc({
-        adUnitId: 'adunit-43f5508f47958d6b',
-        style: {
-          width: 828 * ratio,
-          top: 0,
-          left: 0
-        }
-      });
-      bannerAd.onResize(function() {
-        bannerAd.style.left = w - bannerAd.style.realWidth / 2 + 0.1;
-        bannerAd.style.top = h - bannerAd.style.realHeight + 0.1;
-      })
-      bannerAd.show();
-      return bannerAd;
-    } else {
-      return;
-    }
-  }
-
   //续命接口
   continueGame(type,steps) {
     var self = this;
@@ -569,6 +552,35 @@ export default class DataBus {
     ajax(options)
   }
 
+  getWXFunction(name) {
+    if(typeof(wx) == 'undefined' || wx == null) {
+      return null;
+    }
+    return wx[name];
+  }
+  showBannerAd() {
+    this.bannerAd && this.bannerAd.destroy();
+    var wxFunc = this.getWXFunction('createBannerAd');
+    if(typeof(wxFunc) != 'undefined' && wxFunc != null) {
+      var phone = wx.getSystemInfoSync();
+      var w = phone.screenWidth / 2;
+      var h = phone.screenHeight;
+      this.bannerAd = wxFunc({
+        adUnitId: 'adunit-43f5508f47958d6b',
+        style: {
+          width: 300,
+          top: 0,
+          left: 0
+        }
+      });
+      this.bannerAd.onResize(()=> {
+        this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
+        this.bannerAd.style.top = h - this.bannerAd.style.realHeight + 0.1;
+      })
+      this.bannerAd.show();
+    } 
+  }
+
   createVideoAd(){
     this.videoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-64e0388ba29c2725'
@@ -585,9 +597,7 @@ export default class DataBus {
           this.musicBg = true
           this.musicBgChange = false
         }
-        // setTimeout(() => {
-        //   databus.isShare = true
-        // }, 1000)
+        this.isLookVideo = true
       }
       else {
           // 播放中途退出，不下发游戏奖励

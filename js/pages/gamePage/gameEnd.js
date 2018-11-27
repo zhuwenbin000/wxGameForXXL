@@ -1,6 +1,8 @@
 import { ajax } from '../../base/ajax'
 import DataBus from '../../databus'
 let databus = new DataBus()
+let uiWidth = 828;
+let ratio = canvas.width / uiWidth //设计稿宽度
 
 //统一配置UI值
 let gsc = databus.GameUI.getScoreCoordinates //本次得分坐标
@@ -20,8 +22,10 @@ let R = {
   "getScore": "images/gameEnd/getScore.png",
   "index": "images/gameEnd/index.png",
   "lookVideo": "images/gameEnd/lookVideo.png",
+  "lookVideoGrey": "images/gameEnd/lookVideo-grey.png",
   "newRecord": "images/gameEnd/newRecord.png",
   "shareToQun": "images/gameEnd/shareToQun.png",
+  "shareToQunGrey": "images/gameEnd/shareToQun-grey.png",
   "tips": "images/gameEnd/tips.png",
   "tips2": "images/gameEnd/tips2.png",
   "noSharetips": "images/gameEnd/noSharetips.png",
@@ -45,29 +49,33 @@ export default class GameEnd {
     ctx.drawImage(Robj["getScore"], 0, 0, Robj["getScore"].width, Robj["getScore"].height, gsc.x, gsc.y, gsc.w, gsc.h);
     //游戏结束首页
     ctx.drawImage(Robj["index"], 0, 0, Robj["index"].width, Robj["index"].height, ic.x, ic.y, ic.w, ic.h);
-    if (databus.shareflag) {
+    if (databus.shareflag) {//审核模式
+        //游戏结束提示
+        ctx.drawImage(Robj["tips2"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
       if (!databus.isShare) {
-        //游戏结束提示
-        ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
-        //游戏结束分享
-        ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, sc.x, sc.y, sc.w, sc.h);
+        //游戏结束分享-未分享
+        ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, 85 * ratio, sc.y, sc.w, sc.h);
       } else {
-        //游戏结束提示
-        ctx.drawImage(Robj["noSharetips"], 0, 0, Robj["noSharetips"].width, Robj["noSharetips"].height, tc.x, tc.y, tc.w, tc.h);
-
-        // //游戏结束提示
-        // ctx.drawImage(Robj["tips2"], 0, 0, Robj["tips2"].width, Robj["tips2"].height, tc.x, tc.y, tc.w, tc.h);
-        // //游戏结束看视频
-        // ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, lvc.x, lvc.y, lvc.w, lvc.h);
+        //游戏结束分享-已分享
+        ctx.drawImage(Robj["shareToQunGrey"], 0, 0, Robj["shareToQunGrey"].width, Robj["shareToQunGrey"].height, 85 * ratio, sc.y, sc.w, sc.h);
       }
-    } else {
+      if(!databus.isLookVideo){
+        //游戏看视频-未观看
+        ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, 425 * ratio, sc.y, sc.w, sc.h);
+      }else{
+        //游戏看视频-已观看
+        ctx.drawImage(Robj["lookVideoGrey"], 0, 0, Robj["lookVideoGrey"].width, Robj["lookVideoGrey"].height, 425 * ratio, sc.y, sc.w, sc.h);
+      }
+    } else {//非审核模式
       //游戏结束提示
-      // ctx.drawImage(Robj["noSharetips"], 0, 0, Robj["noSharetips"].width, Robj["noSharetips"].height, tc.x, tc.y, tc.w, tc.h);
-
-      //游戏结束提示
-      ctx.drawImage(Robj["tips2"], 0, 0, Robj["tips2"].width, Robj["tips2"].height, tc.x, tc.y, tc.w, tc.h);
-      //游戏结束看视频
-      ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, lvc.x, lvc.y, lvc.w, lvc.h);
+      ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
+      if(!databus.isLookVideo){
+        //游戏看视频-未观看
+        ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, sc.x, sc.y, sc.w, sc.h);
+      }else{
+        //游戏看视频-已观看
+        ctx.drawImage(Robj["lookVideoGrey"], 0, 0, Robj["lookVideoGrey"].width, Robj["lookVideoGrey"].height, sc.x, sc.y, sc.w, sc.h);
+      }
     }
     if(databus.isNewScore){
       //游戏结束新纪录

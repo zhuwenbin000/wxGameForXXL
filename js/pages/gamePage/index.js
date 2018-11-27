@@ -112,8 +112,12 @@ export default class Index {
   }
 
   //重置页面
-  restart(ctx) {
+  restart(ctx,screenCtx,gameCtx) {
     this.ctx = ctx
+    this.screenCtx = screenCtx
+    this.gameCtx = gameCtx
+    this.gameCtx.width = canvas.width;
+    this.gameCtx.height = canvas.height + databus.offsetTop;
     this.f = 0
     this.tipsAni = 0
     this.music = new Music()
@@ -131,7 +135,7 @@ export default class Index {
     },10000)
     
     //广告位展示
-    // databus.showBannerAd()
+    databus.showBannerAd()
     // let bannerAd = wx.createBannerAd({
     //   adUnitId: 'adunit-43f5508f47958d6b',
     //   style: {
@@ -148,6 +152,8 @@ export default class Index {
     //清除定时动画和绑定事件
     window.cancelAnimationFrame(this.aniId)
     canvas.removeEventListener('touchstart', this.touchStartHandler)
+    //隐藏广告
+    databus.bannerAd && databus.bannerAd.hide()
   }
 
   //canvas重绘函数,每一帧重新绘制所有的需要展示的元素
@@ -366,6 +372,7 @@ export default class Index {
   // 实现游戏帧循环
   loop() {
     this.render(this.ctx)
+    this.screenCtx.drawImage(this.gameCtx, 0, -databus.offsetTop)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
   }
 
@@ -504,7 +511,7 @@ export default class Index {
   touchStart(e) {
     e.preventDefault()
     let x = e.touches[0].clientX
-    let y = e.touches[0].clientY
+    let y = e.touches[0].clientY + databus.offsetTop
     if (this.STATE != "静稳状态") {
       return;
     }
@@ -534,7 +541,8 @@ export default class Index {
         canvas.removeEventListener('touchstart', this.touchStartHandler)
         canvas.removeEventListener('touchmove', this.touchMoveHandler)
         canvas.removeEventListener('touchend', this.touchEndHandler)
-        this.restart(this.ctx)
+        this.restart(this.ctx,this.screenCtx,this.gameCtx)
+
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
@@ -542,7 +550,7 @@ export default class Index {
       if (databus.shareflag) {
         if (!databus.isShare) {
           // 分享事件
-          if (x >= shc.x && x <= shc.x + shc.w && y >= shc.y && y <= shc.y + shc.h) {
+          if (x >= 85 * ratio && x <= (85 * ratio + shc.w) && y >= shc.y && y <= shc.y + shc.h) {
             wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url })
             databus.continueGame(2, 3)
             if (databus.musicBgChange) {
@@ -557,13 +565,22 @@ export default class Index {
             this.music.playMusic('btnDown')
           }
         }
+        if (!databus.isLookVideo) {
+          // 视频广告事件
+          if (x >= 425 * ratio && x <= (425 * ratio + lvc.w) && y >= lvc.y && y <= lvc.y + lvc.h) {
+            databus.showVideoAd()
+            //按钮按下音效
+            this.music.playMusic('btnDown')
+          }
+        }
       }else{
-        // 视频广告事件
-        if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
-          
-          databus.showVideoAd()
-          //按钮按下音效
-          this.music.playMusic('btnDown')
+        if (!databus.isLookVideo) {
+          // 视频广告事件
+          if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
+            databus.showVideoAd()
+            //按钮按下音效
+            this.music.playMusic('btnDown')
+          }
         }
       }
 
@@ -759,7 +776,7 @@ export default class Index {
       }
 
       // 金币问号事件
-      if (x >= (760 * ratio) && x <= ((760 + 40) * ratio) && y >= (1119 * ratio) && y <= ((1119 + 40) * ratio)) {
+      if (x >= cc.x  && x <= (cc.x + cc.w) && y >= cc.y && y <= (cc.y + cc.h)) {
         databus.gameState = 11
         //按钮按下音效
         this.music.playMusic('btnDown')
@@ -801,7 +818,7 @@ export default class Index {
   touchMove(e) {
     e.preventDefault();
     let x = e.touches[0].clientX
-    let y = e.touches[0].clientY
+    let y = e.touches[0].clientY + databus.offsetTop
 
     if (databus.gameState == 1) {
       if (this.STATE != "静稳状态") {
