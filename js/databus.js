@@ -27,6 +27,12 @@ export default class DataBus {
         if (modelmes.search('iPhone X') != -1) {
           //适配iphonex 刘海屏
           this.offsetTop = 0
+        }else if(modelmes.search('iPhone 5') != -1){
+          //适配iphone 5s
+          this.offsetTop = 60 * ratio
+        }else if(modelmes.search('vivo Y85') != -1){
+          //适配vivo Y85
+          this.offsetTop = 0
         }
       }
     })
@@ -122,7 +128,7 @@ export default class DataBus {
       h: 130 * ratio
     }
     
-    this.version = '0.0.1.3';
+    this.version = '0.0.1.4';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
@@ -438,6 +444,7 @@ export default class DataBus {
     this.isShare = false //本局游戏是否分享过
     this.isLookVideo = false //本局游戏是否观看过视频
     this.buyTips = false //购买提示
+    this.stepsAni = false //步数动画
 
     this.score = 0 //每次开始默认分数、当前关卡获得分数
     this.gameScore = 0 //本轮游戏总分
@@ -463,6 +470,7 @@ export default class DataBus {
     this.processAniTime = 0 //进度条动画帧时间
     this.isNewScore = false //是否最高分
     this.doubleHit = 0 //连击数
+    this.doubleHitList = 0 //连击数
     this.doubleHitTime = 0 //连击动画时间
     this.passStateTime = 0 //过关动画
     this.piecesLevelProbblt = { //棋子对应等级的生成概率

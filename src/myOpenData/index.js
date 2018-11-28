@@ -355,14 +355,16 @@ function drawMyRank() {
     context.fillText(`${text}分` || 0, 630, 1120);
     // 自己的名次
     
-    if (myRank != undefined) {
+    if (myRank != undefined && myRank != '-') {
       context.font = '36px Arial';
       context.textAlign = 'center';
-      if (text != '0' && myScore != '0' && myScore != '-') {
+      if (text != '0' && myScore != '0') {
         context.fillText(myRank + 1, 86, 1120);
       } else {
         context.fillText('-', 86, 1120);
       }
+    } else if (myRank == '-') {
+      context.fillText('-', 86, 1120);
     }
   }
 }

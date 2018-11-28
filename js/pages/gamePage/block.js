@@ -321,19 +321,38 @@ export default class Block {
       databus.selectAniBlocks.splice(i, 1)
       return
     }
-    if(this.selectAniTime > 10){
-      if(this.attr.piecesType == 0){
-        //橙子切开
-        ctx.drawImage(I["org_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
-      }else if(this.attr.piecesType == 1){
-        //苹果切开
-        ctx.drawImage(I["apple_cut" + this.selectAniTime % 5], 0, 0, 140, 140, this.x, this.y, bl, bl);
-      }else if(this.attr.piecesType == 2){
-        //蓝莓切开
-        ctx.drawImage(I["blueBerries_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
-      }else if(this.attr.piecesType == 3){
-        //樱桃切开
-        ctx.drawImage(I["cherry_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+    if(this.selectAniTime > 4){
+
+      if(JSON.stringify(databus.doubleHitList).indexOf(JSON.stringify(databus.selectAniBlocks[i])) == -1 ){
+        if(this.attr.piecesType == 0){
+          //橙子切开
+          ctx.drawImage(I["org_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+        }else if(this.attr.piecesType == 1){
+          //苹果切开
+          ctx.drawImage(I["apple_cut" + this.selectAniTime % 5], 0, 0, 140, 140, this.x, this.y, bl, bl);
+        }else if(this.attr.piecesType == 2){
+          //蓝莓切开
+          ctx.drawImage(I["blueBerries_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+        }else if(this.attr.piecesType == 3){
+          //樱桃切开
+          ctx.drawImage(I["cherry_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+        }
+
+      }else{
+        if(this.attr.piecesType == 0){
+          //橙子切开
+          ctx.drawImage(I["org_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x - 15 * ratio, this.y - 15 * ratio, bl + 30 * ratio, bl + 30 * ratio);
+        }else if(this.attr.piecesType == 1){
+          //苹果切开
+          ctx.drawImage(I["apple_cut" + this.selectAniTime % 5], 0, 0, 140, 140, this.x - 15 * ratio, this.y - 15 * ratio, bl + 30 * ratio, bl + 30 * ratio);
+        }else if(this.attr.piecesType == 2){
+          //蓝莓切开
+          ctx.drawImage(I["blueBerries_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x - 15 * ratio, this.y - 15 * ratio, bl + 30 * ratio, bl + 30 * ratio);
+        }else if(this.attr.piecesType == 3){
+          //樱桃切开
+          ctx.drawImage(I["cherry_cut" + this.selectAniTime % 5], 0, 0, 124, 124, this.x - 15 * ratio, this.y - 15 * ratio, bl + 30 * ratio, bl + 30 * ratio);
+        }
+
       }
     }else{
       if(this.attr.piecesType == 0){

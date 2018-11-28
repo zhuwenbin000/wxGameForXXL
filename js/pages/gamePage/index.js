@@ -7,6 +7,8 @@ import { ajax } from '../../base/ajax'
 
 let databus = new DataBus()
 
+const screenWidth = window.innerWidth;
+const screenHeight = window.innerHeight;
 let uiWidth = 828;
 let ratio = canvas.width / uiWidth //设计稿宽度
 
@@ -109,6 +111,7 @@ export default class Index {
     this.istuozhuai = false;
     this.f = 0;
     this.tipsAni = 0;
+    this.rt = 0;
   }
 
   //重置页面
@@ -161,8 +164,24 @@ export default class Index {
     ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
     //绘制棋盘
     ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, btlr, btt, bwh, bwh);
-    //绘制步数图标
-    ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
+    if(databus.stepsAni){
+      this.rt++
+      if(this.rt > 120){
+        databus.stepsAni = false
+        this.rt = 0
+      }else{
+        if(this.tipsAni % 2 == 1){
+          //绘制步数图标
+          ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
+        }else{
+          //绘制步数图标
+          ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x + 10 * ratio, sc.y + 10 * ratio, sc.w - 20 * ratio, sc.h - 20 * ratio);
+        }
+      }
+    }else{
+      //绘制步数图标
+      ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
+    }
 
     //绘制空进度条
     ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
@@ -242,12 +261,12 @@ export default class Index {
     // //彩色道具价格背景坐标宽高
     // ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
     if (databus.doubleHit > 0){
-      databus.doubleHitTime++
-      if (databus.doubleHitTime > 20){
-        databus.doubleHit = 0
-        databus.doubleHitTime = 0
-        return
-      }
+      // databus.doubleHitTime++
+      // if (databus.doubleHitTime > 20){
+      //   databus.doubleHit = 0
+      //   databus.doubleHitTime = 0
+      //   return
+      // }
       //连消图案
       ctx.drawImage(this.Robj["doubleHit"], 0, 0, this.Robj["doubleHit"].width, this.Robj["doubleHit"].height, 610 * ratio, 240 * ratio, 135 * ratio, 55 * ratio);
       //连消数字
@@ -363,7 +382,7 @@ export default class Index {
   // 实现游戏帧循环
   loop() {
     this.render(this.ctx)
-    this.screenCtx.drawImage(this.gameCtx, 0, -databus.offsetTop)
+    this.screenCtx.drawImage(this.gameCtx, 0, -databus.offsetTop,screenWidth, screenHeight + databus.offsetTop)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
   }
 
@@ -798,6 +817,7 @@ export default class Index {
         //棋子按下音效
         this.music.playMusic('piecesDown' + databus.selectBlocks.length)
         this.checkDoubleHit(databus.selectBlocks)
+        this.getDoubleHitNum()
         //震动效果
         wx.vibrateShort()
       } else {
@@ -850,12 +870,14 @@ export default class Index {
               this.music.playMusic('piecesDown' + databus.selectBlocks.length)
             }
             this.checkDoubleHit(databus.selectBlocks)
+            this.getDoubleHitNum()
             //震动效果
             wx.vibrateShort()
           } else {
             //如果回退,则连线回退，即去除之前连线的棋子
             if (JSON.stringify(rc) == JSON.stringify(databus.selectBlocks[databus.selectBlocks.length - 2])) {
               databus.selectBlocks.splice(databus.selectBlocks.length - 1, 1)
+              this.getDoubleHitNum()
             }
           }
         }
@@ -925,6 +947,9 @@ export default class Index {
     //清空上次移动的最终坐标
     this.x = null
     this.y = null
+
+    databus.doubleHitList = 0
+    databus.doubleHit = 0
   }
 
   //画折线
@@ -1004,6 +1029,53 @@ export default class Index {
 
     return bombScore * doubleHit
   }
+
+  //计算旗子连击数量
+  getDoubleHitNum() {
+    const sb = databus.selectBlocks;
+    if (sb.length <= 0) return
+    var scorePrev = 0;//上一个连线分数
+    var scoreList = [];//相同连线分数的集合
+    var doubleHitBL = [];//相同连线分数的集合
+    var doubleHit = 0;//连击次数
+    var doubleHitList = [] //连击数列表
+    for (var i = 0; i < sb.length; i++) {
+      //计算分数
+      var piecesLevelScore = databus.piecesLevelScore[this.map.blocks[sb[i].row][sb[i].col].attr.piecesLevel];
+      if (scorePrev == 0) {
+        scorePrev = piecesLevelScore;
+        scoreList.push(piecesLevelScore)
+        doubleHitBL.push(sb[i])
+      } else if (piecesLevelScore == scorePrev) {
+        scoreList.push(piecesLevelScore)
+        doubleHitBL.push(sb[i])
+      } else {
+        scorePrev = piecesLevelScore;
+        //连击加1
+        if (scoreList.length >= 3) {
+          doubleHit++
+          doubleHitList = doubleHitList.concat(doubleHitBL)
+        }
+        scoreList = []
+        doubleHitBL = []
+        scoreList.push(piecesLevelScore)
+        doubleHitBL.push(sb[i])
+      }
+
+      if (i == sb.length - 1) {
+        //连击加1
+        if (scoreList.length >= 3) {
+          doubleHit++
+          doubleHitList = doubleHitList.concat(doubleHitBL)
+        }
+      }
+    }
+
+    databus.doubleHitList = doubleHitList
+    databus.doubleHit = doubleHit
+  }
+
+
 
   /**
    * 工具函数结束

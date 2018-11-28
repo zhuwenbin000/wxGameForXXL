@@ -25,6 +25,11 @@ export default class Main {
     canvas.width = screenWidth * ratio;
     canvas.height = screenHeight * ratio;
     ctx.scale(ratio, ratio); //加上这个图片清晰的一批
+    
+    gameCanvas.width = screenWidth * ratio;
+    gameCanvas.height = screenHeight * ratio;
+    gameCon.scale(ratio, ratio); //加上这个图片清晰的一批
+
     let openDataContext = wx.getOpenDataContext();
     let sharedCanvas = openDataContext.canvas;
     sharedCanvas.width = screenWidth * ratio;

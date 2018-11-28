@@ -268,6 +268,9 @@ export default class Map {
     }
     //减去1步
     databus.steps--;
+    if(databus.steps <= 5){
+      databus.stepsAni = true
+    }
     //当前关卡使用步数
     databus.useSteps++;
     //存储当前消除的棋子数组
