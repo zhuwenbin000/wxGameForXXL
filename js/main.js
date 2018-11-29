@@ -12,7 +12,6 @@ let databus = new DataBus()
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
 const ratio = wx.getSystemInfoSync().pixelRatio;
-
 //游戏页离屏canvas
 let gameCanvas = wx.createCanvas()
 let gameCon = gameCanvas.getContext('2d')
@@ -36,6 +35,7 @@ export default class Main {
     sharedCanvas.height = screenHeight * ratio;
     DataStore.getInstance().sharedCanvas = sharedCanvas;
     DataStore.getInstance().ctx = ctx;
+    DataStore.getInstance().gameCanvas = gameCanvas;
 
     let loginflag = wx.getStorageSync('loginflag')
 

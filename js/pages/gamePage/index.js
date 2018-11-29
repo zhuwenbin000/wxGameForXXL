@@ -4,6 +4,7 @@ import GameEnd from './gameEnd'
 import GameModal from './gameModal'
 import DataBus from '../../databus'
 import { ajax } from '../../base/ajax'
+import DataStore from '../../base/helper';
 
 let databus = new DataBus()
 
@@ -377,12 +378,17 @@ export default class Index {
         this.istuozhuai = false;
       }
     }
+
+    // console.log(screenWidth,screenHeight,canvas.width,canvas.height,this.gameCtx.width,this.gameCtx.height)
+    DataStore.getInstance().ctx.drawImage(DataStore.getInstance().gameCanvas, 0, -databus.offsetTop, canvas.width, canvas.height+ databus.offsetTop);
+
+    // this.screenCtx.drawImage(this.gameCtx, 0, -databus.offsetTop,screenWidth, screenHeight + databus.offsetTop)
   }
 
   // 实现游戏帧循环
   loop() {
     this.render(this.ctx)
-    this.screenCtx.drawImage(this.gameCtx, 0, -databus.offsetTop,screenWidth, screenHeight + databus.offsetTop)
+    // this.screenCtx.drawImage(this.gameCtx, 0, -databus.offsetTop,screenWidth, screenHeight + databus.offsetTop)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
   }
 

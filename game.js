@@ -4,4 +4,5 @@ import './js/libs/underscore'
 import './js/libs/md5'
 
 import Main from './js/main'
+require('js/base/ald-game.js')
 new Main()
