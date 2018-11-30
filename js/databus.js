@@ -151,7 +151,9 @@ export default class DataBus {
     this.fingerAniTime = 0 //手指滑动动画
     this.firstRule = false //首次进入规则页
     this.videoAdState = false //视频广告状态
-    this.offsetTop = 50 * ratio //游戏页上移高度
+    this.offsetTop = 0 * ratio //游戏页上移高度
+    this.isGameCtxScale = true //游戏页是否放大
+    this.bannerOver = false
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 334 * ratio, //棋盘到顶部的距离
@@ -569,6 +571,7 @@ export default class DataBus {
   showBannerAd() {
     this.bannerAd && this.bannerAd.destroy();
     var wxFunc = this.getWXFunction('createBannerAd');
+    var isOver = false
     if(typeof(wxFunc) != 'undefined' && wxFunc != null) {
       var phone = wx.getSystemInfoSync();
       var w = phone.screenWidth / 2;
@@ -584,12 +587,17 @@ export default class DataBus {
       this.bannerAd.onResize(()=> {
         this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
         this.bannerAd.style.top = h - this.bannerAd.style.realHeight + 0.1;
+        if(this.bannerAd.style.top > 1300 * ratio){
+          this.bannerOver = true
+          if(this.gameState == 8){
+            this.bannerAd.hide();
+          }else{
+            this.bannerAd.show();
+          }
+        }else{
+          this.bannerAd.hide();
+        }
       })
-      if(this.gameState == 8){
-        this.bannerAd.hide();
-      }else{
-        this.bannerAd.show();
-      }
     } 
   }
 

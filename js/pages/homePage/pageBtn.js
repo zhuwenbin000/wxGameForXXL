@@ -40,6 +40,25 @@ loginstartBtn.src = 'images/home/start.png'
 loginfriendsRankBtn.src = 'images/home/friends.png'
 loginauthorBtn.src = "images/home/author.png"
 
+
+let R = {
+  "logo0": "images/home/logo/logo0.png",
+  "logo1": "images/home/logo/logo1.png",
+  "logo2": "images/home/logo/logo2.png",
+  "logo3": "images/home/logo/logo3.png",
+  "logo4": "images/home/logo/logo4.png",
+  "logo5": "images/home/logo/logo5.png",
+  "logo6": "images/home/logo/logo6.png",
+}
+
+//把所有的图片放到一个对象中
+let Robj = {};	//两个对象有相同的k
+// 遍历R对象，把真实image对象，放入this.Robj中
+for (var k in R) {
+  Robj[k] = wx.createImage();
+  Robj[k].src = R[k];
+}
+
 /**
  * 游戏首页按钮类
  */
@@ -52,13 +71,18 @@ export default class PageBtn {
       this.savedata(databus.userinfo)//同步用户数据 每次进来都同步一下昵称头像等数据
     }
     this.getBtnposition()
+    this.logoTime = 0
+    this.f = 0
   }
   
   render(ctx) {
+    this.f++
     ctx.clearRect(0, 0, screenWidth, screenHeight)
     ctx.drawImage(bg, 0, 0, screenWidth, screenHeight)
     this.drawlogo(ctx)//画logo
-    
+    if(this.f % 6 == 0){
+      this.logoTime++
+    }
     if (databus.pownstate == 1) { //已授权
       this.drawhead(ctx)//画头像
     } else { //未授权
@@ -213,7 +237,9 @@ export default class PageBtn {
 
   }
   drawlogo(ctx) {
-    ctx.drawImage(logoBtn, 0, 0, 796, 538, (window.innerWidth - 796 * ratio) / 2, 120 * ratio, 796 * ratio, 538 * ratio)
+    // ctx.drawImage(logoBtn, 0, 0, 796, 538, (window.innerWidth - 796 * ratio) / 2, 120 * ratio, 796 * ratio, 538 * ratio)
+
+    ctx.drawImage(Robj["logo" + this.logoTime % 7], 0, 0, 800, 500, (window.innerWidth - 800 * ratio) / 2, 120 * ratio, 800 * ratio, 500 * ratio)
     //开始游戏按钮区域
 
   }

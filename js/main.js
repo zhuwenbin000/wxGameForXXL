@@ -13,8 +13,8 @@ const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
 const ratio = wx.getSystemInfoSync().pixelRatio;
 //游戏页离屏canvas
-let gameCanvas = wx.createCanvas()
-let gameCon = gameCanvas.getContext('2d')
+// let gameCanvas = wx.createCanvas()
+// let gameCon = gameCanvas.getContext('2d')
 /**
  * 根据场景id渲染页面
  */
@@ -25,9 +25,8 @@ export default class Main {
     canvas.height = screenHeight * ratio;
     ctx.scale(ratio, ratio); //加上这个图片清晰的一批
     
-    gameCanvas.width = screenWidth * ratio;
-    gameCanvas.height = screenHeight * ratio;
-    gameCon.scale(ratio, ratio); //加上这个图片清晰的一批
+    // gameCanvas.width = screenWidth * ratio;
+    // gameCanvas.height = screenHeight * ratio;
 
     let openDataContext = wx.getOpenDataContext();
     let sharedCanvas = openDataContext.canvas;
@@ -35,7 +34,7 @@ export default class Main {
     sharedCanvas.height = screenHeight * ratio;
     DataStore.getInstance().sharedCanvas = sharedCanvas;
     DataStore.getInstance().ctx = ctx;
-    DataStore.getInstance().gameCanvas = gameCanvas;
+    // DataStore.getInstance().gameCanvas = gameCanvas;
 
     let loginflag = wx.getStorageSync('loginflag')
 
@@ -83,7 +82,8 @@ export default class Main {
           }else{
             databus.gameState = 10
           }
-          self.gamePage.restart(gameCon,ctx,gameCanvas)
+          // self.gamePage.restart(gameCon,ctx,gameCanvas)
+          self.gamePage.restart(ctx)
         }
         if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()
       }

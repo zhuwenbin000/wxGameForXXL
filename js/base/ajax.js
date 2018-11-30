@@ -30,6 +30,13 @@ export function ajax(options) {
           }
         }
       } else if (options.apiType == 'version') {
+        // options.data = {
+        //   version: {
+        //     ...options.data,
+        //     loginflag: loginflag,
+        //     userId:userId
+        //   }
+        // }
         if(!options.data || !options.data.version){
           options.data = {
             version: {
@@ -41,7 +48,7 @@ export function ajax(options) {
         }else{
           options.data = {
             version: {
-              ...options.data.version,
+              ...options.data,
               loginflag: loginflag,
               userId:userId
             }

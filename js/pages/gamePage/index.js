@@ -52,6 +52,7 @@ let lvc = databus.GameUI.lookVideoCoordinates //游戏结束看视频
 let ic = databus.GameUI.indexCoordinates //游戏结束首页
 let tac = databus.GameUI.tryAgainCoordinates //游戏结束再来一局
 let psec = databus.GameUI.preScoreCoordinates //游戏结束再来一局
+const ratio2 = wx.getSystemInfoSync().pixelRatio;
 
 //游戏页主函数
 export default class Index {
@@ -83,6 +84,7 @@ export default class Index {
       "progressFull": "images/gamePage/progress_full.png",
       "scoreBg": "images/gamePage/score_bg.png",
       "steps": "images/gamePage/steps.png",
+      "redSteps": "images/gamePage/redSteps.png",
       "pieceslevel2": "images/gamePage/pieceslevel2.png",
       "pieceslevel3": "images/gamePage/pieceslevel3.png",
       "piecesCoin": "images/gamePage/piecesCoin.png",
@@ -116,12 +118,16 @@ export default class Index {
   }
 
   //重置页面
-  restart(ctx,screenCtx,gameCtx) {
+  restart(ctx) {
     this.ctx = ctx
-    this.screenCtx = screenCtx
-    this.gameCtx = gameCtx
-    this.gameCtx.width = canvas.width;
-    this.gameCtx.height = canvas.height + databus.offsetTop;
+    // this.screenCtx = screenCtx
+    // this.gameCtx = gameCtx
+    // this.gameCtx.width = canvas.width;
+    // this.gameCtx.height = canvas.height + databus.offsetTop;
+    // if(databus.isGameCtxScale){
+    //   this.ctx.scale(ratio2, ratio2); //加上这个图片清晰的一批
+    //   databus.isGameCtxScale = false;
+    // }
     this.f = 0
     this.tipsAni = 0
     this.music = new Music()
@@ -173,15 +179,22 @@ export default class Index {
       }else{
         if(this.tipsAni % 2 == 1){
           //绘制步数图标
-          ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
+          ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x, sc.y, sc.w, sc.h);
         }else{
           //绘制步数图标
-          ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x + 10 * ratio, sc.y + 10 * ratio, sc.w - 20 * ratio, sc.h - 20 * ratio);
+          ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x + 10 * ratio, sc.y + 10 * ratio, sc.w - 20 * ratio, sc.h - 20 * ratio);
         }
       }
     }else{
+      if(databus.steps < 6){
+        //绘制步数图标
+        ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x, sc.y, sc.w, sc.h);
+      }else{
+        //绘制步数图标
+        ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
+      }
       //绘制步数图标
-      ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
+      // ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
     }
 
     //绘制空进度条
@@ -380,7 +393,7 @@ export default class Index {
     }
 
     // console.log(screenWidth,screenHeight,canvas.width,canvas.height,this.gameCtx.width,this.gameCtx.height)
-    DataStore.getInstance().ctx.drawImage(DataStore.getInstance().gameCanvas, 0, -databus.offsetTop, canvas.width, canvas.height+ databus.offsetTop);
+    // DataStore.getInstance().ctx.drawImage(DataStore.getInstance().gameCanvas, 0, -databus.offsetTop, canvas.width, canvas.height+ databus.offsetTop);
 
     // this.screenCtx.drawImage(this.gameCtx, 0, -databus.offsetTop,screenWidth, screenHeight + databus.offsetTop)
   }
@@ -557,7 +570,8 @@ export default class Index {
         canvas.removeEventListener('touchstart', this.touchStartHandler)
         canvas.removeEventListener('touchmove', this.touchMoveHandler)
         canvas.removeEventListener('touchend', this.touchEndHandler)
-        this.restart(this.ctx,this.screenCtx,this.gameCtx)
+        // this.restart(this.ctx,this.screenCtx,this.gameCtx)
+        this.restart(this.ctx)
 
         //按钮按下音效
         this.music.playMusic('btnDown')
@@ -732,8 +746,11 @@ export default class Index {
             data: "false"
           })
 
-          //显示广告
-          databus.bannerAd && databus.bannerAd.show()
+          if(databus.bannerOver){
+            //显示广告
+            databus.bannerAd && databus.bannerAd.show()
+          }
+
         }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
