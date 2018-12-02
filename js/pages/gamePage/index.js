@@ -269,12 +269,15 @@ export default class Index {
     //增加步数价格背景坐标宽高
     ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, aspbc.x, aspbc.y, aspbc.w, aspbc.h);
    
-    // //绘制彩色道具按钮
-    // ctx.drawImage(this.Robj["colorTool"], 0, 0, this.Robj["colorTool"].width, this.Robj["colorTool"].height, ctc.x, ctc.y, ctc.w, ctc.h);
-    // //彩色道具红点坐标宽高
-    // ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, ctpoc.x, ctpoc.y, ctpoc.w, ctpoc.h);
-    // //彩色道具价格背景坐标宽高
-    // ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
+    //绘制彩色道具按钮
+    ctx.drawImage(this.Robj["colorTool"], 0, 0, this.Robj["colorTool"].width, this.Robj["colorTool"].height, ctc.x, ctc.y, ctc.w, ctc.h);
+    //彩色道具红点坐标宽高
+
+    if(databus.userhammer != 0 || databus.userhammer != '0'){
+      ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, ctpoc.x, ctpoc.y, ctpoc.w, ctpoc.h);
+    }
+    //彩色道具价格背景坐标宽高
+    ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
     
     if (databus.doubleHit > 0){
       // databus.doubleHitTime++
@@ -321,12 +324,14 @@ export default class Index {
     if(databus.usersteps != 0 || databus.usersteps != '0'){
       ctx.fillText(databus.usersteps, asuc.x, asuc.y);
     }
-    // //彩色道具价格
-    // ctx.font = ctprc.font;
-    // ctx.fillText(databus.hammerprice, ctprc.x, ctprc.y);
-    // //彩色道具拥有数量
-    // ctx.font = ctuc.font;
-    // ctx.fillText(databus.userhammer, ctuc.x, ctuc.y);
+    //彩色道具价格
+    ctx.font = ctprc.font;
+    ctx.fillText(databus.hammerprice, ctprc.x, ctprc.y);
+    //彩色道具拥有数量
+    ctx.font = ctuc.font;
+    if(databus.userhammer != 0 || databus.userhammer != '0'){
+      ctx.fillText(databus.userhammer, ctuc.x, ctuc.y);
+    }
     //金币拥有数量
     ctx.font = cnc.font;
     ctx.fillText(databus.usergold, cnc.x, cnc.y);
@@ -527,6 +532,12 @@ export default class Index {
           databus.steps = databus.steps + 3
           databus.usersteps = databus.usersteps - 1
         }
+
+        if(type == '2'){//如果类型为2
+          databus.userhammer = databus.userhammer - 1
+          databus.gameState = 12
+        }
+
       }
     })
   }
@@ -831,11 +842,23 @@ export default class Index {
       }
       
       // 彩色道具购买按钮事件
-      // if (x >= (455 * ratio) && x <= ((455 + 50) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 50) * ratio)) {
-      //   databus.gameState = 4
-      //   //按钮按下音效
-      //   this.music.playMusic('btnDown')
-      // }
+      if (x >= (455 * ratio) && x <= ((455 + 50) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 50) * ratio)) {
+        databus.gameState = 4
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+      // 增加步数使用按钮事件
+      if (x >= (455 * ratio) && x <= ((455 + 140) * ratio) && y >= (1045 * ratio + databus.gameTop) && y <= ((1045 + 120) * ratio) + databus.gameTop) {
+        if (databus.userhammer > 0) {
+          this.useTool('2')
+        } else {
+          databus.gameState = 4
+        }
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+      
 
       //游戏区域事件
       if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {
