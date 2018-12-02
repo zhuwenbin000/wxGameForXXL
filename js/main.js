@@ -94,6 +94,8 @@ export default class Main {
           databus.pageStateUpdate('friendsRank')
           self.friendsRank.restart(ctx)
         }
+        
+        if (self.music.indexBgmAudio.paused && databus.musicBg == true) self.music.indexBgmAudio.play()
       }
 
       //世界排行榜
@@ -102,6 +104,8 @@ export default class Main {
           databus.pageStateUpdate('worldRank')
           self.worldRank.restart(ctx)
         }
+        
+        if (self.music.indexBgmAudio.paused && databus.musicBg == true) self.music.indexBgmAudio.play()
       }
     }, 50)
   }

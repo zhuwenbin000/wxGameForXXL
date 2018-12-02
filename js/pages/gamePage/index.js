@@ -258,10 +258,10 @@ export default class Index {
           
           if(this.tipsAni % 2 == 1){
             //增加步数购买提示
-            ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 325 * ratio, 1090 * ratio, 50 * ratio, 60 * ratio);
+            ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 325 * ratio, 1010 * ratio + databus.gameTop, 50 * ratio, 60 * ratio);
           }else{
             //增加步数购买提示
-            ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 329 * ratio, 1084 * ratio, 42 * ratio, 52 * ratio);
+            ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 329 * ratio, 1004 * ratio + databus.gameTop, 42 * ratio, 52 * ratio);
           }
         }
       }
@@ -282,9 +282,9 @@ export default class Index {
       //   return
       // }
       //连消图案
-      ctx.drawImage(this.Robj["doubleHit"], 0, 0, this.Robj["doubleHit"].width, this.Robj["doubleHit"].height, 610 * ratio, 240 * ratio, 135 * ratio, 55 * ratio);
+      ctx.drawImage(this.Robj["doubleHit"], 0, 0, this.Robj["doubleHit"].width, this.Robj["doubleHit"].height, 610 * ratio, 160 * ratio + databus.gameTop, 135 * ratio, 55 * ratio);
       //连消数字
-      ctx.drawImage(this.Robj["doubleHit" + databus.doubleHit], 0, 0, this.Robj["doubleHit" + databus.doubleHit].width, this.Robj["doubleHit" + databus.doubleHit].height, 740 * ratio, 245 * ratio, 33 * ratio, 47 * ratio);
+      ctx.drawImage(this.Robj["doubleHit" + databus.doubleHit], 0, 0, this.Robj["doubleHit" + databus.doubleHit].width, this.Robj["doubleHit" + databus.doubleHit].height, 740 * ratio, 165 * ratio + databus.gameTop, 33 * ratio, 47 * ratio);
     }
 
     //绘制金币图标
@@ -540,7 +540,7 @@ export default class Index {
   touchStart(e) {
     e.preventDefault()
     let x = e.touches[0].clientX
-    let y = e.touches[0].clientY + databus.offsetTop
+    let y = e.touches[0].clientY 
     if (this.STATE != "静稳状态") {
       return;
     }
@@ -596,6 +596,10 @@ export default class Index {
           }
         }
         if (!databus.isLookVideo) {
+          if(databus.isVideoing == true){
+            return
+          }
+          databus.isVideoing = true
           // 视频广告事件
           if (x >= 425 * ratio && x <= (425 * ratio + lvc.w) && y >= lvc.y && y <= lvc.y + lvc.h) {
             databus.showVideoAd()
@@ -605,6 +609,10 @@ export default class Index {
         }
       }else{
         if (!databus.isLookVideo) {
+          if(databus.isVideoing == true){
+            return
+          }
+          databus.isVideoing = true
           // 视频广告事件
           if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
             databus.showVideoAd()
@@ -622,28 +630,28 @@ export default class Index {
       // }
     } else if (databus.gameState == 3) {//音乐弹框
       // 关闭弹框事件
-      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (220 * ratio) && y <= ((220 + 162) * ratio)) {
+      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (170 * ratio) && y <= ((170 + 162) * ratio)) {
         databus.gameState = 1
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
 
       // 点击背景音事件
-      if (x >= (190 * ratio) && x <= ((190 + 238) * ratio) && y >= (545 * ratio) && y <= ((545 + 120) * ratio)) {
+      if (x >= (190 * ratio) && x <= ((190 + 238) * ratio) && y >= (495 * ratio) && y <= ((495 + 120) * ratio)) {
         databus.musicBgState = !databus.musicBgState
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
 
       // 点击游戏音效事件
-      if (x >= (190 * ratio) && x <= ((190 + 238) * ratio) && y >= (770 * ratio) && y <= ((770 + 120) * ratio)) {
+      if (x >= (190 * ratio) && x <= ((190 + 238) * ratio) && y >= (720 * ratio) && y <= ((720 + 120) * ratio)) {
         databus.musicSoundState = !databus.musicSoundState
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
 
       // 点击确认事件
-      if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
+      if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1030 * ratio) && y <= ((1030 + 168) * ratio)) {
         databus.btnPlus = 1
         setTimeout(() => {
           databus.musicBg = databus.musicBgState
@@ -677,14 +685,14 @@ export default class Index {
 
     } else if (databus.gameState == 5) {//5:增加步数弹框
       // 关闭弹框事件
-      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (220 * ratio) && y <= ((220 + 162) * ratio)) {
+      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (170 * ratio) && y <= ((170 + 162) * ratio)) {
         databus.gameState = 1
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
 
       // 点击确认事件
-      if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
+      if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1030 * ratio) && y <= ((1030 + 168) * ratio)) {
         databus.btnPlus = 1
         setTimeout(() => {
           this.buyTool('3')
@@ -695,14 +703,14 @@ export default class Index {
 
     } else if (databus.gameState == 6) {//6:返回首页弹框
       // 关闭弹框事件
-      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (220 * ratio) && y <= ((220 + 162) * ratio)) {
+      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (170 * ratio) && y <= ((170 + 162) * ratio)) {
         databus.gameState = 1
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
 
       // 点击确认事件
-      if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1080 * ratio) && y <= ((1080 + 168) * ratio)) {
+      if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1030 * ratio) && y <= ((1030 + 168) * ratio)) {
         databus.btnPlus = 1
         setTimeout(() => {
           this.finish()
@@ -791,7 +799,7 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
       // 增加步数购买按钮事件
-      if (x >= (270 * ratio) && x <= ((270 + 50) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 50) * ratio)) {
+      if (x >= (270 * ratio) && x <= ((270 + 50) * ratio) && y >= (1155 * ratio + databus.gameTop) && y <= ((1155 + 50) * ratio) + databus.gameTop) {
         if((databus.usersteps == 0 || databus.usersteps == '0') && (databus.usergold >= databus.stepprice)){
           databus.buyTips = true
         }
@@ -800,7 +808,7 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
       // 增加步数使用按钮事件
-      if (x >= (270 * ratio) && x <= ((270 + 140) * ratio) && y >= (1125 * ratio) && y <= ((1125 + 120) * ratio)) {
+      if (x >= (270 * ratio) && x <= ((270 + 140) * ratio) && y >= (1045 * ratio + databus.gameTop) && y <= ((1045 + 120) * ratio) + databus.gameTop) {
         if (databus.usersteps > 0) {
           this.useTool('3')
         } else {
@@ -857,7 +865,7 @@ export default class Index {
   touchMove(e) {
     e.preventDefault();
     let x = e.touches[0].clientX
-    let y = e.touches[0].clientY + databus.offsetTop
+    let y = e.touches[0].clientY
 
     if (databus.gameState == 1) {
       if (this.STATE != "静稳状态") {

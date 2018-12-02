@@ -17,7 +17,10 @@ export default class DataBus {
 
     instance = this
     this.pool = new Pool()
-    this.reset()
+
+    this.gameTop = 0 * ratio
+    this.gameEndTop = 0 * ratio
+
     this.createVideoAd()
     //判断是否是哪种设备 
     wx.getSystemInfo({
@@ -26,14 +29,17 @@ export default class DataBus {
         let modelmes = res.model;
         if (modelmes.search('iPhone X') != -1) {
           //适配iphonex 刘海屏
-          this.offsetTop = 0
+          this.gameTop = 80 * ratio
+          this.gameEndTop = 80 * ratio
         }else if(modelmes.search('iPhone 5') != -1){
           //适配iphone 5s
-          this.offsetTop = 60 * ratio
+          // this.offsetTop = 60 * ratio
         }else if(modelmes.search('vivo Y85') != -1){
           //适配vivo Y85
-          this.offsetTop = 0
+          this.gameTop = 80 * ratio
+          this.gameEndTop = 80 * ratio
         }
+        this.reset()
       }
     })
 
@@ -128,7 +134,7 @@ export default class DataBus {
       h: 130 * ratio
     }
     
-    this.version = '0.0.1.4';
+    this.version = '0.0.1.5';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
@@ -151,12 +157,12 @@ export default class DataBus {
     this.fingerAniTime = 0 //手指滑动动画
     this.firstRule = false //首次进入规则页
     this.videoAdState = false //视频广告状态
-    this.offsetTop = 0 * ratio //游戏页上移高度
+    // this.offsetTop = 0 * ratio //游戏页上移高度
     this.isGameCtxScale = true //游戏页是否放大
     this.bannerOver = false
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
-      boardToTOP: 334 * ratio, //棋盘到顶部的距离
+      boardToTOP: 254 * ratio  + this.gameTop, //棋盘到顶部的距离
       boardToLR: 34 * ratio, //棋盘左右两边间距
       boardInner: 8 * ratio, //棋盘内边框
       piecesMargin: 8 * ratio, //棋子边距
@@ -164,7 +170,7 @@ export default class DataBus {
       piecesWH: 0, //棋子宽高
       ruleCoordinates: { //规则坐标宽高
         x: 40 * ratio,
-        y: 1126 * ratio,
+        y: 1046 * ratio + this.gameTop,
         w: 180 * ratio,
         h: 74 * ratio
       },
@@ -176,115 +182,115 @@ export default class DataBus {
       },
       stepsCoordinates: { //步数坐标宽高
         x: 32 * ratio,
-        y: 168 * ratio,
+        y: 110 * ratio + this.gameTop,
         w: 124 * ratio,
         h: 126 * ratio,
       },
       progressEmptyCoordinates: { //空进度条坐标宽高
         x: 237 * ratio,
-        y: 265 * ratio,
+        y: 185 * ratio + this.gameTop,
         w: 360 * ratio,
         h: 52 * ratio,
       },
       progressEmpty2Coordinates: { //空进度条2坐标宽高
         x: 252 * ratio,
-        y: 275 * ratio,
+        y: 195 * ratio + this.gameTop,
         w: 330 * ratio,
         h: 26 * ratio,
       },
       progressFullCoordinates: { //满进度条坐标宽高
         x: 252 * ratio,
-        y: 275 * ratio,
+        y: 195 * ratio + this.gameTop,
         w: 330 * ratio,
         h: 26 * ratio,
       },
       homeCoordinates: { //首页坐标宽高
         x: 44 * ratio,
-        y: 1206 * ratio,
+        y: 1126 * ratio + this.gameTop,
         w: 82 * ratio,
         h: 82 * ratio,
       },
       musicCoordinates: { //音乐坐标宽高
         x: 142 * ratio,
-        y: 1206 * ratio,
+        y: 1126 * ratio + this.gameTop,
         w: 82 * ratio,
         h: 82 * ratio,
       },
       addStepsCoordinates: { //增加步数坐标宽高
         x: 275 * ratio,
-        y: 1125 * ratio,
+        y: 1045 * ratio + this.gameTop,
         w: 144 * ratio,
         h: 142 * ratio,
       },
       addStepsPointCoordinates: { //增加步数红点坐标宽高
         x: 375 * ratio,
-        y: 1124 * ratio,
+        y: 1044 * ratio + this.gameTop,
         w: 52 * ratio,
         h: 52 * ratio,
       },
       addStepsUserCoordinates: { //增加步数拥有数量坐标宽高
         x: 400 * ratio,
-        y: 1160 * ratio,
+        y: 1080 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
       addStepsPriceCoordinates: { //增加步数价格坐标宽高
         x: 355 * ratio,
-        y: 1270 * ratio,
+        y: 1190 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
       addStepsPriceBgCoordinates: { //增加步数价格背景坐标宽高
         x: 270 * ratio,
-        y: 1235 * ratio,
+        y: 1155 * ratio + this.gameTop,
         w: 148 * ratio,
         h: 58 * ratio,
       },
       colorToolCoordinates: { //彩色道具坐标宽高
         x: 460 * ratio,
-        y: 1125 * ratio,
+        y: 1045 * ratio + this.gameTop,
         w: 144 * ratio,
         h: 142 * ratio,
       },
       colorToolPointCoordinates: { //彩色道具红点坐标宽高
         x: 560 * ratio,
-        y: 1124 * ratio,
+        y: 1044 * ratio + this.gameTop,
         w: 52 * ratio,
         h: 52 * ratio,
       },
       colorToolPriceCoordinates: { //彩色道具价格坐标宽高
         x: 540 * ratio,
-        y: 1270 * ratio,
+        y: 1190 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
       colorToolUserCoordinates: { //彩色道具拥有数量坐标宽高
         x: 585 * ratio,
-        y: 1160 * ratio,
+        y: 1080 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
       colorToolPriceBgCoordinates: { //彩色道具价格背景坐标宽高
         x: 455 * ratio,
-        y: 1235 * ratio,
+        y: 1155 * ratio + this.gameTop,
         w: 148 * ratio,
         h: 58 * ratio,
       },
       coinCoordinates: { //金币坐标宽高
         x: 630 * ratio,
-        y: 1119 * ratio,
+        y: 1039 * ratio + this.gameTop,
         w: 171 * ratio,
         h: 175 * ratio,
       },
       coinNumCoordinates: { //金币数量坐标宽高
         x: 715 * ratio,
-        y: 1270 * ratio,
+        y: 1190 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
       checkPointCoordinates: { //关卡坐标
         x: 32 * ratio,
-        y: 130 * ratio,
+        y: 72 * ratio + this.gameTop,
         font: 46 * ratio + 'px Arial'
       },
       selfHighScoreCoordinates: { //本轮分数
         x: (uiWidth / 2) * ratio,
-        y: 135 * ratio,
+        y: 77 * ratio + this.gameTop,
         font: 'bold ' + 60 * ratio + 'px Arial'
       },
       // highestScoreCoordinates: { //世界最高分数坐标
@@ -294,7 +300,7 @@ export default class DataBus {
       // },
       stepsNumCoordinates: { //步数坐标
         x: 92 * ratio,
-        y: 230 * ratio,
+        y: 172 * ratio + this.gameTop,
         font: 'bold ' + 40 * ratio + 'px Arial'
       },
       // stepsTxtCoordinates: { //步数文字坐标
@@ -304,35 +310,35 @@ export default class DataBus {
       // },
       passScoreCoordinates: { //当前过关分数坐标
         x: 560 * ratio,
-        y: 300 * ratio,
+        y: 220 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
       currentScoreCoordinates: { //当前分数坐标
         x: (uiWidth / 2) * ratio,
-        y: 248 * ratio,
+        y: 168 * ratio + this.gameTop,
         font: 'bold ' + 60 * ratio + 'px Arial'
       },
       getScoreCoordinates: { //游戏结束得分
         x: 14 * ratio,
-        y: 280 * ratio,
+        y: 200 * ratio + this.gameEndTop,
         w: 800 * ratio,
         h: 482 * ratio,
       },
       newRecordCoordinates: { //游戏结束新纪录
         x: 560 * ratio,
-        y: 370 * ratio,
+        y: 290 * ratio + this.gameEndTop,
         w: 278 * ratio,
         h: 224 * ratio,
       },
       tipsCoordinates: { //游戏结束提示
         x: 68 * ratio,
-        y: 836 * ratio,
+        y: 756 * ratio + this.gameEndTop,
         w: 692 * ratio,
         h: 248 * ratio,
       },
       shareCoordinates: { //游戏结束分享
         x: (uiWidth - 318) / 2 * ratio,
-        y: 950 * ratio,
+        y: 870 * ratio + this.gameEndTop,
         w: 318 * ratio,
         h: 120 * ratio,
       },
@@ -342,45 +348,45 @@ export default class DataBus {
         // w: 318 * ratio,
         // h: 120 * ratio,
         x: (uiWidth - 318) / 2 * ratio,
-        y: 950 * ratio,
+        y: 870 * ratio + this.gameEndTop,
         w: 318 * ratio,
         h: 120 * ratio,
       },
       indexCoordinates: { //游戏结束首页
         x: 95 * ratio,
-        y: 1150 * ratio,
+        y: 1070 * ratio + this.gameEndTop,
         w: 166 * ratio,
         h: 166 * ratio,
       },
       tryAgainCoordinates: { //游戏结束再来一局
         x: 300 * ratio,
-        y: 1135 * ratio,
+        y: 1055 * ratio + this.gameEndTop,
         w: 496 * ratio,
         h: 200 * ratio,
       },
       stageScoreCoordinates: { //游戏结束分数
         x: 325 * ratio,
-        y: 330 * ratio,
+        y: 250 * ratio + this.gameEndTop,
         font: 'bold ' + 40 * ratio + 'px Arial'
       },
       avatarCoordinates: { //游戏结束头像
         x: 105 * ratio,
-        y: 170 * ratio,
+        y: 90 * ratio + this.gameEndTop,
         r: 95 * ratio,//头像的半径
       },
       userNameCoordinates: { //游戏结束昵称
         x: 325 * ratio,
-        y: 245 * ratio,
+        y: 165 * ratio + this.gameEndTop,
         font: 'bold ' + 40 * ratio + 'px Arial'
       },
       bestScoreCoordinates: { //游戏结束最高得分
         x: (uiWidth / 2) * ratio,
-        y: 660 * ratio,
+        y: 580 * ratio + this.gameEndTop,
         font: 'bold ' + 55 * ratio + 'px Arial'
       },
       preScoreCoordinates: { //预得分
         x: (uiWidth / 2 + 40) * ratio,
-        y: 245 * ratio,
+        y: 165 * ratio + this.gameTop,
         font: 'bold ' + 40 * ratio + 'px Arial'
       },
     }
@@ -587,7 +593,7 @@ export default class DataBus {
       this.bannerAd.onResize(()=> {
         this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
         this.bannerAd.style.top = h - this.bannerAd.style.realHeight + 0.1;
-        if(this.bannerAd.style.top > 1300 * ratio){
+        if(this.bannerAd.style.top > 1220 * ratio){
           this.bannerOver = true
           if(this.gameState == 8){
             this.bannerAd.hide();
@@ -627,10 +633,13 @@ export default class DataBus {
 
   showVideoAd(){
     this.videoAd.load()
-    .then(() => this.videoAd.show())
+    .then(() => {
+      this.videoAd.show()
+      this.isVideoing = false
+    })
     .catch(err => {
-      console.log(err)
-      wx.showToast({ title: err.errMsg, icon:'none'})
+      wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+      this.isVideoing = false
     })
   }
 }

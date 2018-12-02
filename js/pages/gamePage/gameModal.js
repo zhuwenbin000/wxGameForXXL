@@ -42,40 +42,40 @@ export default class GameModal {
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
-      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 240 * ratio, 824 * ratio, 1072 * ratio);
+      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 190 * ratio, 824 * ratio, 1072 * ratio);
       //弹框关闭
-      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 220 * ratio, 150 * ratio, 162 * ratio);
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 170 * ratio, 150 * ratio, 162 * ratio);
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
         //弹框确认
-        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1080 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1030 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
       } else {
         databus.btnPlus = 0
         //弹框确认
-        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1030 * ratio, 340 * ratio, 168 * ratio);
       }
       if (!databus.musicBgState){
         //背景音乐-关
-        ctx.drawImage(Robj["musicBgFalse"], 0, 0, Robj["musicBgFalse"].width, Robj["musicBgFalse"].height, 190 * ratio, 545 * ratio, 238 * ratio, 120 * ratio);
+        ctx.drawImage(Robj["musicBgFalse"], 0, 0, Robj["musicBgFalse"].width, Robj["musicBgFalse"].height, 190 * ratio, 495 * ratio, 238 * ratio, 120 * ratio);
       }else{
         //背景音乐-开
-        ctx.drawImage(Robj["musicBgTrue"], 0, 0, Robj["musicBgTrue"].width, Robj["musicBgTrue"].height, 190 * ratio, 545 * ratio, 238 * ratio, 120 * ratio);
+        ctx.drawImage(Robj["musicBgTrue"], 0, 0, Robj["musicBgTrue"].width, Robj["musicBgTrue"].height, 190 * ratio, 495 * ratio, 238 * ratio, 120 * ratio);
       }
       if (!databus.musicSoundState) {
         //游戏音效-关
-        ctx.drawImage(Robj["musicSoundFalse"], 0, 0, Robj["musicSoundFalse"].width, Robj["musicSoundFalse"].height, 190 * ratio, 770 * ratio, 238 * ratio, 120 * ratio);
+        ctx.drawImage(Robj["musicSoundFalse"], 0, 0, Robj["musicSoundFalse"].width, Robj["musicSoundFalse"].height, 190 * ratio, 720 * ratio, 238 * ratio, 120 * ratio);
       } else {
         //游戏音效-开
-        ctx.drawImage(Robj["musicSoundTrue"], 0, 0, Robj["musicSoundTrue"].width, Robj["musicSoundTrue"].height, 190 * ratio, 770 * ratio, 238 * ratio, 120 * ratio);
+        ctx.drawImage(Robj["musicSoundTrue"], 0, 0, Robj["musicSoundTrue"].width, Robj["musicSoundTrue"].height, 190 * ratio, 720 * ratio, 238 * ratio, 120 * ratio);
       }
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
       ctx.font = 50 * ratio + 'px Arial';
-      ctx.fillText('声音', (uiWidth / 2) * ratio, 415 * ratio); 
+      ctx.fillText('声音', (uiWidth / 2) * ratio, 365 * ratio); 
       ctx.textAlign = 'left';
-      ctx.fillText('背景音乐', 485 * ratio, 620 * ratio); 
-      ctx.fillText('游戏音效', 485 * ratio, 850 * ratio); 
+      ctx.fillText('背景音乐', 485 * ratio, 570 * ratio); 
+      ctx.fillText('游戏音效', 485 * ratio, 800 * ratio); 
     }
     //4:彩色道具弹框
     if (databus.gameState == 4) {
@@ -111,29 +111,29 @@ export default class GameModal {
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
-      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 240 * ratio, 824 * ratio, 1072 * ratio);
+      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 190 * ratio, 824 * ratio, 1072 * ratio);
       //弹框关闭
-      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 220 * ratio, 150 * ratio, 162 * ratio);
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 170 * ratio, 150 * ratio, 162 * ratio);
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
         //弹框确认
-        ctx.drawImage(Robj["buy"], 0, 0, Robj["buy"].width, Robj["buy"].height, (250 - 17) * ratio, (1080 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
+        ctx.drawImage(Robj["buy"], 0, 0, Robj["buy"].width, Robj["buy"].height, (250 - 17) * ratio, (1030 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
       } else {
         databus.btnPlus = 0
         //弹框确认
-        ctx.drawImage(Robj["buy"], 0, 0, Robj["buy"].width, Robj["buy"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
+        ctx.drawImage(Robj["buy"], 0, 0, Robj["buy"].width, Robj["buy"].height, 250 * ratio, 1030 * ratio, 340 * ratio, 168 * ratio);
       }
       //金脚丫
-      ctx.drawImage(Robj["addSteps"], 0, 0, Robj["addSteps"].width, Robj["addSteps"].height, 250 * ratio, 435 * ratio, 346 * ratio, 356 * ratio);
+      ctx.drawImage(Robj["addSteps"], 0, 0, Robj["addSteps"].width, Robj["addSteps"].height, 250 * ratio, 385 * ratio, 346 * ratio, 356 * ratio);
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
       ctx.font = 50 * ratio + 'px Arial';
-      ctx.fillText('道具购买', (uiWidth / 2) * ratio, 415 * ratio);
+      ctx.fillText('道具购买', (uiWidth / 2) * ratio, 365 * ratio);
       ctx.textAlign = 'left';
       ctx.font = 40 * ratio + 'px Arial';
-      ctx.fillText('效果：游戏步数增加3步', 155 * ratio, 865 * ratio);
-      ctx.fillText('价格：' + databus.stepprice + '金币', 155 * ratio, 955 * ratio); 
+      ctx.fillText('效果：游戏步数增加3步', 155 * ratio, 815 * ratio);
+      ctx.fillText('价格：' + databus.stepprice + '金币', 155 * ratio, 905 * ratio); 
     }
 
 
@@ -142,25 +142,25 @@ export default class GameModal {
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
-      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 240 * ratio, 824 * ratio, 1072 * ratio);
+      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 190 * ratio, 824 * ratio, 1072 * ratio);
       //弹框关闭
-      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 220 * ratio, 150 * ratio, 162 * ratio);
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 170 * ratio, 150 * ratio, 162 * ratio);
       //弹框确认
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
         //弹框确认
-        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1080 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1030 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
       } else {
         databus.btnPlus = 0
         //弹框确认
-        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1030 * ratio, 340 * ratio, 168 * ratio);
       }
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
       ctx.font = 50 * ratio + 'px Arial';
-      ctx.fillText('返回将丢失当局进度、得分，', (uiWidth / 2) * ratio, 700 * ratio);
-      ctx.fillText('确认返回？', (uiWidth / 2) * ratio, 800 * ratio);
+      ctx.fillText('返回将丢失当局进度、得分，', (uiWidth / 2) * ratio, 650 * ratio);
+      ctx.fillText('确认返回？', (uiWidth / 2) * ratio, 750 * ratio);
       
     }
     //7:过关
