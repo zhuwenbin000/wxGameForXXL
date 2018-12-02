@@ -596,12 +596,12 @@ export default class Index {
           }
         }
         if (!databus.isLookVideo) {
-          if(databus.isVideoing == true){
-            return
-          }
-          databus.isVideoing = true
           // 视频广告事件
           if (x >= 425 * ratio && x <= (425 * ratio + lvc.w) && y >= lvc.y && y <= lvc.y + lvc.h) {
+            if(databus.isVideoing == true){
+              return
+            }
+            databus.isVideoing = true
             databus.showVideoAd()
             //按钮按下音效
             this.music.playMusic('btnDown')
@@ -609,12 +609,12 @@ export default class Index {
         }
       }else{
         if (!databus.isLookVideo) {
-          if(databus.isVideoing == true){
-            return
-          }
-          databus.isVideoing = true
           // 视频广告事件
           if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
+            if(databus.isVideoing == true){
+              return
+            }
+            databus.isVideoing = true
             databus.showVideoAd()
             //按钮按下音效
             this.music.playMusic('btnDown')

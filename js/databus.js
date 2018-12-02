@@ -160,6 +160,7 @@ export default class DataBus {
     // this.offsetTop = 0 * ratio //游戏页上移高度
     this.isGameCtxScale = true //游戏页是否放大
     this.bannerOver = false
+    this.isVideoing = false
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 254 * ratio  + this.gameTop, //棋盘到顶部的距离
@@ -635,7 +636,9 @@ export default class DataBus {
     this.videoAd.load()
     .then(() => {
       this.videoAd.show()
-      this.isVideoing = false
+      .then(() => {
+        this.isVideoing = false
+      })
     })
     .catch(err => {
       wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
