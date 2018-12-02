@@ -268,12 +268,14 @@ export default class Index {
     }
     //增加步数价格背景坐标宽高
     ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, aspbc.x, aspbc.y, aspbc.w, aspbc.h);
+   
     // //绘制彩色道具按钮
     // ctx.drawImage(this.Robj["colorTool"], 0, 0, this.Robj["colorTool"].width, this.Robj["colorTool"].height, ctc.x, ctc.y, ctc.w, ctc.h);
     // //彩色道具红点坐标宽高
     // ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, ctpoc.x, ctpoc.y, ctpoc.w, ctpoc.h);
     // //彩色道具价格背景坐标宽高
     // ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
+    
     if (databus.doubleHit > 0){
       // databus.doubleHitTime++
       // if (databus.doubleHitTime > 20){
@@ -827,7 +829,8 @@ export default class Index {
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-      // // 彩色道具购买按钮事件
+      
+      // 彩色道具购买按钮事件
       // if (x >= (455 * ratio) && x <= ((455 + 50) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 50) * ratio)) {
       //   databus.gameState = 4
       //   //按钮按下音效

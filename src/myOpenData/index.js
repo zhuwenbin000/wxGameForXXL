@@ -120,12 +120,12 @@ function drawrank(list, page) {
     list.map((item, index) => {
       avatarList[index] = wx.createImage();
       avatarList[index].src = item.avatarUrl;
-      avatarList[index].onload = function () {
+      // avatarList[index].onload = function () {
         allNum++
         if (allNum == list.length) {
           drawList(avatarList, list, page)
         }
-      }
+      // }
     });
   } else {
     // 没有数据
@@ -143,7 +143,10 @@ function drawList(avatarList, list, page) {
 
   list.map((item, index) => {
     var avatarurl_y = index * itemHeight + 275;   //绘制的头像在画布上的位置
-    context.drawImage(avatarList[index], avatarurl_x, avatarurl_y, avatarurl_width, avatarurl_heigth);
+
+    avatarList[index].onload = ()=> {
+      context.drawImage(avatarList[index], avatarurl_x, avatarurl_y, avatarurl_width, avatarurl_heigth);
+    }
     context.fillStyle = '#fff';
     context.font = '28px Arial';
     context.textAlign = 'left';
