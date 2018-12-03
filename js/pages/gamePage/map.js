@@ -541,6 +541,20 @@ export default class Map {
     ajax(options)
   }
 
+  //根据旗子类型获取当前棋盘内相同类型的旗子坐标
+  selectBlocksByType(type) {
+    let piecesArr = []
+    for (var r = 0; r < rn; r++) {
+      for (var c = 0; c < cn; c++) {
+        if(this.blocks[r][c].attr.piecesType == type){
+          this.needToBomb[r][c] = "X";
+          this.blocks[r][c].bomb()
+          piecesArr.push(this.blocks[r][c])
+        }
+      }
+    }
+
+  }
   //规整
   dropDown() {
     //现在要现提出一个矩阵，这个矩阵表示每一个元素要下落多少行

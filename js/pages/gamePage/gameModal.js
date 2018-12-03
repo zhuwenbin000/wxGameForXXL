@@ -82,29 +82,29 @@ export default class GameModal {
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
-      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 240 * ratio, 824 * ratio, 1072 * ratio);
+      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 190 * ratio, 824 * ratio, 1072 * ratio);
       //弹框关闭
-      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 220 * ratio, 150 * ratio, 162 * ratio);
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 170 * ratio, 150 * ratio, 162 * ratio);
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
         //弹框确认
-        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1080 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1030 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
       } else {
         databus.btnPlus = 0
         //弹框确认
-        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1030 * ratio, 340 * ratio, 168 * ratio);
       }
       //金脚丫
-      ctx.drawImage(Robj["colorTool"], 0, 0, Robj["colorTool"].width, Robj["colorTool"].height, 250 * ratio, 435 * ratio, 346 * ratio, 356 * ratio);
+      ctx.drawImage(Robj["colorTool"], 0, 0, Robj["colorTool"].width, Robj["colorTool"].height, 250 * ratio, 385 * ratio, 346 * ratio, 356 * ratio);
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
       ctx.font = 50 * ratio + 'px Arial';
-      ctx.fillText('道具购买', (uiWidth / 2) * ratio, 415 * ratio);
+      ctx.fillText('道具购买', (uiWidth / 2) * ratio, 365 * ratio);
       ctx.textAlign = 'left';
       ctx.font = 40 * ratio + 'px Arial';
-      ctx.fillText('效果：消除棋盘内指定同色水果', 155 * ratio, 865 * ratio);
-      ctx.fillText('价格：' + databus.hammerprice + '金币', 155 * ratio, 955 * ratio); 
+      ctx.fillText('效果：消除棋盘内指定同色水果', 155 * ratio, 815 * ratio);
+      ctx.fillText('价格：' + databus.hammerprice + '金币', 155 * ratio, 905 * ratio); 
     }
     //5:增加步数弹框
     if (databus.gameState == 5) {
@@ -317,24 +317,24 @@ export default class GameModal {
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
-      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 240 * ratio, 824 * ratio, 1072 * ratio);
+      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 190 * ratio, 824 * ratio, 1072 * ratio);
       
       //弹框确认
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
         //弹框确认
-        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1080 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1030 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
       } else {
         databus.btnPlus = 0
         //弹框确认
-        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1080 * ratio, 340 * ratio, 168 * ratio);
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1030 * ratio, 340 * ratio, 168 * ratio);
       }
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
       ctx.font = 50 * ratio + 'px Arial';
-      ctx.fillText('网络异常', (uiWidth / 2) * ratio, 700 * ratio);
-      ctx.fillText('请检查网络设置', (uiWidth / 2) * ratio, 800 * ratio);
+      ctx.fillText('网络异常', (uiWidth / 2) * ratio, 650 * ratio);
+      ctx.fillText('请检查网络设置', (uiWidth / 2) * ratio, 750 * ratio);
 
     }
 
