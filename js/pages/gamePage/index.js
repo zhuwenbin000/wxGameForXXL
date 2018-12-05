@@ -868,7 +868,7 @@ export default class Index {
       }
       
       // 彩色道具购买按钮事件
-      if (x >= (455 * ratio) && x <= ((455 + 50) * ratio) && y >= (1235 * ratio) && y <= ((1235 + 50) * ratio)) {
+      if (x >= (455 * ratio) && x <= ((455 + 50) * ratio) && y >= (1155 * ratio + databus.gameTop) && y <= ((1155 + 50) * ratio) + databus.gameTop) {
         databus.gameState = 4
         //按钮按下音效
         this.music.playMusic('btnDown')

@@ -256,7 +256,7 @@ export default class Map {
     //combo音效
     this.music.playMusic('combo')
     //计算消除得分
-    this.getScoreForBomb(cb)
+    this.getScoreForBomb(cb,1)
   }
 
   //连线消除
@@ -281,13 +281,13 @@ export default class Map {
       this.blocks[sb[i].row][sb[i].col].bomb();
     }
     //计算消除得分
-    this.getScoreForBomb(sb)
+    this.getScoreForBomb(sb,1)
     //预获得分数归0
     databus.preScore = 0;
   }
 
   //根据棋子消除序列计算得分
-  getScoreForBomb(sb) {
+  getScoreForBomb(sb,multiplyBy) {
     if (sb.length <= 0) return
     var bombScore = 0;//本次爆炸分数
     var scorePrev = 0;//上一个连线分数
@@ -333,7 +333,7 @@ export default class Map {
       databus.doubleHit = doubleHit
     }
     
-    databus.score = databus.score + bombScore * doubleHit
+    databus.score = databus.score + bombScore * doubleHit * multiplyBy
 
     //显示获得得分
     const x = databus.getPointCenter(sb[sb.length - 1]).x;
@@ -543,17 +543,22 @@ export default class Map {
 
   //根据旗子类型获取当前棋盘内相同类型的旗子坐标
   selectBlocksByType(type) {
-    let piecesArr = []
+    let piecesArr = [];
+    let sb = [];
     for (var r = 0; r < rn; r++) {
       for (var c = 0; c < cn; c++) {
         if(this.blocks[r][c].attr.piecesType == type){
           this.needToBomb[r][c] = "X";
           this.blocks[r][c].bomb()
           piecesArr.push(this.blocks[r][c])
+          sb.push({row:r,col:c})
         }
       }
     }
 
+    databus.prevSelectBlocks = piecesArr
+    this.getScoreForBomb(sb,10)
+    
   }
   //规整
   dropDown() {

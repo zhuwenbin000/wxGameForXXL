@@ -38,6 +38,10 @@ export default class DataBus {
           //适配vivo Y85
           this.gameTop = 80 * ratio
           this.gameEndTop = 80 * ratio
+        }else if(modelmes.search('huawei P20') != -1){
+          //适配华为P20
+          this.gameTop = 80 * ratio
+          this.gameEndTop = 80 * ratio
         }
         this.reset()
       }
@@ -134,7 +138,7 @@ export default class DataBus {
       h: 130 * ratio
     }
     
-    this.version = '0.0.1.5';
+    this.version = '0.0.1.6';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
