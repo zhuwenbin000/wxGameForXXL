@@ -61,20 +61,7 @@ export default class Map {
     //下落行数阵
     this.downRow = [];
 
-    //根据行列数生成二维矩阵
-    for (var r = 0; r < rn; r++) {
-      this.QRcode[r] = []
-      this.blocks[r] = []
-      this.needToBomb[r] = []
-      this.downRow[r] = []
-      for (var c = 0; c < cn; c++) {
-        this.QRcode[r][c] = {
-          piecesType: _.random(0, databus.piecesType - 1),
-          piecesLevel: databus.getPiecesLevel(),
-          piecesCoin: _.random(0, 10) > 9 ? true : false
-        }
-      }
-    }
+    this.createQR();
 
     this.createBlocksByQR();
 
@@ -87,6 +74,36 @@ export default class Map {
     this.gslTime = 0;
     this.ss = false;
     this.sc = false;
+  }
+
+  createQR() {
+    if(!databus.archiveState){
+      //根据行列数随机生成二维矩阵
+      for (var r = 0; r < rn; r++) {
+        this.QRcode[r] = []
+        this.blocks[r] = []
+        this.needToBomb[r] = []
+        this.downRow[r] = []
+        for (var c = 0; c < cn; c++) {
+          this.QRcode[r][c] = {
+            piecesType: _.random(0, databus.piecesType - 1),
+            piecesLevel: databus.getPiecesLevel(),
+            piecesCoin: _.random(0, 10) > 9 ? true : false
+          }
+        }
+      }
+    }else{
+      //根据存档生成
+      for (var r = 0; r < rn; r++) {
+        this.QRcode[r] = []
+        this.blocks[r] = []
+        this.needToBomb[r] = []
+        this.downRow[r] = []
+        for (var c = 0; c < cn; c++) {
+          this.QRcode[r][c] = databus.archiveData.QRcode[r][c]
+        }
+      }
+    }
   }
 
   createBlocksByQR() {

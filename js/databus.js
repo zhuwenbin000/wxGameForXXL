@@ -160,11 +160,12 @@ export default class DataBus {
     this.btnPlus = 0 //按钮变大效果
     this.fingerAniTime = 0 //手指滑动动画
     this.firstRule = false //首次进入规则页
-    this.videoAdState = false //视频广告状态
     // this.offsetTop = 0 * ratio //游戏页上移高度
     this.isGameCtxScale = true //游戏页是否放大
-    this.bannerOver = false
-    this.isVideoing = false
+    this.bannerOver = false //是否需要显示banner
+    this.isVideoing = false  //视频是否在播放中
+    this.archiveState = false //是否有存档
+    this.archiveData = {} //存档数据
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 254 * ratio  + this.gameTop, //棋盘到顶部的距离
@@ -621,7 +622,6 @@ export default class DataBus {
       // 小于 2.1.0 的基础库版本，res 是一个 undefined
       if (res && res.isEnded || res === undefined) {
         // 正常播放结束，可以下发游戏奖励
-        this.videoAdState = true //观看完毕可以获得奖励
         this.continueGame(1, 5)
         if (this.musicBgChange) {
           //开启音乐

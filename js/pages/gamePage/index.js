@@ -4,12 +4,12 @@ import GameEnd from './gameEnd'
 import GameModal from './gameModal'
 import DataBus from '../../databus'
 import { ajax } from '../../base/ajax'
-import DataStore from '../../base/helper';
 
 let databus = new DataBus()
+//棋盘的宽数和列数
+let rn = databus.rowNum
+let cn = databus.colNum
 
-const screenWidth = window.innerWidth;
-const screenHeight = window.innerHeight;
 let uiWidth = 828;
 let ratio = canvas.width / uiWidth //设计稿宽度
 
@@ -417,18 +417,11 @@ export default class Index {
       }
 
     }
-    
-
-    // console.log(screenWidth,screenHeight,canvas.width,canvas.height,this.gameCtx.width,this.gameCtx.height)
-    // DataStore.getInstance().ctx.drawImage(DataStore.getInstance().gameCanvas, 0, -databus.offsetTop, canvas.width, canvas.height+ databus.offsetTop);
-
-    // this.screenCtx.drawImage(this.gameCtx, 0, -databus.offsetTop,screenWidth, screenHeight + databus.offsetTop)
   }
 
   // 实现游戏帧循环
   loop() {
     this.render(this.ctx)
-    // this.screenCtx.drawImage(this.gameCtx, 0, -databus.offsetTop,screenWidth, screenHeight + databus.offsetTop)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
   }
 
@@ -439,55 +432,98 @@ export default class Index {
   //获取初始关卡数据
   getGameInfo() {
     var self = this;
-    let options = {
-      tradecode: 'game01',
-      apiType: 'user',
-      method: 'POST',
-      success(data) {
-        databus.passScore = data.body.game.stagescore //第一关过关所需分数
-        databus.gameId = data.body.game.gameid //本轮游戏id
-        databus.rewardstep = data.body.game.rewardstep //过关奖励步数
-        //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
-        let piecesConfig = data.body.game.numberifno.split(',');
-        let piecesLevel = ['level1', 'level2','level3'];
-        let piecesProbblt = [];
-        for (var i = 0; i < piecesConfig.length; i++) {
-          piecesProbblt.push(parseFloat(piecesConfig[i].split(':')[1]))
-          databus.piecesLevelScore['level' + (i + 1)] = parseFloat(piecesConfig[i].split(':')[0])
-        }
-        databus.piecesLevelProbblt = { //棋子对应等级的生成概率
-          piecesLevel: piecesLevel,
-          piecesProbblt: piecesProbblt
-        }
 
-        var propList = data.body.prop_list;
-        //道具相关
-        for (var j = 0; j < propList.length; j++) {
-          if (propList[j].proptype == '2'){
-            databus.userhammer = propList[j].propbalance || 0; //用户拥有道具-锤子
-            databus.hammerprice = propList[j].propprice || 0; //用户购买道具-锤子价格
-          } 
-          if (propList[j].proptype == '3'){
-            databus.usersteps = propList[j].propbalance || 0; //用户拥有道具-步数
-            databus.stepprice = propList[j].propprice || 0; //用户购买道具-步数价格
+    if(!databus.archiveState){
+      let options = {
+        tradecode: 'game01',
+        apiType: 'user',
+        method: 'POST',
+        success(data) {
+          databus.passScore = data.body.game.stagescore //第一关过关所需分数
+          databus.gameId = data.body.game.gameid //本轮游戏id
+          databus.rewardstep = data.body.game.rewardstep //过关奖励步数
+          //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
+          let piecesConfig = data.body.game.numberifno.split(',');
+          let piecesLevel = ['level1', 'level2','level3'];
+          let piecesProbblt = [];
+          for (var i = 0; i < piecesConfig.length; i++) {
+            piecesProbblt.push(parseFloat(piecesConfig[i].split(':')[1]))
+            databus.piecesLevelScore['level' + (i + 1)] = parseFloat(piecesConfig[i].split(':')[0])
           }
+          databus.piecesLevelProbblt = { //棋子对应等级的生成概率
+            piecesLevel: piecesLevel,
+            piecesProbblt: piecesProbblt
+          }
+
+          var propList = data.body.prop_list;
+          //道具相关
+          for (var j = 0; j < propList.length; j++) {
+            if (propList[j].proptype == '2'){
+              databus.userhammer = propList[j].propbalance || 0; //用户拥有道具-锤子
+              databus.hammerprice = propList[j].propprice || 0; //用户购买道具-锤子价格
+            } 
+            if (propList[j].proptype == '3'){
+              databus.usersteps = propList[j].propbalance || 0; //用户拥有道具-步数
+              databus.stepprice = propList[j].propprice || 0; //用户购买道具-步数价格
+            }
+          }
+
+          //地图，唯一的实例
+          self.map = new Map(self.ctx)
+          //添加监听
+          self.touchStartHandler = self.touchStart.bind(self)
+          canvas.addEventListener('touchstart', self.touchStartHandler)
+
+          //主循环开始
+          self.bindLoop = self.loop.bind(self)
+
+          // 清除上一帧的动画
+          window.cancelAnimationFrame(self.aniId)
+          self.aniId = window.requestAnimationFrame(self.bindLoop, canvas)
         }
-
-        //地图，唯一的实例
-        self.map = new Map(self.ctx)
-        //添加监听
-        self.touchStartHandler = self.touchStart.bind(self)
-        canvas.addEventListener('touchstart', self.touchStartHandler)
-
-        //主循环开始
-        self.bindLoop = self.loop.bind(self)
-
-        // 清除上一帧的动画
-        window.cancelAnimationFrame(self.aniId)
-        self.aniId = window.requestAnimationFrame(self.bindLoop, canvas)
       }
+      ajax(options)
+    }else{
+      let data = wx.getStorageSync('archiveData') //获取存档信息
+      let archiveData = data && JSON.parse(data)
+      databus.archiveData = archiveData //存档信息
+
+      //开始存档配置并开始游戏
+      databus.score = archiveData.score //每次开始默认分数、当前关卡获得分数
+      databus.gameScore = archiveData.gameScore //本轮游戏总分
+      databus.checkPoint = archiveData.checkPoint //当前关卡
+      databus.steps = archiveData.steps //剩余步数
+      databus.useSteps = archiveData.useSteps //使用步数
+      databus.gamegold = archiveData.gamegold //本轮游戏总金币
+      databus.stagegold = archiveData.stagegold //过关时的金币
+      databus.selfHighScore = archiveData.selfHighScore //个人历史最高分
+      databus.isShare = archiveData.isShare //本局游戏是否分享过
+      databus.isLookVideo = archiveData.isLookVideo //本局游戏是否观看过视频
+      
+      databus.passScore = archiveData.passScore //过关分数
+      databus.gameId = archiveData.gameId //本轮游戏id
+      databus.rewardstep = archiveData.rewardstep //过关奖励步数
+      databus.piecesLevelScore = archiveData.piecesLevelScore //旗子对应分数
+      databus.piecesLevelProbblt = archiveData.piecesLevelProbblt //旗子对应等级和生成概率
+      databus.userhammer = archiveData.userhammer //用户拥有道具-锤子
+      databus.hammerprice = archiveData.hammerprice //用户购买道具-锤子价格
+      databus.usersteps = archiveData.usersteps //用户拥有道具-步数
+      databus.stepprice = archiveData.stepprice //用户购买道具-步数价格
+
+      //地图，唯一的实例
+      self.map = new Map(self.ctx)
+      //添加监听
+      self.touchStartHandler = self.touchStart.bind(self)
+      canvas.addEventListener('touchstart', self.touchStartHandler)
+
+      //主循环开始
+      self.bindLoop = self.loop.bind(self)
+
+      // 清除上一帧的动画
+      window.cancelAnimationFrame(self.aniId)
+      self.aniId = window.requestAnimationFrame(self.bindLoop, canvas)
+
     }
-    ajax(options)
   }
 
   //获取用户信息 最高分数 最高关卡 拥有金币
@@ -802,7 +838,7 @@ export default class Index {
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-    } else if (databus.gameState == 11) {//8:金币规则弹框
+    } else if (databus.gameState == 11) {//11:金币规则弹框
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (820 * ratio) && y <= ((820 + 142) * ratio)) {
         databus.btnPlus = 1
@@ -813,7 +849,54 @@ export default class Index {
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-    }else if (databus.gameState == 1){//游戏进行中
+    } else if (databus.gameState == 13) {//13:存档弹框
+      // 点击确认事件
+      if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (820 * ratio) && y <= ((820 + 142) * ratio)) {
+        console.log('存档')
+        let archiveData = {},QRcode = [];
+        //开始存档配置
+        
+        archiveData.score = databus.score //每次开始默认分数、当前关卡获得分数
+        archiveData.gameScore = databus.gameScore //本轮游戏总分
+        archiveData.checkPoint = databus.checkPoint //当前关卡
+        archiveData.steps = databus.steps //剩余步数
+        archiveData.useSteps = databus.useSteps //使用步数
+        archiveData.gamegold = databus.gamegold //本轮游戏总金币
+        archiveData.stagegold = databus.stagegold //过关时的金币
+        archiveData.selfHighScore = databus.selfHighScore //个人历史最高分
+        archiveData.isShare = databus.isShare //本局游戏是否分享过
+        archiveData.isLookVideo = databus.isLookVideo //本局游戏是否观看过视频
+        
+        archiveData.passScore = databus.passScore //过关分数
+        archiveData.gameId = databus.gameId //本轮游戏id
+        archiveData.rewardstep = databus.rewardstep //过关奖励步数
+        archiveData.piecesLevelScore = databus.piecesLevelScore //旗子对应分数
+        archiveData.piecesLevelProbblt = databus.piecesLevelProbblt //旗子对应等级和生成概率
+        archiveData.userhammer = databus.userhammer //用户拥有道具-锤子
+        archiveData.hammerprice = databus.hammerprice //用户购买道具-锤子价格
+        archiveData.usersteps = databus.usersteps //用户拥有道具-步数
+        archiveData.stepprice = databus.stepprice //用户购买道具-步数价格
+
+        //保存棋盘状态
+        for (var r = 0; r < rn; r++) {
+          QRcode[r] = []
+          for (var c = 0; c < cn; c++) {
+            QRcode[r][c] = this.map.blocks[r][c].attr
+          }
+        }
+        archiveData.QRcode = QRcode
+
+        wx.setStorageSync('archiveData', JSON.stringify(archiveData))
+
+        databus.btnPlus = 1
+        setTimeout(() => {
+          databus.gameState = 1
+          databus.btnPlus = 0
+        }, databus.laterTime)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+    } else if (databus.gameState == 1){//游戏进行中
       // 首页按钮事件
       if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
         databus.gameState = 6
