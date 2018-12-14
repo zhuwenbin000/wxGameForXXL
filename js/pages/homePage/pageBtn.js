@@ -104,6 +104,7 @@ export default class PageBtn {
       this.render_btn(ctx)
       this.loginauthor(ctx)
       this.share_button(ctx)
+      this.bannerBtn(ctx)
     }
 
         
@@ -416,6 +417,39 @@ export default class PageBtn {
       })
     }
   }
+  bannerBtn(ctx) { //banner按钮
+    if (!this.bannerButton) {
+      this.bannerButton = wx.createUserInfoButton({
+        type: 'image',
+        image: 'images/home/bannerbtn.png',
+        style: {
+          left: 680 * ratio,
+          top: 110 * ratio,
+          width: 120 * ratio,
+          height: 150 * ratio,
+          lineHeight: 40,
+          backgroundColor: '#ff0000',
+          color: '#ffffff',
+          textAlign: 'center',
+          fontSize: 16,
+          borderRadius: 4
+        }
+      })
+      this.bannerButton.onTap((res) => {
+        if (res.rawData)//授权成功
+        {
+          
+          this.createbutton.destroy()
+          this.friendbutton.destroy()
+          this.bannerButton.destroy()
+          databus.pownstate = 1;
+          this.getBtnposition()
+          this.render(ctx)
+        }
+      })
+    }
+  }
+
   loginauthor(ctx) {
     if(databus.homeState == 2){
       databus.gameClubbutton.hide()
@@ -440,7 +474,7 @@ export default class PageBtn {
       })
     } 
   }
-  share_button(ctx) {   
+  share_button(ctx) {
     if (!databus.sharebtn_state) {
       ctx.drawImage(shareBtn, 0, 0, 282, 138, sml,smleft, 282 * ratio, 138 * ratio)
     }else{

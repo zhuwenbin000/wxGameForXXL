@@ -107,7 +107,7 @@ export function userLogin(options) {
           if (data.result.code == '0') {//处理成功
             wx.setStorageSync('loginflag', data.body.user.loginflag)
             wx.setStorageSync('userId', data.body.user.userid)
-            wx.setStorageSync('openId', data.body.user.openId)
+            wx.setStorageSync('openId', data.body.user.openid)
             if (options.tradecode) {
               ajax(options)//再次调用
             }else{

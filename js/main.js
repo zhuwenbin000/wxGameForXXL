@@ -50,13 +50,18 @@ export default class Main {
     
     wx.onShow((res)=>{
 
-      if(res && res.query && res.query.fatherId){
-        wx.setStorageSync('fatherId', res.query.fatherId)
+      if(res && res.query && res.query.scene){
+        wx.setStorageSync('fatherId', res.query.scene)
       }
 
       const scene = res && res.scene
+
       if(scene.length == 32){
         wx.setStorageSync('fatherId', res.scene)
+      }
+
+      if(res && res.query && res.query.fatherId){
+        wx.setStorageSync('fatherId', res.query.fatherId)
       }
 
     })
