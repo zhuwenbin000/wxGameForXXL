@@ -137,8 +137,10 @@ export default class DataBus {
       w: 258 * ratio,
       h: 130 * ratio
     }
+
+    this.homeState = 1 //首页状态变化
     
-    this.version = '0.0.1.6';
+    this.version = '0.0.1.7';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id

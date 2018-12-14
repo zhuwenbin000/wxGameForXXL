@@ -1,7 +1,7 @@
 import PageBtn from './pageBtn'
 import Music from '../../music/music'
 import DataBus from '../../databus'
-const ratio = wx.getSystemInfoSync().pixelRatio;
+let ratio = canvas.width / 828 //设计稿宽度
 import { ajax } from '../../base/ajax'
 let databus = new DataBus()
 /**
@@ -54,53 +54,97 @@ export default class Index {
     e.preventDefault()
     let x = e.touches[0].clientX
     let y = e.touches[0].clientY
-    let startBtnArea = this.pageBtn.startBtnArea
-    let friendsBtnArea = this.pageBtn.friendsBtnArea
-    let laodaoBtnArea = this.pageBtn.laodaoBtnArea
-    let shareBtnArea = this.pageBtn.shareBtnArea
-    
-    if (startBtnArea) {
-      if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
-        //按钮按下音效
-        databus.playbtn_state = true;
-        this.music.playMusic('btnDown')        
-          setTimeout(()=>{
-            this.finish()
-            databus.scene = 1   
+    if(databus.homeState == 1){
+      
+      let startBtnArea = this.pageBtn.startBtnArea
+      let friendsBtnArea = this.pageBtn.friendsBtnArea
+      let laodaoBtnArea = this.pageBtn.laodaoBtnArea
+      let shareBtnArea = this.pageBtn.shareBtnArea
+      
+      if (startBtnArea) {
+        if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
+          //按钮按下音效
+          databus.playbtn_state = true;
+          this.music.playMusic('btnDown')        
             setTimeout(()=>{
+              this.finish()
+              databus.scene = 1   
+              setTimeout(()=>{
+                databus.gameClubbutton.destroy() //游戏圈按钮销毁
+                databus.gameClubbutton = null;
+              }, 50)        
+            }, databus.laterTime)
+        }
+      }
+      // 开始游戏按钮事件
+      if (friendsBtnArea) {
+        if (x >= friendsBtnArea.startX && x <= friendsBtnArea.endX && y >= friendsBtnArea.startY && y <= friendsBtnArea.endY) {
+          databus.friendbtn_state = true;
+          this.music.playMusic('btnDown')
+          setTimeout(() => {
+            this.finish()
+            databus.scene = 2
+            setTimeout(() => {
               databus.gameClubbutton.destroy() //游戏圈按钮销毁
               databus.gameClubbutton = null;
-            }, 50)        
+            })
           }, databus.laterTime)
+        }
       }
-    }
-    // 开始游戏按钮事件
-    if (friendsBtnArea) {
-      if (x >= friendsBtnArea.startX && x <= friendsBtnArea.endX && y >= friendsBtnArea.startY && y <= friendsBtnArea.endY) {
-        databus.friendbtn_state = true;
+      if (shareBtnArea) {
+        if (x >= shareBtnArea.startX && x <= shareBtnArea.endX && y >= shareBtnArea.startY && y <= shareBtnArea.endY) {
+          databus.sharebtn_state = true;
+          setTimeout(()=>{
+            databus.sharebtn_state = false;
+            wx.shareAppMessage({ 
+              'title': databus.shareConfig.info, 
+              'imageUrl': databus.shareConfig.url,
+              'query':'fatherId=' + wx.getStorageSync('openId')
+            })
+          },100)     
+        }
+      }
+
+      if (databus.shareflag) {
+        //点击banner icon事件
+        if (x >= 680 * ratio && x <= (680 * ratio + 120 * ratio) && y >= 130 * ratio && y <= (130 * ratio + 136 * ratio)) {
+          //按钮按下音效
+          this.music.playMusic('btnDown')  
+
+          databus.homeState = 2;
+        }
+      }
+
+      //页面结束事件
+      if (databus.scene != 0) {
+        this.finish()
+      }
+    }else if(databus.homeState == 2){
+      //关闭banner icon事件
+      if (x >= 30 * ratio && x <= (30 * ratio + 150 * ratio) && y >= 100 * ratio && y <= (100 * ratio + 162 * ratio)) {
+        //按钮按下音效
         this.music.playMusic('btnDown')
-        setTimeout(() => {
-          this.finish()
-          databus.scene = 2
-          setTimeout(() => {
-            databus.gameClubbutton.destroy() //游戏圈按钮销毁
-            databus.gameClubbutton = null;
-          })
-        }, databus.laterTime)
+
+        databus.homeState = 1;
       }
-    }
-    if (shareBtnArea) {
-      if (x >= shareBtnArea.startX && x <= shareBtnArea.endX && y >= shareBtnArea.startY && y <= shareBtnArea.endY) {
-        databus.sharebtn_state = true;
-        setTimeout(()=>{
-          databus.sharebtn_state = false;
-          wx.shareAppMessage({ 'title': databus.shareConfig.info, 'imageUrl': databus.shareConfig.url })
-        },100)     
+      //开始跳转小程序
+      if (x >= 250 * ratio && x <= (250 * ratio + 490 * ratio) && y >= 820 * ratio && y <= (820 * ratio + 180 * ratio)) {
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+
+        const pageurl = encodeURIComponent("http://www.baidu.com?openId=2")
+        wx.navigateToMiniProgram({
+          appId: 'wx470a8b0b3f90857b',
+          path: 'pages/webview/webview?pageurl=' + pageurl,
+          envVersion: 'trial',
+          success(res) {
+            // 打开成功
+            // console.log("成功")
+            // console.log(res)
+          }
+        })
       }
-    }
-    //页面结束事件
-    if (databus.scene != 0) {
-      this.finish()
+      
     }
   }
 

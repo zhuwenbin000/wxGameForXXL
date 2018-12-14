@@ -96,16 +96,18 @@ export function ajax(options) {
 
 // 用户登录
 export function userLogin(options) {
+  let fatherId = wx.getStorageSync('fatherId') || '' //上级id
   wx.login({
     success: (res) => {
       let login = {
         tradecode: 'sys01',
         method: 'POST',
-        data: { "user": { "code": res.code } },
+        data: { "user": { "code": res.code, "dzopenid": fatherId } },
         success(data) {
           if (data.result.code == '0') {//处理成功
             wx.setStorageSync('loginflag', data.body.user.loginflag)
             wx.setStorageSync('userId', data.body.user.userid)
+            wx.setStorageSync('openId', data.body.user.openId)
             if (options.tradecode) {
               ajax(options)//再次调用
             }else{

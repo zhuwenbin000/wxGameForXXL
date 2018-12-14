@@ -48,6 +48,18 @@ export default class Main {
       this.getBaseInfo()
     }
     
+    wx.onShow((res)=>{
+
+      if(res && res.query && res.query.fatherId){
+        wx.setStorageSync('fatherId', res.query.fatherId)
+      }
+
+      const scene = res && res.scene
+      if(scene.length == 32){
+        wx.setStorageSync('fatherId', res.scene)
+      }
+
+    })
   }
   renderPage() {
     let self = this

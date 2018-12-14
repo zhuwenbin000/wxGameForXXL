@@ -12,6 +12,9 @@ let gameClubbutton = null;
 let authorBtn = wx.createImage();
 let bg = wx.createImage();
 let loginfriendsRankBtn = wx.createImage();
+let banner = wx.createImage();
+let bannerModal = wx.createImage();
+
 
 let loginauthorBtn = wx.createImage();
 let loginstartBtn = wx.createImage();
@@ -31,6 +34,9 @@ let sml2 = window.innerWidth / 2
 let smleft = nmt + 91 * ratio + 312 * ratio + nb * 2
 let smleft_big = nmt + 91 * ratio + 312 * ratio + nb * 2 - (138 * ratio * 0.1 / 2)
 bg.src = 'images/home/background.png'
+banner.src = 'images/home/banner_icon.png'
+bannerModal.src = 'images/home/banner_modal.png'
+
 logoBtn.src = 'images/home/logo.png'
 startBtn.src = 'images/home/start.png'
 friendsRankBtn.src = 'images/home/friends.png'
@@ -49,6 +55,9 @@ let R = {
   "logo4": "images/home/logo/logo4.png",
   "logo5": "images/home/logo/logo5.png",
   "logo6": "images/home/logo/logo6.png",
+  "gameEndBg": "images/gameEnd/gameEndBg.png",
+  "modalClose": "images/gameModal/modal_close.png",
+  "author": "images/home/author.png",
 }
 
 //把所有的图片放到一个对象中
@@ -79,10 +88,14 @@ export default class PageBtn {
     this.f++
     ctx.clearRect(0, 0, screenWidth, screenHeight)
     ctx.drawImage(bg, 0, 0, screenWidth, screenHeight)
+
+
     this.drawlogo(ctx)//画logo
     if(this.f % 6 == 0){
       this.logoTime++
     }
+
+
     if (databus.pownstate == 1) { //已授权
       this.drawhead(ctx)//画头像
     } else { //未授权
@@ -91,6 +104,85 @@ export default class PageBtn {
       this.render_btn(ctx)
       this.loginauthor(ctx)
       this.share_button(ctx)
+    }
+
+        
+    if (databus.shareflag) {
+      //抖m
+      if(this.logoTime % 5 == 0){
+        //中心点变化
+        ctx.translate(740 * ratio, 198 * ratio)
+        //旋转
+        ctx.rotate(Math.PI * 0)
+
+        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+
+        //复位旋转和中心点
+        ctx.rotate(-Math.PI * 0)
+        ctx.translate(-740 * ratio, -198 * ratio)
+
+      }else if(this.logoTime % 5 == 1){
+        //中心点变化
+        ctx.translate(740 * ratio, 198 * ratio)
+        //旋转
+        ctx.rotate(Math.PI * 1 / 12)
+
+        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+
+        //复位旋转和中心点
+        ctx.rotate(-Math.PI * 1 / 12)
+        ctx.translate(-740 * ratio, -198 * ratio)
+
+      }else if(this.logoTime % 5 == 2){
+        //中心点变化
+        ctx.translate(740 * ratio, 198 * ratio)
+        //旋转
+        ctx.rotate(Math.PI * 0)
+
+        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+
+        //复位旋转和中心点
+        ctx.rotate(-Math.PI * 0)
+        ctx.translate(-740 * ratio, -198 * ratio)
+        
+      }else if(this.logoTime % 5 == 3){
+        //中心点变化
+        ctx.translate(740 * ratio, 198 * ratio)
+        //旋转
+        ctx.rotate(-Math.PI * 1 / 12)
+
+        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+
+        //复位旋转和中心点
+        ctx.rotate(Math.PI * 1 / 12)
+        ctx.translate(-740 * ratio, -198 * ratio)
+        
+      }else if(this.logoTime % 5 == 4){
+        //中心点变化
+        ctx.translate(740 * ratio, 198 * ratio)
+        //旋转
+        ctx.rotate(Math.PI * 0)
+
+        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+
+        //复位旋转和中心点
+        ctx.rotate(-Math.PI * 0)
+        ctx.translate(-740 * ratio, -198 * ratio)
+      
+      }
+      
+    }
+
+    if(databus.homeState == 2){
+      //模拟游戏圈
+      ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+
+      ctx.drawImage(bannerModal, 0, 0, bannerModal.width, bannerModal.height,94 * ratio,150 * ratio,640 * ratio,900 * ratio)
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 30 * ratio, 100 * ratio, 150 * ratio, 162 * ratio);
+      
     }
   }
   render_btn() {
@@ -325,7 +417,14 @@ export default class PageBtn {
     }
   }
   loginauthor(ctx) {
-   
+    if(databus.homeState == 2){
+      databus.gameClubbutton.hide()
+      return
+    }else{
+      databus.gameClubbutton && databus.gameClubbutton.show()
+    }
+    
+
     if (!databus.gameClubbutton && !databus.playbtn_state){
      
       databus.gameClubbutton = wx.createGameClubButton({
