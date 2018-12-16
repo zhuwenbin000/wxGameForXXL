@@ -63,17 +63,22 @@ export default class Index {
       
       if (startBtnArea) {
         if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
-          //按钮按下音效
-          databus.playbtn_state = true;
-          this.music.playMusic('btnDown')        
-            setTimeout(()=>{
-              this.finish()
-              databus.scene = 1   
+          if(databus.archiveState){
+            //存档弹框
+            databus.homeState = 3;
+          }else{
+            //按钮按下音效
+            databus.playbtn_state = true;
+            this.music.playMusic('btnDown')        
               setTimeout(()=>{
-                databus.gameClubbutton.destroy() //游戏圈按钮销毁
-                databus.gameClubbutton = null;
-              }, 50)        
-            }, databus.laterTime)
+                this.finish()
+                databus.scene = 1   
+                setTimeout(()=>{
+                  databus.gameClubbutton.destroy() //游戏圈按钮销毁
+                  databus.gameClubbutton = null;
+                }, 50)        
+              }, databus.laterTime)
+          }
         }
       }
       // 开始游戏按钮事件

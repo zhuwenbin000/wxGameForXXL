@@ -166,7 +166,7 @@ export default class DataBus {
     this.isGameCtxScale = true //游戏页是否放大
     this.bannerOver = false //是否需要显示banner
     this.isVideoing = false  //视频是否在播放中
-    this.archiveState = false //是否有存档
+    this.archiveState = true //是否有存档
     this.archiveData = {} //存档数据
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
