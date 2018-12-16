@@ -36,33 +36,32 @@ export default class Main {
     DataStore.getInstance().ctx = ctx;
     // DataStore.getInstance().gameCanvas = gameCanvas;
 
-    wx.onShow((res)=>{
-      if(res && res.query && res.query.scene){
-        wx.setStorageSync('fatherId', res.query.scene)
-      }
+    const res = wx.getLaunchOptionsSync()
+    if(res && res.query && res.query.scene){
+      wx.setStorageSync('fatherId', res.query.scene)
+    }
 
-      const scene = res && res.scene
+    const scene = res && res.scene
 
-      if(scene.length == 32){
-        wx.setStorageSync('fatherId', res.scene)
-      }
+    if(scene.length == 32){
+      wx.setStorageSync('fatherId', res.scene)
+    }
 
-      if(res && res.query && res.query.fatherId){
-        wx.setStorageSync('fatherId', res.query.fatherId)
-      }
+    if(res && res.query && res.query.fatherId){
+      wx.setStorageSync('fatherId', res.query.fatherId)
+    }
 
-      let loginflag = wx.getStorageSync('loginflag')
+    let loginflag = wx.getStorageSync('loginflag')
 
-      if (!loginflag){
-        userLogin({
-          callback:()=>{
-            this.getBaseInfo()
-          }
-        })
-      } else {
-        this.getBaseInfo()
-      }
-    })
+    if (!loginflag){
+      userLogin({
+        callback:()=>{
+          this.getBaseInfo()
+        }
+      })
+    } else {
+      this.getBaseInfo()
+    }
 
   }
   renderPage() {
