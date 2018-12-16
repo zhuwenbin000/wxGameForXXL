@@ -150,6 +150,25 @@ export default class Index {
         })
       }
       
+    }else if(databus.homeState == 3){//读档弹框
+      //弹框关闭
+      if (x >= 0 * ratio && x <= (0 * ratio + 150 * ratio) && y >= 300 * ratio && y <= (300 * ratio + 162 * ratio)) {
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+
+        databus.homeState = 1;
+      }
+      
+      //读档继续
+      if (x >= 175 * ratio && x <= (175 * ratio + 478 * ratio) && y >= 670 * ratio && y <= (670 * ratio + 196 * ratio)) {
+        
+      }
+
+      //新开一把
+      if (x >= 197 * ratio && x <= (197 * ratio + 434 * ratio) && y >= 840 * ratio && y <= (840 * ratio + 176 * ratio)) {
+        
+      }
+      
     }
   }
 

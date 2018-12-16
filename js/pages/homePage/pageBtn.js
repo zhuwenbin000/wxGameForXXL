@@ -199,9 +199,9 @@ export default class PageBtn {
       //存档弹框
       ctx.drawImage(Robj["archiveModal"], 0, 0, Robj["archiveModal"].width, Robj["archiveModal"].height,30 * ratio,350 * ratio,768 * ratio,704 * ratio)
       //新开一把
-      ctx.drawImage(Robj["newGame"], 0, 0, Robj["newGame"].width, Robj["newGame"].height,197 * ratio,880 * ratio,434 * ratio,176 * ratio)
+      ctx.drawImage(Robj["newGame"], 0, 0, Robj["newGame"].width, Robj["newGame"].height,197 * ratio,840 * ratio,434 * ratio,176 * ratio)
       //读档继续
-      ctx.drawImage(Robj["ddBtn"], 0, 0, Robj["ddBtn"].width, Robj["ddBtn"].height,175 * ratio,700 * ratio,478 * ratio,196 * ratio)
+      ctx.drawImage(Robj["ddBtn"], 0, 0, Robj["ddBtn"].width, Robj["ddBtn"].height,175 * ratio,670 * ratio,478 * ratio,196 * ratio)
       //弹框关闭
       ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 300 * ratio, 150 * ratio, 162 * ratio);
     }
@@ -479,7 +479,7 @@ export default class PageBtn {
   }
 
   loginauthor(ctx) {
-    if(databus.homeState == 2){
+    if(databus.homeState != 1){
       databus.gameClubbutton.hide()
       return
     }else{
