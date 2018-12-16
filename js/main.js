@@ -150,6 +150,20 @@ export default class Main {
       success(data) {
         const shareflag = data.body.version.shareflag == '1' ? false : true
         databus.shareflag = shareflag
+        if(shareflag){
+          databus.homeState = 2
+        }
+      }
+    })
+
+    const openid = wx.getStorageSync('openId')
+    //活动信息
+    openid && ajax({
+      tradecode: 'sys02',
+      apiType: 'user',
+      method: 'POST',
+      success(data) {
+        databus.activityData = data.body.activity
       }
     })
 

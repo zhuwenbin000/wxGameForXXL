@@ -112,6 +112,11 @@ export default class Index {
           this.music.playMusic('btnDown')  
 
           databus.homeState = 2;
+
+          this.pageBtn.bannerButton && this.pageBtn.bannerButton.show()
+          this.pageBtn.createbutton && this.pageBtn.createbutton.hide()
+          this.pageBtn.friendbutton && this.pageBtn.friendbutton.hide()
+
         }
       }
 
@@ -121,18 +126,24 @@ export default class Index {
       }
     }else if(databus.homeState == 2){
       //关闭banner icon事件
-      if (x >= 30 * ratio && x <= (30 * ratio + 150 * ratio) && y >= 100 * ratio && y <= (100 * ratio + 162 * ratio)) {
+      if (x >= 30 * ratio && x <= (30 * ratio + 150 * ratio) && y >= 250 * ratio && y <= (250 * ratio + 162 * ratio)) {
         //按钮按下音效
         this.music.playMusic('btnDown')
 
         databus.homeState = 1;
+        this.pageBtn.bannerButton && this.pageBtn.bannerButton.hide()
+        this.pageBtn.createbutton && this.pageBtn.createbutton.show()
+        this.pageBtn.friendbutton && this.pageBtn.friendbutton.show()
+        return
       }
       //开始跳转小程序
-      if (x >= 250 * ratio && x <= (250 * ratio + 490 * ratio) && y >= 820 * ratio && y <= (820 * ratio + 180 * ratio)) {
+      // if (x >= 250 * ratio && x <= (250 * ratio + 490 * ratio) && y >= 820 * ratio && y <= (820 * ratio + 180 * ratio)) {
+      if (x >= 94 * ratio && x <= (94 * ratio + 640 * ratio) && y >= 300 * ratio && y <= (300 * ratio + 900 * ratio)) {
+
         //按钮按下音效
         this.music.playMusic('btnDown')
 
-        const pageurl = encodeURIComponent("http://www.baidu.com?openId=2")
+        const pageurl = encodeURIComponent(databus.activityData.url + "?openid=" + wx.getStorageSync('openId'))
         wx.navigateToMiniProgram({
           appId: 'wx470a8b0b3f90857b',
           path: 'pages/webview/webview?pageurl=' + pageurl,

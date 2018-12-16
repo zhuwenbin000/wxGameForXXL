@@ -168,6 +168,7 @@ export default class DataBus {
     this.isVideoing = false  //视频是否在播放中
     this.archiveState = false //是否有存档
     this.archiveData = {} //存档数据
+    this.activityData = null //活动数据
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
       boardToTOP: 254 * ratio  + this.gameTop, //棋盘到顶部的距离

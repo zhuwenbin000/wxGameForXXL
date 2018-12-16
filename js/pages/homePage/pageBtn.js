@@ -12,8 +12,6 @@ let gameClubbutton = null;
 let authorBtn = wx.createImage();
 let bg = wx.createImage();
 let loginfriendsRankBtn = wx.createImage();
-let banner = wx.createImage();
-let bannerModal = wx.createImage();
 
 
 let loginauthorBtn = wx.createImage();
@@ -34,8 +32,8 @@ let sml2 = window.innerWidth / 2
 let smleft = nmt + 91 * ratio + 312 * ratio + nb * 2
 let smleft_big = nmt + 91 * ratio + 312 * ratio + nb * 2 - (138 * ratio * 0.1 / 2)
 bg.src = 'images/home/background.png'
-banner.src = 'images/home/banner_icon.png'
-bannerModal.src = 'images/home/banner_modal.png'
+// banner.src = 'images/home/banner_icon.png'
+// bannerModal.src = 'images/home/banner_modal.png'
 
 logoBtn.src = 'images/home/logo.png'
 startBtn.src = 'images/home/start.png'
@@ -82,6 +80,12 @@ export default class PageBtn {
     this.getBtnposition()
     this.logoTime = 0
     this.f = 0
+
+
+    this.banner = wx.createImage();
+    this.bannerModal = wx.createImage();
+    
+
   }
   
   render(ctx) {
@@ -109,62 +113,74 @@ export default class PageBtn {
 
         
     if (databus.shareflag) {
+      if(!databus.activityData){
+        return
+      }else{
+        if(!this.banner.src && !this.bannerModal.src){
+
+          this.banner.src = databus.activityData && databus.activityData.img
+          this.bannerModal.src = databus.activityData && databus.activityData.bannaer
+
+        }
+      }
+
+
       //抖m
-      if(this.logoTime % 5 == 0){
+      if(this.logoTime % 20 == 0){
         //中心点变化
         ctx.translate(740 * ratio, 198 * ratio)
         //旋转
         ctx.rotate(Math.PI * 0)
 
-        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+        ctx.drawImage(this.banner, 0, 0, this.banner.width, this.banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
 
         //复位旋转和中心点
         ctx.rotate(-Math.PI * 0)
         ctx.translate(-740 * ratio, -198 * ratio)
 
-      }else if(this.logoTime % 5 == 1){
+      }else if(this.logoTime % 20 == 1){
         //中心点变化
         ctx.translate(740 * ratio, 198 * ratio)
         //旋转
         ctx.rotate(Math.PI * 1 / 12)
 
-        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+        ctx.drawImage(this.banner, 0, 0, this.banner.width, this.banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
 
         //复位旋转和中心点
         ctx.rotate(-Math.PI * 1 / 12)
         ctx.translate(-740 * ratio, -198 * ratio)
 
-      }else if(this.logoTime % 5 == 2){
+      }else if(this.logoTime % 20 == 2){
         //中心点变化
         ctx.translate(740 * ratio, 198 * ratio)
         //旋转
         ctx.rotate(Math.PI * 0)
 
-        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+        ctx.drawImage(this.banner, 0, 0, this.banner.width, this.banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
 
         //复位旋转和中心点
         ctx.rotate(-Math.PI * 0)
         ctx.translate(-740 * ratio, -198 * ratio)
         
-      }else if(this.logoTime % 5 == 3){
+      }else if(this.logoTime % 20 == 3){
         //中心点变化
         ctx.translate(740 * ratio, 198 * ratio)
         //旋转
         ctx.rotate(-Math.PI * 1 / 12)
 
-        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+        ctx.drawImage(this.banner, 0, 0, this.banner.width, this.banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
 
         //复位旋转和中心点
         ctx.rotate(Math.PI * 1 / 12)
         ctx.translate(-740 * ratio, -198 * ratio)
         
-      }else if(this.logoTime % 5 == 4){
+      }else {
         //中心点变化
         ctx.translate(740 * ratio, 198 * ratio)
         //旋转
         ctx.rotate(Math.PI * 0)
 
-        ctx.drawImage(banner, 0, 0, banner.width, banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
+        ctx.drawImage(this.banner, 0, 0, this.banner.width, this.banner.height,-60 * ratio,-68 * ratio,120 * ratio,136 * ratio)
 
         //复位旋转和中心点
         ctx.rotate(-Math.PI * 0)
@@ -177,12 +193,15 @@ export default class PageBtn {
     if(databus.homeState == 2){
       //模拟游戏圈
       ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
+      //模拟好友排行
+      ctx.drawImage(loginfriendsRankBtn, 0, 0, 590, 226, ml, nmt + (196 * ratio) + nb, 590 * ratio, 226 * ratio)
+      
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
 
-      ctx.drawImage(bannerModal, 0, 0, bannerModal.width, bannerModal.height,94 * ratio,150 * ratio,640 * ratio,900 * ratio)
+      ctx.drawImage(this.bannerModal, 0, 0, this.bannerModal.width, this.bannerModal.height,94 * ratio,300 * ratio,640 * ratio,900 * ratio)
       //弹框关闭
-      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 30 * ratio, 100 * ratio, 150 * ratio, 162 * ratio);
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 30 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
       
     }
   }
@@ -362,12 +381,16 @@ export default class PageBtn {
           borderRadius: 4
         }
       })
+      if(databus.homeState == 2){
+        this.createbutton.hide()
+      }
       this.createbutton.onTap((res) => {
         if (res.rawData)//授权成功
         {
          
           this.createbutton.destroy()
           this.friendbutton.destroy()
+          this.bannerButton.destroy()
           databus.pownstate = 1;
           this.getBtnposition()
           this.render(ctx)
@@ -404,38 +427,12 @@ export default class PageBtn {
           borderRadius: 4
         }
       })
+
+      if(databus.homeState == 2){
+        this.friendbutton.hide()
+      }
+
       this.friendbutton.onTap((res) => {
-        if (res.rawData)//授权成功
-        {
-          
-          this.createbutton.destroy()
-          this.friendbutton.destroy()
-          databus.pownstate = 1;
-          this.getBtnposition()
-          this.render(ctx)
-        }
-      })
-    }
-  }
-  bannerBtn(ctx) { //banner按钮
-    if (!this.bannerButton) {
-      this.bannerButton = wx.createUserInfoButton({
-        type: 'image',
-        image: 'images/home/bannerbtn.png',
-        style: {
-          left: 680 * ratio,
-          top: 110 * ratio,
-          width: 120 * ratio,
-          height: 150 * ratio,
-          lineHeight: 40,
-          backgroundColor: '#ff0000',
-          color: '#ffffff',
-          textAlign: 'center',
-          fontSize: 16,
-          borderRadius: 4
-        }
-      })
-      this.bannerButton.onTap((res) => {
         if (res.rawData)//授权成功
         {
           
@@ -449,10 +446,53 @@ export default class PageBtn {
       })
     }
   }
+  bannerBtn(ctx) { //banner按钮
+    if (!this.bannerButton) {
+      this.bannerButton = wx.createUserInfoButton({
+        type: 'image',
+        image: 'images/home/bannerbtn.png',
+        style: {
+          // left: 680 * ratio,
+          // top: 110 * ratio,
+          // width: 120 * ratio,
+          // height: 150 * ratio,
+          left: 94 * ratio,
+          top: 420 * ratio,
+          width: 640 * ratio,
+          height: 900 * ratio,
+          lineHeight: 40,
+          backgroundColor: '#ff0000',
+          color: '#ffffff',
+          textAlign: 'center',
+          fontSize: 16,
+          borderRadius: 4
+        }
+      })
+
+
+      if(databus.homeState == 1){
+        this.bannerButton.hide()
+      }
+
+
+      this.bannerButton.onTap((res) => {
+        if (res.rawData)//授权成功
+        {
+          this.createbutton.destroy()
+          this.friendbutton.destroy()
+          this.bannerButton.destroy()
+          databus.pownstate = 1;
+          databus.homeState = 1;
+          this.getBtnposition()
+          this.render(ctx)
+        }
+      })
+    }
+  }
 
   loginauthor(ctx) {
     if(databus.homeState == 2){
-      databus.gameClubbutton.hide()
+      databus.gameClubbutton && databus.gameClubbutton.hide()
       return
     }else{
       databus.gameClubbutton && databus.gameClubbutton.show()
