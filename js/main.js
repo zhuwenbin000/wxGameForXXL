@@ -36,20 +36,7 @@ export default class Main {
     DataStore.getInstance().ctx = ctx;
     // DataStore.getInstance().gameCanvas = gameCanvas;
 
-    let loginflag = wx.getStorageSync('loginflag')
-
-    if (!loginflag){
-      userLogin({
-        callback:()=>{
-          this.getBaseInfo()
-        }
-      })
-    } else {
-      this.getBaseInfo()
-    }
-    
     wx.onShow((res)=>{
-
       if(res && res.query && res.query.scene){
         wx.setStorageSync('fatherId', res.query.scene)
       }
@@ -64,7 +51,19 @@ export default class Main {
         wx.setStorageSync('fatherId', res.query.fatherId)
       }
 
+      let loginflag = wx.getStorageSync('loginflag')
+
+      if (!loginflag){
+        userLogin({
+          callback:()=>{
+            this.getBaseInfo()
+          }
+        })
+      } else {
+        this.getBaseInfo()
+      }
     })
+
   }
   renderPage() {
     let self = this
