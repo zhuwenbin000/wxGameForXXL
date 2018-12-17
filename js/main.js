@@ -155,15 +155,29 @@ export default class Main {
     })
 
     const openid = wx.getStorageSync('openId')
-    //活动信息
-    openid && ajax({
-      tradecode: 'sys02',
-      apiType: 'user',
-      method: 'POST',
-      success(data) {
-        databus.activityData = data.body.activity
-      }
-    })
+    if(!openid){
+      userLogin({
+        callback:()=>{
+          ajax({
+            tradecode: 'sys02',
+            apiType: 'user',
+            method: 'POST',
+            success(data) {
+              databus.activityData = data.body.activity
+            }
+          })
+        }
+      })
+    }else{
+      ajax({
+        tradecode: 'sys02',
+        apiType: 'user',
+        method: 'POST',
+        success(data) {
+          databus.activityData = data.body.activity
+        }
+      })
+    }
 
     wx.getSetting({
       success: function (res) {
