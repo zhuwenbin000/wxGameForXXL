@@ -843,17 +843,17 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
     } else if (databus.gameState == 11) {//11:金币规则弹框
-      // 点击确认事件
-      if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (820 * ratio) && y <= ((820 + 142) * ratio)) {
-        databus.btnPlus = 1
-        setTimeout(() => {
-          databus.gameState = 1
-          databus.btnPlus = 0
-        }, databus.laterTime)
-        //按钮按下音效
-        this.music.playMusic('btnDown')
-      }
-    } else if (databus.gameState == 13) {//13:存档弹框
+    //   // 点击确认事件
+    //   if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (820 * ratio) && y <= ((820 + 142) * ratio)) {
+    //     databus.btnPlus = 1
+    //     setTimeout(() => {
+    //       databus.gameState = 1
+    //       databus.btnPlus = 0
+    //     }, databus.laterTime)
+    //     //按钮按下音效
+    //     this.music.playMusic('btnDown')
+    //   }
+    // } else if (databus.gameState == 13) {//13:存档弹框
       // 点击确认事件
       if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (820 * ratio) && y <= ((820 + 142) * ratio)) {
         console.log('存档')
@@ -896,6 +896,7 @@ export default class Index {
         setTimeout(() => {
           databus.gameState = 1
           databus.btnPlus = 0
+          databus.archiveState = true
         }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')

@@ -11,6 +11,7 @@ export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
+    
   }
   getscore() { //获取最高分
     let me = this;
@@ -70,14 +71,14 @@ export default class Index {
             //按钮按下音效
             databus.playbtn_state = true;
             this.music.playMusic('btnDown')        
+            setTimeout(()=>{
+              this.finish()
+              databus.scene = 1   
               setTimeout(()=>{
-                this.finish()
-                databus.scene = 1   
-                setTimeout(()=>{
-                  databus.gameClubbutton.destroy() //游戏圈按钮销毁
-                  databus.gameClubbutton = null;
-                }, 50)        
-              }, databus.laterTime)
+                databus.gameClubbutton.destroy() //游戏圈按钮销毁
+                databus.gameClubbutton = null;
+              }, 50)        
+            }, databus.laterTime)
           }
         }
       }
@@ -161,12 +162,36 @@ export default class Index {
       
       //读档继续
       if (x >= 175 * ratio && x <= (175 * ratio + 478 * ratio) && y >= 670 * ratio && y <= (670 * ratio + 196 * ratio)) {
-        
+        //按钮按下音效
+        databus.playbtn_state = true;
+        this.music.playMusic('btnDown')        
+        setTimeout(()=>{
+          databus.homeState = 1;
+          this.finish()
+          databus.scene = 1
+          setTimeout(()=>{
+            databus.gameClubbutton.destroy() //游戏圈按钮销毁
+            databus.gameClubbutton = null;
+          }, 50)
+        }, databus.laterTime)
       }
 
       //新开一把
       if (x >= 197 * ratio && x <= (197 * ratio + 434 * ratio) && y >= 840 * ratio && y <= (840 * ratio + 176 * ratio)) {
-        
+        //按钮按下音效
+        databus.playbtn_state = true;
+        this.music.playMusic('btnDown')        
+        setTimeout(()=>{
+          databus.homeState = 1;
+          this.finish()
+          databus.scene = 1
+          databus.archiveData = {}
+          databus.archiveState = false
+          setTimeout(()=>{
+            databus.gameClubbutton.destroy() //游戏圈按钮销毁
+            databus.gameClubbutton = null;
+          }, 50)        
+        }, databus.laterTime)
       }
       
     }
