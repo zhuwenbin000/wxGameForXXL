@@ -63,6 +63,10 @@ export default class Main {
       this.getBaseInfo()
     }
 
+    const archiveData = wx.getStorageSync('archiveData')
+    if(JSON.stringify(archiveData).length > 2){
+      databus.archiveState = true
+    }
   }
   renderPage() {
     let self = this

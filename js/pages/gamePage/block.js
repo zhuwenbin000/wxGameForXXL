@@ -157,6 +157,7 @@ let R = {
   "blueBerries_spray8": "images/gamePage/blueBerries/spray8.png",
   "blueBerries_spray9": "images/gamePage/blueBerries/spray9.png",
   "blueBerries_spray10": "images/gamePage/blueBerries/spray10.png",
+  "coinBg":"images/gamePage/coin_bg.png"
 }
 
 let I = {};	
@@ -210,6 +211,7 @@ export default class Block {
       if(this.selectAniTime > 0){
         return
       }
+        ctx.drawImage(I["coinBg"], 0, 0, 124, 124, this.x, this.y, bl, bl);
       if(this.attr.piecesType == 0){
         //橙子
         ctx.drawImage(I["org_pos" + this.staticStep % 8], 0, 0, 124, 124, this.x, this.y, bl, bl);

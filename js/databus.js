@@ -225,11 +225,17 @@ export default class DataBus {
         w: 82 * ratio,
         h: 82 * ratio,
       },
+      setCoordinates: { //设置坐标宽高
+        x: 142 * ratio,
+        y: 1126 * ratio + this.gameTop,
+        w: 96 * ratio,
+        h: 96 * ratio,
+      },
       addStepsCoordinates: { //增加步数坐标宽高
         x: 275 * ratio,
         y: 1045 * ratio + this.gameTop,
-        w: 144 * ratio,
-        h: 142 * ratio,
+        w: 108 * ratio,
+        h: 108 * ratio,
       },
       addStepsPointCoordinates: { //增加步数红点坐标宽高
         x: 375 * ratio,
@@ -256,8 +262,8 @@ export default class DataBus {
       colorToolCoordinates: { //彩色道具坐标宽高
         x: 460 * ratio,
         y: 1045 * ratio + this.gameTop,
-        w: 144 * ratio,
-        h: 142 * ratio,
+        w: 108 * ratio,
+        h: 108 * ratio,
       },
       colorToolPointCoordinates: { //彩色道具红点坐标宽高
         x: 560 * ratio,
@@ -284,8 +290,8 @@ export default class DataBus {
       coinCoordinates: { //金币坐标宽高
         x: 630 * ratio,
         y: 1039 * ratio + this.gameTop,
-        w: 171 * ratio,
-        h: 175 * ratio,
+        w: 182 * ratio,
+        h: 150 * ratio,
       },
       coinNumCoordinates: { //金币数量坐标宽高
         x: 715 * ratio,

@@ -5,7 +5,6 @@ import DataBus from '../../databus'
 let databus = new DataBus()
 import { ajax } from '../../base/ajax'
 let onget = false;//接口正在调用中
-let logoBtn = wx.createImage();
 let startBtn = wx.createImage();
 let friendsRankBtn = wx.createImage();
 let gameClubbutton = null;
@@ -16,6 +15,7 @@ let loginfriendsRankBtn = wx.createImage();
 
 let loginauthorBtn = wx.createImage();
 let loginstartBtn = wx.createImage();
+let loginstartBtn2 = wx.createImage();
 let headimg = wx.createImage();
 let shareBtn = wx.createImage();
 let mt = databus.mt * ratio; //头像到顶部的距离
@@ -35,12 +35,12 @@ bg.src = 'images/home/background.png'
 // banner.src = 'images/home/banner_icon.png'
 // bannerModal.src = 'images/home/banner_modal.png'
 
-logoBtn.src = 'images/home/logo.png'
 startBtn.src = 'images/home/start.png'
 friendsRankBtn.src = 'images/home/friends.png'
 shareBtn.src ='images/home/share.png'
 authorBtn.src = "images/home/author.png"
 loginstartBtn.src = 'images/home/start.png'
+loginstartBtn2.src = 'images/gamePage/archive/dd_start_btn.png'
 loginfriendsRankBtn.src = 'images/home/friends.png'
 loginauthorBtn.src = "images/home/author.png"
 
@@ -56,6 +56,9 @@ let R = {
   "gameEndBg": "images/gameEnd/gameEndBg.png",
   "modalClose": "images/gameModal/modal_close.png",
   "author": "images/home/author.png",
+  "archiveModal":"images/gamePage/archive/archive_modal.png",
+  "newGame":"images/gamePage/archive/new_game.png",
+  "ddBtn":"images/gamePage/archive/dd_btn.png"
 }
 
 //把所有的图片放到一个对象中
@@ -204,6 +207,21 @@ export default class PageBtn {
       ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 30 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
       
     }
+
+    if(databus.homeState == 3){
+      //模拟游戏圈
+      ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //存档弹框
+      ctx.drawImage(Robj["archiveModal"], 0, 0, Robj["archiveModal"].width, Robj["archiveModal"].height,30 * ratio,350 * ratio,768 * ratio,704 * ratio)
+      //新开一把
+      ctx.drawImage(Robj["newGame"], 0, 0, Robj["newGame"].width, Robj["newGame"].height,197 * ratio,840 * ratio,434 * ratio,176 * ratio)
+      //读档继续
+      ctx.drawImage(Robj["ddBtn"], 0, 0, Robj["ddBtn"].width, Robj["ddBtn"].height,175 * ratio,670 * ratio,478 * ratio,196 * ratio)
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 300 * ratio, 150 * ratio, 162 * ratio);
+    }
   }
   render_btn() {
 
@@ -349,18 +367,24 @@ export default class PageBtn {
 
   }
   drawlogo(ctx) {
-    // ctx.drawImage(logoBtn, 0, 0, 796, 538, (window.innerWidth - 796 * ratio) / 2, 120 * ratio, 796 * ratio, 538 * ratio)
-
     ctx.drawImage(Robj["logo" + this.logoTime % 7], 0, 0, 800, 500, (window.innerWidth - 800 * ratio) / 2, 120 * ratio, 800 * ratio, 500 * ratio)
     //开始游戏按钮区域
 
   }
   loginstartBtn(ctx) {
-    if (!databus.playbtn_state){
-      ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml, nmt, 590 * ratio, 226 * ratio) 
+    if(databus.archiveState){
+      if (!databus.playbtn_state){
+        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml, nmt, 590 * ratio, 226 * ratio) 
+      }else{
+        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml_big, nmt_big, 590 * ratio*1.1, 226 * ratio*1.1)
+      } 
     }else{
-      ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml_big, nmt_big, 590 * ratio*1.1, 226 * ratio*1.1)
-    } 
+      if (!databus.playbtn_state){
+        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml, nmt, 590 * ratio, 226 * ratio) 
+      }else{
+        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml_big, nmt_big, 590 * ratio*1.1, 226 * ratio*1.1)
+      } 
+    }
   }
 
   startBtn(ctx) { //开始游戏按钮
@@ -491,7 +515,7 @@ export default class PageBtn {
   }
 
   loginauthor(ctx) {
-    if(databus.homeState == 2){
+    if(databus.homeState != 1){
       databus.gameClubbutton && databus.gameClubbutton.hide()
       return
     }else{

@@ -11,6 +11,7 @@ export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
+    
   }
   getscore() { //获取最高分
     let me = this;
@@ -63,9 +64,13 @@ export default class Index {
       
       if (startBtnArea) {
         if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
-          //按钮按下音效
-          databus.playbtn_state = true;
-          this.music.playMusic('btnDown')        
+          if(databus.archiveState){
+            //存档弹框
+            databus.homeState = 3;
+          }else{
+            //按钮按下音效
+            databus.playbtn_state = true;
+            this.music.playMusic('btnDown')        
             setTimeout(()=>{
               this.finish()
               databus.scene = 1   
@@ -74,6 +79,7 @@ export default class Index {
                 databus.gameClubbutton = null;
               }, 50)        
             }, databus.laterTime)
+          }
         }
       }
       // 开始游戏按钮事件
@@ -154,6 +160,49 @@ export default class Index {
             // console.log(res)
           }
         })
+      }
+      
+    }else if(databus.homeState == 3){//读档弹框
+      //弹框关闭
+      if (x >= 0 * ratio && x <= (0 * ratio + 150 * ratio) && y >= 300 * ratio && y <= (300 * ratio + 162 * ratio)) {
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+
+        databus.homeState = 1;
+      }
+      
+      //读档继续
+      if (x >= 175 * ratio && x <= (175 * ratio + 478 * ratio) && y >= 670 * ratio && y <= (670 * ratio + 196 * ratio)) {
+        //按钮按下音效
+        databus.playbtn_state = true;
+        this.music.playMusic('btnDown')        
+        setTimeout(()=>{
+          databus.homeState = 1;
+          this.finish()
+          databus.scene = 1
+          setTimeout(()=>{
+            databus.gameClubbutton.destroy() //游戏圈按钮销毁
+            databus.gameClubbutton = null;
+          }, 50)
+        }, databus.laterTime)
+      }
+
+      //新开一把
+      if (x >= 197 * ratio && x <= (197 * ratio + 434 * ratio) && y >= 840 * ratio && y <= (840 * ratio + 176 * ratio)) {
+        //按钮按下音效
+        databus.playbtn_state = true;
+        this.music.playMusic('btnDown')        
+        setTimeout(()=>{
+          databus.homeState = 1;
+          this.finish()
+          databus.scene = 1
+          databus.archiveData = {}
+          databus.archiveState = false
+          setTimeout(()=>{
+            databus.gameClubbutton.destroy() //游戏圈按钮销毁
+            databus.gameClubbutton = null;
+          }, 50)        
+        }, databus.laterTime)
       }
       
     }
