@@ -28,6 +28,7 @@ let pec2 = databus.GameUI.progressEmpty2Coordinates //空进度条坐标宽高
 let pfc = databus.GameUI.progressFullCoordinates //满进度条坐标宽高
 let hc = databus.GameUI.homeCoordinates //首页按钮坐标宽高
 let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
+let setc = databus.GameUI.setCoordinates //设置按钮坐标宽高
 let asc = databus.GameUI.addStepsCoordinates //增加步数按钮坐标宽高
 let aspoc = databus.GameUI.addStepsPointCoordinates //增加步数红点坐标宽高
 let asprc = databus.GameUI.addStepsPriceCoordinates //增加步数价格坐标宽高
@@ -73,6 +74,7 @@ export default class Index {
       "icon3": "images/gamePage/fruit_icon4.png",
       "baozha": "images/gamePage/baozha.png",
       "addSteps": "images/gamePage/icon_addSteps.png",
+      "setIcon": "images/gamePage/gameBtn/setIcon.png",
       "rule": "images/gamePage/icon_rule.png",
       "coin": "images/gamePage/icon_coin.png",
       "home": "images/gamePage/icon_home.png",
@@ -258,12 +260,15 @@ export default class Index {
         ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * pfc.w, pfc.h);
       }
 
-      //绘制首页按钮
-      ctx.drawImage(this.Robj["home"], 0, 0, this.Robj["home"].width, this.Robj["home"].height, hc.x, hc.y, hc.w, hc.h);
-      //绘制规则按钮
-      ctx.drawImage(this.Robj["rule"], 0, 0, this.Robj["rule"].width, this.Robj["rule"].height, rulec.x, rulec.y, rulec.w, rulec.h);
-      //绘制音乐按钮
-      ctx.drawImage(this.Robj["music"], 0, 0, this.Robj["music"].width, this.Robj["music"].height, mc.x, mc.y, mc.w, mc.h);
+      //设置按钮
+      ctx.drawImage(this.Robj["setIcon"], 0, 0, this.Robj["setIcon"].width, this.Robj["setIcon"].height, setc.x, setc.y, setc.w, setc.h);
+
+      // //绘制首页按钮
+      // ctx.drawImage(this.Robj["home"], 0, 0, this.Robj["home"].width, this.Robj["home"].height, hc.x, hc.y, hc.w, hc.h);
+      // //绘制规则按钮
+      // ctx.drawImage(this.Robj["rule"], 0, 0, this.Robj["rule"].width, this.Robj["rule"].height, rulec.x, rulec.y, rulec.w, rulec.h);
+      // //绘制音乐按钮
+      // ctx.drawImage(this.Robj["music"], 0, 0, this.Robj["music"].width, this.Robj["music"].height, mc.x, mc.y, mc.w, mc.h);
       //绘制增加步数按钮
       ctx.drawImage(this.Robj["addSteps"], 0, 0, this.Robj["addSteps"].width, this.Robj["addSteps"].height, asc.x, asc.y, asc.w, asc.h);
       if(databus.usersteps != 0 || databus.usersteps != '0'){
