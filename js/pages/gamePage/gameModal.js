@@ -24,6 +24,8 @@ let R = {
   "passStateBg": "images/gamePage/passStateBg.png",
   "buy": "images/gameModal/icon_buy.png",
   "coin": "images/gameModal/coin.png",
+  "saveModal": "images/gamePage/archive/save_modal.png",
+  "saveBtn": "images/gamePage/archive/save_game.png",
 }
 
 //把所有的图片放到一个对象中
@@ -397,5 +399,24 @@ export default class GameModal {
       }
     }
     
+    //13:存档弹框
+    if (databus.gameState == 13) {
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //弹框
+      ctx.drawImage(Robj["saveModal"], 0, 0, Robj["saveModal"].width, Robj["saveModal"].height, 30 * ratio, 300 * ratio, 768 * ratio, 704 * ratio);
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
+      
+      if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+        databus.btnPlus++
+        //弹框确认
+        ctx.drawImage(Robj["saveBtn"], 0, 0, Robj["saveBtn"].width, Robj["saveBtn"].height, (252 - 16.2) * ratio, (770 - 7.2) * ratio, 324 * 1.1 * ratio, 142 * 1.1 * ratio);
+      } else {
+        databus.btnPlus = 0
+        //弹框确认
+        ctx.drawImage(Robj["saveBtn"], 0, 0, Robj["saveBtn"].width, Robj["saveBtn"].height, 252 * ratio, 770 * ratio, 324 * ratio, 142 * ratio);
+      }
+    }
   }
 }

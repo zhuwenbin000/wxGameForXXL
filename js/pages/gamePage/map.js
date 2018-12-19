@@ -13,8 +13,6 @@ let rn = databus.rowNum
 let cn = databus.colNum
 
 let R = {
-  "combo": "images/gamePage/combo/combo.png",
-  "combo2": "images/gamePage/combo/combo2.png",
   "combo3": "images/gamePage/combo/combo3.png",
   "comboNum0": "images/gamePage/combo/0.png",
   "comboNum1": "images/gamePage/combo/1.png",
@@ -104,6 +102,9 @@ export default class Map {
         }
       }
     }
+
+    //记录棋盘数据
+    databus.QRcode = this.QRcode
   }
 
   createBlocksByQR() {
@@ -207,19 +208,6 @@ export default class Map {
                 databus.combo = databus.combo + 1
                 isCombo = isCombo + 1
 
-                //显示combo
-                // let x = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).x + (1 - _.random(0, 2)) * _.random(0, 50) * ratio;
-                // const y = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).y;
-                // if (x > 400 * ratio) {
-                //   x = 400 * ratio + (1 - _.random(0, 2)) * _.random(0, 50) * ratio
-                // }
-                // this.gcl.push({
-                  // rc: checkComboBlocks[checkComboBlocks.length - 2],
-                  // combo: databus.combo,
-                  // t: 0,
-                  // x: x,
-                  // y: y
-                // })
                 this.gclCombo++
                 this.comboBlocksBomb(checkComboBlocks)
 
@@ -366,6 +354,7 @@ export default class Map {
     // if (this.gclCombo > 0) {
     //   this.gslScore = this.gslScore + bombScore * doubleHit
     // }
+
     //得分音效
     this.music.playMusic('getScore')
     if (gold > 0 ){
@@ -410,49 +399,12 @@ export default class Map {
         this.gsl[i].t++
       }
     }
-    // if (this.gslScore == 0 || !this.ss) return;
-    // if (this.ss) {
-    //   //显示分数
-    //   const score = (this.gslScore + '').split('');
-    //   const len = score.length;
-    //   for (let j = 0; j < len; j++) {
-    //     // if (this.gslTime <= 30) {
-    //     //   this.ctx.globalAlpha = (1 / 30) * this.gslTime;
-    //     // } else {
-    //     //   this.ctx.globalAlpha = 1 - (1 / 30) * (this.gslTime - 30);
-    //     // }
-    //     this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, (uiWidth - 30) / 2 * ratio + 35 * j * ratio, 750 * ratio, 30 * ratio, 40 * ratio);
-    //   }
-    //   this.gslTime++
-    // }
   }
 
 
   showCombo() {
-    // if (this.gcl.length <= 0) return;
-    // for (var i = 0; i < this.gcl.length; i++) {
-    //   if (this.gcl[i].t < 60) {
-    //     //显示Combo
-    //     if (i == 0) {
-    //       this.ctx.drawImage(Robj["combo"], 0, 0, Robj["combo"].width, Robj["combo"].height, this.gcl[i].x, this.gcl[i].y, 200 * ratio, 54 * ratio);
-    //     } else if (i == 1) {
-    //       this.ctx.drawImage(Robj["combo2"], 0, 0, Robj["combo2"].width, Robj["combo2"].height, this.gcl[i].x, this.gcl[i].y, 298 * ratio, 54 * ratio);
-    //     } else {
-    //       this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, this.gcl[i].x, this.gcl[i].y, 282 * ratio, 60 * ratio);
-    //       if(i < 10){
-    //         this.ctx.drawImage(Robj["comboNum" + (i + 1)], 0, 0, Robj["comboNum" + (i + 1)].width, Robj["comboNum" + (i + 1)].height, this.gcl[i].x + 290 * ratio, this.gcl[i].y, 42 * ratio, 66 * ratio);
-    //       }
-    //     }
-    //     this.gcl[i].t++
-    //   }
-    // }
     if (this.gclCombo == 0 || !this.sc) return;
     if (this.sc) {
-      // if (this.gclTime <= 30){
-      //   this.ctx.globalAlpha = (1 / 30) * this.gclTime;
-      // }else{
-      //   this.ctx.globalAlpha = 1 - (1 / 30) * (this.gclTime - 30);
-      // }
       //显示Combo
       this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, (uiWidth - 225) / 2 * ratio, 680 * ratio, 225 * ratio, 48 * ratio);
       this.ctx.drawImage(Robj["comboNum" + this.gclCombo], 0, 0, Robj["comboNum" + this.gclCombo].width, Robj["comboNum" + this.gclCombo].height, (uiWidth - 225) / 2 * ratio + 230 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
@@ -635,12 +587,15 @@ export default class Map {
           this.blocks[r][c].moveTo(r, c, 10);
           this.QRcode[r][c] = attr;
         }
-
+        
         //借这个位置，复原一下needToBomb、downRow两个阵
         this.needToBomb[r][c] = undefined;
         this.downRow[r][c] = undefined;
       }
     }
+
+    //补充记录棋盘数据
+    databus.QRcode = this.QRcode
   }
 
 

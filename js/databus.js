@@ -21,7 +21,11 @@ export default class DataBus {
     this.gameTop = 0 * ratio
     this.gameEndTop = 0 * ratio
 
+    //创建游戏视频
     this.createVideoAd()
+    //创建存档视频
+    this.creatAarchiveVideoAd()
+
     //判断是否是哪种设备 
     wx.getSystemInfo({
       success: res=>{
@@ -140,7 +144,7 @@ export default class DataBus {
 
     this.homeState = 1 //首页状态变化
     
-    this.version = '0.0.1.8';
+    this.version = '0.0.1.9';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
@@ -226,66 +230,50 @@ export default class DataBus {
         h: 82 * ratio,
       },
       setCoordinates: { //设置坐标宽高
-        x: 142 * ratio,
-        y: 1126 * ratio + this.gameTop,
+        x: 45 * ratio,
+        y: 1070 * ratio + this.gameTop,
         w: 96 * ratio,
         h: 96 * ratio,
       },
       addStepsCoordinates: { //增加步数坐标宽高
-        x: 275 * ratio,
-        y: 1045 * ratio + this.gameTop,
+        x: 180 * ratio,
+        y: 1060 * ratio + this.gameTop,
         w: 108 * ratio,
         h: 108 * ratio,
       },
       addStepsPointCoordinates: { //增加步数红点坐标宽高
-        x: 375 * ratio,
+        x: 245 * ratio,
         y: 1044 * ratio + this.gameTop,
         w: 52 * ratio,
         h: 52 * ratio,
       },
       addStepsUserCoordinates: { //增加步数拥有数量坐标宽高
-        x: 400 * ratio,
+        x: 270 * ratio,
         y: 1080 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
-      addStepsPriceCoordinates: { //增加步数价格坐标宽高
-        x: 355 * ratio,
-        y: 1190 * ratio + this.gameTop,
-        font: 24 * ratio + 'px Arial'
-      },
-      addStepsPriceBgCoordinates: { //增加步数价格背景坐标宽高
-        x: 270 * ratio,
-        y: 1155 * ratio + this.gameTop,
-        w: 148 * ratio,
-        h: 58 * ratio,
-      },
       colorToolCoordinates: { //彩色道具坐标宽高
-        x: 460 * ratio,
-        y: 1045 * ratio + this.gameTop,
+        x: 325 * ratio,
+        y: 1060 * ratio + this.gameTop,
         w: 108 * ratio,
         h: 108 * ratio,
       },
       colorToolPointCoordinates: { //彩色道具红点坐标宽高
-        x: 560 * ratio,
+        x: 395 * ratio,
         y: 1044 * ratio + this.gameTop,
         w: 52 * ratio,
         h: 52 * ratio,
       },
-      colorToolPriceCoordinates: { //彩色道具价格坐标宽高
-        x: 540 * ratio,
-        y: 1190 * ratio + this.gameTop,
-        font: 24 * ratio + 'px Arial'
-      },
       colorToolUserCoordinates: { //彩色道具拥有数量坐标宽高
-        x: 585 * ratio,
+        x: 420 * ratio,
         y: 1080 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
-      colorToolPriceBgCoordinates: { //彩色道具价格背景坐标宽高
-        x: 455 * ratio,
-        y: 1155 * ratio + this.gameTop,
-        w: 148 * ratio,
-        h: 58 * ratio,
+      saveToolCoordinates: { //存档道具坐标宽高
+        x: 475 * ratio,
+        y: 1060 * ratio + this.gameTop,
+        w: 108 * ratio,
+        h: 108 * ratio,
       },
       coinCoordinates: { //金币坐标宽高
         x: 630 * ratio,
@@ -295,7 +283,7 @@ export default class DataBus {
       },
       coinNumCoordinates: { //金币数量坐标宽高
         x: 715 * ratio,
-        y: 1190 * ratio + this.gameTop,
+        y: 1150 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
       checkPointCoordinates: { //关卡坐标
@@ -469,6 +457,7 @@ export default class DataBus {
     this.buyTips = false //购买提示
     this.stepsAni = false //步数动画
 
+    this.QRcode = [] //棋盘数据
     this.score = 0 //每次开始默认分数、当前关卡获得分数
     this.gameScore = 0 //本轮游戏总分
     this.stagegold = 0 //过关时的金币
@@ -583,6 +572,39 @@ export default class DataBus {
     ajax(options)
   }
 
+  //存档
+  saveGame() {
+    let archiveData = {};
+    //开始存档配置
+    archiveData.score = this.score //每次开始默认分数、当前关卡获得分数
+    archiveData.gameScore = this.gameScore //本轮游戏总分
+    archiveData.checkPoint = this.checkPoint //当前关卡
+    archiveData.steps = this.steps //剩余步数
+    archiveData.useSteps = this.useSteps //使用步数
+    archiveData.gamegold = this.gamegold //本轮游戏总金币
+    archiveData.stagegold = this.stagegold //过关时的金币
+    archiveData.selfHighScore = this.selfHighScore //个人历史最高分
+    archiveData.isShare = this.isShare //本局游戏是否分享过
+    archiveData.isLookVideo = this.isLookVideo //本局游戏是否观看过视频
+    
+    archiveData.passScore = this.passScore //过关分数
+    archiveData.gameId = this.gameId //本轮游戏id
+    archiveData.rewardstep = this.rewardstep //过关奖励步数
+    archiveData.piecesLevelScore = this.piecesLevelScore //旗子对应分数
+    archiveData.piecesLevelProbblt = this.piecesLevelProbblt //旗子对应等级和生成概率
+    archiveData.userhammer = this.userhammer //用户拥有道具-锤子
+    archiveData.hammerprice = this.hammerprice //用户购买道具-锤子价格
+    archiveData.usersteps = this.usersteps //用户拥有道具-步数
+    archiveData.stepprice = this.stepprice //用户购买道具-步数价格
+    archiveData.QRcode = this.QRcode //棋盘数据
+
+    //缓存数据
+    wx.setStorageSync('archiveData', JSON.stringify(archiveData))
+
+    this.gameState = 0
+    this.archiveState = true
+  }
+
   getWXFunction(name) {
     if(typeof(wx) == 'undefined' || wx == null) {
       return null;
@@ -642,6 +664,40 @@ export default class DataBus {
       else {
           // 播放中途退出，不下发游戏奖励
       }
+    })
+  }
+
+  creatAarchiveVideoAd(){
+    this.archiveVideoAd = wx.createRewardedVideoAd({
+      adUnitId: 'adunit-7db4ea2fa1cd4854'
+    })
+    this.archiveVideoAd.onClose(res => {
+      // 用户点击了【关闭广告】按钮
+      // 小于 2.1.0 的基础库版本，res 是一个 undefined
+      if (res && res.isEnded || res === undefined) {
+        
+        //存档
+        this.saveGame()
+
+        if (this.musicBgChange) {
+          //开启音乐
+          this.musicBg = true
+          this.musicBgChange = false
+        }
+      }
+      else {
+          // 播放中途退出，不下发游戏奖励
+      }
+    })
+  }
+
+  showAarchiveVideoAd(){
+    this.archiveVideoAd.load()
+    .then(() => {
+      this.archiveVideoAd.show()
+    })
+    .catch(err => {
+      wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
     })
   }
 
