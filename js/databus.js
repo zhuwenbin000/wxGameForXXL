@@ -182,8 +182,8 @@ export default class DataBus {
       boardWH: 0, //棋盘宽高
       piecesWH: 0, //棋子宽高
       ruleCoordinates: { //规则坐标宽高
-        x: 40 * ratio,
-        y: 1046 * ratio + this.gameTop,
+        x: 15 * ratio,
+        y: 830 * ratio + this.gameTop,
         w: 180 * ratio,
         h: 74 * ratio
       },
@@ -218,16 +218,16 @@ export default class DataBus {
         h: 26 * ratio,
       },
       homeCoordinates: { //首页坐标宽高
-        x: 44 * ratio,
-        y: 1126 * ratio + this.gameTop,
-        w: 82 * ratio,
-        h: 82 * ratio,
+        x: 15 * ratio,
+        y: 910 * ratio + this.gameTop,
+        w: 180 * ratio,
+        h: 74 * ratio
       },
       musicCoordinates: { //音乐坐标宽高
-        x: 142 * ratio,
-        y: 1126 * ratio + this.gameTop,
-        w: 82 * ratio,
-        h: 82 * ratio,
+        x: 15 * ratio,
+        y: 990 * ratio + this.gameTop,
+        w: 180 * ratio,
+        h: 74 * ratio
       },
       setCoordinates: { //设置坐标宽高
         x: 45 * ratio,
@@ -457,6 +457,9 @@ export default class DataBus {
     this.buyTips = false //购买提示
     this.stepsAni = false //步数动画
 
+    this.isCrazy = false //是否crazy
+    this.crazyTimes = 0 //crazy次数
+    
     this.QRcode = [] //棋盘数据
     this.score = 0 //每次开始默认分数、当前关卡获得分数
     this.gameScore = 0 //本轮游戏总分

@@ -405,10 +405,19 @@ export default class Map {
   showCombo() {
     if (this.gclCombo == 0 || !this.sc) return;
     if (this.sc) {
-      //显示Combo
-      this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, (uiWidth - 225) / 2 * ratio, 680 * ratio, 225 * ratio, 48 * ratio);
-      this.ctx.drawImage(Robj["comboNum" + this.gclCombo], 0, 0, Robj["comboNum" + this.gclCombo].width, Robj["comboNum" + this.gclCombo].height, (uiWidth - 225) / 2 * ratio + 230 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
-      this.gclTime++
+      if(this.gclCombo < 10){
+        //显示Combo
+        this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, (uiWidth - 225) / 2 * ratio, 680 * ratio, 225 * ratio, 48 * ratio);
+        this.ctx.drawImage(Robj["comboNum" + this.gclCombo], 0, 0, Robj["comboNum" + this.gclCombo].width, Robj["comboNum" + this.gclCombo].height, (uiWidth - 225) / 2 * ratio + 230 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
+        this.gclTime++
+      }else{
+        const numArr = (this.gclCombo + '').split('')
+        //显示Combo
+        this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, (uiWidth - 225) / 2 * ratio, 680 * ratio, 225 * ratio, 48 * ratio);
+        this.ctx.drawImage(Robj["comboNum" + numArr[0]], 0, 0, Robj["comboNum" + numArr[0]].width, Robj["comboNum" + numArr[0]].height, (uiWidth - 225) / 2 * ratio + 230 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
+        this.ctx.drawImage(Robj["comboNum" + numArr[1]], 0, 0, Robj["comboNum" + numArr[1]].width, Robj["comboNum" + numArr[1]].height, (uiWidth - 225) / 2 * ratio + 230 * ratio + 40 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
+        this.gclTime++
+      }
     }
   }
   //判断是否过关

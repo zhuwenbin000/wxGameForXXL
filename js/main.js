@@ -78,7 +78,7 @@ export default class Main {
     self.music = new Music()
    
     //每隔50毫秒判断一次场景是否发生变化
-    let timeLine = setInterval(() => {  
+    let timeLine = setInterval(() => {
       //首页
       if (databus.scene == 0) {
         if (!pageState.homePage) {
