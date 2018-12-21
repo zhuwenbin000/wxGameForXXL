@@ -91,6 +91,16 @@ export default class Main {
       //游戏页
       // console.log(databus.scene)
       if (databus.scene == 1) {
+        
+        if(databus.gameTimer * 50 >= 60000){
+          if(Number.isInteger(databus.gameTimer * 50 / 10000)){
+            if(_.random(0, 10) > 9 ? true : false){
+              databus.isBananaMoving = true
+            }
+          }
+        }
+
+        databus.gameTimer++
         if (!pageState.gamePage) {
           databus.pageStateUpdate('gamePage')
           if(databus.showRule){

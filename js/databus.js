@@ -144,7 +144,7 @@ export default class DataBus {
 
     this.homeState = 1 //首页状态变化
     
-    this.version = '0.0.1.9';
+    this.version = '0.0.2.0';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
@@ -459,6 +459,9 @@ export default class DataBus {
 
     this.isCrazy = false //是否crazy
     this.crazyTimes = 0 //crazy次数
+    this.gameTimer = 0 //游戏的时间 1 = 50ms
+    this.crazyShow = 0 //crazy出现的次数 出现2次不点击就重新60s
+    this.isBananaMoving = false //香蕉是否在移动
     
     this.QRcode = [] //棋盘数据
     this.score = 0 //每次开始默认分数、当前关卡获得分数
