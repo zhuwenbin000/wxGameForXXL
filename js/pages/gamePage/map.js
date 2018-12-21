@@ -429,35 +429,30 @@ export default class Map {
 
 
   showCombo() {
-    // if (this.gcl.length <= 0) return;
-    // for (var i = 0; i < this.gcl.length; i++) {
-    //   if (this.gcl[i].t < 60) {
-    //     //显示Combo
-    //     if (i == 0) {
-    //       this.ctx.drawImage(Robj["combo"], 0, 0, Robj["combo"].width, Robj["combo"].height, this.gcl[i].x, this.gcl[i].y, 200 * ratio, 54 * ratio);
-    //     } else if (i == 1) {
-    //       this.ctx.drawImage(Robj["combo2"], 0, 0, Robj["combo2"].width, Robj["combo2"].height, this.gcl[i].x, this.gcl[i].y, 298 * ratio, 54 * ratio);
-    //     } else {
-    //       this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, this.gcl[i].x, this.gcl[i].y, 282 * ratio, 60 * ratio);
-    //       if(i < 10){
-    //         this.ctx.drawImage(Robj["comboNum" + (i + 1)], 0, 0, Robj["comboNum" + (i + 1)].width, Robj["comboNum" + (i + 1)].height, this.gcl[i].x + 290 * ratio, this.gcl[i].y, 42 * ratio, 66 * ratio);
-    //       }
-    //     }
-    //     this.gcl[i].t++
-    //   }
-    // }
     if (this.gclCombo == 0 || !this.sc) return;
-    if (this.sc) {
-      // if (this.gclTime <= 30){
-      //   this.ctx.globalAlpha = (1 / 30) * this.gclTime;
-      // }else{
-      //   this.ctx.globalAlpha = 1 - (1 / 30) * (this.gclTime - 30);
-      // }
-      //显示Combo
-      this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, (uiWidth - 225) / 2 * ratio, 680 * ratio, 225 * ratio, 48 * ratio);
-      this.ctx.drawImage(Robj["comboNum" + this.gclCombo], 0, 0, Robj["comboNum" + this.gclCombo].width, Robj["comboNum" + this.gclCombo].height, (uiWidth - 225) / 2 * ratio + 230 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
-      this.gclTime++
+
+    //报错处理
+    try {
+      if (this.sc) {
+        if(this.gclCombo < 10){
+          //显示Combo
+          this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, (uiWidth - 225) / 2 * ratio, 680 * ratio, 225 * ratio, 48 * ratio);
+          this.ctx.drawImage(Robj["comboNum" + this.gclCombo], 0, 0, Robj["comboNum" + this.gclCombo].width, Robj["comboNum" + this.gclCombo].height, (uiWidth - 225) / 2 * ratio + 230 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
+          this.gclTime++
+        }else{
+          const numArr = (this.gclCombo + '').split('')
+          //显示Combo
+          this.ctx.drawImage(Robj["combo3"], 0, 0, Robj["combo3"].width, Robj["combo3"].height, (uiWidth - 225) / 2 * ratio, 680 * ratio, 225 * ratio, 48 * ratio);
+          this.ctx.drawImage(Robj["comboNum" + numArr[0]], 0, 0, Robj["comboNum" + numArr[0]].width, Robj["comboNum" + numArr[0]].height, (uiWidth - 225) / 2 * ratio + 230 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
+          this.ctx.drawImage(Robj["comboNum" + numArr[1]], 0, 0, Robj["comboNum" + numArr[1]].width, Robj["comboNum" + numArr[1]].height, (uiWidth - 225) / 2 * ratio + 230 * ratio + 40 * ratio, 680 * ratio, 30 * ratio, 46 * ratio);
+          this.gclTime++
+        }
+      }
     }
+    catch(err){
+
+    }
+    
   }
   //判断是否过关
   checkPassStage() {
