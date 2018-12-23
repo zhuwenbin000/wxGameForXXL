@@ -507,8 +507,8 @@ export default class DataBus {
     this.bananaX = 0 //香蕉的X坐标
     this.bananaY = 0 //香蕉的Y坐标
     this.crazyRemain = 20 //crazy20秒倒计时
-    this.crazyRateInterval = 1 //时间间隔-秒
-    this.crazyStartInterval = 1 //时间间隔-秒
+    this.crazyRateInterval = 10 //时间间隔-秒
+    this.crazyStartInterval = 60 //时间间隔-秒
     this.bananaTime = 0 //香蕉的移动时间
     this.bananaClick = false //香蕉是否被点击
     
@@ -671,13 +671,17 @@ export default class DataBus {
       // 小于 2.1.0 的基础库版本，res 是一个 undefined
       if (res && res.isEnded || res === undefined) {
         // 正常播放结束，可以下发游戏奖励
-        this.continueGame(1, 5)
+        if(this.gameState == 2){
+
+          this.continueGame(1, 5)
+          this.isLookVideo = true
+  
+        }
         if (this.musicBgChange) {
           //开启音乐
           this.musicBg = true
           this.musicBgChange = false
         }
-        this.isLookVideo = true
       }
       else {
           // 播放中途退出，不下发游戏奖励
@@ -693,9 +697,10 @@ export default class DataBus {
       // 用户点击了【关闭广告】按钮
       // 小于 2.1.0 的基础库版本，res 是一个 undefined
       if (res && res.isEnded || res === undefined) {
-        
-        //存档
-        this.saveGame()
+        if(this.gameState == 13){
+          //存档
+          this.saveGame()
+        }
 
         if (this.musicBgChange) {
           //开启音乐
@@ -717,21 +722,19 @@ export default class DataBus {
       // 用户点击了【关闭广告】按钮
       // 小于 2.1.0 的基础库版本，res 是一个 undefined
       if (res && res.isEnded || res === undefined) {
-        
-        //开始crazy
-        this.gameState = 1
-        this.isCrazy = true
-        this.crazyScore = 0
+        if(this.gameState == 15){
 
-        if (this.musicBgChange) {
-          //开启音乐
-          this.musicBg = true
-          this.musicBgChange = false
+          //开始crazy
+          this.gameState = 1
+          this.isCrazy = true
+          this.crazyScore = 0
+
         }
       }
       else {
           // 播放中途退出，不下发游戏奖励
       }
+
     })
   }
 

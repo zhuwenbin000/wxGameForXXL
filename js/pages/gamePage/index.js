@@ -457,6 +457,7 @@ export default class Index {
     if(databus.gameState == 0){
       this.finish()
       databus.scene = 0
+      return
     }
     if(databus.isBananaMoving){
       if(this.f % 4 == 0){
@@ -1009,6 +1010,8 @@ export default class Index {
         databus.btnPlus = 1
         setTimeout(() => {
           databus.gameState = 1
+          databus.bananaTime = 0
+          databus.bananaClick = false
           databus.btnPlus = 0
         }, databus.laterTime)
         //按钮按下音效

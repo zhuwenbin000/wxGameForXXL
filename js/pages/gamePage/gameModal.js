@@ -21,7 +21,7 @@ let R = {
   "musicSoundFalse": "images/gameModal/music_sound_false.png",
   "musicSoundTrue": "images/gameModal/music_sound_true.png",
   "passState": "images/gamePage/passState.png",
-  "rule": "images/gameModal/rule.png",
+  "ruleCon": "images/gameModal/rule.png",
   "finger": "images/gameModal/finger.png",
   "nextStage": "images/gameModal/next_stage.png",
   "iknow": "images/gameModal/iknow.png",
@@ -274,7 +274,7 @@ export default class GameModal {
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框背景
-      ctx.drawImage(Robj["rule"], 0, 0, Robj["rule"].width, Robj["rule"].height, (824 - 768) / 2 * ratio, 100 * ratio, 768 * ratio, 1308 * ratio);
+      ctx.drawImage(Robj["ruleCon"], 0, 0, Robj["ruleCon"].width, Robj["ruleCon"].height, (824 - 768) / 2 * ratio, 100 * ratio, 768 * ratio, 1308 * ratio);
       if (databus.fingerAniTime < 230){
         databus.fingerAniTime++
       }else{

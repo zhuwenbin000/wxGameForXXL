@@ -95,6 +95,23 @@ export default class Main {
       // console.log(databus.scene)
       if (databus.scene == 1) {
         
+
+        if (!pageState.gamePage) {
+          databus.pageStateUpdate('gamePage')
+          if(databus.showRule){
+            //展示规则页
+            databus.gameState = 8
+            //首次进入规则页
+            databus.firstRule = true
+          }else{
+            databus.gameState = 10
+          }
+          // self.gamePage.restart(gameCon,ctx,gameCanvas)
+          self.gamePage.restart(ctx)
+        }
+        if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()
+
+        
         if(databus.crazyTimes < 5){//5次以内出现
 
           if(databus.isCrazy){//isCrazy倒计时
@@ -104,6 +121,7 @@ export default class Main {
                 databus.crazyRemain--
               }
             }
+            return
           }
 
           if(databus.bananaClick){
@@ -114,9 +132,9 @@ export default class Main {
 
           //如果有香蕉动画就不需要计时
           if(!databus.isBananaMoving){
-            if(databus.gameTimer * 20 > databus.crazyStartInterval * 1000){//每隔60秒之后
-              if(Number.isInteger(databus.gameTimer * 20 / (databus.crazyRateInterval * 1000))){//每隔10秒有10%的概率出现
-                const r = _.random(0, 10)
+            if(databus.gameTimer * 50 > databus.crazyStartInterval * 1000){//每隔60秒之后
+              if(Number.isInteger(databus.gameTimer * 50 / (databus.crazyRateInterval * 1000))){//每隔10秒有10%的概率出现
+                const r = _.random(0, 11)
                 if(r > 9){
                   databus.isBananaMoving = true
                   databus.bananaTime = 0
@@ -146,24 +164,7 @@ export default class Main {
             }
             databus.bananaTime++
           }
-
-          
         }
-
-        if (!pageState.gamePage) {
-          databus.pageStateUpdate('gamePage')
-          if(databus.showRule){
-            //展示规则页
-            databus.gameState = 8
-            //首次进入规则页
-            databus.firstRule = true
-          }else{
-            databus.gameState = 10
-          }
-          // self.gamePage.restart(gameCon,ctx,gameCanvas)
-          self.gamePage.restart(ctx)
-        }
-        if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()
       }
 
       //好友排行榜
