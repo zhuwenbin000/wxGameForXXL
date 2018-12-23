@@ -12,6 +12,7 @@ let databus = new DataBus()
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
 const ratio = wx.getSystemInfoSync().pixelRatio;
+const uiRatio = canvas.width / 828 //设计稿宽度
 //游戏页离屏canvas
 // let gameCanvas = wx.createCanvas()
 // let gameCon = gameCanvas.getContext('2d')
@@ -35,6 +36,8 @@ export default class Main {
     DataStore.getInstance().sharedCanvas = sharedCanvas;
     DataStore.getInstance().ctx = ctx;
     // DataStore.getInstance().gameCanvas = gameCanvas;
+
+    this.f = 0
 
     const res = wx.getLaunchOptionsSync()
     if(res && res.query && res.query.scene){
@@ -63,6 +66,10 @@ export default class Main {
       this.getBaseInfo()
     }
 
+    const archiveData = wx.getStorageSync('archiveData')
+    if(JSON.stringify(archiveData).length > 2){
+      databus.archiveState = true
+    }
   }
   renderPage() {
     let self = this
@@ -74,7 +81,7 @@ export default class Main {
     self.music = new Music()
    
     //每隔50毫秒判断一次场景是否发生变化
-    let timeLine = setInterval(() => {  
+    let timeLine = setInterval(() => {
       //首页
       if (databus.scene == 0) {
         if (!pageState.homePage) {
@@ -87,6 +94,62 @@ export default class Main {
       //游戏页
       // console.log(databus.scene)
       if (databus.scene == 1) {
+        
+        if(databus.crazyTimes < 5){//5次以内出现
+
+          if(databus.isCrazy){//isCrazy倒计时
+            if(databus.crazyRemain > 0){
+              this.f++
+              if(Number.isInteger(this.f * 50 / 1000)){
+                databus.crazyRemain--
+              }
+            }
+          }
+
+          if(databus.bananaClick){
+            databus.bananaX = - 200 * ratio
+            databus.bananaY = 600 * ratio
+            return
+          }
+
+          //如果有香蕉动画就不需要计时
+          if(!databus.isBananaMoving){
+            if(databus.gameTimer * 20 > databus.crazyStartInterval * 1000){//每隔60秒之后
+              if(Number.isInteger(databus.gameTimer * 20 / (databus.crazyRateInterval * 1000))){//每隔10秒有10%的概率出现
+                const r = _.random(0, 10)
+                if(r > 9){
+                  databus.isBananaMoving = true
+                  databus.bananaTime = 0
+                  databus.bananaX = - 200 * ratio
+                  databus.bananaY = 600 * ratio
+                }
+              }
+            }
+            databus.gameTimer++
+          }else{//香蕉移动的xy值
+            if(databus.bananaTime < 40){
+              databus.bananaX = - 200 * uiRatio + databus.bananaTime / 40 * 407 * uiRatio
+              databus.bananaY = 600 * uiRatio - databus.bananaTime / 40 * 200 * uiRatio
+            }else if(databus.bananaTime >= 40 && databus.bananaTime < 120){
+              databus.bananaX = 207 * uiRatio + (databus.bananaTime - 40) / 80 * 414 * uiRatio
+              databus.bananaY = 400 * uiRatio + (databus.bananaTime - 40) / 80 * 400 * uiRatio
+            }else if(databus.bananaTime >= 120 && databus.bananaTime < 160){
+              databus.bananaX = 621 * uiRatio + (databus.bananaTime - 120) / 40 * 407 * uiRatio
+              databus.bananaY = 800 * uiRatio - (databus.bananaTime - 120) / 40 * 200 * uiRatio
+            }else{
+              databus.isBananaMoving = false
+              databus.crazyShow++
+              if(databus.crazyShow == 3){
+                databus.gameTimer = 0
+                databus.crazyShow = 0
+              }
+            }
+            databus.bananaTime++
+          }
+
+          
+        }
+
         if (!pageState.gamePage) {
           databus.pageStateUpdate('gamePage')
           if(databus.showRule){

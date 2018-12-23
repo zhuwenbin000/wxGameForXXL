@@ -6,9 +6,6 @@ import DataBus from '../../databus'
 import { ajax } from '../../base/ajax'
 
 let databus = new DataBus()
-//棋盘的宽数和列数
-let rn = databus.rowNum
-let cn = databus.colNum
 
 let uiWidth = 828;
 let ratio = canvas.width / uiWidth //设计稿宽度
@@ -20,24 +17,22 @@ let btt = databus.GameUI.boardToTOP //棋盘到顶部的距离
 let btlr = databus.GameUI.boardToLR //棋盘左右两边间距  
 let bi = databus.GameUI.boardInner //棋盘内边框  
 let pm = databus.GameUI.piecesMargin //棋子边距 
-let rulec = databus.GameUI.ruleCoordinates //规则按钮坐标宽高
 let sbc = databus.GameUI.scoreBgCoordinates //积分背景坐标宽高
+let rulec = databus.GameUI.ruleCoordinates //规则按钮坐标宽高
+let hc = databus.GameUI.homeCoordinates //首页按钮坐标宽高
+let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
 let sc = databus.GameUI.stepsCoordinates //步数坐标宽高
 let pec = databus.GameUI.progressEmptyCoordinates //空进度条坐标宽高
 let pec2 = databus.GameUI.progressEmpty2Coordinates //空进度条坐标宽高
 let pfc = databus.GameUI.progressFullCoordinates //满进度条坐标宽高
-let hc = databus.GameUI.homeCoordinates //首页按钮坐标宽高
-let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
+let setc = databus.GameUI.setCoordinates //设置按钮坐标宽高
 let asc = databus.GameUI.addStepsCoordinates //增加步数按钮坐标宽高
 let aspoc = databus.GameUI.addStepsPointCoordinates //增加步数红点坐标宽高
-let asprc = databus.GameUI.addStepsPriceCoordinates //增加步数价格坐标宽高
 let asuc = databus.GameUI.addStepsUserCoordinates //增加步数拥有数量坐标宽高
-let aspbc = databus.GameUI.addStepsPriceBgCoordinates //增加步数价格背景坐标宽高
 let ctc = databus.GameUI.colorToolCoordinates //彩色道具坐标宽高
 let ctpoc = databus.GameUI.colorToolPointCoordinates //彩色道具红点坐标宽高
-let ctprc = databus.GameUI.colorToolPriceCoordinates //彩色道具价格坐标宽高
 let ctuc = databus.GameUI.colorToolUserCoordinates //增加步数拥有数量坐标宽高
-let ctpbc = databus.GameUI.colorToolPriceBgCoordinates //彩色道具价格背景坐标宽高
+let savetc = databus.GameUI.saveToolCoordinates //存档道具坐标宽高
 let cc = databus.GameUI.coinCoordinates //金币坐标宽高
 let cnc = databus.GameUI.coinNumCoordinates //金币数量坐标宽高
 let cpc = databus.GameUI.checkPointCoordinates //关卡文字坐标宽高
@@ -52,7 +47,6 @@ let lvc = databus.GameUI.lookVideoCoordinates //游戏结束看视频
 let ic = databus.GameUI.indexCoordinates //游戏结束首页
 let tac = databus.GameUI.tryAgainCoordinates //游戏结束再来一局
 let psec = databus.GameUI.preScoreCoordinates //游戏结束再来一局
-const ratio2 = wx.getSystemInfoSync().pixelRatio;
 
 //游戏页主函数
 export default class Index {
@@ -61,34 +55,32 @@ export default class Index {
     // 维护当前requestAnimationFrame的id
     this.aniId = 1;
     this.f = 0;
+    this.bannanaNum = 0
+    this.bannanaTime = 0
     //当前游戏状态
     this.STATE = "静稳状态";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
     //加载所有资源，资源都load之后，定时器开启
     this.R = {
       "bg": "images/gamePage/bg.png",
-      "gameBg": "images/gamePage/gameBg.png",
-      "icon0": "images/gamePage/fruit_icon1.png",
-      "icon1": "images/gamePage/fruit_icon2.png",
-      "icon2": "images/gamePage/fruit_icon3.png",
-      "icon3": "images/gamePage/fruit_icon4.png",
       "baozha": "images/gamePage/baozha.png",
-      "addSteps": "images/gamePage/icon_addSteps.png",
-      "rule": "images/gamePage/icon_rule.png",
-      "coin": "images/gamePage/icon_coin.png",
-      "home": "images/gamePage/icon_home.png",
-      "music": "images/gamePage/icon_music.png",
-      "colorTool": "images/gamePage/icon_tool.png",
+      "crazyBg": "images/gamePage/crazyTime/crazy_bg.png",
+      "boardBg": "images/gamePage/board/board_bg.png",
+      "boardBgC": "images/gamePage/board/board_bg_crazy.png",
+      "boardBorder": "images/gamePage/board/board_border.png",
+      "boardBorderC": "images/gamePage/board/board_border_crazy.png",
+      "infiniteSteps": "images/gamePage/crazyTime/infinite_steps.png",
+      "addSteps": "images/gamePage/gameBtn/addStep_btn.png",
+      "setIcon": "images/gamePage/gameBtn/set_btn.png",
+      "coin": "images/gamePage/gameBtn/coin_btn.png",
+      "colorTool": "images/gamePage/gameBtn/color_btn.png",
       "progressEmpty": "images/gamePage/progress_empty.png",
       "progressEmpty2": "images/gamePage/progress_empty2.png",
       "progressFull": "images/gamePage/progress_full.png",
-      "scoreBg": "images/gamePage/score_bg.png",
       "steps": "images/gamePage/steps.png",
       "redSteps": "images/gamePage/redSteps.png",
       "pieceslevel2": "images/gamePage/pieceslevel2.png",
       "pieceslevel3": "images/gamePage/pieceslevel3.png",
-      "piecesCoin": "images/gamePage/piecesCoin.png",
       "redPoint": "images/gamePage/redPoint.png",
-      "toolPrice": "images/gamePage/toolPrice.png",
       "doubleHit": "images/gamePage/doubleHit.png",
       "doubleHit1": "images/gamePage/doubleHit/1.png",
       "doubleHit2": "images/gamePage/doubleHit/2.png",
@@ -103,6 +95,19 @@ export default class Index {
       "gameEndBg": "images/gameEnd/gameEndBg.png",
       "colorToolTips":"images/gamePage/colorToolTips.png",
       "colorToolCancel":"images/gamePage/colorToolCancel.png",
+      "redplus":"images/gamePage/gameBtn/redplus.png",
+      "saveBtn":"images/gamePage/gameBtn/saveBtn.png",
+      "banana0":"images/gamePage/crazyTime/banana/banana0.png",
+      "banana1":"images/gamePage/crazyTime/banana/banana1.png",
+      "banana2":"images/gamePage/crazyTime/banana/banana2.png",
+      "banana3":"images/gamePage/crazyTime/banana/banana3.png",
+      "banana4":"images/gamePage/crazyTime/banana/banana4.png",
+      "banana5":"images/gamePage/crazyTime/banana/banana5.png",
+      "banana6":"images/gamePage/crazyTime/banana/banana6.png",
+      "banana7":"images/gamePage/crazyTime/banana/banana7.png",
+      "banana8":"images/gamePage/crazyTime/banana/banana8.png",
+      "banana9":"images/gamePage/crazyTime/banana/banana9.png",
+      "banana10":"images/gamePage/crazyTime/banana/banana10.png",
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
@@ -172,9 +177,11 @@ export default class Index {
       //绘制背景
       ctx.drawImage(this.Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //绘制棋盘
-      ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, btlr, btt, bwh, bwh);
+      ctx.drawImage(this.Robj["boardBg"], 0, 0, this.Robj["boardBg"].width, this.Robj["boardBg"].height, btlr, btt, bwh, bwh);
       //绘制棋子
       this.map.render(ctx, this.Robj);
+      //绘制棋盘边框
+      ctx.drawImage(this.Robj["boardBorder"], 0, 0, this.Robj["boardBorder"].width, this.Robj["boardBorder"].height, btlr, btt, bwh, bwh);
       //取消
       ctx.drawImage(this.Robj["colorToolCancel"], 0, 0, this.Robj["colorToolCancel"].width, this.Robj["colorToolCancel"].height, 20 * ratio, 20 * ratio + databus.gameTop, 78 * ratio, 46 * ratio);
       //提示
@@ -185,33 +192,42 @@ export default class Index {
         this.tipsAni++
       }
       //绘制背景。背景没动,也要每帧擦除，重绘
-      ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
-      //绘制棋盘
-      ctx.drawImage(this.Robj["gameBg"], 0, 0, this.Robj["gameBg"].width, this.Robj["gameBg"].height, btlr, btt, bwh, bwh);
-      if(databus.stepsAni){
-        this.rt++
-        if(this.rt > 120){
-          databus.stepsAni = false
-          this.rt = 0
+      if(databus.isCrazy){
+        ctx.drawImage(this.Robj["crazyBg"], 0, 0, this.Robj["crazyBg"].width, this.Robj["crazyBg"].height, 0, 0, window.innerWidth, window.innerHeight);
+      }else{
+        ctx.drawImage(this.Robj["bg"], 0, 0, this.Robj["bg"].width, this.Robj["bg"].height, 0, 0, window.innerWidth, window.innerHeight);
+      }
+
+        //绘制棋盘
+      if(databus.isCrazy){
+        ctx.drawImage(this.Robj["boardBgC"], 0, 0, this.Robj["boardBgC"].width, this.Robj["boardBgC"].height, btlr, btt, bwh, bwh);
+      }else{
+        ctx.drawImage(this.Robj["boardBg"], 0, 0, this.Robj["boardBg"].width, this.Robj["boardBg"].height, btlr, btt, bwh, bwh);
+      }
+
+      //绘制步数图标
+      if(databus.isCrazy){
+        ctx.drawImage(this.Robj["infiniteSteps"], 0, 0, this.Robj["infiniteSteps"].width, this.Robj["infiniteSteps"].height, sc.x, sc.y, sc.w, sc.h);
+      }else{
+        if(databus.stepsAni){
+          this.rt++
+          if(this.rt > 120){
+            databus.stepsAni = false
+            this.rt = 0
+          }else{
+            if(this.tipsAni % 2 == 1){
+              ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x, sc.y, sc.w, sc.h);
+            }else{
+              ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x + 10 * ratio, sc.y + 10 * ratio, sc.w - 20 * ratio, sc.h - 20 * ratio);
+            }
+          }
         }else{
-          if(this.tipsAni % 2 == 1){
-            //绘制步数图标
+          if(databus.steps < 6){
             ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x, sc.y, sc.w, sc.h);
           }else{
-            //绘制步数图标
-            ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x + 10 * ratio, sc.y + 10 * ratio, sc.w - 20 * ratio, sc.h - 20 * ratio);
+            ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
           }
         }
-      }else{
-        if(databus.steps < 6){
-          //绘制步数图标
-          ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x, sc.y, sc.w, sc.h);
-        }else{
-          //绘制步数图标
-          ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
-        }
-        //绘制步数图标
-        // ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
       }
 
       //绘制空进度条
@@ -258,33 +274,30 @@ export default class Index {
         ctx.drawImage(this.Robj["progressFull"], 0, 0, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * this.Robj["progressFull"].width, this.Robj["progressFull"].height, pfc.x, pfc.y, (databus.processScore >= databus.passScore ? 1 : databus.processScore / databus.passScore) * pfc.w, pfc.h);
       }
 
-      //绘制首页按钮
-      ctx.drawImage(this.Robj["home"], 0, 0, this.Robj["home"].width, this.Robj["home"].height, hc.x, hc.y, hc.w, hc.h);
-      //绘制规则按钮
-      ctx.drawImage(this.Robj["rule"], 0, 0, this.Robj["rule"].width, this.Robj["rule"].height, rulec.x, rulec.y, rulec.w, rulec.h);
-      //绘制音乐按钮
-      ctx.drawImage(this.Robj["music"], 0, 0, this.Robj["music"].width, this.Robj["music"].height, mc.x, mc.y, mc.w, mc.h);
+      //设置按钮
+      ctx.drawImage(this.Robj["setIcon"], 0, 0, this.Robj["setIcon"].width, this.Robj["setIcon"].height, setc.x, setc.y, setc.w, setc.h);
+
+      
       //绘制增加步数按钮
       ctx.drawImage(this.Robj["addSteps"], 0, 0, this.Robj["addSteps"].width, this.Robj["addSteps"].height, asc.x, asc.y, asc.w, asc.h);
       if(databus.usersteps != 0 || databus.usersteps != '0'){
         //增加步数红点坐标宽高
         ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
       }else{
+        ctx.drawImage(this.Robj["redplus"], 0, 0, this.Robj["redplus"].width, this.Robj["redplus"].height, aspoc.x, aspoc.y, aspoc.w, aspoc.h);
         if(databus.usergold >= databus.stepprice){
           if(!databus.buyTips){
             
             if(this.tipsAni % 2 == 1){
               //增加步数购买提示
-              ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 325 * ratio, 1010 * ratio + databus.gameTop, 50 * ratio, 60 * ratio);
+              ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 205 * ratio, 1010 * ratio + databus.gameTop, 50 * ratio, 60 * ratio);
             }else{
               //增加步数购买提示
-              ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 329 * ratio, 1004 * ratio + databus.gameTop, 42 * ratio, 52 * ratio);
+              ctx.drawImage(this.Robj["buyTips"], 0, 0, this.Robj["buyTips"].width, this.Robj["buyTips"].height, 209 * ratio, 1004 * ratio + databus.gameTop, 42 * ratio, 52 * ratio);
             }
           }
         }
       }
-      //增加步数价格背景坐标宽高
-      ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, aspbc.x, aspbc.y, aspbc.w, aspbc.h);
     
       //绘制彩色道具按钮
       ctx.drawImage(this.Robj["colorTool"], 0, 0, this.Robj["colorTool"].width, this.Robj["colorTool"].height, ctc.x, ctc.y, ctc.w, ctc.h);
@@ -292,9 +305,9 @@ export default class Index {
 
       if(databus.userhammer != 0 || databus.userhammer != '0'){
         ctx.drawImage(this.Robj["redPoint"], 0, 0, this.Robj["redPoint"].width, this.Robj["redPoint"].height, ctpoc.x, ctpoc.y, ctpoc.w, ctpoc.h);
+      }else{
+        ctx.drawImage(this.Robj["redplus"], 0, 0, this.Robj["redplus"].width, this.Robj["redplus"].height, ctpoc.x, ctpoc.y, ctpoc.w, ctpoc.h);
       }
-      //彩色道具价格背景坐标宽高
-      ctx.drawImage(this.Robj["toolPrice"], 0, 0, this.Robj["toolPrice"].width, this.Robj["toolPrice"].height, ctpbc.x, ctpbc.y, ctpbc.w, ctpbc.h);
       
       if (databus.doubleHit > 0){
         // databus.doubleHitTime++
@@ -309,41 +322,48 @@ export default class Index {
         ctx.drawImage(this.Robj["doubleHit" + databus.doubleHit], 0, 0, this.Robj["doubleHit" + databus.doubleHit].width, this.Robj["doubleHit" + databus.doubleHit].height, 740 * ratio, 165 * ratio + databus.gameTop, 33 * ratio, 47 * ratio);
       }
 
+      
+      //绘制存档道具按钮
+      ctx.drawImage(this.Robj["saveBtn"], 0, 0, this.Robj["saveBtn"].width, this.Robj["saveBtn"].height, savetc.x, savetc.y, savetc.w, savetc.h);
+      
       //绘制金币图标
       ctx.drawImage(this.Robj["coin"], 0, 0, this.Robj["coin"].width, this.Robj["coin"].height, cc.x, cc.y, cc.w, cc.h);
+
 
       // 关卡
       ctx.textAlign = 'left';
       ctx.fillStyle = '#fff';
       ctx.font = cpc.font;
-      
-      ctx.fillText('第' + databus.checkPoint + '关', cpc.x, cpc.y);
-      //世界最高分数
-      // ctx.font = hsc.font;
-      // ctx.textAlign = 'center';
-      // ctx.fillText(databus.highestScore, hsc.x, hsc.y);
-      // 步数
 
+      if(databus.isCrazy){
+        if(databus.crazyRemain < 10){
+          ctx.fillText('00:0' + databus.crazyRemain, cpc.x, cpc.y);
+        }else{
+          ctx.fillText('00:' + databus.crazyRemain, cpc.x, cpc.y);
+        }
+      }else{
+        ctx.fillText('第' + databus.checkPoint + '关', cpc.x, cpc.y);
+      }
+
+      // 步数
       ctx.textAlign = 'center';
-      ctx.font = snc.font;
-      ctx.fillText(databus.steps, snc.x, snc.y);
+      if(!databus.isCrazy){
+        ctx.font = snc.font;
+        ctx.fillText(databus.steps, snc.x, snc.y);
+      }
+
       //步数文字
       // ctx.font = stc.font;
       // ctx.fillText('步数', stc.x, stc.y);
+
       // 本轮分数
       ctx.font = shsc.font;
       ctx.fillText(databus.gameScore + databus.score, shsc.x, shsc.y);
-      //增加步数价格
-      ctx.font = asprc.font;
-      ctx.fillText(databus.stepprice, asprc.x, asprc.y);
       //增加步数拥有数量
       ctx.font = asuc.font;
       if(databus.usersteps != 0 || databus.usersteps != '0'){
         ctx.fillText(databus.usersteps, asuc.x, asuc.y);
       }
-      //彩色道具价格
-      ctx.font = ctprc.font;
-      ctx.fillText(databus.hammerprice, ctprc.x, ctprc.y);
       //彩色道具拥有数量
       ctx.font = ctuc.font;
       if(databus.userhammer != 0 || databus.userhammer != '0'){
@@ -376,11 +396,24 @@ export default class Index {
       //绘制棋子
       this.map.render(ctx, this.Robj);
 
+      //绘制棋盘边框
+      if(databus.isCrazy){
+        ctx.drawImage(this.Robj["boardBorderC"], 0, 0, this.Robj["boardBorderC"].width, this.Robj["boardBorderC"].height, btlr, btt, bwh, bwh);
+      }else{
+        ctx.drawImage(this.Robj["boardBorder"], 0, 0, this.Robj["boardBorder"].width, this.Robj["boardBorder"].height, btlr, btt, bwh, bwh);
+      }
+
+      //绘制crazy香蕉
+      if(databus.isBananaMoving){
+        ctx.drawImage(this.Robj["banana" + this.bannanaNum], 0, 0, this.Robj["banana" + this.bannanaNum].width, this.Robj["banana" + this.bannanaNum].height, databus.bananaX, databus.bananaY, 200 * ratio, 200 * ratio);
+      } 
+      
+
       if (databus.gameState == 2) {
         this.gameEnd.render(ctx)
       }
 
-      if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8 || databus.gameState == 9 || databus.gameState == 10 || databus.gameState == 11) {
+      if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8 || databus.gameState == 9 || databus.gameState == 10 || databus.gameState == 11 || databus.gameState == 13 || databus.gameState == 14 || databus.gameState == 15 || databus.gameState == 16) {
         this.gameModal.render(ctx)
       }
 
@@ -394,16 +427,16 @@ export default class Index {
         }else {
           this.STATE = "静稳状态";
         }
-      } else if (this.STATE == "爆破动画" && this.f > this.startBomb + 41) {
+      } else if (this.STATE == "爆破动画" && this.f > this.startBomb + (databus.isCrazy ? 11 : 41)) {
         this.STATE = "下落动画";
         this.map.dropDown();
         this.startDropDown = this.f
-      } else if (this.STATE == "下落动画" && this.f > this.startDropDown + 5) {
+      } else if (this.STATE == "下落动画" && this.f > this.startDropDown + (databus.isCrazy ? 1 : 5)) {
 
         this.STATE = "补充新的";
         this.map.supplement();
         this.startSupple = this.f;
-      } else if (this.STATE == "补充新的" && this.f > this.startSupple + 11) {
+      } else if (this.STATE == "补充新的" && this.f > this.startSupple + (databus.isCrazy ? 3 : 11)) {
         this.STATE = "爆破检查"
         // this.map.check();
       } else if (this.STATE == "静稳状态") {
@@ -421,6 +454,24 @@ export default class Index {
 
   // 实现游戏帧循环
   loop() {
+    if(databus.gameState == 0){
+      this.finish()
+      databus.scene = 0
+    }
+    if(databus.isBananaMoving){
+      if(this.f % 4 == 0){
+        this.bannanaTime++
+        this.bannanaNum = this.bannanaTime % 11
+      }
+    }
+    //一次crazy结束弹框 当前crazy清空 crazy次数加1
+    if(databus.crazyRemain == 0){
+      databus.gameState = 16
+      databus.isCrazy = false
+      databus.crazyRemain = 20
+      databus.crazyTimes++
+    }
+
     this.render(this.ctx)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
   }
@@ -434,6 +485,10 @@ export default class Index {
     var self = this;
 
     if(!databus.archiveState){
+      //清除存档
+      wx.setStorageSync('archiveData', '')
+      databus.archiveState = false
+      //请求新开一局的游戏数据
       let options = {
         tradecode: 'game01',
         apiType: 'user',
@@ -510,6 +565,7 @@ export default class Index {
       databus.usersteps = archiveData.usersteps //用户拥有道具-步数
       databus.stepprice = archiveData.stepprice //用户购买道具-步数价格
 
+
       //地图，唯一的实例
       self.map = new Map(self.ctx)
       //添加监听
@@ -522,6 +578,10 @@ export default class Index {
       // 清除上一帧的动画
       window.cancelAnimationFrame(self.aniId)
       self.aniId = window.requestAnimationFrame(self.bindLoop, canvas)
+
+      //清除存档
+      wx.setStorageSync('archiveData', '')
+      databus.archiveState = false
 
     }
   }
@@ -619,6 +679,16 @@ export default class Index {
     if (this.STATE != "静稳状态") {
       return;
     }
+
+    if(x >= databus.bananaX && x <= databus.bananaX + 200 * ratio && y >= databus.bananaY && y <= databus.bananaY + 200 * ratio){
+      databus.gameState = 15
+      databus.bananaClick = true
+      databus.gameTimer = 0
+      //按钮按下音效
+      this.music.playMusic('btnDown')
+      return
+    }
+
     if (databus.gameState == 2){
       // 首页按钮事件
       if (x >= ic.x && x <= ic.x + ic.w && y >= ic.y && y <= ic.y + ic.h) {
@@ -855,52 +925,26 @@ export default class Index {
       }
     } else if (databus.gameState == 13) {//13:存档弹框
       // 点击确认事件
-      if (x >= (250 * ratio) && x <= ((250 + 312) * ratio) && y >= (820 * ratio) && y <= ((820 + 142) * ratio)) {
-        console.log('存档')
-        let archiveData = {},QRcode = [];
-        //开始存档配置
+      if (x >= (252 * ratio) && x <= ((252 + 324) * ratio) && y >= (770 * ratio) && y <= ((770 + 142) * ratio)) {
         
-        archiveData.score = databus.score //每次开始默认分数、当前关卡获得分数
-        archiveData.gameScore = databus.gameScore //本轮游戏总分
-        archiveData.checkPoint = databus.checkPoint //当前关卡
-        archiveData.steps = databus.steps //剩余步数
-        archiveData.useSteps = databus.useSteps //使用步数
-        archiveData.gamegold = databus.gamegold //本轮游戏总金币
-        archiveData.stagegold = databus.stagegold //过关时的金币
-        archiveData.selfHighScore = databus.selfHighScore //个人历史最高分
-        archiveData.isShare = databus.isShare //本局游戏是否分享过
-        archiveData.isLookVideo = databus.isLookVideo //本局游戏是否观看过视频
-        
-        archiveData.passScore = databus.passScore //过关分数
-        archiveData.gameId = databus.gameId //本轮游戏id
-        archiveData.rewardstep = databus.rewardstep //过关奖励步数
-        archiveData.piecesLevelScore = databus.piecesLevelScore //旗子对应分数
-        archiveData.piecesLevelProbblt = databus.piecesLevelProbblt //旗子对应等级和生成概率
-        archiveData.userhammer = databus.userhammer //用户拥有道具-锤子
-        archiveData.hammerprice = databus.hammerprice //用户购买道具-锤子价格
-        archiveData.usersteps = databus.usersteps //用户拥有道具-步数
-        archiveData.stepprice = databus.stepprice //用户购买道具-步数价格
-
-        //保存棋盘状态
-        for (var r = 0; r < rn; r++) {
-          QRcode[r] = []
-          for (var c = 0; c < cn; c++) {
-            QRcode[r][c] = this.map.blocks[r][c].attr
-          }
-        }
-        archiveData.QRcode = QRcode
-
-        wx.setStorageSync('archiveData', JSON.stringify(archiveData))
-
         databus.btnPlus = 1
         setTimeout(() => {
-          databus.gameState = 1
+          databus.showAarchiveVideoAd()
           databus.btnPlus = 0
         }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
+
       }
-    } else if (databus.gameState == 1){//游戏进行中
+
+      // 关闭弹框事件
+      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (250 * ratio) && y <= ((250 + 162) * ratio)) {
+        databus.gameState = 1
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+    } else if(databus.gameState == 14){
       // 首页按钮事件
       if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
         databus.gameState = 6
@@ -924,17 +968,74 @@ export default class Index {
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
-      // 增加步数购买按钮事件
-      if (x >= (270 * ratio) && x <= ((270 + 50) * ratio) && y >= (1155 * ratio + databus.gameTop) && y <= ((1155 + 50) * ratio) + databus.gameTop) {
-        if((databus.usersteps == 0 || databus.usersteps == '0') && (databus.usergold >= databus.stepprice)){
-          databus.buyTips = true
-        }
-        databus.gameState = 5
+
+      // 设置按钮事件
+      if (x >= setc.x && x <= setc.x + setc.w && y >= setc.y && y <= setc.y + setc.h) {
+        databus.gameState = 1
         //按钮按下音效
         this.music.playMusic('btnDown')
       }
+
+    }else if(databus.gameState == 15){
+      // 关闭弹框事件
+      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (250 * ratio) && y <= ((250 + 162) * ratio)) {
+        databus.gameState = 1
+        databus.bananaClick = false
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+      // 点击确认事件-开始crazy
+      if (x >= (198 * ratio) && x <= ((198 + 432) * ratio) && y >= (790 * ratio) && y <= ((790 + 174) * ratio)) {
+        databus.btnPlus = 1
+        setTimeout(() => {
+          if(databus.crazyTimes < 1){//第一次crazy免费 后续看视频
+            databus.gameState = 1
+            databus.isCrazy = true
+            databus.crazyScore = 0
+          }else{
+            databus.showCrazyVideoAd()
+          }
+          databus.btnPlus = 0
+        }, databus.laterTime)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+    }else if(databus.gameState == 16){
+
+      // 点击确认事件-结束crazy
+      if (x >= (198 * ratio) && x <= ((198 + 432) * ratio) && y >= (790 * ratio) && y <= ((790 + 174) * ratio)) {
+        databus.btnPlus = 1
+        setTimeout(() => {
+          databus.gameState = 1
+          databus.btnPlus = 0
+        }, databus.laterTime)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+    }else if (databus.gameState == 1){//游戏进行中
+
+      // 设置按钮事件
+      if (x >= setc.x && x <= setc.x + setc.w && y >= setc.y && y <= setc.y + setc.h) {
+        databus.gameState = 14
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+      // 增加步数购买按钮事件
+      if (x >= aspoc.x && x <= (aspoc.x + aspoc.w) && y >= (aspoc.y + databus.gameTop) && y <= (aspoc.y + aspoc.h) + databus.gameTop) {
+        // if((databus.usersteps == 0 || databus.usersteps == '0') && (databus.usergold >= databus.stepprice)){
+          databus.buyTips = true
+          databus.gameState = 5
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+        // }
+        return
+      }
       // 增加步数使用按钮事件
-      if (x >= (270 * ratio) && x <= ((270 + 140) * ratio) && y >= (1045 * ratio + databus.gameTop) && y <= ((1045 + 120) * ratio) + databus.gameTop) {
+      if (x >= asc.x && x <= (asc.x + asc.w) && y >= (asc.y + databus.gameTop) && y <= (asc.y + asc.h) + databus.gameTop) {
         if (databus.usersteps > 0) {
           this.useTool('3')
         } else {
@@ -947,6 +1048,13 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
 
+      // 存档道具使用按钮事件
+      if (x >= savetc.x && x <= (savetc.x + savetc.w) && y >= (savetc.y + databus.gameTop) && y <= (savetc.y + savetc.h) + databus.gameTop) {
+        databus.gameState = 13
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+      
       // 金币问号事件
       if (x >= cc.x  && x <= (cc.x + cc.w) && y >= cc.y && y <= (cc.y + cc.h)) {
         databus.gameState = 11
@@ -955,16 +1063,18 @@ export default class Index {
       }
       
       // 彩色道具购买按钮事件
-      if (x >= (455 * ratio) && x <= ((455 + 50) * ratio) && y >= (1155 * ratio + databus.gameTop) && y <= ((1155 + 50) * ratio) + databus.gameTop) {
-        databus.gameState = 4
-        //按钮按下音效
-        this.music.playMusic('btnDown')
+      if (x >= ctpoc.x && x <= (ctpoc.x + ctpoc.w) && y >= (ctpoc.y + databus.gameTop) && y <= (ctpoc.y + ctpoc.h) + databus.gameTop) {
+        // if((databus.userhammer == 0 || databus.userhammer == '0') && (databus.usergold >= databus.hammerprice)){
+          databus.gameState = 4
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+        // }
+        return
       }
 
       // 彩色道具使用按钮事件
-      if (x >= (455 * ratio) && x <= ((455 + 140) * ratio) && y >= (1045 * ratio + databus.gameTop) && y <= ((1045 + 120) * ratio) + databus.gameTop) {
+      if (x >= ctc.x && x <= (ctc.x + ctc.w) && y >= (ctc.y + databus.gameTop) && y <= (ctc.y + ctc.h) + databus.gameTop) {
         if (databus.userhammer > 0) {
-          // this.useTool('2')
           databus.gameState = 12
         } else {
           databus.gameState = 4
@@ -973,6 +1083,12 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
       
+      //存档按钮事件
+      // if (x >= ctc.x && x <= (ctc.x + ctc.w) && y >= (ctc.y + databus.gameTop) && y <= (ctc.y + ctc.h) + databus.gameTop) {
+      //   databus.gameState = 13
+      //   //按钮按下音效
+      //   this.music.playMusic('btnDown')
+      // }
 
       //游戏区域事件
       if ((x < btlr || y < btt) || (x > bwh + btlr || y > bwh + btt)) {
@@ -1266,8 +1382,6 @@ export default class Index {
     databus.doubleHitList = doubleHitList
     databus.doubleHit = doubleHit
   }
-
-
 
   /**
    * 工具函数结束

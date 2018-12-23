@@ -13,8 +13,6 @@ let rn = databus.rowNum
 let cn = databus.colNum
 
 let R = {
-  "combo": "images/gamePage/combo/combo.png",
-  "combo2": "images/gamePage/combo/combo2.png",
   "combo3": "images/gamePage/combo/combo3.png",
   "comboNum0": "images/gamePage/combo/0.png",
   "comboNum1": "images/gamePage/combo/1.png",
@@ -104,6 +102,9 @@ export default class Map {
         }
       }
     }
+
+    //记录棋盘数据
+    databus.QRcode = this.QRcode
   }
 
   createBlocksByQR() {
@@ -207,19 +208,6 @@ export default class Map {
                 databus.combo = databus.combo + 1
                 isCombo = isCombo + 1
 
-                //显示combo
-                // let x = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).x + (1 - _.random(0, 2)) * _.random(0, 50) * ratio;
-                // const y = databus.getPointCenter(checkComboBlocks[checkComboBlocks.length - 2]).y;
-                // if (x > 400 * ratio) {
-                //   x = 400 * ratio + (1 - _.random(0, 2)) * _.random(0, 50) * ratio
-                // }
-                // this.gcl.push({
-                  // rc: checkComboBlocks[checkComboBlocks.length - 2],
-                  // combo: databus.combo,
-                  // t: 0,
-                  // x: x,
-                  // y: y
-                // })
                 this.gclCombo++
                 this.comboBlocksBomb(checkComboBlocks)
 
@@ -283,8 +271,10 @@ export default class Map {
       databus.gameState = 9 //游戏异常
       return
     }
-    //减去1步
-    databus.steps--;
+    if(!databus.isCrazy){
+      //减去1步
+      databus.steps--;
+    }
     if(databus.steps <= 5){
       databus.stepsAni = true
     }
@@ -350,6 +340,12 @@ export default class Map {
       databus.doubleHit = doubleHit
     }
     
+    //crazy模式下总得分
+    if(databus.isCrazy){
+      databus.crazyScore = databus.crazyScore + bombScore * doubleHit * multiplyBy
+    }
+
+    //游戏得分
     databus.score = databus.score + bombScore * doubleHit * multiplyBy
 
     //显示获得得分
@@ -366,6 +362,7 @@ export default class Map {
     // if (this.gclCombo > 0) {
     //   this.gslScore = this.gslScore + bombScore * doubleHit
     // }
+
     //得分音效
     this.music.playMusic('getScore')
     if (gold > 0 ){
@@ -410,21 +407,6 @@ export default class Map {
         this.gsl[i].t++
       }
     }
-    // if (this.gslScore == 0 || !this.ss) return;
-    // if (this.ss) {
-    //   //显示分数
-    //   const score = (this.gslScore + '').split('');
-    //   const len = score.length;
-    //   for (let j = 0; j < len; j++) {
-    //     // if (this.gslTime <= 30) {
-    //     //   this.ctx.globalAlpha = (1 / 30) * this.gslTime;
-    //     // } else {
-    //     //   this.ctx.globalAlpha = 1 - (1 / 30) * (this.gslTime - 30);
-    //     // }
-    //     this.ctx.drawImage(Robj["score" + score[j]], 0, 0, Robj["score" + score[j]].width, Robj["score" + score[j]].height, (uiWidth - 30) / 2 * ratio + 35 * j * ratio, 750 * ratio, 30 * ratio, 40 * ratio);
-    //   }
-    //   this.gslTime++
-    // }
   }
 
 
@@ -483,7 +465,9 @@ export default class Map {
           self.music.playMusic('passPoint')
           databus.passScore = data.body.game.passscore //第一关过关所需分数
           databus.gameId = data.body.game.gameid //本轮游戏id
-          databus.steps = databus.steps + parseInt(data.body.game.rewardstep) //剩余步数加上奖励步数
+          if(!databus.isCrazy){//crazy模式不增加奖励步数
+            databus.steps = databus.steps + parseInt(data.body.game.rewardstep) //剩余步数加上奖励步数
+          }
           databus.rewardstep = data.body.game.rewardstep //过关奖励步数
           databus.checkPoint = data.body.game.stageno //下一关关卡编号
           //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
@@ -498,11 +482,16 @@ export default class Map {
             piecesLevel: piecesLevel,
             piecesProbblt: piecesProbblt
           }
-          databus.gameState = 7 //过关弹框
           databus.score = 0 //重置当前关卡获得分数
           databus.processScore = 0 //重置得分进度条
           databus.useSteps = 0 //重置当前关卡使用步数
           databus.stagegold = 0 //重置当前关卡所得金币
+
+          if(databus.isCrazy){//crazy模式下不播放过关动画
+            databus.gameState = 1
+          }else{
+            databus.gameState = 7 //过关弹框
+          }
         }
       }
       ajax(options)
@@ -630,12 +619,15 @@ export default class Map {
           this.blocks[r][c].moveTo(r, c, 10);
           this.QRcode[r][c] = attr;
         }
-
+        
         //借这个位置，复原一下needToBomb、downRow两个阵
         this.needToBomb[r][c] = undefined;
         this.downRow[r][c] = undefined;
       }
     }
+
+    //补充记录棋盘数据
+    databus.QRcode = this.QRcode
   }
 
 

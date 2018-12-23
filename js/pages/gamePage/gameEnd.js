@@ -28,7 +28,6 @@ let R = {
   "shareToQunGrey": "images/gameEnd/shareToQun-grey.png",
   "tips": "images/gameEnd/tips.png",
   "tips2": "images/gameEnd/tips2.png",
-  "noSharetips": "images/gameEnd/noSharetips.png",
   "tryAgain": "images/gameEnd/tryAgain.png"
 }
 

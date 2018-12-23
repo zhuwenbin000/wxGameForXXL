@@ -4,6 +4,11 @@ let databus = new DataBus()
 let uiWidth = 828;
 let ratio = canvas.width / uiWidth //设计稿宽度
 
+
+let rulec = databus.GameUI.ruleCoordinates //规则按钮坐标宽高
+let hc = databus.GameUI.homeCoordinates //首页按钮坐标宽高
+let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
+
 let R = {
   "gameEndBg": "images/gameEnd/gameEndBg.png",
   "addSteps": "images/gameModal/add_steps.png",
@@ -16,7 +21,6 @@ let R = {
   "musicSoundFalse": "images/gameModal/music_sound_false.png",
   "musicSoundTrue": "images/gameModal/music_sound_true.png",
   "passState": "images/gamePage/passState.png",
-  "ruleBg": "images/gameModal/rule_bg.png",
   "rule": "images/gameModal/rule.png",
   "finger": "images/gameModal/finger.png",
   "nextStage": "images/gameModal/next_stage.png",
@@ -24,11 +28,21 @@ let R = {
   "passStateBg": "images/gamePage/passStateBg.png",
   "buy": "images/gameModal/icon_buy.png",
   "coin": "images/gameModal/coin.png",
+  "saveModal": "images/gamePage/archive/save_modal.png",
+  "saveBtn": "images/gamePage/archive/save_game.png",
+  "rule": "images/gamePage/gameBtn/rule.png",
+  "home": "images/gamePage/gameBtn/home.png",
+  "music": "images/gamePage/gameBtn/music.png",
+  "crazyBtnFree": "images/gamePage/crazyTime/crazy_btn_free.png",
+  "crazyBtnVideo": "images/gamePage/crazyTime/crazy_btn_video.png",
+  "crazyEndModal": "images/gamePage/crazyTime/endModal.png",
+  "crazyStartModal": "images/gamePage/crazyTime/startModal.png",
+  "okBtn": "images/gamePage/crazyTime/ok_btn.png",
 }
 
 //把所有的图片放到一个对象中
 let Robj = {};	//两个对象有相同的k
-// 遍历R对象，把真实image对象，放入this.Robj中
+// 遍历R对象，把真实image对象，放入Robj中
 for (var k in R) {
   Robj[k] = wx.createImage();
   Robj[k].src = R[k];
@@ -397,5 +411,90 @@ export default class GameModal {
       }
     }
     
+    //13:存档弹框
+    if (databus.gameState == 13) {
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //弹框
+      ctx.drawImage(Robj["saveModal"], 0, 0, Robj["saveModal"].width, Robj["saveModal"].height, 30 * ratio, 300 * ratio, 768 * ratio, 704 * ratio);
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
+      
+      if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+        databus.btnPlus++
+        //弹框确认
+        ctx.drawImage(Robj["saveBtn"], 0, 0, Robj["saveBtn"].width, Robj["saveBtn"].height, (252 - 16.2) * ratio, (770 - 7.2) * ratio, 324 * 1.1 * ratio, 142 * 1.1 * ratio);
+      } else {
+        databus.btnPlus = 0
+        //弹框确认
+        ctx.drawImage(Robj["saveBtn"], 0, 0, Robj["saveBtn"].width, Robj["saveBtn"].height, 252 * ratio, 770 * ratio, 324 * ratio, 142 * ratio);
+      }
+    }
+
+    //14设置
+    if(databus.gameState == 14){
+      //绘制首页按钮
+      ctx.drawImage(Robj["home"], 0, 0, Robj["home"].width, Robj["home"].height, hc.x, hc.y, hc.w, hc.h);
+      //绘制规则按钮
+      ctx.drawImage(Robj["rule"], 0, 0, Robj["rule"].width, Robj["rule"].height, rulec.x, rulec.y, rulec.w, rulec.h);
+      //绘制音乐按钮
+      ctx.drawImage(Robj["music"], 0, 0, Robj["music"].width, Robj["music"].height, mc.x, mc.y, mc.w, mc.h);
+    }
+
+    //15:crazy开始
+    if (databus.gameState == 15) {
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //弹框
+      ctx.drawImage(Robj["crazyStartModal"], 0, 0, Robj["crazyStartModal"].width, Robj["crazyStartModal"].height, 41 * ratio, 300 * ratio, 746 * ratio, 754 * ratio);
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
+      
+      if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+        databus.btnPlus++
+        if(databus.crazyTimes < 1){
+          //弹框确认
+          ctx.drawImage(Robj["crazyBtnFree"], 0, 0, Robj["crazyBtnFree"].width, Robj["crazyBtnFree"].height, (198 - 21.6) * ratio, (790 - 8.7) * ratio, 432 * 1.1 * ratio, 174 * 1.1 * ratio);
+        }else{
+          //弹框确认
+          ctx.drawImage(Robj["crazyBtnVideo"], 0, 0, Robj["crazyBtnVideo"].width, Robj["crazyBtnVideo"].height, (198 - 21.6) * ratio, (790 - 7.2) * ratio, 432 * 1.1 * ratio, 174 * 1.1 * ratio);
+        }
+      } else {
+        databus.btnPlus = 0
+        if(databus.crazyTimes < 1){
+          //弹框确认
+          ctx.drawImage(Robj["crazyBtnFree"], 0, 0, Robj["crazyBtnFree"].width, Robj["crazyBtnFree"].height, 198 * ratio, 790 * ratio, 432 * ratio, 174 * ratio);
+        }else{
+          //弹框确认
+          ctx.drawImage(Robj["crazyBtnVideo"], 0, 0, Robj["crazyBtnVideo"].width, Robj["crazyBtnVideo"].height, 198 * ratio, 790 * ratio, 432 * ratio, 174 * ratio);
+        }
+      }
+    }
+
+
+    //16:crazy结束
+    if (databus.gameState == 16) {
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //弹框
+      ctx.drawImage(Robj["crazyEndModal"], 0, 0, Robj["crazyEndModal"].width, Robj["crazyEndModal"].height, 41 * ratio, 300 * ratio, 746 * ratio, 754 * ratio);
+      //弹框关闭
+      // ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
+      
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#fff';
+      ctx.font = 70 * ratio + 'px Arial';
+      ctx.fillText(databus.crazyScore, 440 * ratio, 740 * ratio);
+
+      if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+        databus.btnPlus++
+        ctx.drawImage(Robj["okBtn"], 0, 0, Robj["okBtn"].width, Robj["okBtn"].height, (198 - 21.6) * ratio, (790 - 8.7) * ratio, 432 * 1.1 * ratio, 174 * 1.1 * ratio);
+      } else {
+        databus.btnPlus = 0
+        //弹框确认
+        ctx.drawImage(Robj["okBtn"], 0, 0, Robj["okBtn"].width, Robj["okBtn"].height, 198 * ratio, 790 * ratio, 432 * ratio, 174 * ratio);
+      }
+
+    }
   }
 }

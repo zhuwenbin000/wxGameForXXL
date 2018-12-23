@@ -21,7 +21,13 @@ export default class DataBus {
     this.gameTop = 0 * ratio
     this.gameEndTop = 0 * ratio
 
+    //创建游戏视频
     this.createVideoAd()
+    //创建存档视频
+    this.creatAarchiveVideoAd()
+    //创建crazy视频
+    this.creatCrazyVideoAd()
+
     //判断是否是哪种设备 
     wx.getSystemInfo({
       success: res=>{
@@ -140,7 +146,7 @@ export default class DataBus {
 
     this.homeState = 1 //首页状态变化
     
-    this.version = '0.0.1.9';
+    this.version = '0.0.2.0';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
@@ -178,8 +184,8 @@ export default class DataBus {
       boardWH: 0, //棋盘宽高
       piecesWH: 0, //棋子宽高
       ruleCoordinates: { //规则坐标宽高
-        x: 40 * ratio,
-        y: 1046 * ratio + this.gameTop,
+        x: 15 * ratio,
+        y: 830 * ratio + this.gameTop,
         w: 180 * ratio,
         h: 74 * ratio
       },
@@ -214,82 +220,72 @@ export default class DataBus {
         h: 26 * ratio,
       },
       homeCoordinates: { //首页坐标宽高
-        x: 44 * ratio,
-        y: 1126 * ratio + this.gameTop,
-        w: 82 * ratio,
-        h: 82 * ratio,
+        x: 15 * ratio,
+        y: 910 * ratio + this.gameTop,
+        w: 180 * ratio,
+        h: 74 * ratio
       },
       musicCoordinates: { //音乐坐标宽高
-        x: 142 * ratio,
-        y: 1126 * ratio + this.gameTop,
-        w: 82 * ratio,
-        h: 82 * ratio,
+        x: 15 * ratio,
+        y: 990 * ratio + this.gameTop,
+        w: 180 * ratio,
+        h: 74 * ratio
+      },
+      setCoordinates: { //设置坐标宽高
+        x: 45 * ratio,
+        y: 1070 * ratio + this.gameTop,
+        w: 96 * ratio,
+        h: 96 * ratio,
       },
       addStepsCoordinates: { //增加步数坐标宽高
-        x: 275 * ratio,
-        y: 1045 * ratio + this.gameTop,
-        w: 144 * ratio,
-        h: 142 * ratio,
+        x: 180 * ratio,
+        y: 1060 * ratio + this.gameTop,
+        w: 108 * ratio,
+        h: 108 * ratio,
       },
       addStepsPointCoordinates: { //增加步数红点坐标宽高
-        x: 375 * ratio,
+        x: 245 * ratio,
         y: 1044 * ratio + this.gameTop,
         w: 52 * ratio,
         h: 52 * ratio,
       },
       addStepsUserCoordinates: { //增加步数拥有数量坐标宽高
-        x: 400 * ratio,
+        x: 270 * ratio,
         y: 1080 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
-      addStepsPriceCoordinates: { //增加步数价格坐标宽高
-        x: 355 * ratio,
-        y: 1190 * ratio + this.gameTop,
-        font: 24 * ratio + 'px Arial'
-      },
-      addStepsPriceBgCoordinates: { //增加步数价格背景坐标宽高
-        x: 270 * ratio,
-        y: 1155 * ratio + this.gameTop,
-        w: 148 * ratio,
-        h: 58 * ratio,
-      },
       colorToolCoordinates: { //彩色道具坐标宽高
-        x: 460 * ratio,
-        y: 1045 * ratio + this.gameTop,
-        w: 144 * ratio,
-        h: 142 * ratio,
+        x: 325 * ratio,
+        y: 1060 * ratio + this.gameTop,
+        w: 108 * ratio,
+        h: 108 * ratio,
       },
       colorToolPointCoordinates: { //彩色道具红点坐标宽高
-        x: 560 * ratio,
+        x: 395 * ratio,
         y: 1044 * ratio + this.gameTop,
         w: 52 * ratio,
         h: 52 * ratio,
       },
-      colorToolPriceCoordinates: { //彩色道具价格坐标宽高
-        x: 540 * ratio,
-        y: 1190 * ratio + this.gameTop,
-        font: 24 * ratio + 'px Arial'
-      },
       colorToolUserCoordinates: { //彩色道具拥有数量坐标宽高
-        x: 585 * ratio,
+        x: 420 * ratio,
         y: 1080 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
-      colorToolPriceBgCoordinates: { //彩色道具价格背景坐标宽高
-        x: 455 * ratio,
-        y: 1155 * ratio + this.gameTop,
-        w: 148 * ratio,
-        h: 58 * ratio,
+      saveToolCoordinates: { //存档道具坐标宽高
+        x: 475 * ratio,
+        y: 1060 * ratio + this.gameTop,
+        w: 108 * ratio,
+        h: 108 * ratio,
       },
       coinCoordinates: { //金币坐标宽高
         x: 630 * ratio,
         y: 1039 * ratio + this.gameTop,
-        w: 171 * ratio,
-        h: 175 * ratio,
+        w: 182 * ratio,
+        h: 150 * ratio,
       },
       coinNumCoordinates: { //金币数量坐标宽高
         x: 715 * ratio,
-        y: 1190 * ratio + this.gameTop,
+        y: 1150 * ratio + this.gameTop,
         font: 24 * ratio + 'px Arial'
       },
       checkPointCoordinates: { //关卡坐标
@@ -463,6 +459,7 @@ export default class DataBus {
     this.buyTips = false //购买提示
     this.stepsAni = false //步数动画
 
+    this.QRcode = [] //棋盘数据
     this.score = 0 //每次开始默认分数、当前关卡获得分数
     this.gameScore = 0 //本轮游戏总分
     this.stagegold = 0 //过关时的金币
@@ -499,6 +496,22 @@ export default class DataBus {
       level2: 0,
       level3: 0
     }
+
+    //craz模式配置
+    this.isCrazy = false //是否crazy
+    this.crazyScore = 0 //crazy期间的总分数
+    this.crazyTimes = 0 //crazy次数
+    this.gameTimer = 0 //游戏的时间 1 = 50ms
+    this.crazyShow = 0 //crazy出现的次数 出现2次不点击就重新60s
+    this.isBananaMoving = false //香蕉是否在移动
+    this.bananaX = 0 //香蕉的X坐标
+    this.bananaY = 0 //香蕉的Y坐标
+    this.crazyRemain = 20 //crazy20秒倒计时
+    this.crazyRateInterval = 1 //时间间隔-秒
+    this.crazyStartInterval = 1 //时间间隔-秒
+    this.bananaTime = 0 //香蕉的移动时间
+    this.bananaClick = false //香蕉是否被点击
+    
   }
 
   //获取棋子所在中心的坐标
@@ -577,6 +590,39 @@ export default class DataBus {
     ajax(options)
   }
 
+  //存档
+  saveGame() {
+    let archiveData = {};
+    //开始存档配置
+    archiveData.score = this.score //每次开始默认分数、当前关卡获得分数
+    archiveData.gameScore = this.gameScore //本轮游戏总分
+    archiveData.checkPoint = this.checkPoint //当前关卡
+    archiveData.steps = this.steps //剩余步数
+    archiveData.useSteps = this.useSteps //使用步数
+    archiveData.gamegold = this.gamegold //本轮游戏总金币
+    archiveData.stagegold = this.stagegold //过关时的金币
+    archiveData.selfHighScore = this.selfHighScore //个人历史最高分
+    archiveData.isShare = this.isShare //本局游戏是否分享过
+    archiveData.isLookVideo = this.isLookVideo //本局游戏是否观看过视频
+    
+    archiveData.passScore = this.passScore //过关分数
+    archiveData.gameId = this.gameId //本轮游戏id
+    archiveData.rewardstep = this.rewardstep //过关奖励步数
+    archiveData.piecesLevelScore = this.piecesLevelScore //旗子对应分数
+    archiveData.piecesLevelProbblt = this.piecesLevelProbblt //旗子对应等级和生成概率
+    archiveData.userhammer = this.userhammer //用户拥有道具-锤子
+    archiveData.hammerprice = this.hammerprice //用户购买道具-锤子价格
+    archiveData.usersteps = this.usersteps //用户拥有道具-步数
+    archiveData.stepprice = this.stepprice //用户购买道具-步数价格
+    archiveData.QRcode = this.QRcode //棋盘数据
+
+    //缓存数据
+    wx.setStorageSync('archiveData', JSON.stringify(archiveData))
+
+    this.gameState = 0
+    this.archiveState = true
+  }
+
   getWXFunction(name) {
     if(typeof(wx) == 'undefined' || wx == null) {
       return null;
@@ -636,6 +682,78 @@ export default class DataBus {
       else {
           // 播放中途退出，不下发游戏奖励
       }
+    })
+  }
+
+  creatAarchiveVideoAd(){
+    this.archiveVideoAd = wx.createRewardedVideoAd({
+      adUnitId: 'adunit-7db4ea2fa1cd4854'
+    })
+    this.archiveVideoAd.onClose(res => {
+      // 用户点击了【关闭广告】按钮
+      // 小于 2.1.0 的基础库版本，res 是一个 undefined
+      if (res && res.isEnded || res === undefined) {
+        
+        //存档
+        this.saveGame()
+
+        if (this.musicBgChange) {
+          //开启音乐
+          this.musicBg = true
+          this.musicBgChange = false
+        }
+      }
+      else {
+          // 播放中途退出，不下发游戏奖励
+      }
+    })
+  }
+
+  creatCrazyVideoAd(){
+    this.crazyVideoAd = wx.createRewardedVideoAd({
+      adUnitId: 'adunit-5d837d2cf40a537f'
+    })
+    this.crazyVideoAd.onClose(res => {
+      // 用户点击了【关闭广告】按钮
+      // 小于 2.1.0 的基础库版本，res 是一个 undefined
+      if (res && res.isEnded || res === undefined) {
+        
+        //开始crazy
+        this.gameState = 1
+        this.isCrazy = true
+        this.crazyScore = 0
+
+        if (this.musicBgChange) {
+          //开启音乐
+          this.musicBg = true
+          this.musicBgChange = false
+        }
+      }
+      else {
+          // 播放中途退出，不下发游戏奖励
+      }
+    })
+  }
+
+  
+
+  showAarchiveVideoAd(){
+    this.archiveVideoAd.load()
+    .then(() => {
+      this.archiveVideoAd.show()
+    })
+    .catch(err => {
+      wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+    })
+  }
+
+  showCrazyVideoAd(){
+    this.crazyVideoAd.load()
+    .then(() => {
+      this.crazyVideoAd.show()
+    })
+    .catch(err => {
+      wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
     })
   }
 
