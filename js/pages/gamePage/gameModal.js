@@ -21,7 +21,6 @@ let R = {
   "musicSoundFalse": "images/gameModal/music_sound_false.png",
   "musicSoundTrue": "images/gameModal/music_sound_true.png",
   "passState": "images/gamePage/passState.png",
-  "ruleBg": "images/gameModal/rule_bg.png",
   "rule": "images/gameModal/rule.png",
   "finger": "images/gameModal/finger.png",
   "nextStage": "images/gameModal/next_stage.png",
@@ -480,8 +479,13 @@ export default class GameModal {
       //弹框
       ctx.drawImage(Robj["crazyEndModal"], 0, 0, Robj["crazyEndModal"].width, Robj["crazyEndModal"].height, 41 * ratio, 300 * ratio, 746 * ratio, 754 * ratio);
       //弹框关闭
-      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
+      // ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
       
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#fff';
+      ctx.font = 70 * ratio + 'px Arial';
+      ctx.fillText(databus.crazyScore, 440 * ratio, 740 * ratio);
+
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
         ctx.drawImage(Robj["okBtn"], 0, 0, Robj["okBtn"].width, Robj["okBtn"].height, (198 - 21.6) * ratio, (790 - 8.7) * ratio, 432 * 1.1 * ratio, 174 * 1.1 * ratio);

@@ -271,8 +271,10 @@ export default class Map {
       databus.gameState = 9 //游戏异常
       return
     }
-    //减去1步
-    databus.steps--;
+    if(!databus.isCrazy){
+      //减去1步
+      databus.steps--;
+    }
     if(databus.steps <= 5){
       databus.stepsAni = true
     }
@@ -338,6 +340,12 @@ export default class Map {
       databus.doubleHit = doubleHit
     }
     
+    //crazy模式下总得分
+    if(databus.isCrazy){
+      databus.crazyScore = databus.crazyScore + bombScore * doubleHit * multiplyBy
+    }
+
+    //游戏得分
     databus.score = databus.score + bombScore * doubleHit * multiplyBy
 
     //显示获得得分
@@ -449,7 +457,9 @@ export default class Map {
           self.music.playMusic('passPoint')
           databus.passScore = data.body.game.passscore //第一关过关所需分数
           databus.gameId = data.body.game.gameid //本轮游戏id
-          databus.steps = databus.steps + parseInt(data.body.game.rewardstep) //剩余步数加上奖励步数
+          if(!databus.isCrazy){//crazy模式不增加奖励步数
+            databus.steps = databus.steps + parseInt(data.body.game.rewardstep) //剩余步数加上奖励步数
+          }
           databus.rewardstep = data.body.game.rewardstep //过关奖励步数
           databus.checkPoint = data.body.game.stageno //下一关关卡编号
           //根据水果数字信息获得棋子种类和棋子对应等级的生成概率
@@ -464,11 +474,16 @@ export default class Map {
             piecesLevel: piecesLevel,
             piecesProbblt: piecesProbblt
           }
-          databus.gameState = 7 //过关弹框
           databus.score = 0 //重置当前关卡获得分数
           databus.processScore = 0 //重置得分进度条
           databus.useSteps = 0 //重置当前关卡使用步数
           databus.stagegold = 0 //重置当前关卡所得金币
+
+          if(databus.isCrazy){//crazy模式下不播放过关动画
+            databus.gameState = 1
+          }else{
+            databus.gameState = 7 //过关弹框
+          }
         }
       }
       ajax(options)

@@ -55,15 +55,20 @@ export default class Index {
     // 维护当前requestAnimationFrame的id
     this.aniId = 1;
     this.f = 0;
+    this.bannanaNum = 0
+    this.bannanaTime = 0
     //当前游戏状态
     this.STATE = "静稳状态";  //爆破检查、爆破动画、下落动画、补充新的、静稳状态
     //加载所有资源，资源都load之后，定时器开启
     this.R = {
       "bg": "images/gamePage/bg.png",
+      "baozha": "images/gamePage/baozha.png",
+      "crazyBg": "images/gamePage/crazyTime/crazy_bg.png",
       "boardBg": "images/gamePage/board/board_bg.png",
       "boardBgC": "images/gamePage/board/board_bg_crazy.png",
       "boardBorder": "images/gamePage/board/board_border.png",
       "boardBorderC": "images/gamePage/board/board_border_crazy.png",
+      "infiniteSteps": "images/gamePage/crazyTime/infinite_steps.png",
       "addSteps": "images/gamePage/gameBtn/addStep_btn.png",
       "setIcon": "images/gamePage/gameBtn/set_btn.png",
       "coin": "images/gamePage/gameBtn/coin_btn.png",
@@ -71,14 +76,11 @@ export default class Index {
       "progressEmpty": "images/gamePage/progress_empty.png",
       "progressEmpty2": "images/gamePage/progress_empty2.png",
       "progressFull": "images/gamePage/progress_full.png",
-      "scoreBg": "images/gamePage/score_bg.png",
       "steps": "images/gamePage/steps.png",
       "redSteps": "images/gamePage/redSteps.png",
       "pieceslevel2": "images/gamePage/pieceslevel2.png",
       "pieceslevel3": "images/gamePage/pieceslevel3.png",
-      "piecesCoin": "images/gamePage/piecesCoin.png",
       "redPoint": "images/gamePage/redPoint.png",
-      "toolPrice": "images/gamePage/toolPrice.png",
       "doubleHit": "images/gamePage/doubleHit.png",
       "doubleHit1": "images/gamePage/doubleHit/1.png",
       "doubleHit2": "images/gamePage/doubleHit/2.png",
@@ -95,6 +97,17 @@ export default class Index {
       "colorToolCancel":"images/gamePage/colorToolCancel.png",
       "redplus":"images/gamePage/gameBtn/redplus.png",
       "saveBtn":"images/gamePage/gameBtn/saveBtn.png",
+      "banana0":"images/gamePage/crazyTime/banana/banana0.png",
+      "banana1":"images/gamePage/crazyTime/banana/banana1.png",
+      "banana2":"images/gamePage/crazyTime/banana/banana2.png",
+      "banana3":"images/gamePage/crazyTime/banana/banana3.png",
+      "banana4":"images/gamePage/crazyTime/banana/banana4.png",
+      "banana5":"images/gamePage/crazyTime/banana/banana5.png",
+      "banana6":"images/gamePage/crazyTime/banana/banana6.png",
+      "banana7":"images/gamePage/crazyTime/banana/banana7.png",
+      "banana8":"images/gamePage/crazyTime/banana/banana8.png",
+      "banana9":"images/gamePage/crazyTime/banana/banana9.png",
+      "banana10":"images/gamePage/crazyTime/banana/banana10.png",
     }
     //把所有的图片放到一个对象中
     this.Robj = {};	//两个对象有相同的k
@@ -179,33 +192,42 @@ export default class Index {
         this.tipsAni++
       }
       //绘制背景。背景没动,也要每帧擦除，重绘
-      ctx.drawImage(this.Robj["bg"], 0, 0, canvas.width, canvas.height);
-      //绘制棋盘
-      ctx.drawImage(this.Robj["boardBg"], 0, 0, this.Robj["boardBg"].width, this.Robj["boardBg"].height, btlr, btt, bwh, bwh);
-      if(databus.stepsAni){
-        this.rt++
-        if(this.rt > 120){
-          databus.stepsAni = false
-          this.rt = 0
+      if(databus.isCrazy){
+        ctx.drawImage(this.Robj["crazyBg"], 0, 0, this.Robj["crazyBg"].width, this.Robj["crazyBg"].height, 0, 0, window.innerWidth, window.innerHeight);
+      }else{
+        ctx.drawImage(this.Robj["bg"], 0, 0, this.Robj["bg"].width, this.Robj["bg"].height, 0, 0, window.innerWidth, window.innerHeight);
+      }
+
+        //绘制棋盘
+      if(databus.isCrazy){
+        ctx.drawImage(this.Robj["boardBgC"], 0, 0, this.Robj["boardBgC"].width, this.Robj["boardBgC"].height, btlr, btt, bwh, bwh);
+      }else{
+        ctx.drawImage(this.Robj["boardBg"], 0, 0, this.Robj["boardBg"].width, this.Robj["boardBg"].height, btlr, btt, bwh, bwh);
+      }
+
+      //绘制步数图标
+      if(databus.isCrazy){
+        ctx.drawImage(this.Robj["infiniteSteps"], 0, 0, this.Robj["infiniteSteps"].width, this.Robj["infiniteSteps"].height, sc.x, sc.y, sc.w, sc.h);
+      }else{
+        if(databus.stepsAni){
+          this.rt++
+          if(this.rt > 120){
+            databus.stepsAni = false
+            this.rt = 0
+          }else{
+            if(this.tipsAni % 2 == 1){
+              ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x, sc.y, sc.w, sc.h);
+            }else{
+              ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x + 10 * ratio, sc.y + 10 * ratio, sc.w - 20 * ratio, sc.h - 20 * ratio);
+            }
+          }
         }else{
-          if(this.tipsAni % 2 == 1){
-            //绘制步数图标
+          if(databus.steps < 6){
             ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x, sc.y, sc.w, sc.h);
           }else{
-            //绘制步数图标
-            ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x + 10 * ratio, sc.y + 10 * ratio, sc.w - 20 * ratio, sc.h - 20 * ratio);
+            ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
           }
         }
-      }else{
-        if(databus.steps < 6){
-          //绘制步数图标
-          ctx.drawImage(this.Robj["redSteps"], 0, 0, this.Robj["redSteps"].width, this.Robj["redSteps"].height, sc.x, sc.y, sc.w, sc.h);
-        }else{
-          //绘制步数图标
-          ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
-        }
-        //绘制步数图标
-        // ctx.drawImage(this.Robj["steps"], 0, 0, this.Robj["steps"].width, this.Robj["steps"].height, sc.x, sc.y, sc.w, sc.h);
       }
 
       //绘制空进度条
@@ -307,17 +329,29 @@ export default class Index {
       //绘制金币图标
       ctx.drawImage(this.Robj["coin"], 0, 0, this.Robj["coin"].width, this.Robj["coin"].height, cc.x, cc.y, cc.w, cc.h);
 
+
       // 关卡
       ctx.textAlign = 'left';
       ctx.fillStyle = '#fff';
       ctx.font = cpc.font;
-      
-      ctx.fillText('第' + databus.checkPoint + '关', cpc.x, cpc.y);
+
+      if(databus.isCrazy){
+        if(databus.crazyRemain < 10){
+          ctx.fillText('00:0' + databus.crazyRemain, cpc.x, cpc.y);
+        }else{
+          ctx.fillText('00:' + databus.crazyRemain, cpc.x, cpc.y);
+        }
+      }else{
+        ctx.fillText('第' + databus.checkPoint + '关', cpc.x, cpc.y);
+      }
 
       // 步数
       ctx.textAlign = 'center';
-      ctx.font = snc.font;
-      ctx.fillText(databus.steps, snc.x, snc.y);
+      if(!databus.isCrazy){
+        ctx.font = snc.font;
+        ctx.fillText(databus.steps, snc.x, snc.y);
+      }
+
       //步数文字
       // ctx.font = stc.font;
       // ctx.fillText('步数', stc.x, stc.y);
@@ -363,8 +397,18 @@ export default class Index {
       this.map.render(ctx, this.Robj);
 
       //绘制棋盘边框
-      ctx.drawImage(this.Robj["boardBorder"], 0, 0, this.Robj["boardBorder"].width, this.Robj["boardBorder"].height, btlr, btt, bwh, bwh);
+      if(databus.isCrazy){
+        ctx.drawImage(this.Robj["boardBorderC"], 0, 0, this.Robj["boardBorderC"].width, this.Robj["boardBorderC"].height, btlr, btt, bwh, bwh);
+      }else{
+        ctx.drawImage(this.Robj["boardBorder"], 0, 0, this.Robj["boardBorder"].width, this.Robj["boardBorder"].height, btlr, btt, bwh, bwh);
+      }
+
+      //绘制crazy香蕉
+      if(databus.isBananaMoving){
+        ctx.drawImage(this.Robj["banana" + this.bannanaNum], 0, 0, this.Robj["banana" + this.bannanaNum].width, this.Robj["banana" + this.bannanaNum].height, databus.bananaX, databus.bananaY, 200 * ratio, 200 * ratio);
+      } 
       
+
       if (databus.gameState == 2) {
         this.gameEnd.render(ctx)
       }
@@ -383,16 +427,16 @@ export default class Index {
         }else {
           this.STATE = "静稳状态";
         }
-      } else if (this.STATE == "爆破动画" && this.f > this.startBomb + 41) {
+      } else if (this.STATE == "爆破动画" && this.f > this.startBomb + (databus.isCrazy ? 11 : 41)) {
         this.STATE = "下落动画";
         this.map.dropDown();
         this.startDropDown = this.f
-      } else if (this.STATE == "下落动画" && this.f > this.startDropDown + 5) {
+      } else if (this.STATE == "下落动画" && this.f > this.startDropDown + (databus.isCrazy ? 1 : 5)) {
 
         this.STATE = "补充新的";
         this.map.supplement();
         this.startSupple = this.f;
-      } else if (this.STATE == "补充新的" && this.f > this.startSupple + 11) {
+      } else if (this.STATE == "补充新的" && this.f > this.startSupple + (databus.isCrazy ? 3 : 11)) {
         this.STATE = "爆破检查"
         // this.map.check();
       } else if (this.STATE == "静稳状态") {
@@ -414,6 +458,20 @@ export default class Index {
       this.finish()
       databus.scene = 0
     }
+    if(databus.isBananaMoving){
+      if(this.f % 4 == 0){
+        this.bannanaTime++
+        this.bannanaNum = this.bannanaTime % 11
+      }
+    }
+    //一次crazy结束弹框 当前crazy清空 crazy次数加1
+    if(databus.crazyRemain == 0){
+      databus.gameState = 16
+      databus.isCrazy = false
+      databus.crazyRemain = 20
+      databus.crazyTimes++
+    }
+
     this.render(this.ctx)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
   }
@@ -621,6 +679,16 @@ export default class Index {
     if (this.STATE != "静稳状态") {
       return;
     }
+
+    if(x >= databus.bananaX && x <= databus.bananaX + 200 * ratio && y >= databus.bananaY && y <= databus.bananaY + 200 * ratio){
+      databus.gameState = 15
+      databus.bananaClick = true
+      databus.gameTimer = 0
+      //按钮按下音效
+      this.music.playMusic('btnDown')
+      return
+    }
+
     if (databus.gameState == 2){
       // 首页按钮事件
       if (x >= ic.x && x <= ic.x + ic.w && y >= ic.y && y <= ic.y + ic.h) {
@@ -904,6 +972,45 @@ export default class Index {
       // 设置按钮事件
       if (x >= setc.x && x <= setc.x + setc.w && y >= setc.y && y <= setc.y + setc.h) {
         databus.gameState = 1
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+    }else if(databus.gameState == 15){
+      // 关闭弹框事件
+      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (250 * ratio) && y <= ((250 + 162) * ratio)) {
+        databus.gameState = 1
+        databus.bananaClick = false
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+      // 点击确认事件-开始crazy
+      if (x >= (198 * ratio) && x <= ((198 + 432) * ratio) && y >= (790 * ratio) && y <= ((790 + 174) * ratio)) {
+        databus.btnPlus = 1
+        setTimeout(() => {
+          if(databus.crazyTimes < 1){//第一次crazy免费 后续看视频
+            databus.gameState = 1
+            databus.isCrazy = true
+            databus.crazyScore = 0
+          }else{
+            databus.showCrazyVideoAd()
+          }
+          databus.btnPlus = 0
+        }, databus.laterTime)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+    }else if(databus.gameState == 16){
+
+      // 点击确认事件-结束crazy
+      if (x >= (198 * ratio) && x <= ((198 + 432) * ratio) && y >= (790 * ratio) && y <= ((790 + 174) * ratio)) {
+        databus.btnPlus = 1
+        setTimeout(() => {
+          databus.gameState = 1
+          databus.btnPlus = 0
+        }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
       }

@@ -188,6 +188,7 @@ export default class Block {
     this.levelY = btt + bi + this.row * pm + this.row * bl;
     //小帧计数器
     this.f = 0;
+    this.speed = 4;
     //指示爆炸的小动画
     this.bombStep = 0;
     //自己是否正处于爆炸动画中
@@ -203,6 +204,13 @@ export default class Block {
   //渲染
   render(ctx, Robj) {
     //渲染在画布的指定位置
+    if((this.row % 2 == 0 && this.col % 2 == 0) || ((this.row + 1) % 2 == 0 && (this.col + 1) % 2 == 0)){
+      if(databus.isCrazy){
+        ctx.drawImage(I["pieceBgCrazy"], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }else{
+        ctx.drawImage(I["pieceBg"], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      }
+    }
 
     //如果自己已经消失了，那么后面的两条渲染，都不执行
     if (this.hide) {
@@ -212,10 +220,6 @@ export default class Block {
     if (!this.isBomb) {
       if(this.selectAniTime > 0){
         return
-      }
-
-      if((this.row % 2 == 0 && this.col % 2 == 0) || ((this.row + 1) % 2 == 0 && (this.col + 1) % 2 == 0)){
-        ctx.drawImage(I["pieceBg"], 0, 0, 124, 124, this.x, this.y, bl, bl);
       }
 
       if(this.attr.piecesCoin){
@@ -238,42 +242,43 @@ export default class Block {
       if (this.attr.piecesLevel != 'level1') {
         ctx.drawImage(Robj["pieces" + this.attr.piecesLevel], 0, 0, 124, 124, this.x, this.y, bl, bl);
       }
-      if (this.attr.piecesCoin) {
-        ctx.drawImage(Robj["piecesCoin"], 0, 0, 124, 124, this.x, this.y, bl, bl);
-      }
     } else if (this.isBomb) {
-      if(this.attr.piecesType == 0){
-        //橙子碎片
-        ctx.drawImage(I["org_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
-        //橙子喷溅
-        ctx.drawImage(I["org_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
-        //橙子切开
-        ctx.drawImage(I["org_cut" + this.bombStep % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
-      }else if(this.attr.piecesType == 1){
-        //苹果碎片
-        ctx.drawImage(I["apple_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
-        //苹果喷溅
-        ctx.drawImage(I["apple_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
-        //苹果切开
-        ctx.drawImage(I["apple_cut" + this.bombStep % 5], 0, 0, 140, 140, this.x, this.y, bl, bl);
-      }else if(this.attr.piecesType == 2){
-        //蓝莓碎片
-        ctx.drawImage(I["blueBerries_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
-        //蓝莓喷溅
-        ctx.drawImage(I["blueBerries_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
-        //蓝莓切开
-        ctx.drawImage(I["blueBerries_cut" + this.bombStep % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
-      }else if(this.attr.piecesType == 3){
-        //樱桃碎片
-        ctx.drawImage(I["cherry_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
-        //樱桃喷溅
-        ctx.drawImage(I["cherry_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
-        //樱桃切开
-        ctx.drawImage(I["cherry_cut" + this.bombStep % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
-      }else{
-        //渲染爆炸图
-        ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);
-      }
+
+      //渲染爆炸图
+      ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);
+    
+      // if(this.attr.piecesType == 0){
+      //   //橙子碎片
+      //   ctx.drawImage(I["org_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+      //   //橙子喷溅
+      //   ctx.drawImage(I["org_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+      //   //橙子切开
+      //   ctx.drawImage(I["org_cut" + this.bombStep % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      // }else if(this.attr.piecesType == 1){
+      //   //苹果碎片
+      //   ctx.drawImage(I["apple_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+      //   //苹果喷溅
+      //   ctx.drawImage(I["apple_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+      //   //苹果切开
+      //   ctx.drawImage(I["apple_cut" + this.bombStep % 5], 0, 0, 140, 140, this.x, this.y, bl, bl);
+      // }else if(this.attr.piecesType == 2){
+      //   //蓝莓碎片
+      //   ctx.drawImage(I["blueBerries_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+      //   //蓝莓喷溅
+      //   ctx.drawImage(I["blueBerries_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+      //   //蓝莓切开
+      //   ctx.drawImage(I["blueBerries_cut" + this.bombStep % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      // }else if(this.attr.piecesType == 3){
+      //   //樱桃碎片
+      //   ctx.drawImage(I["cherry_piece" + this.bombStep % 11], 0, 0, 580, 600, this.x - (580 * ratio - bl) / 2, this.y - (600 * ratio - bl) / 2, 580 * ratio, 600 * ratio);
+      //   //樱桃喷溅
+      //   ctx.drawImage(I["cherry_spray" + this.bombStep % 11], 0, 0, 273, 296, this.x - (273 * ratio - bl) / 2, this.y - (296 * ratio - bl) / 2, 273 * ratio, 296 * ratio);
+      //   //樱桃切开
+      //   ctx.drawImage(I["cherry_cut" + this.bombStep % 5], 0, 0, 124, 124, this.x, this.y, bl, bl);
+      // }else{
+      //   //渲染爆炸图
+      //   ctx.drawImage(Robj["baozha"], this.bombStep % 5 * 192, parseInt(this.bombStep / 5) * 192, 192, 192, this.x, this.y, bl, bl);
+      // }
     }
   }
 
@@ -282,7 +287,12 @@ export default class Block {
   update() {
     //小帧计数器++
     this.f++;
-
+    this.speed
+    if(databus.isCrazy){
+      this.speed = 1
+    }else{
+      this.speed = 4
+    }
     //如果自己在运动，那么x、y有增量
     if (this.isAnimate && this.f <= this.endf) {
       this.x += this.dx;
@@ -290,7 +300,7 @@ export default class Block {
     }
 
     //爆炸动画
-    if (this.isBomb && this.f % 4 == 0) {
+    if (this.isBomb && this.f % this.speed == 0) {
       this.bombStep++;
       if (this.bombStep > 9) {
         this.hide = true;

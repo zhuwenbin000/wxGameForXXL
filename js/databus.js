@@ -25,6 +25,8 @@ export default class DataBus {
     this.createVideoAd()
     //创建存档视频
     this.creatAarchiveVideoAd()
+    //创建crazy视频
+    this.creatCrazyVideoAd()
 
     //判断是否是哪种设备 
     wx.getSystemInfo({
@@ -457,12 +459,6 @@ export default class DataBus {
     this.buyTips = false //购买提示
     this.stepsAni = false //步数动画
 
-    this.isCrazy = false //是否crazy
-    this.crazyTimes = 0 //crazy次数
-    this.gameTimer = 0 //游戏的时间 1 = 50ms
-    this.crazyShow = 0 //crazy出现的次数 出现2次不点击就重新60s
-    this.isBananaMoving = false //香蕉是否在移动
-    
     this.QRcode = [] //棋盘数据
     this.score = 0 //每次开始默认分数、当前关卡获得分数
     this.gameScore = 0 //本轮游戏总分
@@ -500,6 +496,22 @@ export default class DataBus {
       level2: 0,
       level3: 0
     }
+
+    //craz模式配置
+    this.isCrazy = false //是否crazy
+    this.crazyScore = 0 //crazy期间的总分数
+    this.crazyTimes = 0 //crazy次数
+    this.gameTimer = 0 //游戏的时间 1 = 50ms
+    this.crazyShow = 0 //crazy出现的次数 出现2次不点击就重新60s
+    this.isBananaMoving = false //香蕉是否在移动
+    this.bananaX = 0 //香蕉的X坐标
+    this.bananaY = 0 //香蕉的Y坐标
+    this.crazyRemain = 20 //crazy20秒倒计时
+    this.crazyRateInterval = 1 //时间间隔-秒
+    this.crazyStartInterval = 1 //时间间隔-秒
+    this.bananaTime = 0 //香蕉的移动时间
+    this.bananaClick = false //香蕉是否被点击
+    
   }
 
   //获取棋子所在中心的坐标
@@ -697,10 +709,48 @@ export default class DataBus {
     })
   }
 
+  creatCrazyVideoAd(){
+    this.crazyVideoAd = wx.createRewardedVideoAd({
+      adUnitId: 'adunit-5d837d2cf40a537f'
+    })
+    this.crazyVideoAd.onClose(res => {
+      // 用户点击了【关闭广告】按钮
+      // 小于 2.1.0 的基础库版本，res 是一个 undefined
+      if (res && res.isEnded || res === undefined) {
+        
+        //开始crazy
+        this.gameState = 1
+        this.isCrazy = true
+        this.crazyScore = 0
+
+        if (this.musicBgChange) {
+          //开启音乐
+          this.musicBg = true
+          this.musicBgChange = false
+        }
+      }
+      else {
+          // 播放中途退出，不下发游戏奖励
+      }
+    })
+  }
+
+  
+
   showAarchiveVideoAd(){
     this.archiveVideoAd.load()
     .then(() => {
       this.archiveVideoAd.show()
+    })
+    .catch(err => {
+      wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+    })
+  }
+
+  showCrazyVideoAd(){
+    this.crazyVideoAd.load()
+    .then(() => {
+      this.crazyVideoAd.show()
     })
     .catch(err => {
       wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
