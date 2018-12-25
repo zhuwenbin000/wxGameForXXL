@@ -188,7 +188,6 @@ export default class Block {
     this.levelY = btt + bi + this.row * pm + this.row * bl;
     //小帧计数器
     this.f = 0;
-    this.speed = 4;
     //指示爆炸的小动画
     this.bombStep = 0;
     //自己是否正处于爆炸动画中
@@ -287,12 +286,7 @@ export default class Block {
   update() {
     //小帧计数器++
     this.f++;
-    this.speed
-    if(databus.isCrazy){
-      this.speed = 1
-    }else{
-      this.speed = 4
-    }
+
     //如果自己在运动，那么x、y有增量
     if (this.isAnimate && this.f <= this.endf) {
       this.x += this.dx;
@@ -300,14 +294,14 @@ export default class Block {
     }
 
     //爆炸动画
-    if (this.isBomb && this.f % this.speed == 0) {
+    if (this.isBomb && this.f % (databus.isCrazy ? 1 : 4) == 0) {
       this.bombStep++;
       if (this.bombStep > 9) {
         this.hide = true;
       }
     }
     //静态动画
-    if (!this.isBomb && this.f % 8 == 0) {
+    if (!this.isBomb && this.f % (databus.isCrazy ? 2 : 8) == 0) {
       this.staticStep++;
     }
   }
@@ -333,7 +327,7 @@ export default class Block {
 
   selectAni(ctx,i){
     this.selectAnif++
-    if(this.selectAnif % 4 == 0){
+    if(this.selectAnif % (databus.isCrazy ? 2 : 4) == 0){
       this.selectAniTime++
     }
     if(JSON.stringify(databus.selectBlocks).indexOf(JSON.stringify(databus.selectAniBlocks[i])) == -1 ){

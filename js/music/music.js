@@ -42,6 +42,8 @@ export default class Music {
       "btnDown": "audio/btnDown.mp3",//按钮按下
       "noNewRecord": "audio/noNewRecord.mp3",//未获得最高分结束音
       "NewRecord": "audio/NewRecord.mp3",//获得最高分结束音
+      "modalShow": "audio/modalShow.mp3",//弹框音效
+      "crazy": "audio/crazy.mp3",//crazy音效
     }
     //把所有的音乐放到一个对象中
     this.Mobj = {};	//两个对象有相同的k

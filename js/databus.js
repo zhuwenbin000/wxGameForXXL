@@ -146,7 +146,7 @@ export default class DataBus {
 
     this.homeState = 1 //首页状态变化
     
-    this.version = '0.0.2.0';
+    this.version = '0.0.2.1';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
@@ -499,18 +499,21 @@ export default class DataBus {
 
     //craz模式配置
     this.isCrazy = false //是否crazy
+    this.crazyBombScore = 0 //爆炸累计分数
     this.crazyScore = 0 //crazy期间的总分数
     this.crazyTimes = 0 //crazy次数
     this.gameTimer = 0 //游戏的时间 1 = 50ms
     this.crazyShow = 0 //crazy出现的次数 出现2次不点击就重新60s
     this.isBananaMoving = false //香蕉是否在移动
-    this.bananaX = 0 //香蕉的X坐标
-    this.bananaY = 0 //香蕉的Y坐标
+    this.bananaX = - 200 * ratio //香蕉的X坐标
+    this.bananaY = 600 * ratio //香蕉的Y坐标
     this.crazyRemain = 20 //crazy20秒倒计时
     this.crazyRateInterval = 10 //时间间隔-秒
     this.crazyStartInterval = 60 //时间间隔-秒
     this.bananaTime = 0 //香蕉的移动时间
     this.bananaClick = false //香蕉是否被点击
+    this.crazyMusic = true //crazy music
+    this.bananaMovingType = 0 //香蕉移动类型
     
   }
 
@@ -728,6 +731,7 @@ export default class DataBus {
           this.gameState = 1
           this.isCrazy = true
           this.crazyScore = 0
+          this.crazyBombScore = 0
 
         }
       }

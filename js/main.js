@@ -109,7 +109,7 @@ export default class Main {
           // self.gamePage.restart(gameCon,ctx,gameCanvas)
           self.gamePage.restart(ctx)
         }
-        if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()
+        // if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()
 
         
         if(databus.crazyTimes < 5){//5次以内出现
@@ -124,19 +124,14 @@ export default class Main {
             return
           }
 
-          if(databus.bananaClick){
-            databus.bananaX = - 200 * ratio
-            databus.bananaY = 600 * ratio
-            return
-          }
-
           //如果有香蕉动画就不需要计时
           if(!databus.isBananaMoving){
             if(databus.gameTimer * 50 > databus.crazyStartInterval * 1000){//每隔60秒之后
               if(Number.isInteger(databus.gameTimer * 50 / (databus.crazyRateInterval * 1000))){//每隔10秒有10%的概率出现
-                const r = _.random(0, 11)
-                if(r > 9){
+                const r = _.random(0, 9)
+                if(r > 6){
                   databus.isBananaMoving = true
+                  databus.bananaMovingType = _.random(0, 10)
                   databus.bananaTime = 0
                   databus.bananaX = - 200 * ratio
                   databus.bananaY = 600 * ratio
@@ -145,21 +140,64 @@ export default class Main {
             }
             databus.gameTimer++
           }else{//香蕉移动的xy值
-            if(databus.bananaTime < 40){
-              databus.bananaX = - 200 * uiRatio + databus.bananaTime / 40 * 407 * uiRatio
-              databus.bananaY = 600 * uiRatio - databus.bananaTime / 40 * 200 * uiRatio
-            }else if(databus.bananaTime >= 40 && databus.bananaTime < 120){
-              databus.bananaX = 207 * uiRatio + (databus.bananaTime - 40) / 80 * 414 * uiRatio
-              databus.bananaY = 400 * uiRatio + (databus.bananaTime - 40) / 80 * 400 * uiRatio
-            }else if(databus.bananaTime >= 120 && databus.bananaTime < 160){
-              databus.bananaX = 621 * uiRatio + (databus.bananaTime - 120) / 40 * 407 * uiRatio
-              databus.bananaY = 800 * uiRatio - (databus.bananaTime - 120) / 40 * 200 * uiRatio
-            }else{
-              databus.isBananaMoving = false
-              databus.crazyShow++
-              if(databus.crazyShow == 3){
-                databus.gameTimer = 0
-                databus.crazyShow = 0
+            if(databus.bananaClick) return
+
+            if(databus.bananaMovingType > 4){//香蕉移动类型1
+              
+              if(databus.bananaTime < 40){
+                databus.bananaX = - 200 * uiRatio + databus.bananaTime / 40 * 407 * uiRatio
+                databus.bananaY = 600 * uiRatio - databus.bananaTime / 40 * 200 * uiRatio
+              }else if(databus.bananaTime >= 40 && databus.bananaTime < 120){
+                databus.bananaX = 207 * uiRatio + (databus.bananaTime - 40) / 80 * 414 * uiRatio
+                databus.bananaY = 400 * uiRatio + (databus.bananaTime - 40) / 80 * 400 * uiRatio
+              }else if(databus.bananaTime >= 120 && databus.bananaTime < 160){
+                databus.bananaX = 621 * uiRatio + (databus.bananaTime - 120) / 40 * 407 * uiRatio
+                databus.bananaY = 800 * uiRatio - (databus.bananaTime - 120) / 40 * 200 * uiRatio
+              }else if(databus.bananaTime >= 160 && databus.bananaTime < 200){
+                databus.bananaX = - 200 * uiRatio + (databus.bananaTime - 160) / 40 * 407 * uiRatio
+                databus.bananaY = 600 * uiRatio - (databus.bananaTime - 160) / 40 * 200 * uiRatio
+              }else if(databus.bananaTime >= 200 && databus.bananaTime < 280){
+                databus.bananaX = 207 * uiRatio + (databus.bananaTime - 200) / 80 * 414 * uiRatio
+                databus.bananaY = 400 * uiRatio + (databus.bananaTime - 200) / 80 * 400 * uiRatio
+              }else if(databus.bananaTime >= 280 && databus.bananaTime < 320){
+                databus.bananaX = 621 * uiRatio + (databus.bananaTime - 280) / 40 * 407 * uiRatio
+                databus.bananaY = 800 * uiRatio - (databus.bananaTime - 280) / 40 * 200 * uiRatio
+              }else{
+                databus.isBananaMoving = false
+                databus.crazyShow++
+                if(databus.crazyShow == 3){
+                  databus.gameTimer = 0
+                  databus.crazyShow = 0
+                }
+              }
+
+            }else{//香蕉移动类型2
+
+              if(databus.bananaTime < 40){
+                databus.bananaX = - 200 * uiRatio + databus.bananaTime / 40 * 407 * uiRatio
+                databus.bananaY = 600 * uiRatio + databus.bananaTime / 40 * 200 * uiRatio
+              }else if(databus.bananaTime >= 40 && databus.bananaTime < 120){
+                databus.bananaX = 207 * uiRatio + (databus.bananaTime - 40) / 80 * 414 * uiRatio
+                databus.bananaY = 800 * uiRatio - (databus.bananaTime - 40) / 80 * 400 * uiRatio
+              }else if(databus.bananaTime >= 120 && databus.bananaTime < 160){
+                databus.bananaX = 621 * uiRatio + (databus.bananaTime - 120) / 40 * 407 * uiRatio
+                databus.bananaY = 400 * uiRatio + (databus.bananaTime - 120) / 40 * 200 * uiRatio
+              }else if(databus.bananaTime >= 160 && databus.bananaTime < 200){
+                databus.bananaX = - 200 * uiRatio + (databus.bananaTime - 160) / 40 * 407 * uiRatio
+                databus.bananaY = 600 * uiRatio + (databus.bananaTime - 160) / 40 * 200 * uiRatio
+              }else if(databus.bananaTime >= 200 && databus.bananaTime < 280){
+                databus.bananaX = 207 * uiRatio + (databus.bananaTime - 200) / 80 * 414 * uiRatio
+                databus.bananaY = 800 * uiRatio - (databus.bananaTime - 200) / 80 * 400 * uiRatio
+              }else if(databus.bananaTime >= 280 && databus.bananaTime < 320){
+                databus.bananaX = 621 * uiRatio + (databus.bananaTime - 280) / 40 * 407 * uiRatio
+                databus.bananaY = 400 * uiRatio + (databus.bananaTime - 280) / 40 * 200 * uiRatio
+              }else{
+                databus.isBananaMoving = false
+                databus.crazyShow++
+                if(databus.crazyShow == 3){
+                  databus.gameTimer = 0
+                  databus.crazyShow = 0
+                }
               }
             }
             databus.bananaTime++

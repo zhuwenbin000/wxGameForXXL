@@ -137,6 +137,7 @@ export default class Index {
     // }
     this.f = 0
     this.tipsAni = 0
+    this.crazyAni = 0
     this.music = new Music()
     this.music.playGameBgm()
     databus.gameInfoReset()
@@ -193,7 +194,25 @@ export default class Index {
       }
       //绘制背景。背景没动,也要每帧擦除，重绘
       if(databus.isCrazy){
-        ctx.drawImage(this.Robj["crazyBg"], 0, 0, this.Robj["crazyBg"].width, this.Robj["crazyBg"].height, 0, 0, window.innerWidth, window.innerHeight);
+        if(this.f % 2 == 0){
+          this.crazyAni++
+        }
+        // ctx.drawImage(this.Robj["crazyBg"], 0, 0, this.Robj["crazyBg"].width, this.Robj["crazyBg"].height, 0,  0, window.innerWidth, window.innerHeight);
+
+        //中心点变化
+        ctx.translate(0.5 * window.innerWidth, 0.5 * window.innerHeight)
+        //旋转
+        ctx.rotate(Math.PI * this.crazyAni / 60)
+        //过关光图
+        ctx.drawImage(this.Robj["crazyBg"], 0, 0, this.Robj["crazyBg"].width, this.Robj["crazyBg"].height, -0.6 * window.innerHeight, -0.6 * window.innerHeight, 1.2 * window.innerHeight, 1.2 * window.innerHeight);
+        //复位旋转和中心点以及透明度
+        ctx.rotate(-Math.PI * this.crazyAni / 60)
+        ctx.translate(-0.5 * window.innerWidth, -0.5 * window.innerHeight)
+        // if(this.crazyAni > 60){
+        //   this.crazyAni = 0
+        // }
+        // ctx.drawImage(this.Robj["crazyBg"], 0, 0, this.Robj["crazyBg"].width, this.Robj["crazyBg"].height, 0,  - this.crazyAni, window.innerWidth, window.innerHeight);
+        // ctx.drawImage(this.Robj["crazyBg"], 0, 0, this.Robj["crazyBg"].width, this.Robj["crazyBg"].height, 0, window.innerHeight - this.crazyAni, window.innerWidth, window.innerHeight);
       }else{
         ctx.drawImage(this.Robj["bg"], 0, 0, this.Robj["bg"].width, this.Robj["bg"].height, 0, 0, window.innerWidth, window.innerHeight);
       }
@@ -465,12 +484,28 @@ export default class Index {
         this.bannanaNum = this.bannanaTime % 11
       }
     }
+    if(databus.isCrazy && databus.crazyMusic){
+      databus.crazyMusic = false
+      //crazy音效
+      this.music.playMusic('crazy')
+      this.music.pauseMusicBgm()
+
+      databus.isBananaMoving = false
+      databus.gameTimer = 0
+      databus.bananaX = - 200 * ratio
+      databus.bananaY = 600 * ratio
+    }
     //一次crazy结束弹框 当前crazy清空 crazy次数加1
     if(databus.crazyRemain == 0){
       databus.gameState = 16
       databus.isCrazy = false
+      databus.crazyMusic = true
       databus.crazyRemain = 20
       databus.crazyTimes++
+      //弹框音效
+      this.music.playMusic('modalShow')
+      this.music.playGameBgm()
+      
     }
 
     this.render(this.ctx)
@@ -684,9 +719,8 @@ export default class Index {
     if(x >= databus.bananaX && x <= databus.bananaX + 200 * ratio && y >= databus.bananaY && y <= databus.bananaY + 200 * ratio){
       databus.gameState = 15
       databus.bananaClick = true
-      databus.gameTimer = 0
-      //按钮按下音效
-      this.music.playMusic('btnDown')
+      //弹框音效
+      this.music.playMusic('modalShow')  
       return
     }
 
@@ -949,8 +983,8 @@ export default class Index {
       // 首页按钮事件
       if (x >= hc.x && x <= hc.x + hc.w && y >= hc.y && y <= hc.y + hc.h) {
         databus.gameState = 6
-        //按钮按下音效
-        this.music.playMusic('btnDown')
+        //弹框音效
+        this.music.playMusic('modalShow')  
       }
       // 规则按钮事件
       if (x >= rulec.x && x <= rulec.x + rulec.w && y >= rulec.y && y <= rulec.y + rulec.h) {
@@ -958,16 +992,16 @@ export default class Index {
         databus.fingerAniTime = 0
         //隐藏广告
         databus.bannerAd && databus.bannerAd.hide()
-        //按钮按下音效
-        this.music.playMusic('btnDown')
+        //弹框音效
+        this.music.playMusic('modalShow')  
       }
       // 音乐按钮事件
       if (x >= mc.x && x <= mc.x + mc.w && y >= mc.y && y <= mc.y + mc.h) {
         databus.gameState = 3
         databus.musicBgState = databus.musicBg
         databus.musicSoundState = databus.musicSound
-        //按钮按下音效
-        this.music.playMusic('btnDown')
+        //弹框音效
+        this.music.playMusic('modalShow')  
       }
 
       // 设置按钮事件
@@ -994,6 +1028,7 @@ export default class Index {
             databus.gameState = 1
             databus.isCrazy = true
             databus.crazyScore = 0
+            databus.crazyBombScore = 0
           }else{
             databus.showCrazyVideoAd()
           }
@@ -1028,17 +1063,17 @@ export default class Index {
       }
 
       // 增加步数购买按钮事件
-      if (x >= aspoc.x && x <= (aspoc.x + aspoc.w) && y >= (aspoc.y + databus.gameTop) && y <= (aspoc.y + aspoc.h) + databus.gameTop) {
+      if (x >= aspoc.x && x <= (aspoc.x + aspoc.w) && y >= (aspoc.y) && y <= (aspoc.y + aspoc.h)) {
         // if((databus.usersteps == 0 || databus.usersteps == '0') && (databus.usergold >= databus.stepprice)){
           databus.buyTips = true
           databus.gameState = 5
-          //按钮按下音效
-          this.music.playMusic('btnDown')
+          //弹框音效
+          this.music.playMusic('modalShow')  
         // }
         return
       }
       // 增加步数使用按钮事件
-      if (x >= asc.x && x <= (asc.x + asc.w) && y >= (asc.y + databus.gameTop) && y <= (asc.y + asc.h) + databus.gameTop) {
+      if (x >= asc.x && x <= (asc.x + asc.w) && y >= (asc.y) && y <= (asc.y + asc.h)) {
         if (databus.usersteps > 0) {
           this.useTool('3')
         } else {
@@ -1052,31 +1087,31 @@ export default class Index {
       }
 
       // 存档道具使用按钮事件
-      if (x >= savetc.x && x <= (savetc.x + savetc.w) && y >= (savetc.y + databus.gameTop) && y <= (savetc.y + savetc.h) + databus.gameTop) {
+      if (x >= savetc.x && x <= (savetc.x + savetc.w) && y >= (savetc.y) && y <= (savetc.y + savetc.h)) {
         databus.gameState = 13
-        //按钮按下音效
-        this.music.playMusic('btnDown')
+        //弹框音效
+        this.music.playMusic('modalShow')  
       }
       
       // 金币问号事件
       if (x >= cc.x  && x <= (cc.x + cc.w) && y >= cc.y && y <= (cc.y + cc.h)) {
         databus.gameState = 11
-        //按钮按下音效
-        this.music.playMusic('btnDown')
+        //弹框音效
+        this.music.playMusic('modalShow')  
       }
       
       // 彩色道具购买按钮事件
-      if (x >= ctpoc.x && x <= (ctpoc.x + ctpoc.w) && y >= (ctpoc.y + databus.gameTop) && y <= (ctpoc.y + ctpoc.h) + databus.gameTop) {
+      if (x >= ctpoc.x && x <= (ctpoc.x + ctpoc.w) && y >= (ctpoc.y) && y <= (ctpoc.y + ctpoc.h)) {
         // if((databus.userhammer == 0 || databus.userhammer == '0') && (databus.usergold >= databus.hammerprice)){
           databus.gameState = 4
-          //按钮按下音效
-          this.music.playMusic('btnDown')
+          //弹框音效
+          this.music.playMusic('modalShow')  
         // }
         return
       }
 
       // 彩色道具使用按钮事件
-      if (x >= ctc.x && x <= (ctc.x + ctc.w) && y >= (ctc.y + databus.gameTop) && y <= (ctc.y + ctc.h) + databus.gameTop) {
+      if (x >= ctc.x && x <= (ctc.x + ctc.w) && y >= (ctc.y) && y <= (ctc.y + ctc.h)) {
         if (databus.userhammer > 0) {
           databus.gameState = 12
         } else {
@@ -1338,7 +1373,7 @@ export default class Index {
       doubleHit = 1
     }
 
-    return bombScore * doubleHit
+    return bombScore * doubleHit + (databus.isCrazy ? databus.crazyBombScore : 0)
   }
 
   //计算旗子连击数量

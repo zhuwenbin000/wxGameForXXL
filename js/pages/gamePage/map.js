@@ -339,14 +339,9 @@ export default class Map {
     }else{
       databus.doubleHit = doubleHit
     }
-    
-    //crazy模式下总得分
-    if(databus.isCrazy){
-      databus.crazyScore = databus.crazyScore + bombScore * doubleHit * multiplyBy
-    }
 
     //游戏得分
-    databus.score = databus.score + bombScore * doubleHit * multiplyBy
+    databus.score = databus.score + bombScore * doubleHit * multiplyBy + (databus.isCrazy ? databus.crazyBombScore : 0)
 
     //显示获得得分
     const x = databus.getPointCenter(sb[sb.length - 1]).x;
@@ -354,14 +349,17 @@ export default class Map {
 
     this.gsl.push({
       rc: sb[sb.length - 1],
-      score: bombScore * doubleHit,
+      score: bombScore * doubleHit + (databus.isCrazy ? databus.crazyBombScore : 0),
       t:0,
       x:x,
       y:y
     })
-    // if (this.gclCombo > 0) {
-    //   this.gslScore = this.gslScore + bombScore * doubleHit
-    // }
+
+    //crazy模式下总得分
+    if(databus.isCrazy){
+      databus.crazyScore = databus.crazyScore + databus.crazyBombScore + bombScore * doubleHit * multiplyBy
+      databus.crazyBombScore = databus.crazyBombScore + bombScore * doubleHit * multiplyBy
+    }
 
     //得分音效
     this.music.playMusic('getScore')
@@ -465,7 +463,9 @@ export default class Map {
           self.music.playMusic('passPoint')
           databus.passScore = data.body.game.passscore //第一关过关所需分数
           databus.gameId = data.body.game.gameid //本轮游戏id
-          if(!databus.isCrazy){//crazy模式不增加奖励步数
+          if(databus.isCrazy || databus.gameState == 16){//crazy模式不增加奖励步数
+            
+          }else{
             databus.steps = databus.steps + parseInt(data.body.game.rewardstep) //剩余步数加上奖励步数
           }
           databus.rewardstep = data.body.game.rewardstep //过关奖励步数
@@ -489,6 +489,8 @@ export default class Map {
 
           if(databus.isCrazy){//crazy模式下不播放过关动画
             databus.gameState = 1
+          }else if(databus.gameState == 16){//结束时过关 停在crazy弹框
+            databus.gameState = 16
           }else{
             databus.gameState = 7 //过关弹框
           }

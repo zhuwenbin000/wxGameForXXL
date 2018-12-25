@@ -67,6 +67,8 @@ export default class Index {
           if(databus.archiveState){
             //存档弹框
             databus.homeState = 3;
+            //弹框音效
+            this.music.playMusic('modalShow')   
           }else{
             //按钮按下音效
             databus.playbtn_state = true;
@@ -114,8 +116,8 @@ export default class Index {
       if (databus.shareflag) {
         //点击banner icon事件
         if (x >= 680 * ratio && x <= (680 * ratio + 120 * ratio) && y >= 130 * ratio && y <= (130 * ratio + 136 * ratio)) {
-          //按钮按下音效
-          this.music.playMusic('btnDown')  
+          //弹框音效
+          this.music.playMusic('modalShow')   
 
           databus.homeState = 2;
 
