@@ -146,7 +146,7 @@ export default class DataBus {
 
     this.homeState = 1 //首页状态变化
     
-    this.version = '0.0.2.1';
+    this.version = '0.0.2.2';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id

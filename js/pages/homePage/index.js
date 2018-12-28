@@ -113,7 +113,12 @@ export default class Index {
         }
       }
 
-      if (databus.shareflag) {
+      if (databus.shareflag) {//如果是非审核模式
+
+        if(!databus.activityData){//如果没有获得banner数据就return
+          return
+        }
+
         //点击banner icon事件
         if (x >= 680 * ratio && x <= (680 * ratio + 120 * ratio) && y >= 130 * ratio && y <= (130 * ratio + 136 * ratio)) {
           //弹框音效

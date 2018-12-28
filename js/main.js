@@ -252,35 +252,41 @@ export default class Main {
         const shareflag = data.body.version.shareflag == '1' ? false : true
         databus.shareflag = shareflag
         if(shareflag){
-          databus.homeState = 2
+
+          const openid = wx.getStorageSync('openId')
+          if(!openid){
+            userLogin({
+              callback:()=>{
+                ajax({
+                  tradecode: 'sys02',
+                  apiType: 'user',
+                  method: 'POST',
+                  success(data) {
+                    if(JSON.stringify(data.body.activity && data.body.activity.img || '').length > 2 && JSON.stringify(data.body.activity && data.body.activity.bannaer || '').length > 2){
+                      databus.homeState = 2
+                      databus.activityData = data.body.activity
+                    }
+                  }
+                })
+              }
+            })
+          }else{
+            ajax({
+              tradecode: 'sys02',
+              apiType: 'user',
+              method: 'POST',
+              success(data) {
+                if(JSON.stringify(data.body.activity && data.body.activity.img || '').length > 2 && JSON.stringify(data.body.activity && data.body.activity.bannaer || '').length > 2){
+                  databus.homeState = 2
+                  databus.activityData = data.body.activity
+                }
+              }
+            })
+          }
         }
       }
     })
 
-    const openid = wx.getStorageSync('openId')
-    if(!openid){
-      userLogin({
-        callback:()=>{
-          ajax({
-            tradecode: 'sys02',
-            apiType: 'user',
-            method: 'POST',
-            success(data) {
-              databus.activityData = data.body.activity
-            }
-          })
-        }
-      })
-    }else{
-      ajax({
-        tradecode: 'sys02',
-        apiType: 'user',
-        method: 'POST',
-        success(data) {
-          databus.activityData = data.body.activity
-        }
-      })
-    }
 
     wx.getSetting({
       success: function (res) {
