@@ -294,7 +294,7 @@ export default class Block {
     }
 
     //爆炸动画
-    if (this.isBomb && this.f % (databus.isCrazy ? 1 : 4) == 0) {
+    if (this.isBomb && this.f % (databus.isCrazy ? 1 : 2) == 0) {
       this.bombStep++;
       if (this.bombStep > 9) {
         this.hide = true;

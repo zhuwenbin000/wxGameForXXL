@@ -202,11 +202,11 @@ export default class Index {
         //中心点变化
         ctx.translate(0.5 * window.innerWidth, 0.5 * window.innerHeight)
         //旋转
-        ctx.rotate(Math.PI * this.crazyAni / 60)
+        ctx.rotate(Math.PI * this.crazyAni / 30)
         //过关光图
         ctx.drawImage(this.Robj["crazyBg"], 0, 0, this.Robj["crazyBg"].width, this.Robj["crazyBg"].height, -0.6 * window.innerHeight, -0.6 * window.innerHeight, 1.2 * window.innerHeight, 1.2 * window.innerHeight);
         //复位旋转和中心点以及透明度
-        ctx.rotate(-Math.PI * this.crazyAni / 60)
+        ctx.rotate(-Math.PI * this.crazyAni / 30)
         ctx.translate(-0.5 * window.innerWidth, -0.5 * window.innerHeight)
         // if(this.crazyAni > 60){
         //   this.crazyAni = 0
@@ -446,7 +446,7 @@ export default class Index {
         }else {
           this.STATE = "静稳状态";
         }
-      } else if (this.STATE == "爆破动画" && this.f > this.startBomb + (databus.isCrazy ? 11 : 41)) {
+      } else if (this.STATE == "爆破动画" && this.f > this.startBomb + (databus.isCrazy ? 11 : 21)) {
         this.STATE = "下落动画";
         this.map.dropDown();
         this.startDropDown = this.f
@@ -487,7 +487,8 @@ export default class Index {
     if(databus.isCrazy && databus.crazyMusic){
       databus.crazyMusic = false
       //crazy音效
-      this.music.playMusic('crazy')
+      this.music.pauseCrazyBgm()
+      //暂停游戏背景音乐
       this.music.pauseMusicBgm()
 
       databus.isBananaMoving = false

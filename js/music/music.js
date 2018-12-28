@@ -22,6 +22,10 @@ export default class Music {
     this.gameBgmAudio.loop = true
     this.gameBgmAudio.src = 'audio/gameBgm.mp3'
 
+    //crazy音乐
+    this.crazyBgmAudio = new Audio()
+    this.crazyBgmAudio.src = 'audio/crazy.mp3'
+
     //音效类
     this.M = {
       "piecesDown1": "audio/piecesDown/piecesDown1.mp3",//棋子按下1
@@ -43,7 +47,7 @@ export default class Music {
       "noNewRecord": "audio/noNewRecord.mp3",//未获得最高分结束音
       "NewRecord": "audio/NewRecord.mp3",//获得最高分结束音
       "modalShow": "audio/modalShow.mp3",//弹框音效
-      "crazy": "audio/crazy.mp3",//crazy音效
+      // "crazy": "audio/crazy.mp3",//crazy音效
     }
     //把所有的音乐放到一个对象中
     this.Mobj = {};	//两个对象有相同的k
@@ -58,6 +62,7 @@ export default class Music {
   playIndexBgm() {
     if (!databus.musicBg) return
     this.gameBgmAudio.pause()
+    this.crazyBgmAudio.pause()
     this.indexBgmAudio.play()
   }
 
@@ -71,6 +76,10 @@ export default class Music {
     this.gameBgmAudio.pause()
   }
   
+  pauseCrazyBgm() {
+    this.crazyBgmAudio.play()
+  }
+
   playMusic(musicName) {
     if (!databus.musicSound) return
     this.Mobj[musicName].currentTime = 0

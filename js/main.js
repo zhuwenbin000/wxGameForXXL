@@ -89,6 +89,7 @@ export default class Main {
           self.homePage.restart(ctx)
         }
         if (self.music.indexBgmAudio.paused && databus.musicBg == true) self.music.indexBgmAudio.play()
+
       }
 
       //游戏页
@@ -109,7 +110,7 @@ export default class Main {
           // self.gamePage.restart(gameCon,ctx,gameCanvas)
           self.gamePage.restart(ctx)
         }
-        // if (self.music.gameBgmAudio.paused && databus.musicBg == true) self.music.gameBgmAudio.play()
+        if (self.music.gameBgmAudio.paused && databus.musicBg == true && databus.crazyMusic) self.music.gameBgmAudio.play()
 
         
         if(databus.crazyTimes < 5){//5次以内出现
