@@ -496,5 +496,33 @@ export default class GameModal {
       }
 
     }
+
+    //17:无广告时消耗金币
+    if (databus.gameState == 17) {
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //弹框背景
+      ctx.drawImage(Robj["modalBg"], 0, 0, Robj["modalBg"].width, Robj["modalBg"].height, 2 * ratio, 190 * ratio, 824 * ratio, 1072 * ratio);
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 170 * ratio, 150 * ratio, 162 * ratio);
+      //弹框确认
+      if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+        databus.btnPlus++
+        //弹框确认
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, (250 - 17) * ratio, (1030 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
+      } else {
+        databus.btnPlus = 0
+        //弹框确认
+        ctx.drawImage(Robj["modalSubmit"], 0, 0, Robj["modalSubmit"].width, Robj["modalSubmit"].height, 250 * ratio, 1030 * ratio, 340 * ratio, 168 * ratio);
+      }
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 50 * ratio + 'px Arial';
+      ctx.fillText('暂无广告可用，', (uiWidth / 2) * ratio, 650 * ratio);
+      ctx.fillText('是否用' + databus.videoCoin + '金币购买', (uiWidth / 2) * ratio, 750 * ratio);
+      
+    }
+
   }
 }

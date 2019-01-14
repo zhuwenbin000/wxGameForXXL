@@ -146,7 +146,7 @@ export default class DataBus {
 
     this.homeState = 1 //首页状态变化
     
-    this.version = '0.0.2.2';
+    this.version = '0.0.2.4';
     this.shareflag = false;
     this.showRule = true;
     this.scene = 0 //场景id
@@ -458,6 +458,7 @@ export default class DataBus {
     this.isLookVideo = false //本局游戏是否观看过视频
     this.buyTips = false //购买提示
     this.stepsAni = false //步数动画
+    this.videoCoin = 0 //视频金币
 
     this.QRcode = [] //棋盘数据
     this.score = 0 //每次开始默认分数、当前关卡获得分数
@@ -673,18 +674,7 @@ export default class DataBus {
       // 用户点击了【关闭广告】按钮
       // 小于 2.1.0 的基础库版本，res 是一个 undefined
       if (res && res.isEnded || res === undefined) {
-        // 正常播放结束，可以下发游戏奖励
-        if(this.gameState == 2){
-
-          this.continueGame(1, 5)
-          this.isLookVideo = true
-  
-        }
-        if (this.musicBgChange) {
-          //开启音乐
-          this.musicBg = true
-          this.musicBgChange = false
-        }
+        this.getVideoReward()
       }
       else {
           // 播放中途退出，不下发游戏奖励
@@ -700,16 +690,7 @@ export default class DataBus {
       // 用户点击了【关闭广告】按钮
       // 小于 2.1.0 的基础库版本，res 是一个 undefined
       if (res && res.isEnded || res === undefined) {
-        if(this.gameState == 13){
-          //存档
-          this.saveGame()
-        }
-
-        if (this.musicBgChange) {
-          //开启音乐
-          this.musicBg = true
-          this.musicBgChange = false
-        }
+        this.getVideoReward()
       }
       else {
           // 播放中途退出，不下发游戏奖励
@@ -725,15 +706,7 @@ export default class DataBus {
       // 用户点击了【关闭广告】按钮
       // 小于 2.1.0 的基础库版本，res 是一个 undefined
       if (res && res.isEnded || res === undefined) {
-        if(this.gameState == 15){
-
-          //开始crazy
-          this.gameState = 1
-          this.isCrazy = true
-          this.crazyScore = 0
-          this.crazyBombScore = 0
-
-        }
+        this.getVideoReward()
       }
       else {
           // 播放中途退出，不下发游戏奖励
@@ -742,7 +715,43 @@ export default class DataBus {
     })
   }
 
-  
+  hasNoVideo(coin){
+    if(coin){
+      this.gameState = 17
+      this.videoCoin = coin
+    }
+  }
+
+  getVideoReward(){
+    if(this.gameState == 15 || this.videoCoin == 150){
+
+      //开始crazy
+      this.gameState = 1
+      this.isCrazy = true
+      this.crazyScore = 0
+      this.crazyBombScore = 0
+
+    }
+
+    if(this.gameState == 13 || this.videoCoin == 100){
+      //存档
+      this.saveGame()
+    }
+
+    if(this.gameState == 2){
+
+      this.continueGame(1, 5)
+      this.isLookVideo = true
+
+    }
+
+    if (this.musicBgChange) {
+      //开启音乐
+      this.musicBg = true
+      this.musicBgChange = false
+    }
+    
+  }
 
   showAarchiveVideoAd(){
     this.archiveVideoAd.load()
@@ -750,7 +759,12 @@ export default class DataBus {
       this.archiveVideoAd.show()
     })
     .catch(err => {
-      wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+      // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+    })
+
+    this.archiveVideoAd.onError(err => {
+      this.hasNoVideo(100)
+      this.archiveVideoAd.offError(this.hasNoVideo())
     })
   }
 
@@ -760,7 +774,12 @@ export default class DataBus {
       this.crazyVideoAd.show()
     })
     .catch(err => {
-      wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+      // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+    })
+    
+    this.crazyVideoAd.onError(err => {
+      this.hasNoVideo(150)
+      this.crazyVideoAd.offError(this.hasNoVideo())
     })
   }
 
@@ -776,6 +795,7 @@ export default class DataBus {
       wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
       this.isVideoing = false
     })
+
   }
 }
 

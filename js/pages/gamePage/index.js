@@ -432,7 +432,7 @@ export default class Index {
         this.gameEnd.render(ctx)
       }
 
-      if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8 || databus.gameState == 9 || databus.gameState == 10 || databus.gameState == 11 || databus.gameState == 13 || databus.gameState == 14 || databus.gameState == 15 || databus.gameState == 16) {
+      if (databus.gameState == 3 || databus.gameState == 4 || databus.gameState == 5 || databus.gameState == 6 || databus.gameState == 7 || databus.gameState == 8 || databus.gameState == 9 || databus.gameState == 10 || databus.gameState == 11 || databus.gameState == 13 || databus.gameState == 14 || databus.gameState == 15 || databus.gameState == 16 || databus.gameState == 17) {
         this.gameModal.render(ctx)
       }
 
@@ -1054,7 +1054,27 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
 
-    }else if (databus.gameState == 1){//游戏进行中
+    } else if (databus.gameState == 17) {
+      // 关闭弹框事件
+      if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (170 * ratio) && y <= ((170 + 162) * ratio)) {
+        databus.gameState = 1
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+      // 点击确认事件
+      if (x >= (250 * ratio) && x <= ((250 + 340) * ratio) && y >= (1030 * ratio) && y <= ((1030 + 168) * ratio)) {
+        databus.btnPlus = 1
+        setTimeout(() => {
+          databus.btnPlus = 0
+          databus.getVideoReward()
+        }, databus.laterTime)
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+      }
+
+
+    } else if (databus.gameState == 1){//游戏进行中
 
       // 设置按钮事件
       if (x >= setc.x && x <= setc.x + setc.w && y >= setc.y && y <= setc.y + setc.h) {
