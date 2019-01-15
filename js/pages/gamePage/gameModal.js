@@ -13,7 +13,7 @@ let R = {
   "gameEndBg": "images/gameEnd/gameEndBg.png",
   "addSteps": "images/gameModal/add_steps.png",
   "colorTool": "images/gameModal/color_tool.png",
-  "modalBg": "images/gameModal/modal_bg.png",
+  "modalBg": "energySys/img/tabs/bg.png",
   "modalClose": "images/gameModal/modal_close.png",
   "modalSubmit": "images/gameModal/modal_submit.png",
   "musicBgFalse": "images/gameModal/music_bg_false.png",

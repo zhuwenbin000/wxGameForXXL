@@ -87,8 +87,6 @@ export default class PageBtn {
 
     this.banner = wx.createImage();
     this.bannerModal = wx.createImage();
-    
-
   }
   
   render(ctx) {

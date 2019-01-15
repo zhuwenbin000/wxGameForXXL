@@ -70,6 +70,18 @@ export default class Main {
     if(JSON.stringify(archiveData).length > 2){
       databus.archiveState = true
     }
+
+    const loadTask = wx.loadSubpackage({
+      name: 'energySys', // name 可以填 name 或者 root
+      success(res) {
+          // 分包加载成功后通过 success 回调
+          
+      },
+      fail(res) {
+          // 分包加载失败通过 fail 回调
+      }
+    })
+
   }
   renderPage() {
     let self = this

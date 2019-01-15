@@ -1,5 +1,11 @@
 {
     "deviceOrientation": "portrait",
     "openDataContext": "src/myOpenData",
-    "navigateToMiniProgramAppIdList": ["wx470a8b0b3f90857b"]
+    "navigateToMiniProgramAppIdList": ["wx470a8b0b3f90857b"],
+    "subpackages": [
+        {
+          "name": "energySys",
+          "root": "energySys/" 
+        }
+    ]
 }
