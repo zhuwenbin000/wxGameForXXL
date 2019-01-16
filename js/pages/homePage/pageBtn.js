@@ -4,6 +4,7 @@ let ratio = canvas.width / 828 //设计稿宽度
 import DataBus from '../../databus'
 let databus = new DataBus()
 import { ajax } from '../../base/ajax'
+import ActiveModal from './activeModal'
 let onget = false;//接口正在调用中
 let startBtn = wx.createImage();
 let friendsRankBtn = wx.createImage();
@@ -87,6 +88,7 @@ export default class PageBtn {
 
     this.banner = wx.createImage();
     this.bannerModal = wx.createImage();
+    this.activeModal = new ActiveModal()
   }
   
   render(ctx) {
@@ -220,6 +222,14 @@ export default class PageBtn {
       //弹框关闭
       ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 300 * ratio, 150 * ratio, 162 * ratio);
     }
+
+
+    if(databus.homeState == 4){ //精力系统
+      if(databus.energySysLoad){//精力系统资源加载完毕才绘制
+        this.activeModal.render(ctx)
+      }
+    }
+
   }
   render_btn() {
 

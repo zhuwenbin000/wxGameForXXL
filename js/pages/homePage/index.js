@@ -212,6 +212,42 @@ export default class Index {
         }, databus.laterTime)
       }
       
+    }else if(databus.homeState == 4){//精力系统弹框
+      
+      //弹框关闭
+      if (x >= 0 * ratio && x <= (0 * ratio + 80 * ratio) && y >= 100 * ratio && y <= (100 * ratio + 80 * ratio)) {
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+        databus.homeState = 1;
+        databus.energySysTab = 0;
+      }
+
+      //大赛tab点击
+      if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+        databus.energySysTab = 0;
+      }
+      //签到tab点击
+      if (x >= 242 * ratio && x <= (242 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+        databus.energySysTab = 1;
+      }
+      //抽奖tab点击
+      if (x >= 422 * ratio && x <= (422 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+        databus.energySysTab = 2;
+      }
+      //搜刮tab点击
+      if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+        //按钮按下音效
+        this.music.playMusic('btnDown')
+        databus.energySysTab = 3;
+      }
+
+
     }
   }
 

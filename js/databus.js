@@ -144,8 +144,9 @@ export default class DataBus {
       h: 130 * ratio
     }
 
-    this.homeState = 1 //首页状态变化
-    
+    this.homeState = 4 //首页状态变化 2banner弹框 3存档弹框 4精力系统
+    this.energySysTab = 0 //精力系统tab顺序
+    this.energySysLoad = false //精力系统加载状态
     this.version = '0.0.2.4';
     this.shareflag = false;
     this.showRule = true;

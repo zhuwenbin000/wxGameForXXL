@@ -75,7 +75,7 @@ export default class Main {
       name: 'energySys', // name 可以填 name 或者 root
       success(res) {
           // 分包加载成功后通过 success 回调
-          
+          databus.energySysLoad = true
       },
       fail(res) {
           // 分包加载失败通过 fail 回调
