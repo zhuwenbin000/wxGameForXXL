@@ -43,6 +43,8 @@ let R = {
   "week5": "energySys/img/sign/week5.png",
   "week6": "energySys/img/sign/week6.png",
   "week7": "energySys/img/sign/week7.png",
+  "rewardBg": "energySys/img/reward/rewardBg.png",
+  "reward1": "energySys/img/reward/reward1.png",
   //抽奖部分
 
   //搜刮部分
@@ -53,6 +55,110 @@ for (var k in R) {
   Img[k] = wx.createImage();
   Img[k].src = R[k];
 }
+
+const signXY = [
+  {
+    signBg:{ x:65, y:300 },
+    week:{ x:145, y:315 },
+    rewardBg:{ x:75, y:350 },
+    state2:{ x:140, y:545 },
+    state3:{ x:125, y:545 },
+  },
+  {
+    signBg:{ x:305, y:300 },
+    week:{ x:385, y:315 },
+    rewardBg:{ x:315, y:350 },
+    state3:{ x:380, y:545 },
+    state3:{ x:365, y:545 },
+  },
+  {
+    signBg:{ x:545, y:300 },
+    week:{ x:625, y:315 },
+    rewardBg:{ x:555, y:350 },
+    state3:{ x:620, y:545 },
+    state3:{ x:605, y:545 },
+  },
+  {
+    signBg:{ x:65, y:610 },
+    week:{ x:145, y:625 },
+    rewardBg:{ x:75, y:660 },
+    state3:{ x:140, y:855 },
+    state3:{ x:125, y:855 },
+  },
+  {
+    signBg:{ x:305, y:610 },
+    week:{ x:385, y:625 },
+    rewardBg:{ x:315, y:660 },
+    state3:{ x:380, y:855 },
+    state3:{ x:365, y:855 },
+  },
+  {
+    signBg:{ x:545, y:610 },
+    week:{ x:625, y:625 },
+    rewardBg:{ x:555, y:660 },
+    state3:{ x:620, y:855 },
+    state3:{ x:605, y:855 },
+  },
+  {
+    signBg:{ x:65, y:925 },
+    week:{ x:145, y:940 },
+    rewardBg:{ x:75, y:975 },
+    state2:{ x:140, y:1170 },
+    state3:{ x:125, y:1170 },
+  },
+]
+
+const daysinfo = [
+  {
+    day:'20190114',
+    week:'1',
+    proptype:'1',
+    propnum:'1',
+    isdone:'1'
+  },
+  {
+    day:'20190114',
+    week:'2',
+    proptype:'1',
+    propnum:'1',
+    isdone:'1'
+  },
+  {
+    day:'20190114',
+    week:'3',
+    proptype:'1',
+    propnum:'1',
+    isdone:'1'
+  },
+  {
+    day:'20190114',
+    week:'4',
+    proptype:'1',
+    propnum:'1',
+    isdone:'1'
+  },
+  {
+    day:'20190114',
+    week:'5',
+    proptype:'1',
+    propnum:'1',
+    isdone:'1'
+  },
+  {
+    day:'20190114',
+    week:'6',
+    proptype:'1',
+    propnum:'1',
+    isdone:'1'
+  },
+  {
+    day:'20190114',
+    week:'7',
+    proptype:'1',
+    propnum:'1',
+    isdone:'0'
+  }
+]
 
 export default class ActiveModal {
   render(ctx) {
@@ -110,25 +216,27 @@ export default class ActiveModal {
     
     //签到
     if (databus.energySysTab == 1) {
-      ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, 65 * ratio, 300 * ratio, 220 * ratio, 296 * ratio);
 
-
-      ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, 305 * ratio, 300 * ratio, 220 * ratio, 296 * ratio);
-
-
-      ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, 545 * ratio, 300 * ratio, 220 * ratio, 296 * ratio);
-
-
-      ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, 65 * ratio, 610 * ratio, 220 * ratio, 296 * ratio);
-
-
-      ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, 305 * ratio, 610 * ratio, 220 * ratio, 296 * ratio);
-
-
-      ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, 545 * ratio, 610 * ratio, 220 * ratio, 296 * ratio);
-
-
-      ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, 65 * ratio, 925 * ratio, 220 * ratio, 296 * ratio);
+      for (let i = 0; i < daysinfo.length; i++) {
+        //签到背景
+        ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, signXY[i].signBg.x * ratio, signXY[i].signBg.y * ratio, 220 * ratio, 296 * ratio);
+        //week
+        ctx.drawImage(Img["week" + daysinfo[i].week], 0, 0, Img["week" + daysinfo[i].week].width, Img["week" + daysinfo[i].week].height, signXY[i].week.x * ratio, signXY[i].week.y * ratio, 56 * ratio, 30 * ratio);
+        //奖品背景
+        ctx.drawImage(Img["rewardBg"], 0, 0, Img["rewardBg"].width, Img["rewardBg"].height, signXY[i].rewardBg.x * ratio, signXY[i].rewardBg.y * ratio, 200 * ratio, 200 * ratio);
+        //奖品
+        ctx.drawImage(Img["reward1"], 0, 0, Img["reward1"].width, Img["reward1"].height, signXY[i].rewardBg.x * ratio, signXY[i].rewardBg.y * ratio, 200 * ratio, 200 * ratio);
+        if(daysinfo[i].isdone == '1'){
+          //签到状态-已签到
+          ctx.drawImage(Img["received"], 0, 0, Img["received"].width, Img["received"].height, signXY[i].state3.x * ratio, signXY[i].state3.y * ratio, 98 * ratio, 34 * ratio);
+          //已领取蒙层
+          ctx.drawImage(Img["receivedBg"], 0, 0, Img["receivedBg"].width, Img["receivedBg"].height, signXY[i].signBg.x * ratio, signXY[i].signBg.y * ratio, 220 * ratio, 296 * ratio);
+        }else{
+          //签到状态-签到
+          ctx.drawImage(Img["signBtn"], 0, 0, Img["signBtn"].width, Img["signBtn"].height, signXY[i].state2.x * ratio, signXY[i].state2.y * ratio, 66 * ratio, 34 * ratio);
+        }
+      }
+      
       //底部提示和修饰图
       ctx.drawImage(Img["signPic"], 0, 0, Img["signPic"].width, Img["signPic"].height, 360 * ratio, 960 * ratio, 402 * ratio, 274 * ratio);
       ctx.drawImage(Img["signBar"], 0, 0, Img["signBar"].width, Img["signBar"].height, 129 * ratio, 1250 * ratio, 570 * ratio, 22 * ratio);
