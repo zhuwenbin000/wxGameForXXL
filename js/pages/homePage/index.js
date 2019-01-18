@@ -112,9 +112,7 @@ export default class Index {
           },100)     
         }
       }
-
       if (databus.shareflag) {//如果是非审核模式
-
         if(!databus.activityData){//如果没有获得banner数据就return
           return
         }
@@ -123,9 +121,7 @@ export default class Index {
         if (x >= 680 * ratio && x <= (680 * ratio + 120 * ratio) && y >= 130 * ratio && y <= (130 * ratio + 136 * ratio)) {
           //弹框音效
           this.music.playMusic('modalShow')   
-
           databus.homeState = 2;
-
           this.pageBtn.bannerButton && this.pageBtn.bannerButton.show()
           this.pageBtn.createbutton && this.pageBtn.createbutton.hide()
           this.pageBtn.friendbutton && this.pageBtn.friendbutton.hide()
@@ -246,8 +242,6 @@ export default class Index {
         this.music.playMusic('btnDown')
         databus.energySysTab = 3;
       }
-
-
     }
   }
 

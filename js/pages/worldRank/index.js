@@ -8,6 +8,7 @@ let mt = 240;
  * 游戏页
  */
 
+
 export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id

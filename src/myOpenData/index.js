@@ -200,6 +200,7 @@ function getFriendsRanking() {
   wx.getFriendCloudStorage({
     keyList: ['score'],
     success: res => {
+      console.log(res.data)
       let data = [...res.data];
       nowpage = 1
       friendData = sortByScore(1, data)

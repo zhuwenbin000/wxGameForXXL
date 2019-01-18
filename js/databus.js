@@ -17,7 +17,6 @@ export default class DataBus {
 
     instance = this
     this.pool = new Pool()
-
     this.gameTop = 0 * ratio
     this.gameEndTop = 0 * ratio
 
@@ -56,6 +55,46 @@ export default class DataBus {
   }
 
   reset() {
+    this.jl_list = [
+      {                                   avatarUrl:"https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
+        nickname:"Lemon＊",
+        openid:"oU1F75TOBNQnmpU0FM21o6JiyB1Y",
+        penrgy:20,
+        cansteal:1
+      },
+      {
+        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
+        nickname: "Lemon＊",
+        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
+        penrgy: 50,
+        cansteal: 1
+      }, {
+        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
+        nickname: "Lemon＊",
+        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
+        penrgy: 68,
+        cansteal: 2
+      }, {
+        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
+        nickname: "Lemon＊",
+        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
+        penrgy: 20,
+        cansteal: 1
+      }, {
+        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
+        nickname: "Lemon＊",
+        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
+        penrgy: 0,
+        cansteal: 1
+      }, {
+        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
+        nickname: "Lemon＊",
+        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
+        penrgy: 100,
+        cansteal: 1
+      }
+    ]
+    this.frinendCount = 18;//搜刮好友数量
     this.playbtn_state = false;//开始游戏按钮状态
     this.sharebtn_state = false;//分享按钮状态
     this.provbtn_state = false;//上一页按钮状态
@@ -145,7 +184,7 @@ export default class DataBus {
     }
 
     this.homeState = 4 //首页状态变化 2banner弹框 3存档弹框 4精力系统
-    this.energySysTab = 0 //精力系统tab顺序
+    this.energySysTab = 3 //精力系统tab顺序
     this.energySysLoad = false //精力系统加载状态
     this.version = '0.0.2.4';
     this.shareflag = false;
