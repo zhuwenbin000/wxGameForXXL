@@ -74,7 +74,11 @@ let R = {
   'sj': 'energySys/img/plunder/sj.png',
   'ysj': 'energySys/img/plunder/ysj.png',
   'group30':'energySys/img/plunder/group30.png',
-  'group31': 'energySys/img/plunder/group31.png'
+  'group31': 'energySys/img/plunder/group31.png',
+  "tip": "energySys/img/reward/tip.png",
+  "sgcg": "energySys/img/reward/sgcg.png",
+  "sgsb": "energySys/img/reward/sgsb.png",
+  "sgcg_b": "energySys/img/plunder/sgcg.png",
 }
 
 let Img = {};
@@ -422,6 +426,14 @@ export default class ActiveModal {
         ctx.drawImage(Img["sj"], 592 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9  * ratio, Img["sj"].height*0.9  * ratio)
       }
     })
-
+    if (databus.tip_success){
+      ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(Img["tip"], 0, 0, Img["tip"].width, Img["tip"].height, 80 * ratio, 400 * ratio, 672 * ratio, 384 * ratio);
+      ctx.drawImage(Img["sgcg"], 0, 0, Img["sgcg"].width, Img["sgcg"].height, 92 * ratio, 412 * ratio, 648 * ratio, 360 * ratio);
+      ctx.drawImage(Img["reward4"], 0, 0, Img["reward4"].width, Img["reward4"].height * 0.7, 262 * ratio, 432 * ratio, 400 * ratio * 0.8, 400 * ratio * 0.56);
+      //弹框关闭
+      ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 45 * ratio, 365 * ratio, 80 * ratio, 80 * ratio);
+      ctx.drawImage(Img["sgcg_b"], 0, 0, Img["sgcg_b"].width, Img["sgcg_b"].height, 155 * ratio, 825 * ratio, 512 * ratio, 200 * ratio);
+    }
   }
 }

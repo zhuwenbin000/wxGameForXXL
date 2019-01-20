@@ -55,6 +55,9 @@ export default class DataBus {
   }
 
   reset() {
+    this.tip_success = false
+    this.tip_flase = false
+    this.ji_pageindex = 1
     this.jl_list = [
       {                                   avatarUrl:"https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
         nickname:"Lemon＊",
