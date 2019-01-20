@@ -290,6 +290,27 @@ export default class DataBus {
       }
     ];
     this.signData = {} //当前签到奖励
+    //抽奖部分
+    this.plunderRecord = [//搜刮记录
+      {
+        logopath:'',
+        nickname:'林杰',
+        penrgy:'1',
+        stealtime:'1'
+      },
+      {
+        logopath:'',
+        nickname:'林杰',
+        penrgy:'1',
+        stealtime:'1'
+      },
+      {
+        logopath:'',
+        nickname:'林杰',
+        penrgy:'1',
+        stealtime:'1'
+      }
+    ]
     this.energySysLoad = false //精力系统加载状态
     this.version = '0.0.2.4';
     this.shareflag = false;

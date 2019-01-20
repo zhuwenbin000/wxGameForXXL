@@ -54,6 +54,16 @@ let R = {
   "reward4": "energySys/img/reward/reward4.png",
   "reward6": "energySys/img/reward/reward6.png",
   //抽奖部分
+  "boxShadow": "energySys/img/openbox/boxShadow.png",
+  "box": "energySys/img/openbox/box.png",
+  "boxNum": "energySys/img/openbox/boxNum.png",
+  "openBoxTxt": "energySys/img/openbox/openBoxTxt.png",
+  "openBtn": "energySys/img/openbox/openBtn.png",
+  "boxMask": "energySys/img/openbox/boxMask.png",
+  "boxProcessWrap": "energySys/img/openbox/boxProcessWrap.png",
+  "boxProcess": "energySys/img/openbox/boxProcess.png",
+  "myProcessWrap": "energySys/img/openbox/myProcessWrap.png",
+  "myProcess": "energySys/img/openbox/myProcess.png",
 
   //搜刮部分
   'friend': 'energySys/img/plunder/friend.png',
@@ -74,8 +84,8 @@ for (var k in R) {
 }
 
 const signXY = databus.signXY
-
 const daysinfo = databus.daysinfo
+const plunderRecord = databus.plunderRecord
 
 export default class ActiveModal {
   render(ctx) {
@@ -272,7 +282,54 @@ export default class ActiveModal {
 
     //抽奖
     if (databus.energySysTab == 2) {
+      //我的背景
+      ctx.drawImage(Img["list_bg"], 0, 0, Img["list_bg"].width, Img["list_bg"].height, 42 * ratio, 320 * ratio, 740 * ratio, 152 * ratio);
+      //我的精力进度条外层
+      ctx.drawImage(Img["myProcessWrap"], 0, 0, Img["myProcessWrap"].width, Img["myProcessWrap"].height, 265 * ratio, 380 * ratio, 308 * ratio, 28 * ratio);
+      //我的精力进度条内层
+      ctx.drawImage(Img["myProcess"], 0, 0, Img["myProcess"].width, Img["myProcess"].height, 272 * ratio, 386 * ratio, 294 * ratio, 16 * ratio);
+      //我的精力
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 28 * ratio + 'px Arial';
+      ctx.fillText('我的精力：75g', 414 * ratio, 445 * ratio);
+      //搜刮精力
+      ctx.drawImage(Img["sj"], 0, 0, Img["sj"].width, Img["sj"].height, 615 * ratio, 295 * ratio, 148 * ratio, 156 * ratio);
+      //搜刮精力红点
+      ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 723 * ratio, 344 * ratio, 40 * ratio, 40 * ratio);
 
+      //偷取记录
+      for (let i = 0; i < 3; i++) {
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#ffe739';
+        ctx.font = 28 * ratio + 'px Arial';
+        ctx.fillText('好友' + plunderRecord[i].nickname + '，' + plunderRecord[i].stealtime + '小时前搜刮了你的精力' + plunderRecord[i].penrgy + '点。', 80 * ratio, (470 + 45 * (i + 1)) * ratio);
+      }
+
+      //宝箱投影
+      ctx.drawImage(Img["boxShadow"], 0, 0, Img["boxShadow"].width, Img["boxShadow"].height, 200 * ratio, 920 * ratio, 430 * ratio, 106 * ratio);
+      //宝箱
+      ctx.drawImage(Img["box"], 0, 0, Img["box"].width, Img["box"].height, 245 * ratio, 715 * ratio, 350 * ratio, 286 * ratio);
+      //宝箱数量
+      ctx.drawImage(Img["boxNum"], 0, 0, Img["boxNum"].width, Img["boxNum"].height, 555 * ratio, 690 * ratio, 80 * ratio, 80 * ratio);
+      //箱子精力进度条外层
+      ctx.drawImage(Img["boxProcessWrap"], 0, 0, Img["boxProcessWrap"].width, Img["boxProcessWrap"].height, 214 * ratio, 1043 * ratio, 400 * ratio, 28 * ratio);
+      //箱子精力进度条内层
+      ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width, Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * ratio, 16 * ratio);
+      //箱子精力
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 30 * ratio + 'px Arial';
+      ctx.fillText('箱子精力：45/50', 414 * ratio, 1120 * ratio);
+      //开箱按钮
+      ctx.drawImage(Img["openBtn"], 0, 0, Img["openBtn"].width, Img["openBtn"].height, 255 * ratio, 1170 * ratio, 312 * ratio, 138 * ratio);
+      //连续点击
+      ctx.drawImage(Img["openBoxTxt"], 0, 0, Img["openBoxTxt"].width, Img["openBoxTxt"].height, 306 * ratio, 1310 * ratio, 216 * ratio, 74 * ratio);
+
+      //头像
+      let headimg = wx.createImage();
+      headimg.src = "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132"
+      databus.circleImg(ctx, headimg, 110 * ratio, 348 * ratio, 40 * ratio)
     }
 
     //搜刮好友
