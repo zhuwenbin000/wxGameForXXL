@@ -185,6 +185,111 @@ export default class DataBus {
 
     this.homeState = 4 //首页状态变化 2banner弹框 3存档弹框 4精力系统
     this.energySysTab = 3 //精力系统tab顺序
+    this.energySysModal = 0 //精力系统tab弹框状态
+    //签到部分
+    this.signXY = [ //签到各个位置坐标
+      {
+        signBg: { x: 65, y: 300 },
+        week: { x: 145, y: 315 },
+        rewardBg: { x: 75, y: 350 },
+        state2: { x: 140, y: 550 },
+        state3: { x: 125, y: 550 },
+      },
+      {
+        signBg: { x: 305, y: 300 },
+        week: { x: 385, y: 315 },
+        rewardBg: { x: 315, y: 350 },
+        state2: { x: 380, y: 550 },
+        state3: { x: 365, y: 550 },
+      },
+      {
+        signBg: { x: 545, y: 300 },
+        week: { x: 625, y: 315 },
+        rewardBg: { x: 555, y: 350 },
+        state2: { x: 620, y: 550 },
+        state3: { x: 605, y: 550 },
+      },
+      {
+        signBg: { x: 65, y: 610 },
+        week: { x: 145, y: 625 },
+        rewardBg: { x: 75, y: 660 },
+        state2: { x: 140, y: 860 },
+        state3: { x: 125, y: 860 },
+      },
+      {
+        signBg: { x: 305, y: 610 },
+        week: { x: 385, y: 625 },
+        rewardBg: { x: 315, y: 660 },
+        state2: { x: 380, y: 860 },
+        state3: { x: 365, y: 860 },
+      },
+      {
+        signBg: { x: 545, y: 610 },
+        week: { x: 625, y: 625 },
+        rewardBg: { x: 555, y: 660 },
+        state2: { x: 620, y: 860 },
+        state3: { x: 605, y: 860 },
+      },
+      {
+        signBg: { x: 65, y: 925 },
+        week: { x: 145, y: 940 },
+        rewardBg: { x: 75, y: 975 },
+        state2: { x: 140, y: 1175 },
+        state3: { x: 125, y: 1175 },
+      },
+    ];
+    this.daysinfo = [ //签到页数据
+      {
+        day: '20190114',
+        week: '1',
+        proptype: '1',
+        propnum: '1',
+        isdone: '0'
+      },
+      {
+        day: '20190115',
+        week: '2',
+        proptype: '1',
+        propnum: '1',
+        isdone: '1'
+      },
+      {
+        day: '20190116',
+        week: '3',
+        proptype: '1',
+        propnum: '1',
+        isdone: '1'
+      },
+      {
+        day: '20190117',
+        week: '4',
+        proptype: '2',
+        propnum: '1',
+        isdone: '1'
+      },
+      {
+        day: '20190118',
+        week: '5',
+        proptype: '3',
+        propnum: '1',
+        isdone: '0'
+      },
+      {
+        day: '20190119',
+        week: '6',
+        proptype: '4',
+        propnum: '1',
+        isdone: '0'
+      },
+      {
+        day: '20190120',
+        week: '7',
+        proptype: '6',
+        propnum: '1',
+        isdone: '0'
+      }
+    ];
+    this.signData = {} //当前签到奖励
     this.energySysLoad = false //精力系统加载状态
     this.version = '0.0.2.4';
     this.shareflag = false;
@@ -838,6 +943,7 @@ export default class DataBus {
 
   }
 
+
   getDateStr(date) {
     var year = "";
     var month = "";
@@ -856,7 +962,24 @@ export default class DataBus {
     }
     return year+month+day;
   }
-
+  getNowTimeStr() {
+    var year = "";
+    var month = "";
+    var day = "";
+    var now = new Date();
+    year = ""+now.getFullYear();
+    if((now.getMonth()+1)<10){
+        month = "0"+(now.getMonth()+1);
+    }else{
+        month = ""+(now.getMonth()+1);
+    }
+    if((now.getDate())<10){
+        day = "0"+(now.getDate());
+    }else{
+        day = ""+(now.getDate());
+    }
+    return year+month+day;
+  }
   getWeekStartAndEnd(AddWeekCount) { 
     //起止日期数组   
     var startStop = new Array(); 
@@ -881,6 +1004,6 @@ export default class DataBus {
     startStop.push(this.getDateStr(currentWeekLastDay)); 
    
     return startStop; 
-  } 
+  }
 }
 

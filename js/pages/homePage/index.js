@@ -209,38 +209,98 @@ export default class Index {
       }
       
     }else if(databus.homeState == 4){//精力系统弹框
-      
-      //弹框关闭
-      if (x >= 0 * ratio && x <= (0 * ratio + 80 * ratio) && y >= 100 * ratio && y <= (100 * ratio + 80 * ratio)) {
-        //按钮按下音效
-        this.music.playMusic('btnDown')
-        databus.homeState = 1;
-        databus.energySysTab = 0;
-      }
+      //精力系统tab弹框之后的点击事件 1签到 2补签
+      if(databus.energySysModal == 1){
+        if (x >= 190 * ratio && x <= (455 * ratio + 190 * ratio) && y >= 875 * ratio && y <= (875 * ratio + 170 * ratio)) {
+          //关闭签到成功弹框
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          //补签弹框
+          databus.energySysModal = 0
+        }
+        if (x >= 185 * ratio && x <= (185 * ratio + 80 * ratio) && y >= 365 * ratio && y <= (365 * ratio + 80 * ratio)) {
+          //关闭签到成功弹框
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          //补签弹框
+          databus.energySysModal = 0
+        }
+      }else if(databus.energySysModal == 2){
+        if (x >= 190 * ratio && x <= (455 * ratio + 190 * ratio) && y >= 875 * ratio && y <= (875 * ratio + 170 * ratio)) {
+          //关闭签到成功弹框
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          //补签弹框
+          databus.energySysModal = 0
+        }
+        if (x >= 185 * ratio && x <= (185 * ratio + 80 * ratio) && y >= 365 * ratio && y <= (365 * ratio + 80 * ratio)) {
+          //关闭签到成功弹框
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          //补签弹框
+          databus.energySysModal = 0
+        }
+      }else if(databus.energySysModal == 0){
+        //签到部分点击事件
+        if(databus.energySysTab == 1){
+          for (let i = 0; i < databus.daysinfo.length; i++) {
+            //弹框关闭
+            if (x >= databus.signXY[i].signBg.x * ratio && x <= (220 * ratio + databus.signXY[i].signBg.x * ratio) && y >= databus.signXY[i].signBg.y * ratio && y <= (296 * ratio + databus.signXY[i].signBg.y * ratio)) {
+              if(parseInt(databus.daysinfo[i].day) < parseInt(databus.getNowTimeStr())){//当日之前的天数
+                //签到状态-补签
+                if (databus.daysinfo[i].isdone == '0') {
+                  //按钮按下音效
+                  this.music.playMusic('btnDown')
+                  //补签弹框
+                  databus.signData = databus.daysinfo[i];
+                  databus.energySysModal = 2;
+                }
+              }
+              if(parseInt(databus.daysinfo[i].day) == parseInt(databus.getNowTimeStr())){//当日之前的天数
+                //签到状态-签到
+                if (databus.daysinfo[i].isdone == '0') {
+                  //按钮按下音效
+                  this.music.playMusic('btnDown')
+                  //签到成功
+                  databus.signData = databus.daysinfo[i];
+                  databus.energySysModal = 1;
+                }
+              }
+            }
+          }
+        }
 
-      //大赛tab点击
-      if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-        //按钮按下音效
-        this.music.playMusic('btnDown')
-        databus.energySysTab = 0;
-      }
-      //签到tab点击
-      if (x >= 242 * ratio && x <= (242 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-        //按钮按下音效
-        this.music.playMusic('btnDown')
-        databus.energySysTab = 1;
-      }
-      //抽奖tab点击
-      if (x >= 422 * ratio && x <= (422 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-        //按钮按下音效
-        this.music.playMusic('btnDown')
-        databus.energySysTab = 2;
-      }
-      //搜刮tab点击
-      if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-        //按钮按下音效
-        this.music.playMusic('btnDown')
-        databus.energySysTab = 3;
+        //弹框关闭
+        if (x >= 0 * ratio && x <= (0 * ratio + 80 * ratio) && y >= 100 * ratio && y <= (100 * ratio + 80 * ratio)) {
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          databus.homeState = 1;
+          databus.energySysTab = 0;
+        }
+        //大赛tab点击
+        if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          databus.energySysTab = 0;
+        }
+        //签到tab点击
+        if (x >= 242 * ratio && x <= (242 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          databus.energySysTab = 1;
+        }
+        //抽奖tab点击
+        if (x >= 422 * ratio && x <= (422 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          databus.energySysTab = 2;
+        }
+        //搜刮tab点击
+        if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          databus.energySysTab = 3;
+        }
       }
     }
   }

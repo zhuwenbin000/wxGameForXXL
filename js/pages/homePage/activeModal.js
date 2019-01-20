@@ -18,6 +18,10 @@ let R = {
   "sign": "energySys/img/tabs/sign.png",
   "signDown": "energySys/img/tabs/signDown.png",
   //大赛部分
+  "battleBorder": "energySys/img/tabs/battleBorder.png",
+  "battleInfo": "energySys/img/tabs/battleInfo.png",
+  "battleProcess": "energySys/img/tabs/battleProcess.png",
+  "battleShare": "energySys/img/tabs/battleShare.png",
 
   //签到部分
   "btnY": "energySys/img/sign/btn_y.png",
@@ -45,6 +49,10 @@ let R = {
   "week7": "energySys/img/sign/week7.png",
   "rewardBg": "energySys/img/reward/rewardBg.png",
   "reward1": "energySys/img/reward/reward1.png",
+  "reward2": "energySys/img/reward/reward2.png",
+  "reward3": "energySys/img/reward/reward3.png",
+  "reward4": "energySys/img/reward/reward4.png",
+  "reward6": "energySys/img/reward/reward6.png",
   //抽奖部分
 
   //搜刮部分
@@ -65,109 +73,9 @@ for (var k in R) {
   Img[k].src = R[k];
 }
 
-const signXY = [
-  {
-    signBg: { x: 65, y: 300 },
-    week: { x: 145, y: 315 },
-    rewardBg: { x: 75, y: 350 },
-    state2: { x: 140, y: 545 },
-    state3: { x: 125, y: 545 },
-  },
-  {
-    signBg: { x: 305, y: 300 },
-    week: { x: 385, y: 315 },
-    rewardBg: { x: 315, y: 350 },
-    state3: { x: 380, y: 545 },
-    state3: { x: 365, y: 545 },
-  },
-  {
-    signBg: { x: 545, y: 300 },
-    week: { x: 625, y: 315 },
-    rewardBg: { x: 555, y: 350 },
-    state3: { x: 620, y: 545 },
-    state3: { x: 605, y: 545 },
-  },
-  {
-    signBg: { x: 65, y: 610 },
-    week: { x: 145, y: 625 },
-    rewardBg: { x: 75, y: 660 },
-    state3: { x: 140, y: 855 },
-    state3: { x: 125, y: 855 },
-  },
-  {
-    signBg: { x: 305, y: 610 },
-    week: { x: 385, y: 625 },
-    rewardBg: { x: 315, y: 660 },
-    state3: { x: 380, y: 855 },
-    state3: { x: 365, y: 855 },
-  },
-  {
-    signBg: { x: 545, y: 610 },
-    week: { x: 625, y: 625 },
-    rewardBg: { x: 555, y: 660 },
-    state3: { x: 620, y: 855 },
-    state3: { x: 605, y: 855 },
-  },
-  {
-    signBg: { x: 65, y: 925 },
-    week: { x: 145, y: 940 },
-    rewardBg: { x: 75, y: 975 },
-    state2: { x: 140, y: 1170 },
-    state3: { x: 125, y: 1170 },
-  },
-]
+const signXY = databus.signXY
 
-const daysinfo = [
-  {
-    day: '20190114',
-    week: '1',
-    proptype: '1',
-    propnum: '1',
-    isdone: '1'
-  },
-  {
-    day: '20190114',
-    week: '2',
-    proptype: '1',
-    propnum: '1',
-    isdone: '1'
-  },
-  {
-    day: '20190114',
-    week: '3',
-    proptype: '1',
-    propnum: '1',
-    isdone: '1'
-  },
-  {
-    day: '20190114',
-    week: '4',
-    proptype: '1',
-    propnum: '1',
-    isdone: '1'
-  },
-  {
-    day: '20190114',
-    week: '5',
-    proptype: '1',
-    propnum: '1',
-    isdone: '1'
-  },
-  {
-    day: '20190114',
-    week: '6',
-    proptype: '1',
-    propnum: '1',
-    isdone: '1'
-  },
-  {
-    day: '20190114',
-    week: '7',
-    proptype: '1',
-    propnum: '1',
-    isdone: '0'
-  }
-]
+const daysinfo = databus.daysinfo
 
 export default class ActiveModal {
   render(ctx) {
@@ -222,28 +130,79 @@ export default class ActiveModal {
     //大赛
     if (databus.energySysTab == 0) {
 
+      //大赛进度
+      ctx.drawImage(Img["battleProcess"], 0, 0, Img["battleProcess"].width, Img["battleProcess"].height, 56 * ratio, 1180 * ratio, 716 * ratio, 80 * ratio);
+      //大赛框
+      ctx.drawImage(Img["battleBorder"], 0, 0, Img["battleBorder"].width, Img["battleBorder"].height, 54 * ratio, 300 * ratio, 720 * ratio, 960 * ratio);
+      //大赛进度
+      ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 60 * ratio, 1300 * ratio, 305 * ratio, 115 * ratio);
+      //大赛进度
+      ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 415 * ratio, 1300 * ratio, 350 * ratio, 115 * ratio);
+      //分享组战队
+      ctx.drawImage(Img["battleShare"], 0, 0, Img["battleShare"].width, Img["battleShare"].height, 110 * ratio, 1330 * ratio, 200 * ratio, 40 * ratio);
+      //最新赛况
+      ctx.drawImage(Img["battleInfo"], 0, 0, Img["battleInfo"].width, Img["battleInfo"].height, 470 * ratio, 1325 * ratio, 232 * ratio, 52 * ratio);
+
     }
 
     //签到
     if (databus.energySysTab == 1) {
-
+      
       for (let i = 0; i < daysinfo.length; i++) {
         //签到背景
-        ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, signXY[i].signBg.x * ratio, signXY[i].signBg.y * ratio, 220 * ratio, 296 * ratio);
+        if(databus.getNowTimeStr() == daysinfo[i].day && daysinfo[i].isdone == '0'){
+          ctx.drawImage(Img["signTodayBg"], 0, 0, Img["signTodayBg"].width, Img["signTodayBg"].height, signXY[i].signBg.x * ratio, signXY[i].signBg.y * ratio, 220 * ratio, 296 * ratio);
+        }else{
+          ctx.drawImage(Img["signBg"], 0, 0, Img["signBg"].width, Img["signBg"].height, signXY[i].signBg.x * ratio, signXY[i].signBg.y * ratio, 220 * ratio, 296 * ratio);
+        }
         //week
         ctx.drawImage(Img["week" + daysinfo[i].week], 0, 0, Img["week" + daysinfo[i].week].width, Img["week" + daysinfo[i].week].height, signXY[i].week.x * ratio, signXY[i].week.y * ratio, 56 * ratio, 30 * ratio);
         //奖品背景
         ctx.drawImage(Img["rewardBg"], 0, 0, Img["rewardBg"].width, Img["rewardBg"].height, signXY[i].rewardBg.x * ratio, signXY[i].rewardBg.y * ratio, 200 * ratio, 200 * ratio);
+        
         //奖品
-        ctx.drawImage(Img["reward1"], 0, 0, Img["reward1"].width, Img["reward1"].height, signXY[i].rewardBg.x * ratio, signXY[i].rewardBg.y * ratio, 200 * ratio, 200 * ratio);
-        if (daysinfo[i].isdone == '1') {
+        ctx.drawImage(Img["reward" + daysinfo[i].proptype], 0, 0, Img["reward" + daysinfo[i].proptype].width, Img["reward" + daysinfo[i].proptype].height, signXY[i].rewardBg.x * ratio, signXY[i].rewardBg.y * ratio, 200 * ratio, 200 * ratio);
+        if(daysinfo[i].proptype == '2' || daysinfo[i].proptype == '3' || daysinfo[i].proptype == '6'){//判断道具名字长度
+          //奖品数量
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#fff';
+          ctx.font = 28 * ratio + 'px Arial';
+          ctx.fillText(daysinfo[i].propnum, (signXY[i].signBg.x + 165) * ratio, (signXY[i].signBg.y + 230) * ratio);
+        }else{
+          //奖品数量
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#fff';
+          ctx.font = 28 * ratio + 'px Arial';
+          ctx.fillText(daysinfo[i].propnum, (signXY[i].signBg.x + 150) * ratio, (signXY[i].signBg.y + 230) * ratio);
+        }
+        
+        if(parseInt(daysinfo[i].day) < parseInt(databus.getNowTimeStr())){//当日之前的天数
           //签到状态-已签到
-          ctx.drawImage(Img["received"], 0, 0, Img["received"].width, Img["received"].height, signXY[i].state3.x * ratio, signXY[i].state3.y * ratio, 98 * ratio, 34 * ratio);
-          //已领取蒙层
-          ctx.drawImage(Img["receivedBg"], 0, 0, Img["receivedBg"].width, Img["receivedBg"].height, signXY[i].signBg.x * ratio, signXY[i].signBg.y * ratio, 220 * ratio, 296 * ratio);
-        } else {
+          if (daysinfo[i].isdone == '1') {
+            ctx.drawImage(Img["received"], 0, 0, Img["received"].width, Img["received"].height, signXY[i].state3.x * ratio, signXY[i].state3.y * ratio, 98 * ratio, 34 * ratio);
+            //已领取蒙层
+            ctx.drawImage(Img["receivedBg"], 0, 0, Img["receivedBg"].width, Img["receivedBg"].height, signXY[i].signBg.x * ratio, signXY[i].signBg.y * ratio, 220 * ratio, 296 * ratio);
+          } else {
+            //签到状态-签到
+            ctx.drawImage(Img["pending"], 0, 0, Img["pending"].width, Img["pending"].height, signXY[i].state3.x * ratio, signXY[i].state3.y * ratio, 98 * ratio, 34 * ratio);
+          }
+        } 
+        if(parseInt(daysinfo[i].day) == parseInt(databus.getNowTimeStr())){
+          //签到状态-已签到
+          if (daysinfo[i].isdone == '1') {
+            ctx.drawImage(Img["received"], 0, 0, Img["received"].width, Img["received"].height, signXY[i].state3.x * ratio, signXY[i].state3.y * ratio, 98 * ratio, 34 * ratio);
+            //已领取蒙层
+            ctx.drawImage(Img["receivedBg"], 0, 0, Img["receivedBg"].width, Img["receivedBg"].height, signXY[i].signBg.x * ratio, signXY[i].signBg.y * ratio, 220 * ratio, 296 * ratio);
+          } else {
+            //签到状态-签到
+            ctx.drawImage(Img["signBtn"], 0, 0, Img["signBtn"].width, Img["signBtn"].height, signXY[i].state2.x * ratio, signXY[i].state2.y * ratio, 66 * ratio, 34 * ratio);
+            //红点
+            ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, (signXY[i].signBg.x + 145) * ratio, (signXY[i].signBg.y + 220) * ratio, 40 * ratio, 40 * ratio);
+          }
+        }
+        if(parseInt(daysinfo[i].day) > parseInt(databus.getNowTimeStr())){
           //签到状态-签到
-          ctx.drawImage(Img["signBtn"], 0, 0, Img["signBtn"].width, Img["signBtn"].height, signXY[i].state2.x * ratio, signXY[i].state2.y * ratio, 66 * ratio, 34 * ratio);
+          ctx.drawImage(Img["waitSign"], 0, 0, Img["waitSign"].width, Img["waitSign"].height, signXY[i].state3.x * ratio, signXY[i].state3.y * ratio, 98 * ratio, 34 * ratio);
         }
       }
 
@@ -251,6 +210,64 @@ export default class ActiveModal {
       ctx.drawImage(Img["signPic"], 0, 0, Img["signPic"].width, Img["signPic"].height, 360 * ratio, 960 * ratio, 402 * ratio, 274 * ratio);
       ctx.drawImage(Img["signBar"], 0, 0, Img["signBar"].width, Img["signBar"].height, 129 * ratio, 1250 * ratio, 570 * ratio, 22 * ratio);
       ctx.drawImage(Img["signTips"], 0, 0, Img["signTips"].width, Img["signTips"].height, 110 * ratio, 1300 * ratio, 592 * ratio, 62 * ratio);
+
+      //签到成功弹框
+      if(databus.energySysModal == 1){
+        //绘制背景
+        ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
+        //弹框背景
+        ctx.drawImage(Img["rewardBg"], 0, 0, Img["rewardBg"].width, Img["rewardBg"].height, 210 * ratio, 400 * ratio, 428 * ratio, 428 * ratio);
+        //弹框关闭
+        ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 185 * ratio, 365 * ratio, 80 * ratio, 80 * ratio);
+        //奖品
+        ctx.drawImage(Img["reward" + databus.signData.proptype], 0, 0, Img["reward" + databus.signData.proptype].width, Img["reward" + databus.signData.proptype].height, 210 * ratio, 400 * ratio, 428 * ratio, 428 * ratio);
+        if(databus.signData.proptype == '2' || databus.signData.proptype == '3' || databus.signData.proptype == '6'){//判断道具名字长度
+          //奖品数量
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#fff';
+          ctx.font = 50 * ratio + 'px Arial';
+          ctx.fillText(databus.signData.propnum, 550 * ratio, 785 * ratio);
+        }else{
+          //奖品数量
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#fff';
+          ctx.font = 50 * ratio + 'px Arial';
+          ctx.fillText(databus.signData.propnum, 525 * ratio, 785 * ratio);
+        }
+        //按钮背景
+        ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 190 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
+        //签到成功
+        ctx.drawImage(Img["signSuc"], 0, 0, Img["signSuc"].width, Img["signSuc"].height, 295 * ratio, 920 * ratio, 236 * ratio, 58 * ratio);
+      }
+
+      //补签弹框
+      if(databus.energySysModal == 2){
+        //绘制背景
+        ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
+        //弹框背景
+        ctx.drawImage(Img["rewardBg"], 0, 0, Img["rewardBg"].width, Img["rewardBg"].height, 210 * ratio, 400 * ratio, 428 * ratio, 428 * ratio);
+        //弹框关闭
+        ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 185 * ratio, 365 * ratio, 80 * ratio, 80 * ratio);
+        //奖品
+        ctx.drawImage(Img["reward" + databus.signData.proptype], 0, 0, Img["reward" + databus.signData.proptype].width, Img["reward" + databus.signData.proptype].height, 210 * ratio, 400 * ratio, 428 * ratio, 428 * ratio);
+        if(databus.signData.proptype == '2' || databus.signData.proptype == '3' || databus.signData.proptype == '6'){//判断道具名字长度
+          //奖品数量
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#fff';
+          ctx.font = 50 * ratio + 'px Arial';
+          ctx.fillText(databus.signData.propnum, 550 * ratio, 785 * ratio);
+        }else{
+          //奖品数量
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#fff';
+          ctx.font = 50 * ratio + 'px Arial';
+          ctx.fillText(databus.signData.propnum, 525 * ratio, 785 * ratio);
+        }
+        //按钮背景
+        ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 190 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
+        //视频补签
+        ctx.drawImage(Img["videoToSign"], 0, 0, Img["videoToSign"].width, Img["videoToSign"].height, 265 * ratio, 918 * ratio, 302 * ratio, 60 * ratio);
+      }
     }
 
     //抽奖
@@ -275,6 +292,10 @@ export default class ActiveModal {
 
 
   }
+
+  //签到部分
+
+  //搜刮部分
   initRanklist = (ctx, list, page, type) => {
     let me = this;
     // 至少绘制6个
