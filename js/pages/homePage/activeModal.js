@@ -2,7 +2,7 @@ import DataBus from '../../databus'
 let databus = new DataBus()
 let uiWidth = 828;
 let ratio = canvas.width / uiWidth //设计稿宽度
-const mt = 170;
+const mt = 373*ratio;
 let R = {
   //其他部分
   "bg": "images/gameEnd/gameEndBg.png",
@@ -312,9 +312,8 @@ export default class ActiveModal {
       var w = (750 * ratio - 50 * ratio * 2);
       var h = itemHeight * length;
       for (let i = 0; i < length; i++) {
-        ctx.drawImage(Img["list_bg"], 40, i * itemHeight + mt, w, itemHeight);
+        ctx.drawImage(Img["list_bg"], 90*ratio, i * itemHeight + mt, w, itemHeight);
             
-        
         if (i == 5) {  
           me.drawrank(ctx, list, page)  
         }
@@ -363,7 +362,7 @@ export default class ActiveModal {
       ctx.drawImage(Img["jd"], 380*ratio, index * itemHeight + (430 * ratio), Img["jd"].width*0.5, Img["jd"].height*0.5) 
       ctx.drawImage(Img["jdbg"], 392 * ratio, index * itemHeight + (441 * ratio), Img["jdbg"].width * 0.51 * jd, Img["jdbg"].height * 0.5) 
       if (item.cansteal == 1){
-        ctx.drawImage(Img["sj"], 592 * ratio, index * itemHeight + (371 * ratio), Img["sj"].width*0.4, Img["sj"].height*0.4 )
+        ctx.drawImage(Img["sj"], 592 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9  * ratio, Img["sj"].height*0.9  * ratio)
       }
     })
 
