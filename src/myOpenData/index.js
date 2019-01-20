@@ -59,7 +59,6 @@ wx.onMessage(data => {
   } else if (data.type === 'provfriend') {
     initRanklist(friendData, nowpage - 1, 'reduce');
   } else if (data.type === 'nextworld') {
-
     initRanklist(worldData, nowpage + 1, 'add');
   } else if (data.type === 'provworld') {
     initRanklist(worldData, nowpage - 1, 'reduce');
