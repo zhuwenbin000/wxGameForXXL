@@ -301,7 +301,6 @@ export default class ActiveModal {
       ctx.drawImage(Img["sj"], 0, 0, Img["sj"].width, Img["sj"].height, 615 * ratio, 295 * ratio, 148 * ratio, 156 * ratio);
       //搜刮精力红点
       ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 723 * ratio, 344 * ratio, 40 * ratio, 40 * ratio);
-
       //偷取记录
       for (let i = 0; i < 3; i++) {
         ctx.textAlign = 'left';
@@ -309,13 +308,17 @@ export default class ActiveModal {
         ctx.font = 28 * ratio + 'px Arial';
         ctx.fillText('好友' + plunderRecord[i].nickname + '，' + plunderRecord[i].stealtime + '小时前搜刮了你的精力' + plunderRecord[i].penrgy + '点。', 80 * ratio, (470 + 45 * (i + 1)) * ratio);
       }
-
       //宝箱投影
       ctx.drawImage(Img["boxShadow"], 0, 0, Img["boxShadow"].width, Img["boxShadow"].height, 200 * ratio, 920 * ratio, 430 * ratio, 106 * ratio);
       //宝箱
       ctx.drawImage(Img["box"], 0, 0, Img["box"].width, Img["box"].height, 245 * ratio, 715 * ratio, 350 * ratio, 286 * ratio);
       //宝箱数量
       ctx.drawImage(Img["boxNum"], 0, 0, Img["boxNum"].width, Img["boxNum"].height, 555 * ratio, 690 * ratio, 80 * ratio, 80 * ratio);
+      //宝箱数量
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 40 * ratio + 'px Arial';
+      ctx.fillText(databus.boxNum, 595 * ratio, 750 * ratio);
       //箱子精力进度条外层
       ctx.drawImage(Img["boxProcessWrap"], 0, 0, Img["boxProcessWrap"].width, Img["boxProcessWrap"].height, 214 * ratio, 1043 * ratio, 400 * ratio, 28 * ratio);
       //箱子精力进度条内层

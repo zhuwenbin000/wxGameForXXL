@@ -314,6 +314,7 @@ export default class DataBus {
         stealtime:'1'
       }
     ]
+    this.boxNum = 0 //拥有箱子的数量
     this.energySysLoad = false //精力系统加载状态
     this.version = '0.0.2.4';
     this.shareflag = false;
