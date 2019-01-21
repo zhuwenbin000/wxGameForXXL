@@ -243,49 +243,49 @@ export default class DataBus {
     ];
     this.daysinfo = [ //签到页数据
       {
-        day: '20190114',
+        day: '20190121',
         week: '1',
         proptype: '1',
         propnum: '1',
         isdone: '0'
       },
       {
-        day: '20190115',
+        day: '20190122',
         week: '2',
         proptype: '1',
         propnum: '1',
         isdone: '1'
       },
       {
-        day: '20190116',
+        day: '20190123',
         week: '3',
         proptype: '1',
         propnum: '1',
         isdone: '1'
       },
       {
-        day: '20190117',
+        day: '20190124',
         week: '4',
         proptype: '2',
         propnum: '1',
         isdone: '1'
       },
       {
-        day: '20190118',
+        day: '20190125',
         week: '5',
         proptype: '3',
         propnum: '1',
         isdone: '0'
       },
       {
-        day: '20190119',
+        day: '20190126',
         week: '6',
         proptype: '4',
         propnum: '1',
         isdone: '0'
       },
       {
-        day: '20190120',
+        day: '20190127',
         week: '7',
         proptype: '6',
         propnum: '1',
@@ -314,7 +314,18 @@ export default class DataBus {
         stealtime:'1'
       }
     ]
-    this.boxNum = 0 //拥有箱子的数量
+    this.boxNum = 1 //拥有箱子的数量
+    this.myEnergy = 11 //个人精力
+    this.boxEnergy = 11 //箱子精力
+    this.boxExchangeTime = 1548073321452 //上次换取宝箱时间
+    this.canExchangeBox = true //上次换取宝箱时间
+    this.boxOpenStart = false //开箱状态 
+    this.boxOpenClickNum = 0 //当前开箱次数
+    this.boxOpenNeedClickNum = 0 //需要开箱总次数
+    this.openBoxData = {} //开箱结果
+    this.exchangeBoxAni = false //是否换取宝箱动画
+    this.exchangeBoxAniTime = 0 //换取动画帧
+
     this.energySysLoad = false //精力系统加载状态
     this.version = '0.0.2.4';
     this.shareflag = false;
@@ -836,6 +847,31 @@ export default class DataBus {
     } 
   }
 
+  showOpenBoxAd() {
+    this.bannerAd && this.bannerAd.destroy();
+    var wxFunc = this.getWXFunction('createBannerAd');
+    if(typeof(wxFunc) != 'undefined' && wxFunc != null) {
+      var phone = wx.getSystemInfoSync();
+      var w = phone.screenWidth / 2;
+      var h = phone.screenHeight;
+      this.bannerAd = wxFunc({
+        adUnitId: 'adunit-550eb97eb726418a',
+        style: {
+          width: 300,
+          top: 0,
+          left: 0
+        }
+      });
+      this.bannerAd.onResize(()=> {
+        this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
+        this.bannerAd.style.top = h - this.bannerAd.style.realHeight + 0.1;
+        if(this.energySysModal == 3){
+          this.bannerAd.show();
+        }
+      })
+    } 
+  }
+
   createVideoAd(){
     this.videoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-64e0388ba29c2725'
@@ -1029,6 +1065,22 @@ export default class DataBus {
     startStop.push(this.getDateStr(currentWeekLastDay)); 
    
     return startStop; 
+  }
+
+  getRemainTime(){
+    var day = 0, hour = 0, minute = 0, second = 0;//时间默认值
+    var times = Math.floor(this.boxExchangeTime + 10 * 60 * 60 * 1000 - (new Date()).getTime() / 1000)
+    if(times > 0){
+      day = Math.floor(times / (60 * 60 * 24));
+      hour = Math.floor(times / (60 * 60)) - (day * 24);
+      minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
+      second = Math.floor(times) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+    }
+    if (hour <= 9) hour = '0' + hour;
+    if (minute <= 9) minute = '0' + minute;
+    if (second <= 9) second = '0' + second;
+    
+    return hour + ":" + minute + ":" + second 
   }
 }
 
