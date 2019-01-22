@@ -239,14 +239,14 @@ export default class PageBtn {
   }
   getBtnposition(){
     if (databus.pownstate == 1) { //按钮位置
-      this.startBtnArea = {
+      this.activeBtnArea= {
         startX: ml,
         startY: nmt + (110 * ratio),
         endX: ml + 590 * ratio,
         endY: nmt + (110 * ratio) + (226 * ratio)
       }
      
-      this.activeBtnArea ={
+      this.startBtnArea ={
         startX: ml,
         startY: nmt + (300 * ratio),
         endX: ml + 590 * ratio,
@@ -381,15 +381,15 @@ export default class PageBtn {
   loginstartBtn(ctx) {
     if(databus.archiveState){
       if (!databus.playbtn_state){
-        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml, nmt + (110 * ratio), 590 * ratio, 226 * ratio) 
+        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml, nmt + (300 * ratio), 590 * ratio, 226 * ratio ) 
       }else{
-        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml_big, nmt_big + (110 * ratio), 590 * ratio*1.1, 226 * ratio*1.1)
+        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml * 0.8, nmt + (300 * ratio * 0.98), 590 * ratio * 1.1, 226 * ratio * 1.1 )
       } 
     }else{
       if (!databus.playbtn_state){
-        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml, nmt+(110*ratio), 590 * ratio, 226 * ratio) 
+        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml, nmt + (300 * ratio), 590 * ratio, 226 * ratio) 
       }else{
-        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml_big, nmt_big + (110 * ratio), 590 * ratio * 1.1, 226 * ratio * 1.1)
+        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml * 0.8, nmt + (300 * ratio * 0.98), 590 * ratio * 1.1, 226 * ratio * 1.1)
       } 
     }
   }
@@ -401,9 +401,10 @@ export default class PageBtn {
         image: 'images/home/start.png',
         style: {
           left: ml,
-          top: nmt+(110*ratio),
+          top: nmt + (300 * ratio),
           width: 590 * ratio,
           height: 226 * ratio,
+          
           lineHeight: 40,
           backgroundColor: '#ff0000',
           color: '#ffffff',
@@ -438,10 +439,7 @@ export default class PageBtn {
       ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 16 * ratio, nmt - nb * ratio, 280 * ratio, 138 * ratio)
    }else{
       ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 16 * ratio*0.3, nmt - nb * ratio*2, 280 * ratio*1.1, 138 * ratio*1.1)
-   }
-     
-   
-    
+   } 
   }
   friendsRankBtn(ctx) { //好友排行榜
     if (!this.friendbutton) {
@@ -522,7 +520,6 @@ export default class PageBtn {
       })
     }
   }
-
   loginauthor(ctx) {
     if(databus.homeState != 1){
       databus.gameClubbutton && databus.gameClubbutton.hide()
@@ -549,9 +546,9 @@ export default class PageBtn {
   }
   login_share_button(ctx){
     if (!databus.active_state) {
-      ctx.drawImage(activeBtn, 0, 0, 590, 226, ml, nmt + (300 * ratio), 590 * ratio, 226 * ratio)
+      ctx.drawImage(activeBtn, 0, 0, 590, 226, ml, nmt + (110 * ratio), 590 * ratio, 226 * ratio)
     }else{
-      ctx.drawImage(activeBtn, 0, 0, 590, 226, ml*0.8, nmt + (300 * ratio*0.98), 590 * ratio*1.1, 226 * ratio*1.1)
+      ctx.drawImage(activeBtn, 0, 0, 590, 226, ml_big, nmt_big + (110 * ratio), 590 * ratio * 1.1, 226 * ratio * 1.1 )
     }
    
   }
@@ -561,8 +558,8 @@ export default class PageBtn {
         type: 'image',
         image: 'images/home/active.png',
         style: {
-          left: ml,
-          top: nmt+(300*ratio),
+         left: ml,
+          top: nmt+(110*ratio),
           width: 590 * ratio,
           height: 226 * ratio,
           lineHeight: 40,
