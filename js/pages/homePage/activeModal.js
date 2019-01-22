@@ -54,7 +54,18 @@ let R = {
   "reward4": "energySys/img/reward/reward4.png",
   "reward6": "energySys/img/reward/reward6.png",
   //抽奖部分
-
+  "boxShadow": "energySys/img/openbox/boxShadow.png",
+  "box": "energySys/img/openbox/box.png",
+  "boxNum": "energySys/img/openbox/boxNum.png",
+  "openBoxTxt": "energySys/img/openbox/openBoxTxt.png",
+  "openBtn": "energySys/img/openbox/openBtn.png",
+  "boxMask": "energySys/img/openbox/boxMask.png",
+  "boxProcessWrap": "energySys/img/openbox/boxProcessWrap.png",
+  "boxProcess": "energySys/img/openbox/boxProcess.png",
+  "myProcessWrap": "energySys/img/openbox/myProcessWrap.png",
+  "myProcess": "energySys/img/openbox/myProcess.png",
+  "exchangeTime": "energySys/img/plunder/exchangeTime.png",
+  
   //搜刮部分
   'friend': 'energySys/img/plunder/friend.png',
   'yaoqing': 'energySys/img/plunder/yaoqing.png',
@@ -78,8 +89,8 @@ for (var k in R) {
 }
 
 const signXY = databus.signXY
-
 const daysinfo = databus.daysinfo
+const plunderRecord = databus.plunderRecord
 
 export default class ActiveModal {
   render(ctx) {
@@ -239,9 +250,9 @@ export default class ActiveModal {
           ctx.fillText(databus.signData.propnum, 525 * ratio, 785 * ratio);
         }
         //按钮背景
-        ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 190 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
+        ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 195 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
         //签到成功
-        ctx.drawImage(Img["signSuc"], 0, 0, Img["signSuc"].width, Img["signSuc"].height, 295 * ratio, 920 * ratio, 236 * ratio, 58 * ratio);
+        ctx.drawImage(Img["signSuc"], 0, 0, Img["signSuc"].width, Img["signSuc"].height, 300 * ratio, 920 * ratio, 236 * ratio, 58 * ratio);
       }
 
       //补签弹框
@@ -268,15 +279,118 @@ export default class ActiveModal {
           ctx.fillText(databus.signData.propnum, 525 * ratio, 785 * ratio);
         }
         //按钮背景
-        ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 190 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
+        ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 195 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
         //视频补签
-        ctx.drawImage(Img["videoToSign"], 0, 0, Img["videoToSign"].width, Img["videoToSign"].height, 265 * ratio, 918 * ratio, 302 * ratio, 60 * ratio);
+        ctx.drawImage(Img["videoToSign"], 0, 0, Img["videoToSign"].width, Img["videoToSign"].height, 270 * ratio, 918 * ratio, 302 * ratio, 60 * ratio);
       }
     }
 
     //抽奖
     if (databus.energySysTab == 2) {
+      //我的背景
+      ctx.drawImage(Img["list_bg"], 0, 0, Img["list_bg"].width, Img["list_bg"].height, 42 * ratio, 320 * ratio, 740 * ratio, 152 * ratio);
+      //我的精力进度条外层
+      ctx.drawImage(Img["myProcessWrap"], 0, 0, Img["myProcessWrap"].width, Img["myProcessWrap"].height, 265 * ratio, 380 * ratio, 308 * ratio, 28 * ratio);
+      //我的精力进度条内层
+      if(databus.exchangeBoxAni){
+        ctx.drawImage(Img["myProcess"], 0, 0, Img["myProcess"].width * (databus.myEnergy * ((30 - databus.exchangeBoxAniTime) / 30) / 100), Img["myProcess"].height, 272 * ratio, 386 * ratio, 294 * (databus.myEnergy * ((30 - databus.exchangeBoxAniTime) / 30) / 100) * ratio, 16 * ratio);
+      }else{
+        ctx.drawImage(Img["myProcess"], 0, 0, Img["myProcess"].width * (databus.myEnergy / 100), Img["myProcess"].height, 272 * ratio, 386 * ratio, 294 * (databus.myEnergy / 100) * ratio, 16 * ratio);
+      }
+      //我的精力
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 28 * ratio + 'px Arial';
+      ctx.fillText('我的精力：' + databus.myEnergy + 'g', 414 * ratio, 445 * ratio);
+      //换取倒计时
+      // if((new Date()).getTime() > databus.boxExchangeTime + 10 * 60 * 60 * 1000){
+      if(databus.canExchangeBox){
+        //搜刮精力
+        ctx.drawImage(Img["sj"], 0, 0, Img["sj"].width, Img["sj"].height, 615 * ratio, 295 * ratio, 148 * ratio, 156 * ratio);
+        //搜刮精力红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 723 * ratio, 344 * ratio, 40 * ratio, 40 * ratio);
+      }else{
+        //搜刮精力
+        ctx.drawImage(Img["exchangeTime"], 0, 0, Img["exchangeTime"].width, Img["exchangeTime"].height, 615 * ratio, 295 * ratio, 148 * ratio, 156 * ratio);
+        //搜刮倒计时
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#fff';
+        ctx.font = 28 * ratio + 'px Arial';
+        ctx.fillText(databus.getRemainTime(), 685 * ratio, 430 * ratio);
+      }
+      //偷取记录
+      for (let i = 0; i < 3; i++) {
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#ffe739';
+        ctx.font = 28 * ratio + 'px Arial';
+        ctx.fillText('好友' + plunderRecord[i].nickname + '，' + plunderRecord[i].stealtime + '小时前搜刮了你的精力' + plunderRecord[i].penrgy + '点。', 80 * ratio, (470 + 45 * (i + 1)) * ratio);
+      }
+      //宝箱投影
+      ctx.drawImage(Img["boxShadow"], 0, 0, Img["boxShadow"].width, Img["boxShadow"].height, 200 * ratio, 920 * ratio, 430 * ratio, 106 * ratio);
+      //宝箱
+      ctx.drawImage(Img["box"], 0, 0, Img["box"].width, Img["box"].height, 245 * ratio, 715 * ratio, 350 * ratio, 286 * ratio);
+      if(databus.boxOpenStart){
+        //开箱中
+        ctx.drawImage(Img["boxMask"], 0, 0, Img["boxMask"].width, Img["boxMask"].height * (1 - databus.boxOpenClickNum / databus.boxOpenNeedClickNum), 245 * ratio, 715 * ratio, 350 * ratio, 286 * (1 - databus.boxOpenClickNum / databus.boxOpenNeedClickNum) * ratio);
+      }
+      //宝箱数量
+      ctx.drawImage(Img["boxNum"], 0, 0, Img["boxNum"].width, Img["boxNum"].height, 555 * ratio, 690 * ratio, 80 * ratio, 80 * ratio);
+      //宝箱数量
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 40 * ratio + 'px Arial';
+      ctx.fillText(databus.boxNum, 595 * ratio, 745 * ratio);
+      //箱子精力进度条外层
+      ctx.drawImage(Img["boxProcessWrap"], 0, 0, Img["boxProcessWrap"].width, Img["boxProcessWrap"].height, 214 * ratio, 1043 * ratio, 400 * ratio, 28 * ratio);
+      //箱子精力进度条内层
+      if(databus.exchangeBoxAni){
+        ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * ((databus.boxEnergy + databus.myEnergy * (databus.exchangeBoxAniTime / 30)) / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * ((databus.boxEnergy + databus.myEnergy * (databus.exchangeBoxAniTime / 30)) / 50) * ratio, 16 * ratio);
+      }else{
+        ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * (databus.boxEnergy / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * (databus.boxEnergy / 50) * ratio, 16 * ratio);
+      }
+      //箱子精力
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 30 * ratio + 'px Arial';
+      ctx.fillText('箱子精力：' + databus.boxEnergy + '/50', 414 * ratio, 1120 * ratio);
+      //开箱按钮
+      ctx.drawImage(Img["openBtn"], 0, 0, Img["openBtn"].width, Img["openBtn"].height, 255 * ratio, 1170 * ratio, 312 * ratio, 138 * ratio);
+      //连续点击
+      ctx.drawImage(Img["openBoxTxt"], 0, 0, Img["openBoxTxt"].width, Img["openBoxTxt"].height, 306 * ratio, 1310 * ratio, 216 * ratio, 74 * ratio);
 
+      //头像
+      let headimg = wx.createImage();
+      headimg.src = "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132"
+      databus.circleImg(ctx, headimg, 110 * ratio, 348 * ratio, 40 * ratio)
+
+      //开箱成功弹框
+      if(databus.energySysModal == 3){
+        //绘制背景
+        ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
+        //弹框背景
+        ctx.drawImage(Img["rewardBg"], 0, 0, Img["rewardBg"].width, Img["rewardBg"].height, 210 * ratio, 400 * ratio, 428 * ratio, 428 * ratio);
+        //弹框关闭
+        ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 185 * ratio, 365 * ratio, 80 * ratio, 80 * ratio);
+        //奖品
+        ctx.drawImage(Img["reward" + databus.openBoxData.proptype], 0, 0, Img["reward" + databus.openBoxData.proptype].width, Img["reward" + databus.openBoxData.proptype].height, 210 * ratio, 400 * ratio, 428 * ratio, 428 * ratio);
+        if(databus.openBoxData.proptype == '2' || databus.openBoxData.proptype == '3' || databus.openBoxData.proptype == '6'){//判断道具名字长度
+          //奖品数量
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#fff';
+          ctx.font = 50 * ratio + 'px Arial';
+          ctx.fillText(databus.openBoxData.propnum, 550 * ratio, 785 * ratio);
+        }else{
+          //奖品数量
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#fff';
+          ctx.font = 50 * ratio + 'px Arial';
+          ctx.fillText(databus.openBoxData.propnum, 525 * ratio, 785 * ratio);
+        }
+        // //按钮背景
+        // ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 195 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
+        // //开箱成功
+        // ctx.drawImage(Img["signSuc"], 0, 0, Img["signSuc"].width, Img["signSuc"].height, 300 * ratio, 920 * ratio, 236 * ratio, 58 * ratio);
+      }
     }
 
     //搜刮好友

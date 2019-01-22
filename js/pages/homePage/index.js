@@ -11,7 +11,7 @@ export default class Index {
   constructor() {
     // 维护当前requestAnimationFrame的id
     this.aniId = 0
-
+    this.f = 0
   }
   getscore() { //获取最高分
     let me = this;
@@ -210,7 +210,7 @@ export default class Index {
       }
 
     } else if (databus.homeState == 4) {//精力系统弹框
-      //精力系统tab弹框之后的点击事件 1签到 2补签
+      //精力系统tab弹框之后的点击事件 0非弹框状态 1签到 2补签 3开箱成功
       
       if (databus.energySysModal == 1) {
         if (x >= 190 * ratio && x <= (455 * ratio + 190 * ratio) && y >= 875 * ratio && y <= (875 * ratio + 170 * ratio)) {
@@ -242,10 +242,38 @@ export default class Index {
           //补签弹框
           databus.energySysModal = 0
         }
+      } else if (databus.energySysModal == 3) {
+        // if (x >= 190 * ratio && x <= (455 * ratio + 190 * ratio) && y >= 875 * ratio && y <= (875 * ratio + 170 * ratio)) {
+        //   //关闭开箱成功弹框
+        //   //按钮按下音效
+        //   this.music.playMusic('btnDown')
+        //   //补签弹框
+        //   databus.energySysModal = 0
+        //   //reset开箱相关数据
+        //   databus.boxOpenStart = false
+        //   databus.boxOpenNeedClickNum = 0
+        //   databus.boxOpenClickNum = 0
+        // }
+        if (x >= 185 * ratio && x <= (185 * ratio + 80 * ratio) && y >= 365 * ratio && y <= (365 * ratio + 80 * ratio)) {
+          //关闭开箱成功弹框
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          //补签弹框
+          databus.energySysModal = 0
+          //reset开箱相关数据
+          databus.boxOpenStart = false
+          databus.boxOpenNeedClickNum = 0
+          databus.boxOpenClickNum = 0
+          //关闭广告
+          databus.bannerAd.hide();
+        }
       } else if (databus.energySysModal == 0) {
-        //签到部分点击事件
         
-        if (databus.energySysTab == 1) {
+        if (databus.energySysTab == 0) {
+          //大赛部分点击事件
+
+        } else if (databus.energySysTab == 1) {
+          //签到部分点击事件
           for (let i = 0; i < databus.daysinfo.length; i++) {
             //弹框关闭
             if (x >= databus.signXY[i].signBg.x * ratio && x <= (220 * ratio + databus.signXY[i].signBg.x * ratio) && y >= databus.signXY[i].signBg.y * ratio && y <= (296 * ratio + databus.signXY[i].signBg.y * ratio)) {
@@ -271,6 +299,44 @@ export default class Index {
               }
             }
           }
+        } else if (databus.energySysTab == 2) {
+          //抽奖部分点击事件
+          if(databus.canExchangeBox){
+            //点击换取宝箱精力
+            if (x >= 615 * ratio && x <= (615 * ratio + 148 * ratio) && y >= 295 * ratio && y <= (295 * ratio + 156 * ratio)) {
+              //按钮按下音效
+              this.music.playMusic('btnDown')
+              wx.showToast({ title: "成功换取精力啦~", icon:'none'})
+              databus.exchangeBoxAni = true
+              databus.exchangeBoxAniTime = 0
+            }
+          }
+
+          //点击开箱
+          if (x >= 255 * ratio && x <= (255 * ratio + 312 * ratio) && y >= 1170 * ratio && y <= (1170 * ratio + 138 * ratio)) {
+            //按钮按下音效
+            this.music.playMusic('btnDown')
+            if(databus.boxOpenStart){ //开箱进行中时 开箱次数+1
+              databus.boxOpenClickNum++
+              if(databus.boxOpenClickNum == databus.boxOpenNeedClickNum){//当开箱次数等于需要开箱总次数时  开箱成功
+                databus.energySysModal = 3
+                databus.openBoxData = {
+                  proptype: '1',
+                  propnum: '1',
+                }
+                databus.showOpenBoxAd()
+              }
+            }else{
+              if(databus.boxNum > 0){
+                wx.showToast({ title: "连续点击按钮开箱~", icon:'none'})
+                databus.boxOpenStart = true
+                databus.boxOpenNeedClickNum = _.random(4, 8)
+              }else{
+                wx.showToast({ title: "还没有宝箱可以开哦~", icon:'none'})
+              }
+            }
+          }
+          
         } else if (databus.energySysTab == 3){ //搜刮事件绑定
           if (databus.tip_success || databus.tip_flase){
            
@@ -278,26 +344,26 @@ export default class Index {
               databus.tip_success = false;
               databus.tip_flase = false;
             }
-        }else{
-          const datalist = databus.jl_list.slice((databus.ji_pageindex-1)*6,databus.ji_pageindex*6)
-          const itemHeight = 917 * ratio / 6;
-          
-          if (databus.jl_list.length>0){
-            if (x >= 110 * ratio && x <= (110 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
-              console.log("上一页")
+          }else{
+            const datalist = databus.jl_list.slice((databus.ji_pageindex-1)*6,databus.ji_pageindex*6)
+            const itemHeight = 917 * ratio / 6;
+            
+            if (databus.jl_list.length>0){
+              if (x >= 110 * ratio && x <= (110 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
+                console.log("上一页")
+              }
+            
+              if (x >= 460 * ratio && x <= (460 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
+                console.log("下一页")
+              }
             }
-           
-            if (x >= 460 * ratio && x <= (460 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
-              console.log("下一页")
-            }
+            datalist.map((item,index) => {
+              if (x >= 592 * ratio && x <= (592 * ratio) + (148 * ratio) && y >= index * itemHeight + (365 * ratio) && y <= index * itemHeight + (365 * ratio)+(156*ratio)) { //点击列表的搜刮精力
+                console.log(index)
+                databus.tip_success = true;
+              }
+            })
           }
-          datalist.map((item,index) => {
-            if (x >= 592 * ratio && x <= (592 * ratio) + (148 * ratio) && y >= index * itemHeight + (365 * ratio) && y <= index * itemHeight + (365 * ratio)+(156*ratio)) { //点击列表的搜刮精力
-              console.log(index)
-              databus.tip_success = true;
-            }
-          })
-        }
         }
 
         //弹框关闭
@@ -345,6 +411,15 @@ export default class Index {
       this.touchEvent = true
       this.touchHomePageHandler = this.touchHomePage.bind(this)
       canvas.addEventListener('touchstart', this.touchHomePageHandler)
+    }
+    //动画帧f
+    this.f++
+    if(this.f % 2 == 0){
+      if(databus.exchangeBoxAniTime < 30){
+        databus.exchangeBoxAniTime++
+      }else{
+        // databus.exchangeBoxAni = false
+      }
     }
   }
 
