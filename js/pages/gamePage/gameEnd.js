@@ -16,6 +16,10 @@ let ac = databus.GameUI.avatarCoordinates //游戏结束头像
 let unc = databus.GameUI.userNameCoordinates //游戏结束昵称
 let bsc = databus.GameUI.bestScoreCoordinates //游戏结束最高得分
 let ssc = databus.GameUI.stageScoreCoordinates //游戏结束最高得分
+let bic = databus.GameUI.battleIconCoordinates //战报icon
+let aec = databus.GameUI.addEngCoordinates //增加精力
+let aenc = databus.GameUI.addEngNumCoordinates //增加精力数字
+
 
 let R = {
   "gameEndBg": "images/gameEnd/gameEndBg.png",
@@ -28,7 +32,11 @@ let R = {
   "shareToQunGrey": "images/gameEnd/shareToQun-grey.png",
   "tips": "images/gameEnd/tips.png",
   "tips2": "images/gameEnd/tips2.png",
-  "tryAgain": "images/gameEnd/tryAgain.png"
+  "tryAgain": "images/gameEnd/tryAgain.png",
+  "addEnergy": "images/gameEnd/addEnergy.png",
+  "battleReportIcon": "images/gameEnd/battleReportIcon.png",
+  "battleReportBg": "images/gameEnd/battleReportBg.png",
+  "modalClose": "images/gameModal/modal_close.png",
 }
 
 //把所有的图片放到一个对象中
@@ -82,12 +90,19 @@ export default class GameEnd {
     }
     //游戏结束再来一局
     ctx.drawImage(Robj["tryAgain"], 0, 0, Robj["tryAgain"].width, Robj["tryAgain"].height, tac.x, tac.y, tac.w, tac.h);
+    //战报icon
+    ctx.drawImage(Robj["battleReportIcon"], 0, 0, Robj["battleReportIcon"].width, Robj["battleReportIcon"].height, bic.x , bic.y, bic.w, bic.h);
+    //增加精力
+    ctx.drawImage(Robj["addEnergy"], 0, 0, Robj["addEnergy"].width, Robj["addEnergy"].height, aec.x, aec.y, aec.w, aec.h);
     
     // 昵称
     ctx.textAlign = 'left';
     ctx.fillStyle = '#fff';
     ctx.font = unc.font;
     ctx.fillText(databus.userinfo.userInfo.nickName, unc.x, unc.y);
+    //增加精力数字
+    ctx.font = aenc.font;
+    ctx.fillText('+18', aenc.x, aenc.y);
     //历史最高分
     ctx.font = ssc.font;
     if (databus.isNewScore) {
@@ -103,5 +118,37 @@ export default class GameEnd {
     let headimg = wx.createImage();
     headimg.src = databus.userinfo.userInfo.avatarUrl
     databus.circleImg(ctx, headimg, ac.x, ac.y, ac.r)
+
+    if(databus.gameEndState == 1){
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //绘制战报背景
+      ctx.drawImage(Robj["battleReportBg"], 0, 0, Robj["battleReportBg"].width, Robj["battleReportBg"].height, 54 * ratio, 140 * ratio, 720 * ratio, 1200 * ratio);
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 85 * ratio, 150 * ratio, 162 * ratio);
+      
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff323';
+      ctx.font = 30 * ratio + 'px Arial';
+      //最后得分
+      ctx.fillText("1212", 310 * ratio, 670 * ratio);
+      //最后关卡
+      ctx.fillText("10", 590 * ratio, 667 * ratio);
+      //累计连击
+      ctx.fillText("10", 290 * ratio, 730 * ratio);
+      //crazy time得分
+      ctx.fillText("1000", 385 * ratio, 792 * ratio);
+      //花费时间
+      ctx.textAlign = 'left';
+      ctx.fillText("1小时20分20秒", 260 * ratio, 850 * ratio);
+      ctx.textAlign = 'center';
+      //击败百分比
+      ctx.font = 50 * ratio + 'px Arial';
+      ctx.fillText("80", 310 * ratio, 923 * ratio);
+      //保存tips
+      ctx.font = 30 * ratio + 'px Arial';
+      ctx.fillStyle = '#fff';
+      ctx.fillText("已为你保存到相册", 414 * ratio, 1390 * ratio);
+    }
   }
 }

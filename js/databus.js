@@ -341,6 +341,7 @@ export default class DataBus {
       worldRank: false,
     }
     this.gameState = 0 //1:游戏中2:游戏结束3:音乐弹框4:彩色道具弹框5:增加步数弹框,6::返回首页,7:游戏过关,8:规则弹框
+    this.gameEndState = 0 //0结束 1战报
     this.musicBg = true //背景音默认开
     this.musicSound = true //音效默认开
     this.musicBgState = true //背景音状态
@@ -507,25 +508,25 @@ export default class DataBus {
       },
       getScoreCoordinates: { //游戏结束得分
         x: 14 * ratio,
-        y: 200 * ratio + this.gameEndTop,
+        y: 150 * ratio + this.gameEndTop,
         w: 800 * ratio,
         h: 482 * ratio,
       },
       newRecordCoordinates: { //游戏结束新纪录
         x: 560 * ratio,
-        y: 290 * ratio + this.gameEndTop,
+        y: 240 * ratio + this.gameEndTop,
         w: 278 * ratio,
         h: 224 * ratio,
       },
       tipsCoordinates: { //游戏结束提示
         x: 68 * ratio,
-        y: 756 * ratio + this.gameEndTop,
+        y: 676 * ratio + this.gameEndTop,
         w: 692 * ratio,
         h: 248 * ratio,
       },
       shareCoordinates: { //游戏结束分享
         x: (uiWidth - 318) / 2 * ratio,
-        y: 870 * ratio + this.gameEndTop,
+        y: 790 * ratio + this.gameEndTop,
         w: 318 * ratio,
         h: 120 * ratio,
       },
@@ -535,7 +536,7 @@ export default class DataBus {
         // w: 318 * ratio,
         // h: 120 * ratio,
         x: (uiWidth - 318) / 2 * ratio,
-        y: 870 * ratio + this.gameEndTop,
+        y: 790 * ratio + this.gameEndTop,
         w: 318 * ratio,
         h: 120 * ratio,
       },
@@ -550,6 +551,23 @@ export default class DataBus {
         y: 1055 * ratio + this.gameEndTop,
         w: 496 * ratio,
         h: 200 * ratio,
+      },
+      battleIconCoordinates: { //战报icon
+        x: 120 * ratio,
+        y: 940 * ratio + this.gameEndTop,
+        w: 110 * ratio,
+        h: 110 * ratio,
+      },
+      addEngCoordinates: { //增加精力
+        x: 315 * ratio,
+        y: 940 * ratio + this.gameEndTop,
+        w: 166 * ratio,
+        h: 106 * ratio,
+      },
+      addEngNumCoordinates: { //增加精力数字
+        x: 410 * ratio,
+        y: 1030 * ratio + this.gameEndTop,
+        font: 36 * ratio + 'px Arial'
       },
       stageScoreCoordinates: { //游戏结束分数
         x: 325 * ratio,
@@ -568,7 +586,7 @@ export default class DataBus {
       },
       bestScoreCoordinates: { //游戏结束最高得分
         x: (uiWidth / 2) * ratio,
-        y: 580 * ratio + this.gameEndTop,
+        y: 530 * ratio + this.gameEndTop,
         font: 'bold ' + 55 * ratio + 'px Arial'
       },
       preScoreCoordinates: { //预得分
