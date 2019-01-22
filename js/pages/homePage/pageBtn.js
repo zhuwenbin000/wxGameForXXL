@@ -197,10 +197,10 @@ export default class PageBtn {
     }
 
     if(databus.homeState == 2){
-      //模拟游戏圈
-      ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
-      //模拟好友排行
-      ctx.drawImage(loginfriendsRankBtn, 0, 0, 280 , 138 , ml + 16 * ratio, nmt - nb * ratio, 280 * ratio, 138 * ratio)
+      // //模拟游戏圈
+      // ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
+      // //模拟好友排行
+      // ctx.drawImage(loginfriendsRankBtn, 0, 0, 280 , 138 , ml + 16 * ratio, nmt - nb * ratio, 280 * ratio, 138 * ratio)
       
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
@@ -213,7 +213,7 @@ export default class PageBtn {
 
     if(databus.homeState == 3){
       //模拟游戏圈
-      ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
+      // ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //存档弹框
