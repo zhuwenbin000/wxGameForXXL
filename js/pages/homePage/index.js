@@ -42,6 +42,7 @@ export default class Index {
     this.getscore()
     databus.playbtn_state = false;
     databus.friendbtn_state = false;
+    databus.active_state = false;
   }
 
   finish() {
@@ -60,7 +61,7 @@ export default class Index {
       let startBtnArea = this.pageBtn.startBtnArea
       let friendsBtnArea = this.pageBtn.friendsBtnArea
       let laodaoBtnArea = this.pageBtn.laodaoBtnArea
-      let shareBtnArea = this.pageBtn.shareBtnArea
+      let activeBtnArea = this.pageBtn.activeBtnArea
 
       if (startBtnArea) {
         if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
@@ -92,24 +93,24 @@ export default class Index {
           setTimeout(() => {
             this.finish()
             databus.scene = 2
-            setTimeout(() => {
+           
               databus.gameClubbutton.destroy() //游戏圈按钮销毁
               databus.gameClubbutton = null;
-            })
+            
           }, databus.laterTime)
         }
       }
-      if (shareBtnArea) {
-        if (x >= shareBtnArea.startX && x <= shareBtnArea.endX && y >= shareBtnArea.startY && y <= shareBtnArea.endY) {
-          databus.sharebtn_state = true;
-          setTimeout(() => {
-            databus.sharebtn_state = false;
-            wx.shareAppMessage({
-              'title': databus.shareConfig.info,
-              'imageUrl': databus.shareConfig.url,
-              'query': 'fatherId=' + wx.getStorageSync('openId')
-            })
-          }, 100)
+      if (activeBtnArea) {
+        if (x >= activeBtnArea.startX && x <= activeBtnArea.endX && y >= activeBtnArea.startY && y <= activeBtnArea.endY) {
+          databus.active_state = true;
+          this.music.playMusic('btnDown')
+          setTimeout(()=>{
+            
+            databus.homeState = 4;
+            databus.active_state = false;
+            databus.gameClubbutton.destroy() //游戏圈按钮销毁
+            databus.gameClubbutton = null;
+          },databus.laterTime)   
         }
       }
       if (databus.shareflag) {//如果是非审核模式

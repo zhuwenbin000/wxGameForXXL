@@ -313,10 +313,10 @@ export default class ActiveModal {
     if (list.length > 0) { //有数据才渲染
       let length = 6
       let itemHeight = 917 * ratio / 6;
-      var w = (750 * ratio - 50 * ratio * 2);
+      var w = (750 * ratio - 20 * ratio );
       var h = itemHeight * length;
       for (let i = 0; i < length; i++) {
-        ctx.drawImage(Img["list_bg"], 90*ratio, i * itemHeight + mt, w, itemHeight);
+        ctx.drawImage(Img["list_bg"], 50*ratio, i * itemHeight + mt, w, itemHeight);
             
         if (i == 5) {  
           me.drawrank(ctx, list, page)  
@@ -361,12 +361,12 @@ export default class ActiveModal {
       item.nickname = item.nickname.length > 5 ? item.nickname.substring(0, 6) + '..' : item.nickname
      
       ctx.fillText(item.nickname, 205 * ratio, index * itemHeight+(460*ratio)); 
-      ctx.fillText(item.penrgy+'g', 455 * ratio, index * itemHeight + (496 * ratio));//能量几克
+      ctx.fillText(item.penrgy+'g', 485 * ratio, index * itemHeight + (496 * ratio));//能量几克
       var jd = item.penrgy/100
-      ctx.drawImage(Img["jd"], 380*ratio, index * itemHeight + (430 * ratio), Img["jd"].width*0.5, Img["jd"].height*0.5) 
-      ctx.drawImage(Img["jdbg"], 392 * ratio, index * itemHeight + (441 * ratio), Img["jdbg"].width * 0.51 * jd, Img["jdbg"].height * 0.5) 
+      ctx.drawImage(Img["jd"], 420 * ratio, index * itemHeight + (430 * ratio), Img["jd"].width * ratio, Img["jd"].height * ratio) 
+      ctx.drawImage(Img["jdbg"], 432 * ratio, index * itemHeight + (441 * ratio), Img["jdbg"].width * ratio * jd, Img["jdbg"].height * ratio*0.8) 
       if (item.cansteal == 1){
-        ctx.drawImage(Img["sj"], 592 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9  * ratio, Img["sj"].height*0.9  * ratio)
+        ctx.drawImage(Img["sj"], 632 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9  * ratio, Img["sj"].height*0.9  * ratio)
       }
     })
     if (databus.tip_success){

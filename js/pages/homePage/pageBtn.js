@@ -7,7 +7,7 @@ import { ajax } from '../../base/ajax'
 import ActiveModal from './activeModal'
 let onget = false;//接口正在调用中
 let startBtn = wx.createImage();
-let friendsRankBtn = wx.createImage();
+
 let gameClubbutton = null;
 let authorBtn = wx.createImage();
 let bg = wx.createImage();
@@ -17,6 +17,7 @@ let loginfriendsRankBtn = wx.createImage();
 let loginauthorBtn = wx.createImage();
 let loginstartBtn = wx.createImage();
 let loginstartBtn2 = wx.createImage();
+let activeBtn = wx.createImage()
 let headimg = wx.createImage();
 let shareBtn = wx.createImage();
 let mt = databus.mt * ratio; //头像到顶部的距离
@@ -35,14 +36,14 @@ let smleft_big = nmt + 91 * ratio + 312 * ratio + nb * 2 - (138 * ratio * 0.1 / 
 bg.src = 'images/home/background.png'
 // banner.src = 'images/home/banner_icon.png'
 // bannerModal.src = 'images/home/banner_modal.png'
-
+activeBtn.src = 'images/home/active.png'
 startBtn.src = 'images/home/start.png'
-friendsRankBtn.src = 'images/home/friends.png'
+
 shareBtn.src ='images/home/share.png'
 authorBtn.src = "images/home/author.png"
 loginstartBtn.src = 'images/home/start.png'
 loginstartBtn2.src = 'images/gamePage/archive/dd_start_btn.png'
-loginfriendsRankBtn.src = 'images/home/friends.png'
+loginfriendsRankBtn.src = 'images/home/newrank.png'
 loginauthorBtn.src = "images/home/author.png"
 
 
@@ -59,7 +60,8 @@ let R = {
   "author": "images/home/author.png",
   "archiveModal":"images/gamePage/archive/archive_modal.png",
   "newGame":"images/gamePage/archive/new_game.png",
-  "ddBtn":"images/gamePage/archive/dd_btn.png"
+  "ddBtn":"images/gamePage/archive/dd_btn.png",
+  'active':'images/home/active.png'
 }
 
 //把所有的图片放到一个对象中
@@ -108,6 +110,7 @@ export default class PageBtn {
     } else { //未授权
       this.startBtn(ctx)
       this.friendsRankBtn(ctx)
+
       this.render_btn(ctx)
       this.loginauthor(ctx)
       this.share_button(ctx)
@@ -197,7 +200,7 @@ export default class PageBtn {
       //模拟游戏圈
       ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
       //模拟好友排行
-      ctx.drawImage(loginfriendsRankBtn, 0, 0, 590, 226, ml, nmt + (196 * ratio) + nb, 590 * ratio, 226 * ratio)
+      ctx.drawImage(loginfriendsRankBtn, 0, 0, 280 , 138 , ml + 16 * ratio, nmt - nb * ratio, 280 * ratio, 138 * ratio)
       
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
@@ -238,29 +241,25 @@ export default class PageBtn {
     if (databus.pownstate == 1) { //按钮位置
       this.startBtnArea = {
         startX: ml,
-        startY: nmt,
+        startY: nmt + (110 * ratio),
         endX: ml + 590 * ratio,
-        endY: nmt + 226 * ratio
+        endY: nmt + (110 * ratio) + (226 * ratio)
+      }
+     
+      this.activeBtnArea ={
+        startX: ml,
+        startY: nmt + (300 * ratio),
+        endX: ml + 590 * ratio,
+        endY: nmt + (300 * ratio) + (226 * ratio)
       }
       this.friendsBtnArea = {
-        startX: ml,
-        startY: nmt + (196 * ratio) + nb,
-        endX: ml + 590 * ratio,
-        endY: nmt + (196 * ratio) + nb + 226 * ratio
-      }
-      this.shareBtnArea = {
-        startX: sml,
-        startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
-        endX: sml2 + 282 * ratio,
-        endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio,
-      }
+        startX: ml + 16 * ratio,
+        startY: nmt - nb * ratio,
+        endX: ml + 16 * ratio+280 * ratio,
+        endY: nmt - nb * ratio + 138 * ratio
+      } 
     } else {
-      this.shareBtnArea = {
-        startX: sml,
-        startY: nmt + 91 * ratio + 312 * ratio + nb * 2,
-        endX: sml2 + 282 * ratio,
-        endY: nmt + 91 * ratio + 312 * ratio + nb * 2 + 138 * ratio,
-      }
+      
     }
   }
   drawhead(ctx) {
@@ -367,7 +366,7 @@ export default class PageBtn {
     this.loginstartBtn(ctx)
     this.loginfriendsRankBtn(ctx)
     this.loginauthor(ctx)
-    this.share_button(ctx)
+    this.login_share_button(ctx)
     //画分数
     if (bestscore) {
       this.drawscore(ctx, bestscore)
@@ -382,27 +381,27 @@ export default class PageBtn {
   loginstartBtn(ctx) {
     if(databus.archiveState){
       if (!databus.playbtn_state){
-        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml, nmt, 590 * ratio, 226 * ratio) 
+        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml, nmt + (110 * ratio), 590 * ratio, 226 * ratio) 
       }else{
-        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml_big, nmt_big, 590 * ratio*1.1, 226 * ratio*1.1)
+        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml_big, nmt_big + (110 * ratio), 590 * ratio*1.1, 226 * ratio*1.1)
       } 
     }else{
       if (!databus.playbtn_state){
-        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml, nmt, 590 * ratio, 226 * ratio) 
+        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml, nmt+(110*ratio), 590 * ratio, 226 * ratio) 
       }else{
-        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml_big, nmt_big, 590 * ratio*1.1, 226 * ratio*1.1)
+        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml_big, nmt_big + (110 * ratio), 590 * ratio * 1.1, 226 * ratio * 1.1)
       } 
     }
   }
 
-  startBtn(ctx) { //开始游戏按钮
+  startBtn(ctx) { //活动按钮
     if (!this.createbutton) {
       this.createbutton = wx.createUserInfoButton({
         type: 'image',
         image: 'images/home/start.png',
         style: {
           left: ml,
-          top: nmt,
+          top: nmt+(110*ratio),
           width: 590 * ratio,
           height: 226 * ratio,
           lineHeight: 40,
@@ -419,7 +418,7 @@ export default class PageBtn {
       this.createbutton.onTap((res) => {
         if (res.rawData)//授权成功
         {
-         
+          this.activeBtn.destroy()
           this.createbutton.destroy()
           this.friendbutton.destroy()
           this.bannerButton.destroy()
@@ -434,23 +433,26 @@ export default class PageBtn {
 
   }
   loginfriendsRankBtn(ctx) { //好友排行榜
-    if (!databus.friendbtn_state) {
-    ctx.drawImage(loginfriendsRankBtn, 0, 0, 590, 226, ml, nmt + (196 * ratio) + nb, 590 * ratio, 226 * ratio)
-    }else{
-      ctx.drawImage(loginfriendsRankBtn, 0, 0, 590, 226, ml_big, nmt_big + (196 * ratio) + nb, 590 * ratio * 1.1, 226 * ratio * 1.1)
-    }
+   
+    if (!databus.friendbtn_state){
+      ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 16 * ratio, nmt - nb * ratio, 280 * ratio, 138 * ratio)
+   }else{
+      ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 16 * ratio*0.3, nmt - nb * ratio*2, 280 * ratio*1.1, 138 * ratio*1.1)
+   }
+     
+   
     
   }
   friendsRankBtn(ctx) { //好友排行榜
     if (!this.friendbutton) {
       this.friendbutton = wx.createUserInfoButton({
         type: 'image',
-        image: 'images/home/friends.png',
+        image: 'images/home/newrank.png',
         style: {
-          left: ml,
-          top: nmt + (196 * ratio) + nb,
-          width: 590 * ratio,
-          height: 226 * ratio,
+          left: ml+16*ratio,
+          top: nmt  - nb*ratio,
+          width: 280 * ratio,
+          height: 138 * ratio,
           lineHeight: 40,
           backgroundColor: '#ff0000',
           color: '#ffffff',
@@ -471,6 +473,7 @@ export default class PageBtn {
           this.createbutton.destroy()
           this.friendbutton.destroy()
           this.bannerButton.destroy()
+          this.activeBtn.destroy()
           databus.pownstate = 1;
           this.getBtnposition()
           this.render(ctx)
@@ -484,10 +487,7 @@ export default class PageBtn {
         type: 'image',
         image: 'images/home/bannerbtn.png',
         style: {
-          // left: 680 * ratio,
-          // top: 110 * ratio,
-          // width: 120 * ratio,
-          // height: 150 * ratio,
+         
           left: 94 * ratio,
           top: 420 * ratio,
           width: 640 * ratio,
@@ -513,6 +513,7 @@ export default class PageBtn {
           this.createbutton.destroy()
           this.friendbutton.destroy()
           this.bannerButton.destroy()
+          this.activeBtn.destroy()
           databus.pownstate = 1;
           databus.homeState = 1;
           this.getBtnposition()
@@ -536,21 +537,60 @@ export default class PageBtn {
       databus.gameClubbutton = wx.createGameClubButton({
         icon: 'green',
         type: 'image',
-        image: 'images/home/author.png',
+        image: 'images/home/newidea.png',
         style: {
           left: sml2,
-          top: nmt + 91 * ratio + 312 * ratio + nb * 2,
+          top: nmt  - nb*ratio ,
           width: 282 * ratio,
           height: 138 * ratio
         }
       })
     } 
   }
-  share_button(ctx) {
-    if (!databus.sharebtn_state) {
-      ctx.drawImage(shareBtn, 0, 0, 282, 138, sml,smleft, 282 * ratio, 138 * ratio)
+  login_share_button(ctx){
+    if (!databus.active_state) {
+      ctx.drawImage(activeBtn, 0, 0, 590, 226, ml, nmt + (300 * ratio), 590 * ratio, 226 * ratio)
     }else{
-      ctx.drawImage(shareBtn, 0, 0, 282, 138, sml_big, smleft_big, 282 * ratio * 1.1, 138 * ratio * 1.1)
+      ctx.drawImage(activeBtn, 0, 0, 590, 226, ml*0.8, nmt + (300 * ratio*0.98), 590 * ratio*1.1, 226 * ratio*1.1)
+    }
+   
+  }
+  share_button(ctx) {
+    if (!this.activeBtn) {
+      this.activeBtn = wx.createUserInfoButton({
+        type: 'image',
+        image: 'images/home/active.png',
+        style: {
+          left: ml,
+          top: nmt+(300*ratio),
+          width: 590 * ratio,
+          height: 226 * ratio,
+          lineHeight: 40,
+          backgroundColor: '#ff0000',
+          color: '#ffffff',
+          textAlign: 'center',
+          fontSize: 16,
+          borderRadius: 4
+        }
+      })
+      if (databus.homeState == 2) {
+        this.activeBtn.hide()
+      }
+      this.activeBtn.onTap((res) => {
+        if (res.rawData)//授权成功
+        {
+          this.createbutton.destroy()
+          this.friendbutton.destroy()
+          this.bannerButton.destroy()
+          this.activeBtn.destroy()
+          databus.homeState = 4;
+          databus.pownstate = 1;
+          this.getBtnposition()
+          this.render(ctx)
+        } else {
+          wx.showToast({ title: '授权才能参加活动噢～', icon: 'none' })
+        }
+      })
     }
   }
 }

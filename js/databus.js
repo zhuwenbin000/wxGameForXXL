@@ -98,6 +98,7 @@ export default class DataBus {
       }
     ]
     this.frinendCount = 18;//搜刮好友数量
+    this.active_state = false;//活动按钮状态
     this.playbtn_state = false;//开始游戏按钮状态
     this.sharebtn_state = false;//分享按钮状态
     this.provbtn_state = false;//上一页按钮状态
@@ -186,7 +187,7 @@ export default class DataBus {
       h: 130 * ratio
     }
 
-    this.homeState = 4 //首页状态变化 2banner弹框 3存档弹框 4精力系统
+    this.homeState = 1 //首页状态变化 2banner弹框 3存档弹框 4精力系统
     this.energySysTab = 3 //精力系统tab顺序
     this.energySysModal = 0 //精力系统tab弹框状态
     //签到部分
