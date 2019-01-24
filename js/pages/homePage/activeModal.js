@@ -88,13 +88,13 @@ for (var k in R) {
   Img[k].src = R[k];
 }
 
-const signXY = databus.signXY
-const daysinfo = databus.daysinfo
-const plunderRecord = databus.plunderRecord
 
 export default class ActiveModal {
   render(ctx) {
-
+    const signXY = databus.signXY
+    const daysinfo = databus.daysinfo
+    const plunderRecord = databus.plunderRecord
+    
     //绘制背景
     ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
     //弹框背景
@@ -103,40 +103,83 @@ export default class ActiveModal {
     ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 0 * ratio, 100 * ratio, 80 * ratio, 80 * ratio);
 
     //导航部分
-    //大赛
-    if (databus.energySysTab == 0) {
-      ctx.drawImage(Img["battleDown"], 0, 0, Img["battleDown"].width, Img["battleDown"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    } else {
-      ctx.drawImage(Img["battle"], 0, 0, Img["battle"].width, Img["battle"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-      //红点
-      ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    }
+    if(databus.battleInfo){//有大赛
+      //大赛
+      if (databus.energySysTab == 0) {
+        ctx.drawImage(Img["battleDown"], 0, 0, Img["battleDown"].width, Img["battleDown"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["battle"], 0, 0, Img["battle"].width, Img["battle"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+        if(databus.battlePoint){
+          //红点
+          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+        }
+      }
 
-    //签到
-    if (databus.energySysTab == 1) {
-      ctx.drawImage(Img["signDown"], 0, 0, Img["signDown"].width, Img["signDown"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    } else {
-      ctx.drawImage(Img["sign"], 0, 0, Img["sign"].width, Img["sign"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-      //红点
-      ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    }
+      //签到
+      if (databus.energySysTab == 1) {
+        ctx.drawImage(Img["signDown"], 0, 0, Img["signDown"].width, Img["signDown"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["sign"], 0, 0, Img["sign"].width, Img["sign"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+        if(databus.signPoint){
+          //红点
+          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+        }
+      }
 
-    //抽奖
-    if (databus.energySysTab == 2) {
-      ctx.drawImage(Img["lotteryDown"], 0, 0, Img["lotteryDown"].width, Img["lotteryDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    } else {
-      ctx.drawImage(Img["lottery"], 0, 0, Img["lottery"].width, Img["lottery"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-      //红点
-      ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    }
+      //抽奖
+      if (databus.energySysTab == 2) {
+        ctx.drawImage(Img["lotteryDown"], 0, 0, Img["lotteryDown"].width, Img["lotteryDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["lottery"], 0, 0, Img["lottery"].width, Img["lottery"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+        if(databus.lotteryPoint){
+          //红点
+          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+        }
+      }
 
-    //搜刮好友
-    if (databus.energySysTab == 3) {
-      ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    } else {
-      ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-      //红点
-      ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 715 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+      //搜刮好友
+      if (databus.energySysTab == 3) {
+        ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+        if(databus.plunderPoint){
+          //红点
+          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 715 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+        }
+      }
+    }else{//无大赛
+      //签到
+      if (databus.energySysTab == 1) {
+        ctx.drawImage(Img["signDown"], 0, 0, Img["signDown"].width, Img["signDown"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["sign"], 0, 0, Img["sign"].width, Img["sign"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+        if(databus.signPoint){
+          //红点
+          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+        }
+      }
+
+      //抽奖
+      if (databus.energySysTab == 2) {
+        ctx.drawImage(Img["lotteryDown"], 0, 0, Img["lotteryDown"].width, Img["lotteryDown"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["lottery"], 0, 0, Img["lottery"].width, Img["lottery"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+        if(databus.lotteryPoint){
+          //红点
+          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+        }
+      }
+
+      //搜刮好友
+      if (databus.energySysTab == 3) {
+        ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+        if(databus.lotteryPoint){
+          //红点
+          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+        }
+      }
 
     }
 
@@ -280,8 +323,18 @@ export default class ActiveModal {
         }
         //按钮背景
         ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 195 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
-        //视频补签
-        ctx.drawImage(Img["videoToSign"], 0, 0, Img["videoToSign"].width, Img["videoToSign"].height, 270 * ratio, 918 * ratio, 302 * ratio, 60 * ratio);
+        if(databus.signType == 2){
+          //视频补签
+          ctx.drawImage(Img["videoToSign"], 0, 0, Img["videoToSign"].width, Img["videoToSign"].height, 270 * ratio, 918 * ratio, 302 * ratio, 60 * ratio);
+        }
+        if(databus.signType == 0){
+          //金币补签
+          ctx.drawImage(Img["coinToSign"], 0, 0, Img["coinToSign"].width, Img["coinToSign"].height, 319 * ratio, 925 * ratio, 204 * ratio, 46 * ratio);
+        }
+        if(databus.signType == 1){
+          //分享补签
+          ctx.drawImage(Img["shareToSign"], 0, 0, Img["shareToSign"].width, Img["shareToSign"].height, 270 * ratio, 918 * ratio, 302 * ratio, 60 * ratio);
+        }
       }
     }
 
@@ -303,7 +356,6 @@ export default class ActiveModal {
       ctx.font = 28 * ratio + 'px Arial';
       ctx.fillText('我的精力：' + databus.myEnergy + 'g', 414 * ratio, 445 * ratio);
       //换取倒计时
-      // if((new Date()).getTime() > databus.boxExchangeTime + 10 * 60 * 60 * 1000){
       if(databus.canExchangeBox){
         //搜刮精力
         ctx.drawImage(Img["sj"], 0, 0, Img["sj"].width, Img["sj"].height, 615 * ratio, 295 * ratio, 148 * ratio, 156 * ratio);

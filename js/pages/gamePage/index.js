@@ -532,6 +532,7 @@ export default class Index {
         apiType: 'user',
         method: 'POST',
         success(data) {
+          databus.gameStartTime = (new Date()).getTime() //记录开始时间
           databus.passScore = data.body.game.stagescore //第一关过关所需分数
           databus.gameId = data.body.game.gameid //本轮游戏id
           databus.rewardstep = data.body.game.rewardstep //过关奖励步数
@@ -631,6 +632,9 @@ export default class Index {
       tradecode: 'sys04',
       apiType: 'user',
       method: 'POST',
+      data:{
+        version:databus.version
+      },
       success(data) {
         databus.usergold = data.body.user.glod; //用户拥有金币
       }
@@ -741,29 +745,31 @@ export default class Index {
           //按钮按下音效
           this.music.playMusic('btnDown')
         }
-        // 战报icon事件
-        if (x >= bic.x && x <= bic.x + bic.w && y >= bic.y && y <= bic.y + bic.h) {
-          //按钮按下音效
-          this.music.playMusic('btnDown')
-          databus.gameEndState = 1
-          databus.bannerAd.hide()
-          setTimeout(()=>{
-            const tempFilePath = canvas.toTempFilePathSync({
-              x: 0,
-              y: 0,
-              width: canvas.width,
-              height: canvas.height,
-              destWidth: canvas.width,
-              destHeight: canvas.height
-            })
-
-            wx.saveImageToPhotosAlbum({
-              filePath: tempFilePath,
-              success:function (data) {
-                console.log(data);
-              }
-            })
-          },500)
+        if(databus.shareflag){
+          // 战报icon事件
+          if (x >= bic.x && x <= bic.x + bic.w && y >= bic.y && y <= bic.y + bic.h) {
+            //按钮按下音效
+            this.music.playMusic('btnDown')
+            databus.gameEndState = 1
+            databus.bannerAd.hide()
+            setTimeout(()=>{
+              const tempFilePath = canvas.toTempFilePathSync({
+                x: 0,
+                y: 0,
+                width: canvas.width,
+                height: canvas.height,
+                destWidth: canvas.width,
+                destHeight: canvas.height
+              })
+  
+              wx.saveImageToPhotosAlbum({
+                filePath: tempFilePath,
+                success:function (data) {
+                  console.log(data);
+                }
+              })
+            },500)
+          }
         }
         // 再来一局事件
         if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
@@ -1104,7 +1110,21 @@ export default class Index {
         databus.btnPlus = 1
         setTimeout(() => {
           databus.btnPlus = 0
-          databus.getVideoReward()
+          ajax({
+            tradecode: 'acct01',
+            apiType: 'user',
+            method: 'POST',
+            data: {
+              "gameid": databus.gameId,
+              "proptype": 98,
+              "gold":databus.videoCoin
+            },
+            success(data) {
+              databus.usergold = data.body.user.glod
+              databus.getVideoReward()
+            }
+          })
+
         }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')

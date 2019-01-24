@@ -90,8 +90,10 @@ export default class GameEnd {
     }
     //游戏结束再来一局
     ctx.drawImage(Robj["tryAgain"], 0, 0, Robj["tryAgain"].width, Robj["tryAgain"].height, tac.x, tac.y, tac.w, tac.h);
-    //战报icon
-    ctx.drawImage(Robj["battleReportIcon"], 0, 0, Robj["battleReportIcon"].width, Robj["battleReportIcon"].height, bic.x , bic.y, bic.w, bic.h);
+    if(databus.shareflag){
+      //战报icon
+      ctx.drawImage(Robj["battleReportIcon"], 0, 0, Robj["battleReportIcon"].width, Robj["battleReportIcon"].height, bic.x , bic.y, bic.w, bic.h);
+    }
     //增加精力
     ctx.drawImage(Robj["addEnergy"], 0, 0, Robj["addEnergy"].width, Robj["addEnergy"].height, aec.x, aec.y, aec.w, aec.h);
     
@@ -131,24 +133,38 @@ export default class GameEnd {
       ctx.fillStyle = '#fff323';
       ctx.font = 30 * ratio + 'px Arial';
       //最后得分
-      ctx.fillText("1212", 310 * ratio, 670 * ratio);
+      ctx.fillText(databus.gameScore + databus.score, 310 * ratio, 670 * ratio);
       //最后关卡
-      ctx.fillText("10", 590 * ratio, 667 * ratio);
+      ctx.fillText(databus.checkPoint, 590 * ratio, 667 * ratio);
       //累计连击
-      ctx.fillText("10", 290 * ratio, 730 * ratio);
+      ctx.fillText(databus.gameDoubleHit, 290 * ratio, 730 * ratio);
       //crazy time得分
-      ctx.fillText("1000", 385 * ratio, 792 * ratio);
+      ctx.fillText(databus.gameCrazyTime, 385 * ratio, 792 * ratio);
       //花费时间
       ctx.textAlign = 'left';
-      ctx.fillText("1小时20分20秒", 260 * ratio, 850 * ratio);
+      ctx.fillText(databus.getGameTime(databus.gameStartTime,databus.gameEndTime), 260 * ratio, 850 * ratio);
       ctx.textAlign = 'center';
       //击败百分比
       ctx.font = 50 * ratio + 'px Arial';
-      ctx.fillText("80", 310 * ratio, 923 * ratio);
+      ctx.fillText(databus.battlePrecent, 310 * ratio, 923 * ratio);
       //保存tips
       ctx.font = 30 * ratio + 'px Arial';
       ctx.fillStyle = '#fff';
       ctx.fillText("已为你保存到相册", 414 * ratio, 1390 * ratio);
+
+      //头像
+      let headimg = wx.createImage();
+      headimg.src = databus.userinfo.userInfo.avatarUrl
+      databus.circleImg(ctx, headimg, 330 * ratio, 320 * ratio, 85 * ratio)
+      //昵称
+      ctx.textAlign = 'center';
+      ctx.font = 50 * ratio + 'px Arial';
+      ctx.fillText(databus.userinfo.userInfo.nickName, 414 * ratio, 570 * ratio);
+
+      let wxaqrcodeurl = wx.createImage();
+      wxaqrcodeurl.src = databus.wxaqrcodeurl
+      //弹框关闭
+      ctx.drawImage(wxaqrcodeurl, 0, 0, wxaqrcodeurl.width, wxaqrcodeurl.height, 90 * ratio, 1185 * ratio, 130 * ratio, 125 * ratio);
     }
   }
 }

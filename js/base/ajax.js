@@ -54,6 +54,24 @@ export function ajax(options) {
             }
           }
         }
+      }else if (options.apiType == 'week'){
+        if(!options.data || !options.data.week){
+          options.data = {
+            week: {
+              ...options.data,
+              loginflag: loginflag,
+              userId:userId
+            }
+          }
+        }else{
+          options.data = {
+            week: {
+              ...options.data.week,
+              loginflag: loginflag,
+              userId:userId
+            }
+          }
+        }
       }
       //如果是...
     }
@@ -82,6 +100,7 @@ export function ajax(options) {
         userLogin(options)
       }else{//其他
         wx.showToast({ title: res.data.result.message, icon:'none'})
+        console.log(res.data)
       }
     },
     fail(res) {//失败回调

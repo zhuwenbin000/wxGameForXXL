@@ -263,6 +263,10 @@ export default class Main {
       success(data) {
         const shareflag = data.body.version.shareflag == '1' ? false : true
         databus.shareflag = shareflag
+
+        databus.sharerate = data.body.version.sharerate
+        databus.nogoldsharerate = data.body.version.nogoldsharerate
+
         if(shareflag){
 
           const openid = wx.getStorageSync('openId')
