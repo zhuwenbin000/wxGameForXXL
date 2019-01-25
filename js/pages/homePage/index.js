@@ -19,9 +19,22 @@ export default class Index {
       tradecode: 'sys04',
       apiType: 'user',
       method: 'POST',
+      data:{
+        version:databus.version
+      },
       success(data) {
         databus.bestscore = data.body.user.bestscore;
         databus.updateMaxScore(databus.bestscore)
+        //精力系统相关
+        databus.boxExchangeTime = data.body.user.lastzhtime;
+        databus.boxNum = data.body.user.boxnum;
+        databus.myEnergy = data.body.user.pengry;
+        databus.boxEnergy = data.body.user.boxengry;
+        databus.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
+        
+        if((new Date()).getTime() > databus.boxExchangeTime + 10 * 60 * 60 * 1000){
+          databus.canExchangeBox = true
+        }
       }
     }
     ajax(options)
@@ -43,6 +56,8 @@ export default class Index {
     databus.playbtn_state = false;
     databus.friendbtn_state = false;
     databus.active_state = false;
+    //获取精力系统相关
+    this.getEngerySysInfo()
   }
 
   finish() {
@@ -105,7 +120,6 @@ export default class Index {
           databus.active_state = true;
           this.music.playMusic('btnDown')
           setTimeout(()=>{
-            
             databus.homeState = 4;
             databus.active_state = false;
             databus.gameClubbutton.destroy() //游戏圈按钮销毁
@@ -233,7 +247,21 @@ export default class Index {
           //按钮按下音效
           this.music.playMusic('btnDown')
           //补签弹框
-          databus.energySysModal = 0
+          if(databus.signType == 2){
+            databus.showSignVideoAd()
+          }
+          if(databus.signType == 0){
+            this.goSign({
+              openid:wx.getStorageSync('openId'),
+              day:databus.signData,
+              isoverday:1,
+              gold:50
+            })
+          }
+          if(databus.signType == 1){
+            console.log("分享补签")
+          }
+          
         }
         if (x >= 185 * ratio && x <= (185 * ratio + 80 * ratio) && y >= 365 * ratio && y <= (365 * ratio + 80 * ratio)) {
           //关闭签到成功弹框
@@ -282,7 +310,13 @@ export default class Index {
                 if (databus.daysinfo[i].isdone == '0') {
                   //按钮按下音效
                   this.music.playMusic('btnDown')
+
                   //补签弹框
+                  if(databus.shareflag){//非审核模式
+                    databus.signType = 2
+                  }else{
+                    databus.signType = 0
+                  }
                   databus.signData = databus.daysinfo[i];
                   databus.energySysModal = 2;
                 }
@@ -292,9 +326,11 @@ export default class Index {
                 if (databus.daysinfo[i].isdone == '0') {
                   //按钮按下音效
                   this.music.playMusic('btnDown')
-                  //签到成功
-                  databus.signData = databus.daysinfo[i];
-                  databus.energySysModal = 1;
+                  this.goSign({
+                    openid:wx.getStorageSync('openId'),
+                    day:databus.daysinfo[i].day,
+                    isoverday:0,
+                  })
                 }
               }
             }
@@ -306,9 +342,7 @@ export default class Index {
             if (x >= 615 * ratio && x <= (615 * ratio + 148 * ratio) && y >= 295 * ratio && y <= (295 * ratio + 156 * ratio)) {
               //按钮按下音效
               this.music.playMusic('btnDown')
-              wx.showToast({ title: "成功换取精力啦~", icon:'none'})
-              databus.exchangeBoxAni = true
-              databus.exchangeBoxAniTime = 0
+              this.enchangeEngery()
             }
           }
 
@@ -332,7 +366,7 @@ export default class Index {
                 databus.boxOpenStart = true
                 databus.boxOpenNeedClickNum = _.random(4, 8)
               }else{
-                wx.showToast({ title: "还没有宝箱可以开哦~", icon:'none'})
+                wx.showToast({ title: "暂无宝箱可开~", icon:'none'})
               }
             }
           }
@@ -371,31 +405,50 @@ export default class Index {
           //按钮按下音效
           this.music.playMusic('btnDown')
           databus.homeState = 1;
-          databus.energySysTab = 0;
+          if(databus.battleInfo){//有无大赛判断
+            databus.energySysTab = 0;
+          }else{
+            databus.energySysTab = 1;
+          }
         }
         //大赛tab点击
         if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
           //按钮按下音效
           this.music.playMusic('btnDown')
-          databus.energySysTab = 0;
+          if(databus.battleInfo){//有无大赛判断
+            databus.energySysTab = 0;
+          }else{
+            databus.energySysTab = 1;
+          }
         }
         //签到tab点击
         if (x >= 242 * ratio && x <= (242 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
           //按钮按下音效
           this.music.playMusic('btnDown')
-          databus.energySysTab = 1;
+          if(databus.battleInfo){//有无大赛判断
+            databus.energySysTab = 1;
+          }else{
+            databus.energySysTab = 2;
+          }
         }
         //抽奖tab点击
         if (x >= 422 * ratio && x <= (422 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
           //按钮按下音效
           this.music.playMusic('btnDown')
-          databus.energySysTab = 2;
+          if(databus.battleInfo){//有无大赛判断
+            databus.energySysTab = 2;
+          }else{
+            databus.energySysTab = 3;
+          }
         }
-        //搜刮tab点击
-        if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-          //按钮按下音效
-          this.music.playMusic('btnDown')
-          databus.energySysTab = 3;
+
+        if(databus.battleInfo){//有无大赛判断
+          //搜刮tab点击
+          if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+            //按钮按下音效
+            this.music.playMusic('btnDown')
+            databus.energySysTab = 3;
+          }
         }
       } 
     } 
@@ -428,5 +481,71 @@ export default class Index {
     this.render(this.ctx)
     this.aniId = window.requestAnimationFrame(this.bindLoop, canvas)
 
+  }
+
+  //获取精力系统相关
+  getEngerySysInfo(){
+    this.getBattleInfo()
+    databus.getSignInfo()
+  }
+
+  getBattleInfo() {
+
+    //获取大赛信息
+    ajax({
+      tradecode: 'sys23',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        openid:wx.getStorageSync('openId')
+      },
+      success(data) {
+
+      }
+    })
+
+  }
+
+  
+
+  goSign(data) {
+    let self = this;
+    //签到补签
+    ajax({
+      tradecode: 'sys20',
+      apiType: 'user',
+      method: 'POST',
+      data: data,
+      success(data) {
+        databus.signData = data.body.info;
+        databus.energySysModal = data.body.info.signtype == '1' ? data.body.info.signtype : '0';
+        self.getSignInfo()
+        // if(data.signtype == 1){
+        //   databus.energySysModal = 1;
+        // }
+        // if(data.signtype == 2){
+        //   databus.energySysModal = 2;
+        // }
+      }
+    })
+  }
+
+  enchangeEngery() {
+    //个人精力换取宝箱精力
+    ajax({
+      tradecode: 'sys17',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        openid:wx.getStorageSync('openId'),
+        penrgy: databus.myEnergy
+      },
+      success(data) {
+        // wx.showToast({ title: "成功换取精力啦~", icon:'none'})
+        databus.exchangeBoxAni = true
+        databus.exchangeBoxAniTime = 0
+        databus.myEnergy = 0
+      }
+    })
   }
 }

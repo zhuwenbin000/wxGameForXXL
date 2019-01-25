@@ -98,7 +98,6 @@ export default class PageBtn {
     ctx.clearRect(0, 0, screenWidth, screenHeight)
     ctx.drawImage(bg, 0, 0, screenWidth, screenHeight)
 
-
     this.drawlogo(ctx)//画logo
     if(this.f % 6 == 0){
       this.logoTime++
@@ -117,6 +116,44 @@ export default class PageBtn {
       this.bannerBtn(ctx)
     }
 
+    if(databus.homeState == 2){
+      // //模拟游戏圈
+      // ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
+      // //模拟好友排行
+      // ctx.drawImage(loginfriendsRankBtn, 0, 0, 280 , 138 , ml + 16 * ratio, nmt - nb * ratio, 280 * ratio, 138 * ratio)
+      
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+
+      ctx.drawImage(this.bannerModal, 0, 0, this.bannerModal.width, this.bannerModal.height,94 * ratio,300 * ratio,640 * ratio,900 * ratio)
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 30 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
+      
+    }
+
+    if(databus.homeState == 3){
+      //模拟游戏圈
+      // ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //存档弹框
+      ctx.drawImage(Robj["archiveModal"], 0, 0, Robj["archiveModal"].width, Robj["archiveModal"].height,30 * ratio,350 * ratio,768 * ratio,704 * ratio)
+      //新开一把
+      ctx.drawImage(Robj["newGame"], 0, 0, Robj["newGame"].width, Robj["newGame"].height,197 * ratio,840 * ratio,434 * ratio,176 * ratio)
+      //读档继续
+      ctx.drawImage(Robj["ddBtn"], 0, 0, Robj["ddBtn"].width, Robj["ddBtn"].height,175 * ratio,670 * ratio,478 * ratio,196 * ratio)
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 300 * ratio, 150 * ratio, 162 * ratio);
+    }
+
+    if(databus.homeState == 4){ //精力系统
+      
+      if(databus.energySysLoad){//精力系统资源加载完毕才绘制
+        this.activeModal.render(ctx)
+      }else{
+        wx.showToast({title: '资源加载中～', icon: 'none' })
+      }
+    }
         
     if (databus.shareflag) {
       if(!databus.activityData){
@@ -195,44 +232,6 @@ export default class PageBtn {
       }
       
     }
-
-    if(databus.homeState == 2){
-      // //模拟游戏圈
-      // ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
-      // //模拟好友排行
-      // ctx.drawImage(loginfriendsRankBtn, 0, 0, 280 , 138 , ml + 16 * ratio, nmt - nb * ratio, 280 * ratio, 138 * ratio)
-      
-      //绘制背景
-      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
-
-      ctx.drawImage(this.bannerModal, 0, 0, this.bannerModal.width, this.bannerModal.height,94 * ratio,300 * ratio,640 * ratio,900 * ratio)
-      //弹框关闭
-      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 30 * ratio, 250 * ratio, 150 * ratio, 162 * ratio);
-      
-    }
-
-    if(databus.homeState == 3){
-      //模拟游戏圈
-      // ctx.drawImage(Robj["author"], 0, 0, Robj["author"].width, Robj["author"].height,sml2,nmt + 91 * ratio + 312 * ratio + nb * 2,282 * ratio,138 * ratio);
-      //绘制背景
-      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
-      //存档弹框
-      ctx.drawImage(Robj["archiveModal"], 0, 0, Robj["archiveModal"].width, Robj["archiveModal"].height,30 * ratio,350 * ratio,768 * ratio,704 * ratio)
-      //新开一把
-      ctx.drawImage(Robj["newGame"], 0, 0, Robj["newGame"].width, Robj["newGame"].height,197 * ratio,840 * ratio,434 * ratio,176 * ratio)
-      //读档继续
-      ctx.drawImage(Robj["ddBtn"], 0, 0, Robj["ddBtn"].width, Robj["ddBtn"].height,175 * ratio,670 * ratio,478 * ratio,196 * ratio)
-      //弹框关闭
-      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 300 * ratio, 150 * ratio, 162 * ratio);
-    }
-
-
-    if(databus.homeState == 4){ //精力系统
-      if(databus.energySysLoad){//精力系统资源加载完毕才绘制
-        this.activeModal.render(ctx)
-      }
-    }
-
   }
   render_btn() {
 
@@ -294,6 +293,9 @@ export default class PageBtn {
       tradecode: 'sys04',
       apiType: 'user',
       method: 'POST',
+      data:{
+        version:databus.version
+      },
       success(data) { 
         var bestscore = data.body.user.bestscore;    
         databus.bestscore = bestscore;

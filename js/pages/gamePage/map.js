@@ -338,6 +338,8 @@ export default class Map {
       doubleHit = 1
     }else{
       databus.doubleHit = doubleHit
+
+      databus.gameDoubleHit = databus.gameDoubleHit + doubleHit //获取每局游戏的总连击数
     }
 
     //游戏得分
@@ -359,6 +361,7 @@ export default class Map {
     if(databus.isCrazy){
       databus.crazyScore = databus.crazyScore + databus.crazyBombScore + bombScore * doubleHit * multiplyBy
       databus.crazyBombScore = databus.crazyBombScore + bombScore * doubleHit * multiplyBy
+      databus.gameCrazyTime = databus.gameCrazyTime + databus.crazyScore
     }
 
     //得分音效
@@ -522,7 +525,10 @@ export default class Map {
         'gamegold': databus.gamegold + databus.stagegold,//本次游戏获得总金币数
       },
       success(data) {
+        databus.gameEndTime = (new Date()).getTime() 
         databus.gameState = 2
+        databus.battlePrecent = data.body.game.rpercent
+
         if (databus.musicBg) {
           //暂停音乐
           self.music.pauseMusicBgm()

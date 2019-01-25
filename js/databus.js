@@ -26,6 +26,8 @@ export default class DataBus {
     this.creatAarchiveVideoAd()
     //创建crazy视频
     this.creatCrazyVideoAd()
+    //创建sign视频
+    this.creatSignVideoAd()
 
     //判断是否是哪种设备 
     wx.getSystemInfo({
@@ -187,9 +189,14 @@ export default class DataBus {
       h: 130 * ratio
     }
 
+    this.battleInfo = null //大赛信息
     this.homeState = 1 //首页状态变化 2banner弹框 3存档弹框 4精力系统
-    this.energySysTab = 3 //精力系统tab顺序
+    this.energySysTab = 1 //精力系统tab顺序
     this.energySysModal = 0 //精力系统tab弹框状态
+    this.battlePoint = false //大赛红点
+    this.signPoint = false //签到红点
+    this.lotteryPoint = false //抽奖红点
+    this.plunderPoint = false //搜刮红点
     //签到部分
     this.signXY = [ //签到各个位置坐标
       {
@@ -242,58 +249,11 @@ export default class DataBus {
         state3: { x: 125, y: 1175 },
       },
     ];
-    this.daysinfo = [ //签到页数据
-      {
-        day: '20190121',
-        week: '1',
-        proptype: '1',
-        propnum: '1',
-        isdone: '0'
-      },
-      {
-        day: '20190122',
-        week: '2',
-        proptype: '1',
-        propnum: '1',
-        isdone: '1'
-      },
-      {
-        day: '20190123',
-        week: '3',
-        proptype: '1',
-        propnum: '1',
-        isdone: '1'
-      },
-      {
-        day: '20190124',
-        week: '4',
-        proptype: '2',
-        propnum: '1',
-        isdone: '1'
-      },
-      {
-        day: '20190125',
-        week: '5',
-        proptype: '3',
-        propnum: '1',
-        isdone: '0'
-      },
-      {
-        day: '20190126',
-        week: '6',
-        proptype: '4',
-        propnum: '1',
-        isdone: '0'
-      },
-      {
-        day: '20190127',
-        week: '7',
-        proptype: '6',
-        propnum: '1',
-        isdone: '0'
-      }
-    ];
+    this.daysinfo = [] //签到页数据
     this.signData = {} //当前签到奖励
+    this.signType = 0 //补签条件 0金币1分享2视频
+    this.sharerate = 0 
+    this.nogoldsharerate = 0 
     //抽奖部分
     this.plunderRecord = [//搜刮记录
       {
@@ -315,11 +275,12 @@ export default class DataBus {
         stealtime:'1'
       }
     ]
-    this.boxNum = 1 //拥有箱子的数量
-    this.myEnergy = 11 //个人精力
-    this.boxEnergy = 11 //箱子精力
-    this.boxExchangeTime = 1548073321452 //上次换取宝箱时间
-    this.canExchangeBox = true //上次换取宝箱时间
+    this.boxNum = 0 //拥有箱子的数量
+    this.myEnergy = 0 //个人精力
+    this.boxEnergy = 0 //箱子精力
+    this.wxaqrcodeurl = '' //个人小游戏二维码地址
+    this.boxExchangeTime = 0 //上次换取宝箱时间
+    this.canExchangeBox = false //上次换取宝箱时间
     this.boxOpenStart = false //开箱状态 
     this.boxOpenClickNum = 0 //当前开箱次数
     this.boxOpenNeedClickNum = 0 //需要开箱总次数
@@ -329,7 +290,7 @@ export default class DataBus {
 
     this.energySysLoad = false //精力系统加载状态
     this.version = '0.0.2.4';
-    this.shareflag = false;
+    this.shareflag = false; //true为非审核模式
     this.showRule = true;
     this.scene = 0 //场景id
     this.rowNum = 6 //行数
@@ -341,6 +302,7 @@ export default class DataBus {
       worldRank: false,
     }
     this.gameState = 0 //1:游戏中2:游戏结束3:音乐弹框4:彩色道具弹框5:增加步数弹框,6::返回首页,7:游戏过关,8:规则弹框
+    this.gameEndState = 0 //0结束 1战报
     this.musicBg = true //背景音默认开
     this.musicSound = true //音效默认开
     this.musicBgState = true //背景音状态
@@ -507,25 +469,25 @@ export default class DataBus {
       },
       getScoreCoordinates: { //游戏结束得分
         x: 14 * ratio,
-        y: 200 * ratio + this.gameEndTop,
+        y: 150 * ratio + this.gameEndTop,
         w: 800 * ratio,
         h: 482 * ratio,
       },
       newRecordCoordinates: { //游戏结束新纪录
         x: 560 * ratio,
-        y: 290 * ratio + this.gameEndTop,
+        y: 240 * ratio + this.gameEndTop,
         w: 278 * ratio,
         h: 224 * ratio,
       },
       tipsCoordinates: { //游戏结束提示
         x: 68 * ratio,
-        y: 756 * ratio + this.gameEndTop,
+        y: 676 * ratio + this.gameEndTop,
         w: 692 * ratio,
         h: 248 * ratio,
       },
       shareCoordinates: { //游戏结束分享
         x: (uiWidth - 318) / 2 * ratio,
-        y: 870 * ratio + this.gameEndTop,
+        y: 790 * ratio + this.gameEndTop,
         w: 318 * ratio,
         h: 120 * ratio,
       },
@@ -535,7 +497,7 @@ export default class DataBus {
         // w: 318 * ratio,
         // h: 120 * ratio,
         x: (uiWidth - 318) / 2 * ratio,
-        y: 870 * ratio + this.gameEndTop,
+        y: 790 * ratio + this.gameEndTop,
         w: 318 * ratio,
         h: 120 * ratio,
       },
@@ -550,6 +512,23 @@ export default class DataBus {
         y: 1055 * ratio + this.gameEndTop,
         w: 496 * ratio,
         h: 200 * ratio,
+      },
+      battleIconCoordinates: { //战报icon
+        x: 120 * ratio,
+        y: 940 * ratio + this.gameEndTop,
+        w: 110 * ratio,
+        h: 110 * ratio,
+      },
+      addEngCoordinates: { //增加精力
+        x: 315 * ratio,
+        y: 940 * ratio + this.gameEndTop,
+        w: 166 * ratio,
+        h: 106 * ratio,
+      },
+      addEngNumCoordinates: { //增加精力数字
+        x: 410 * ratio,
+        y: 1030 * ratio + this.gameEndTop,
+        font: 36 * ratio + 'px Arial'
       },
       stageScoreCoordinates: { //游戏结束分数
         x: 325 * ratio,
@@ -568,7 +547,7 @@ export default class DataBus {
       },
       bestScoreCoordinates: { //游戏结束最高得分
         x: (uiWidth / 2) * ratio,
-        y: 580 * ratio + this.gameEndTop,
+        y: 530 * ratio + this.gameEndTop,
         font: 'bold ' + 55 * ratio + 'px Arial'
       },
       preScoreCoordinates: { //预得分
@@ -629,6 +608,11 @@ export default class DataBus {
    * 游戏页数据初始化
    */
   gameInfoReset() {
+    this.gameDoubleHit = 0 //本局总连击数
+    this.gameCrazyTime = 0 //本局总crazyTime分数
+    this.gameStartTime = 0 //本局开始时间
+    this.gameEndTime = 0 //本局结束时间
+    this.battlePrecent = 0 //本局结束打败了多少玩家
     this.combo = 0 //combo数
     this.prevSelectBlocks = [] //上次爆炸棋子数组
     this.selectBlocks = [] //连线棋子数组
@@ -655,7 +639,7 @@ export default class DataBus {
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 0 //当前关卡过关分数
     this.gameId = '' //本轮游戏id
-    this.steps = 10 //总步步数
+    this.steps = 1 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 4 //棋子种类
@@ -893,43 +877,87 @@ export default class DataBus {
     this.archiveVideoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-7db4ea2fa1cd4854'
     })
-    this.archiveVideoAd.onClose(res => {
-      // 用户点击了【关闭广告】按钮
-      // 小于 2.1.0 的基础库版本，res 是一个 undefined
-      if (res && res.isEnded || res === undefined) {
-        this.getVideoReward()
-      }
-      else {
-          // 播放中途退出，不下发游戏奖励
-      }
-    })
+    // this.archiveVideoAd.onClose(res => {
+    //   // 用户点击了【关闭广告】按钮
+    //   // 小于 2.1.0 的基础库版本，res 是一个 undefined
+    //   if (res && res.isEnded || res === undefined) {
+    //     this.getVideoReward()
+    //   }
+    //   else {
+    //       // 播放中途退出，不下发游戏奖励
+    //   }
+    // })
   }
 
   creatCrazyVideoAd(){
     this.crazyVideoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-5d837d2cf40a537f'
     })
-    this.crazyVideoAd.onClose(res => {
-      // 用户点击了【关闭广告】按钮
-      // 小于 2.1.0 的基础库版本，res 是一个 undefined
-      if (res && res.isEnded || res === undefined) {
-        this.getVideoReward()
-      }
-      else {
-          // 播放中途退出，不下发游戏奖励
-      }
+    // this.crazyVideoAd.onClose(res => {
+    //   // 用户点击了【关闭广告】按钮
+    //   // 小于 2.1.0 的基础库版本，res 是一个 undefined
+    //   if (res && res.isEnded || res === undefined) {
+    //     this.getVideoReward()
+    //   }
+    //   else {
+    //       // 播放中途退出，不下发游戏奖励
+    //   }
 
+    // })
+  }
+
+  creatSignVideoAd(){
+    this.signVideoAd = wx.createRewardedVideoAd({
+      adUnitId: 'adunit-5d837d2cf40a537f'
     })
+    // this.signVideoAd.onClose(res => {
+    //   // 用户点击了【关闭广告】按钮
+    //   // 小于 2.1.0 的基础库版本，res 是一个 undefined
+    //   if (res && res.isEnded || res === undefined) {
+    //     this.getVideoReward()
+    //   }
+    //   else {
+    //       // 播放中途退出，不下发游戏奖励
+    //   }
+
+    // })
   }
 
   hasNoVideo(coin){
     if(coin){
       this.gameState = 17
       this.videoCoin = coin
+    }else{
+      //如果补签没有视频
+      if(this.energySysModal == 2){
+        if(this.usergold > 50){
+          if(_.random(0, 10) >= (1 - this.sharerate) * 10){
+            this.signType = 1
+          }else{
+            this.signType = 0
+          }
+        }else{
+          if(_.random(0, 10) >= (1 - this.nogoldsharerate) * 10){
+            this.signType = 1
+          }else{
+            this.signType = 0
+          }
+        }
+      }
     }
   }
 
   getVideoReward(){
+
+    if(this.energySysModal == 2){
+      this.goSign({
+        openid:wx.getStorageSync('openId'),
+        day:this.signData.day,
+        isoverday:1,
+        gold:0
+      })
+    }
+
     if(this.gameState == 15 || this.videoCoin == 150){
 
       //开始crazy
@@ -987,6 +1015,21 @@ export default class DataBus {
     this.crazyVideoAd.onError(err => {
       this.hasNoVideo(150)
       this.crazyVideoAd.offError(this.hasNoVideo())
+    })
+  }
+
+  showSignVideoAd(){
+    this.signVideoAd.load()
+    .then(() => {
+      this.signVideoAd.show()
+    })
+    .catch(err => {
+      // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+    })
+    
+    this.signVideoAd.onError(err => {
+      this.hasNoVideo()
+      this.signVideoAd.offError(this.hasNoVideo())
     })
   }
 
@@ -1070,7 +1113,7 @@ export default class DataBus {
 
   getRemainTime(){
     var day = 0, hour = 0, minute = 0, second = 0;//时间默认值
-    var times = Math.floor(this.boxExchangeTime + 10 * 60 * 60 * 1000 - (new Date()).getTime() / 1000)
+    var times = Math.floor((this.boxExchangeTime + 10 * 60 * 60 * 1000 - (new Date()).getTime()) / 1000)
     if(times > 0){
       day = Math.floor(times / (60 * 60 * 24));
       hour = Math.floor(times / (60 * 60)) - (day * 24);
@@ -1082,6 +1125,62 @@ export default class DataBus {
     if (second <= 9) second = '0' + second;
     
     return hour + ":" + minute + ":" + second 
+  }
+
+  getGameTime(start,end){
+    var day = 0, hour = 0, minute = 0, second = 0;//时间默认值
+    var times = (end - start) / 1000
+    if(times > 0){
+      day = Math.floor(times / (60 * 60 * 24));
+      hour = Math.floor(times / (60 * 60)) - (day * 24);
+      minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
+      second = Math.floor(times) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+    }
+    if (hour <= 9) hour = '0' + hour;
+    if (minute <= 9) minute = '0' + minute;
+    if (second <= 9) second = '0' + second;
+    
+    return hour + "时" + minute + "分" + second  + "秒"
+  }
+
+  getSignInfo(){
+    let self = this
+    //获取签到信息
+    ajax({
+      tradecode: 'sys16',
+      apiType: 'week',
+      method: 'POST',
+      data: {
+        startday:this.getWeekStartAndEnd(0)[0],
+        endday:this.getWeekStartAndEnd(0)[1],
+        openid:wx.getStorageSync('openId')
+      },
+      success(data) {
+        self.daysinfo = data.body.daysinfo
+      }
+    })
+  }
+
+  goSign(data) {
+    let self = this;
+    //签到补签
+    ajax({
+      tradecode: 'sys20',
+      apiType: 'user',
+      method: 'POST',
+      data: data,
+      success(data) {
+        self.signData = data.body.info;
+        self.energySysModal = 1;
+        self.getSignInfo()
+        // if(data.signtype == 1){
+        //   databus.energySysModal = 1;
+        // }
+        // if(data.signtype == 2){
+        //   databus.energySysModal = 2;
+        // }
+      }
+    })
   }
 }
 

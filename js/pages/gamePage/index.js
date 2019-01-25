@@ -47,6 +47,7 @@ let lvc = databus.GameUI.lookVideoCoordinates //游戏结束看视频
 let ic = databus.GameUI.indexCoordinates //游戏结束首页
 let tac = databus.GameUI.tryAgainCoordinates //游戏结束再来一局
 let psec = databus.GameUI.preScoreCoordinates //游戏结束再来一局
+let bic = databus.GameUI.battleIconCoordinates //战报icon
 
 //游戏页主函数
 export default class Index {
@@ -531,6 +532,7 @@ export default class Index {
         apiType: 'user',
         method: 'POST',
         success(data) {
+          databus.gameStartTime = (new Date()).getTime() //记录开始时间
           databus.passScore = data.body.game.stagescore //第一关过关所需分数
           databus.gameId = data.body.game.gameid //本轮游戏id
           databus.rewardstep = data.body.game.rewardstep //过关奖励步数
@@ -630,6 +632,9 @@ export default class Index {
       tradecode: 'sys04',
       apiType: 'user',
       method: 'POST',
+      data:{
+        version:databus.version
+      },
       success(data) {
         databus.usergold = data.body.user.glod; //用户拥有金币
       }
@@ -726,93 +731,131 @@ export default class Index {
     }
 
     if (databus.gameState == 2){
-      // 首页按钮事件
-      if (x >= ic.x && x <= ic.x + ic.w && y >= ic.y && y <= ic.y + ic.h) {
-        this.finish()
-        databus.scene = 0
-        databus.gameState = 0
-        if (databus.musicBgChange) {
-          //开启音乐
-          databus.musicBg = true
-          databus.musicBgChange = false
+      if(databus.gameEndState == 0){
+        // 首页按钮事件
+        if (x >= ic.x && x <= ic.x + ic.w && y >= ic.y && y <= ic.y + ic.h) {
+          this.finish()
+          databus.scene = 0
+          databus.gameState = 0
+          if (databus.musicBgChange) {
+            //开启音乐
+            databus.musicBg = true
+            databus.musicBgChange = false
+          }
+          //按钮按下音效
+          this.music.playMusic('btnDown')
         }
-        //按钮按下音效
-        this.music.playMusic('btnDown')
-      }
-      // 再来一局事件
-      if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
-        databus.gameState = 1
-        if (databus.musicBgChange) {
-          //开启音乐
-          databus.musicBg = true
-          databus.musicBgChange = false
+        if(databus.shareflag){
+          // 战报icon事件
+          if (x >= bic.x && x <= bic.x + bic.w && y >= bic.y && y <= bic.y + bic.h) {
+            //按钮按下音效
+            this.music.playMusic('btnDown')
+            databus.gameEndState = 1
+            databus.bannerAd.hide()
+            setTimeout(()=>{
+              const tempFilePath = canvas.toTempFilePathSync({
+                x: 0,
+                y: 0,
+                width: canvas.width,
+                height: canvas.height,
+                destWidth: canvas.width,
+                destHeight: canvas.height
+              })
+  
+              wx.saveImageToPhotosAlbum({
+                filePath: tempFilePath,
+                success:function (data) {
+                  console.log(data);
+                }
+              })
+            },500)
+          }
         }
-        //移除事件重新绑定
-        canvas.removeEventListener('touchstart', this.touchStartHandler)
-        canvas.removeEventListener('touchmove', this.touchMoveHandler)
-        canvas.removeEventListener('touchend', this.touchEndHandler)
-        // this.restart(this.ctx,this.screenCtx,this.gameCtx)
-        this.restart(this.ctx)
+        // 再来一局事件
+        if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
+          databus.gameState = 1
+          if (databus.musicBgChange) {
+            //开启音乐
+            databus.musicBg = true
+            databus.musicBgChange = false
+          }
+          //移除事件重新绑定
+          canvas.removeEventListener('touchstart', this.touchStartHandler)
+          canvas.removeEventListener('touchmove', this.touchMoveHandler)
+          canvas.removeEventListener('touchend', this.touchEndHandler)
+          // this.restart(this.ctx,this.screenCtx,this.gameCtx)
+          this.restart(this.ctx)
 
-        //按钮按下音效
-        this.music.playMusic('btnDown')
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+        }
+        //有分享按钮才可以触发点击事件
+        if (databus.shareflag) {
+          if (!databus.isShare) {
+            // 分享事件
+            if (x >= 85 * ratio && x <= (85 * ratio + shc.w) && y >= shc.y && y <= shc.y + shc.h) {
+              wx.shareAppMessage({ 
+                'title': databus.shareConfig.info, 
+                'imageUrl': databus.shareConfig.url,
+                'query':'fatherId=' + wx.getStorageSync('openId')
+              })
+              databus.continueGame(2, 3)
+              if (databus.musicBgChange) {
+                //开启音乐
+                databus.musicBg = true
+                databus.musicBgChange = false
+              }
+              setTimeout(() => {
+                databus.isShare = true
+              }, 1000)
+              //按钮按下音效
+              this.music.playMusic('btnDown')
+            }
+          }
+          if (!databus.isLookVideo) {
+            // 视频广告事件
+            if (x >= 425 * ratio && x <= (425 * ratio + lvc.w) && y >= lvc.y && y <= lvc.y + lvc.h) {
+              if(databus.isVideoing == true){
+                return
+              }
+              databus.isVideoing = true
+              databus.showVideoAd()
+              //按钮按下音效
+              this.music.playMusic('btnDown')
+            }
+          }
+        }else{
+          if (!databus.isLookVideo) {
+            // 视频广告事件
+            if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
+              if(databus.isVideoing == true){
+                return
+              }
+              databus.isVideoing = true
+              databus.showVideoAd()
+              //按钮按下音效
+              this.music.playMusic('btnDown')
+            }
+          }
+        }
+
+        // // 看视频事件
+        // if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
+        //   databus.continueGame(1, 10)
+        //   //按钮按下音效
+        //   this.music.playMusic('btnDown')
+        // }
       }
-      //有分享按钮才可以触发点击事件
-      if (databus.shareflag) {
-        if (!databus.isShare) {
-          // 分享事件
-          if (x >= 85 * ratio && x <= (85 * ratio + shc.w) && y >= shc.y && y <= shc.y + shc.h) {
-            wx.shareAppMessage({ 
-              'title': databus.shareConfig.info, 
-              'imageUrl': databus.shareConfig.url,
-              'query':'fatherId=' + wx.getStorageSync('openId')
-            })
-            databus.continueGame(2, 3)
-            if (databus.musicBgChange) {
-              //开启音乐
-              databus.musicBg = true
-              databus.musicBgChange = false
-            }
-            setTimeout(() => {
-              databus.isShare = true
-            }, 1000)
-            //按钮按下音效
-            this.music.playMusic('btnDown')
-          }
-        }
-        if (!databus.isLookVideo) {
-          // 视频广告事件
-          if (x >= 425 * ratio && x <= (425 * ratio + lvc.w) && y >= lvc.y && y <= lvc.y + lvc.h) {
-            if(databus.isVideoing == true){
-              return
-            }
-            databus.isVideoing = true
-            databus.showVideoAd()
-            //按钮按下音效
-            this.music.playMusic('btnDown')
-          }
-        }
-      }else{
-        if (!databus.isLookVideo) {
-          // 视频广告事件
-          if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
-            if(databus.isVideoing == true){
-              return
-            }
-            databus.isVideoing = true
-            databus.showVideoAd()
-            //按钮按下音效
-            this.music.playMusic('btnDown')
-          }
+
+      if(databus.gameEndState == 1){
+        // 战报icon关闭
+        if (x >= 0 * ratio && x <= ( 0 + 150 ) * ratio && y >= 85 * ratio && y <= ( 85 + 162) * ratio) {
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          databus.gameEndState = 0
         }
       }
 
-      // // 看视频事件
-      // if (x >= lvc.x && x <= lvc.x + lvc.w && y >= lvc.y && y <= lvc.y + lvc.h) {
-      //   databus.continueGame(1, 10)
-      //   //按钮按下音效
-      //   this.music.playMusic('btnDown')
-      // }
     } else if (databus.gameState == 3) {//音乐弹框
       // 关闭弹框事件
       if (x >= (0 * ratio) && x <= ((0 + 150) * ratio) && y >= (170 * ratio) && y <= ((170 + 162) * ratio)) {
@@ -1067,7 +1110,21 @@ export default class Index {
         databus.btnPlus = 1
         setTimeout(() => {
           databus.btnPlus = 0
-          databus.getVideoReward()
+          ajax({
+            tradecode: 'acct01',
+            apiType: 'user',
+            method: 'POST',
+            data: {
+              "gameid": databus.gameId,
+              "proptype": 98,
+              "gold":databus.videoCoin
+            },
+            success(data) {
+              databus.usergold = data.body.user.glod
+              databus.getVideoReward()
+            }
+          })
+
         }, databus.laterTime)
         //按钮按下音效
         this.music.playMusic('btnDown')
