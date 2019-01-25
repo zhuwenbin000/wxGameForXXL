@@ -189,6 +189,8 @@ export default class DataBus {
       h: 130 * ratio
     }
 
+    this.battleDays = 0 //大赛总天数
+    this.battlePastDays = 0 //大赛进行天数
     this.battleInfo = null //大赛信息
     this.homeState = 1 //首页状态变化 2banner弹框 3存档弹框 4精力系统
     this.energySysTab = 1 //精力系统tab顺序
@@ -254,27 +256,10 @@ export default class DataBus {
     this.signType = 0 //补签条件 0金币1分享2视频
     this.sharerate = 0 
     this.nogoldsharerate = 0 
+    this.boxbannerrate = 0
     //抽奖部分
-    this.plunderRecord = [//搜刮记录
-      {
-        logopath:'',
-        nickname:'林杰',
-        penrgy:'1',
-        stealtime:'1'
-      },
-      {
-        logopath:'',
-        nickname:'林杰',
-        penrgy:'1',
-        stealtime:'1'
-      },
-      {
-        logopath:'',
-        nickname:'林杰',
-        penrgy:'1',
-        stealtime:'1'
-      }
-    ]
+    this.plunderRecord = []//搜刮记录
+    
     this.boxNum = 0 //拥有箱子的数量
     this.myEnergy = 0 //个人精力
     this.boxEnergy = 0 //箱子精力
@@ -1127,6 +1112,33 @@ export default class DataBus {
     return hour + ":" + minute + ":" + second 
   }
 
+  getDurDays(start,end){
+    var day = 0;
+    var times = Math.floor((end - start) / 1000)
+    if(times > 0){
+      day = Math.floor(times / (60 * 60 * 24));
+    }
+    if (day <= 9) day = '0' + day;
+    
+    return day
+  }
+
+  getStealTime(time){
+    var day = 0, hour = 0;//时间默认值
+    var times = Math.floor(((new Date()).getTime() - time) / 1000)
+    if(times > 0){
+      day = Math.floor(times / (60 * 60 * 24));
+      hour = Math.floor(times / (60 * 60)) - (day * 24);
+    }
+    
+    if(day > 0){
+      return day + "天"
+    }else{
+      return hour + "小时"
+    }
+    
+  }
+
   getGameTime(start,end){
     var day = 0, hour = 0, minute = 0, second = 0;//时间默认值
     var times = (end - start) / 1000
@@ -1181,6 +1193,31 @@ export default class DataBus {
         // }
       }
     })
+  }
+
+  getUserInfo() { //获取个人信息
+    let self = this;
+    let options = {
+      tradecode: 'sys04',
+      apiType: 'user',
+      method: 'POST',
+      data:{
+        version:self.version
+      },
+      success(data) {
+        //精力系统相关
+        self.boxExchangeTime = data.body.user.lastzhtime;
+        self.boxNum = data.body.user.boxnum;
+        self.myEnergy = data.body.user.pengry;
+        self.boxEnergy = data.body.user.boxengry;
+        self.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
+        
+        if((new Date()).getTime() > self.boxExchangeTime + 10 * 60 * 60 * 1000){
+          self.canExchangeBox = true
+        }
+      }
+    }
+    ajax(options)
   }
 }
 

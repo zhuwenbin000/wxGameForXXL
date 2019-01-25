@@ -251,12 +251,16 @@ export default class Index {
             databus.showSignVideoAd()
           }
           if(databus.signType == 0){
-            this.goSign({
-              openid:wx.getStorageSync('openId'),
-              day:databus.signData,
-              isoverday:1,
-              gold:50
-            })
+            if(databus.usergold > 50){
+              this.goSign({
+                openid:wx.getStorageSync('openId'),
+                day:databus.signData,
+                isoverday:1,
+                gold:50
+              })
+            }else{
+              wx.showToast({ title: "金币不足", icon:'none'})
+            }
           }
           if(databus.signType == 1){
             console.log("分享补签")
@@ -293,13 +297,40 @@ export default class Index {
           databus.boxOpenNeedClickNum = 0
           databus.boxOpenClickNum = 0
           //关闭广告
-          databus.bannerAd.hide();
+          databus.bannerAd && databus.bannerAd.hide();
         }
       } else if (databus.energySysModal == 0) {
         
         if (databus.energySysTab == 0) {
           //大赛部分点击事件
+          //分享
+          if (x >= 60 * ratio && x <= (60 * ratio + 305 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio + 115 * ratio)) {
+            //按钮按下音效
+            this.music.playMusic('btnDown')
+            console.log("分享组战队")
+            wx.shareAppMessage({ 
+              'title': databus.shareConfig.info, 
+              'imageUrl': databus.shareConfig.url,
+              'query':'fatherId=' + wx.getStorageSync('openId')
+            })
+          }
 
+          //大赛详情
+          if (x >= 415 * ratio && x <= (415 * ratio + 350 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio + 115 * ratio)) {
+            //按钮按下音效
+            this.music.playMusic('btnDown')
+            const pageurl = encodeURIComponent(databus.activityData.url + "?openid=" + wx.getStorageSync('openId'))
+            wx.navigateToMiniProgram({
+              appId: 'wx470a8b0b3f90857b',
+              path: 'pages/webview/webview?pageurl=' + pageurl,
+              envVersion: 'trial',
+              success(res) {
+                // 打开成功
+                // console.log("成功")
+                // console.log(res)
+              }
+            })
+          }
         } else if (databus.energySysTab == 1) {
           //签到部分点击事件
           for (let i = 0; i < databus.daysinfo.length; i++) {
@@ -312,7 +343,7 @@ export default class Index {
                   this.music.playMusic('btnDown')
 
                   //补签弹框
-                  if(databus.shareflag){//非审核模式
+                  if(!databus.shareflag){//非审核模式
                     databus.signType = 2
                   }else{
                     databus.signType = 0
@@ -353,12 +384,7 @@ export default class Index {
             if(databus.boxOpenStart){ //开箱进行中时 开箱次数+1
               databus.boxOpenClickNum++
               if(databus.boxOpenClickNum == databus.boxOpenNeedClickNum){//当开箱次数等于需要开箱总次数时  开箱成功
-                databus.energySysModal = 3
-                databus.openBoxData = {
-                  proptype: '1',
-                  propnum: '1',
-                }
-                databus.showOpenBoxAd()
+                this.openBox()
               }
             }else{
               if(databus.boxNum > 0){
@@ -486,6 +512,7 @@ export default class Index {
   //获取精力系统相关
   getEngerySysInfo(){
     this.getBattleInfo()
+    this.getPlunderList()
     databus.getSignInfo()
   }
 
@@ -500,13 +527,31 @@ export default class Index {
         openid:wx.getStorageSync('openId')
       },
       success(data) {
-
+        databus.battleInfo = data.body.info
+        databus.energySysTab = 0
+        databus.battleDays = databus.getDurDays(data.body.info.starttime,data.body.info.endtime)//大赛总天数
+        databus.battlePastDays = databus.getDurDays(data.body.info.starttime,(new Date()).getTime()) //大赛进行天数
       }
     })
 
   }
 
-  
+  getPlunderList() {
+
+    //获取搜刮记录
+    ajax({
+      tradecode: 'sys18',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        openid:wx.getStorageSync('openId')
+      },
+      success(data) {
+        databus.plunderRecord = data.body.infos
+      }
+    })
+
+  }
 
   goSign(data) {
     let self = this;
@@ -519,7 +564,7 @@ export default class Index {
       success(data) {
         databus.signData = data.body.info;
         databus.energySysModal = data.body.info.signtype == '1' ? data.body.info.signtype : '0';
-        self.getSignInfo()
+        databus.getSignInfo()
         // if(data.signtype == 1){
         //   databus.energySysModal = 1;
         // }
@@ -544,7 +589,31 @@ export default class Index {
         // wx.showToast({ title: "成功换取精力啦~", icon:'none'})
         databus.exchangeBoxAni = true
         databus.exchangeBoxAniTime = 0
-        databus.myEnergy = 0
+        databus.getUserInfo()
+      }
+    })
+  }
+
+  openBox() {
+    //开箱
+    ajax({
+      tradecode: 'sys21',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        openid:wx.getStorageSync('openId'),
+        version: databus.version
+      },
+      success(data) {
+        databus.energySysModal = 3
+        databus.openBoxData = data.body.info
+        databus.boxNum = data.body.info.boxnum
+        if(!databus.shareflag){
+          if(_.random(0, 10) >= (1 - this.sharerate) * 10){
+            databus.showOpenBoxAd()
+          }
+        }
+        databus.getUserInfo()
       }
     })
   }
