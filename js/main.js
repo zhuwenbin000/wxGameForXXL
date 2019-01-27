@@ -242,13 +242,25 @@ export default class Main {
 
   getBaseInfo() {
     var me = this;
+    
     //分享文案
     ajax({
       tradecode: 'sys05',
       apiType: 'user',
       method: 'POST',
       success(data) {
-        databus.shareConfig = data.body.share;
+        data.body.sharelist.map((item,index)=>{
+          if (item.sharetype == '1'){
+            databus.shareConfig.sg = item 
+          } else if (item.sharetype == '2'){
+            databus.shareConfig.ds = item
+          } else if (item.sharetype == '3') {
+            databus.shareConfig.pt = item
+          } else if (item.sharetype == '4') {
+            databus.shareConfig.tj = item
+          }
+        })
+      
       }
     })
 
@@ -266,7 +278,6 @@ export default class Main {
 
         databus.sharerate = data.body.version.sharerate
         databus.nogoldsharerate = data.body.version.nogoldsharerate
-        databus.boxbannerrate = data.body.version.boxbannerrate
 
         if(shareflag){
 

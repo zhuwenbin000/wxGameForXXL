@@ -745,7 +745,7 @@ export default class Index {
           //按钮按下音效
           this.music.playMusic('btnDown')
         }
-        if(!databus.shareflag){
+        if(databus.shareflag){
           // 战报icon事件
           if (x >= bic.x && x <= bic.x + bic.w && y >= bic.y && y <= bic.y + bic.h) {
             //按钮按下音效
@@ -795,8 +795,8 @@ export default class Index {
             // 分享事件
             if (x >= 85 * ratio && x <= (85 * ratio + shc.w) && y >= shc.y && y <= shc.y + shc.h) {
               wx.shareAppMessage({ 
-                'title': databus.shareConfig.info, 
-                'imageUrl': databus.shareConfig.url,
+                'title': databus.shareConfig.pt.info, 
+                'imageUrl': databus.shareConfig.pt.url ? databus.shareConfig.pt.url:'',
                 'query':'fatherId=' + wx.getStorageSync('openId')
               })
               databus.continueGame(2, 3)
