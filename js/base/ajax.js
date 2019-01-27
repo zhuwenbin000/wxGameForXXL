@@ -116,12 +116,14 @@ export function ajax(options) {
 // 用户登录
 export function userLogin(options) {
   let fatherId = wx.getStorageSync('fatherId') || '' //上级id
+  let sharetype = wx.getStorageSync('sharetype') || '' //分享类型
+  
   wx.login({
     success: (res) => {
       let login = {
         tradecode: 'sys01',
         method: 'POST',
-        data: { "user": { "code": res.code, "dzopenid": fatherId } },
+        data: { "user": { "code": res.code, "dzopenid": fatherId, "sharetype": sharetype} },
         success(data) {
           if (data.result.code == '0') {//处理成功
             wx.setStorageSync('loginflag', data.body.user.loginflag)

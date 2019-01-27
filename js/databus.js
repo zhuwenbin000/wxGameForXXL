@@ -153,7 +153,7 @@ export default class DataBus {
       w: 258 * ratio,
       h: 130 * ratio
     }
-
+    this.sharetime = 0 //有效分享的最短时间
     this.battleInfo = null //大赛信息
     this.homeState = 1 //首页状态变化 2banner弹框 3存档弹框 4精力系统
     this.energySysTab = 1 //精力系统tab顺序
@@ -220,26 +220,7 @@ export default class DataBus {
     this.sharerate = 0
     this.nogoldsharerate = 0
     //抽奖部分
-    this.plunderRecord = [//搜刮记录
-      {
-        logopath: '',
-        nickname: '林杰',
-        penrgy: '1',
-        stealtime: '1'
-      },
-      {
-        logopath: '',
-        nickname: '林杰',
-        penrgy: '1',
-        stealtime: '1'
-      },
-      {
-        logopath: '',
-        nickname: '林杰',
-        penrgy: '1',
-        stealtime: '1'
-      }
-    ]
+    this.plunderRecord = []
     this.boxNum = 0 //拥有箱子的数量
     this.myEnergy = 0 //个人精力
     this.boxEnergy = 0 //箱子精力
@@ -1191,5 +1172,34 @@ export default class DataBus {
     }
     ajax(options)
   }
+
+  wxShare(shareType, callback) {
+    
+    callback && wx.setStorageSync('shareStart', (new Date()).getTime())
+    wx.shareAppMessage({
+      'title': this.shareConfig[shareType].info, 
+      'imageUrl': this.shareConfig[shareType].url,
+      'imageUrlId': this.shareConfig[shareType].imgid,
+      'query':'fatherId=' + wx.getStorageSync('openId') + '&shareType=' + shareType
+    })
+    callback && setTimeout(()=>{
+      if(wx.getStorageSync('shareEnd') > wx.getStorageSync('shareStart') + this.sharetime * 1000){
+        callback()
+      }
+      wx.removeStorage({key: 'shareStart'})
+      wx.removeStorage({key: 'shareEnd'})
+    },parseInt(this.sharetime) * 1000)
+  }
+
+  onShareAppMessage() {
+    const shareType = '3';
+    wx.onShareAppMessage({
+      'title': this.shareConfig[shareType].info, 
+      'imageUrl': this.shareConfig[shareType].url,
+      'imageUrlId': this.shareConfig[shareType].imgid,
+      'query':'fatherId=' + wx.getStorageSync('openId') + '&shareType=' + shareType
+    })
+  }
+
 }
 

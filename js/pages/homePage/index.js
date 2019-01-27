@@ -308,11 +308,13 @@ export default class Index {
           if (x >= 60 * ratio && x <= (60 * ratio + 305 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio + 115 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
-            wx.shareAppMessage({
-              'title': databus.battleInfo.sharetextofgame, 
-              'imageUrl': databus.battleInfo.shareimgofgame,
-              'query':'fatherId=' + wx.getStorageSync('openId')
-            })
+            // wx.shareAppMessage({
+            //   'title': databus.battleInfo.sharetextofgame, 
+            //   'imageUrl': databus.battleInfo.shareimgofgame,
+            //   'query':'fatherId=' + wx.getStorageSync('openId')
+            // })
+
+            databus.wxShare('2')
           }
 
           //大赛详情

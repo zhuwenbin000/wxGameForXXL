@@ -52,6 +52,7 @@ export default class Main {
 
     if(res && res.query && res.query.fatherId){
       wx.setStorageSync('fatherId', res.query.fatherId)
+      wx.setStorageSync('sharetype', res.query.sharetype)
     }
 
     let loginflag = wx.getStorageSync('loginflag')
@@ -79,6 +80,12 @@ export default class Main {
       },
       fail(res) {
           // 分包加载失败通过 fail 回调
+      }
+    })
+
+    wx.onShow(()=>{
+      if(wx.getStorageSync('shareStart')){
+        wx.setStorageSync('shareEnd', (new Date()).getTime())
       }
     })
 
@@ -249,18 +256,10 @@ export default class Main {
       apiType: 'user',
       method: 'POST',
       success(data) {
-        data.body.sharelist.map((item,index)=>{
-          if (item.sharetype == '1'){
-            databus.shareConfig.sg = item 
-          } else if (item.sharetype == '2'){
-            databus.shareConfig.ds = item
-          } else if (item.sharetype == '3') {
-            databus.shareConfig.pt = item
-          } else if (item.sharetype == '4') {
-            databus.shareConfig.tj = item
-          }
+        data.body.sharelist && data.body.sharelist.map((item,index)=>{
+          databus.shareConfig[item.sharetype] = item
         })
-      
+        databus.onShareAppMessage()
       }
     })
 

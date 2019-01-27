@@ -794,12 +794,15 @@ export default class Index {
           if (!databus.isShare) {
             // 分享事件
             if (x >= 85 * ratio && x <= (85 * ratio + shc.w) && y >= shc.y && y <= shc.y + shc.h) {
-              wx.shareAppMessage({ 
-                'title': databus.shareConfig.pt.info, 
-                'imageUrl': databus.shareConfig.pt.url ? databus.shareConfig.pt.url:'',
-                'query':'fatherId=' + wx.getStorageSync('openId')
+              // wx.shareAppMessage({ 
+              //   'title': databus.shareConfig.pt.info, 
+              //   'imageUrl': databus.shareConfig.pt.url ? databus.shareConfig.pt.url:'',
+              //   'query':'fatherId=' + wx.getStorageSync('openId')
+              // })
+              // databus.continueGame(2, 3)
+              databus.wxShare('3',()=>{
+                databus.continueGame(2, 3)
               })
-              databus.continueGame(2, 3)
               if (databus.musicBgChange) {
                 //开启音乐
                 databus.musicBg = true
