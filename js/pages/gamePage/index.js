@@ -802,17 +802,17 @@ export default class Index {
               // databus.continueGame(2, 3)
               databus.wxShare('3',()=>{
                 databus.continueGame(2, 3)
+                if (databus.musicBgChange) {
+                  //开启音乐
+                  databus.musicBg = true
+                  databus.musicBgChange = false
+                }
+                setTimeout(() => {
+                  databus.isShare = true
+                }, 1000)
+                //按钮按下音效
+                this.music.playMusic('btnDown')
               })
-              if (databus.musicBgChange) {
-                //开启音乐
-                databus.musicBg = true
-                databus.musicBgChange = false
-              }
-              setTimeout(() => {
-                databus.isShare = true
-              }, 1000)
-              //按钮按下音效
-              this.music.playMusic('btnDown')
             }
           }
           if (!databus.isLookVideo) {

@@ -33,8 +33,12 @@ export default class Index {
         databus.boxEnergy = data.body.user.boxengry;
         databus.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
         
-        if((new Date()).getTime() > databus.boxExchangeTime + 10 * 60 * 60 * 1000){
+        if(!databus.boxExchangeTime){
           databus.canExchangeBox = true
+        }else{
+          if((new Date()).getTime() > databus.boxExchangeTime + 10 * 60 * 60 * 1000){
+            databus.canExchangeBox = true
+          }
         }
       }
     }
@@ -298,7 +302,7 @@ export default class Index {
           databus.boxOpenNeedClickNum = 0
           databus.boxOpenClickNum = 0
           //关闭广告
-          databus.bannerAd.hide();
+          databus.bannerAd && databus.bannerAd.hide();
         }
       } else if (databus.energySysModal == 0) {
         
@@ -404,12 +408,7 @@ export default class Index {
             if(databus.boxOpenStart){ //开箱进行中时 开箱次数+1
               databus.boxOpenClickNum++
               if(databus.boxOpenClickNum == databus.boxOpenNeedClickNum){//当开箱次数等于需要开箱总次数时  开箱成功
-                databus.energySysModal = 3
-                databus.openBoxData = {
-                  proptype: '1',
-                  propnum: '1',
-                }
-                databus.showOpenBoxAd()
+                this.openBox()
               }
             }else{
               if(databus.boxNum > 0){
@@ -432,22 +431,25 @@ export default class Index {
            
            
             if ((x >= 84 * ratio && x <= (84 * ratio + 662 * ratio) && y >= 825 * ratio && y <= (825 * ratio) + (200 * ratio)) && databus.tip_flase) {
-              console.log(2)
-              wx.shareAppMessage({
-                'title': databus.shareConfig.tj.info,
-                'imageUrl': databus.shareConfig.tj.url,
-                'query': 'fatherId=' + wx.getStorageSync('openId')
-              })
-              console.log(1)
+              // console.log(2)
+              // wx.shareAppMessage({
+              //   'title': databus.shareConfig.tj.info,
+              //   'imageUrl': databus.shareConfig.tj.url,
+              //   'query': 'fatherId=' + wx.getStorageSync('openId')
+              // })
+              // console.log(1)
+
+              databus.wxShare('1')
             }
           }else{
             if (x >= 230 * ratio && x <= (230 * ratio + 194 * ratio) && y >= 295 * ratio && y <= (295 * ratio) + (88 * ratio)) {
-              console.log(1)
-              wx.shareAppMessage({
-                'title': databus.shareConfig.info,
-                'imageUrl': databus.shareConfig.url,
-                'query': 'fatherId=' + wx.getStorageSync('openId')
-              })
+              // console.log(1)
+              // wx.shareAppMessage({
+              //   'title': databus.shareConfig.info,
+              //   'imageUrl': databus.shareConfig.url,
+              //   'query': 'fatherId=' + wx.getStorageSync('openId')
+              // })
+              databus.wxShare('4')
             }
             const datalist = databus.jl_list.slice((databus.ji_pageindex-1)*6,databus.ji_pageindex*6)
             const itemHeight = 917 * ratio / 6;
@@ -593,6 +595,7 @@ export default class Index {
   //获取精力系统相关
   getEngerySysInfo(){
     this.getBattleInfo()
+    this.getPlunderList()
     databus.getSignInfo()
   }
 
@@ -607,13 +610,31 @@ export default class Index {
         openid:wx.getStorageSync('openId')
       },
       success(data) {
-
+        databus.battleInfo = data.body.info
+        databus.energySysTab = 0
+        databus.battleDays = databus.getDurDays(data.body.info.starttime,data.body.info.endtime)//大赛总天数
+        databus.battlePastDays = databus.getDurDays(data.body.info.starttime,(new Date()).getTime()) //大赛进行天数
       }
     })
 
   }
 
-  
+  getPlunderList() {
+
+    //获取搜刮记录
+    ajax({
+      tradecode: 'sys18',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        openid:wx.getStorageSync('openId')
+      },
+      success(data) {
+        databus.plunderRecord = data.body.infos
+      }
+    })
+
+  }
 
   goSign(data) {
     let self = this;
@@ -651,7 +672,31 @@ export default class Index {
         // wx.showToast({ title: "成功换取精力啦~", icon:'none'})
         databus.exchangeBoxAni = true
         databus.exchangeBoxAniTime = 0
-        databus.myEnergy = 0
+        databus.getUserInfo()
+      }
+    })
+  }
+
+  openBox() {
+    //开箱
+    ajax({
+      tradecode: 'sys21',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        openid:wx.getStorageSync('openId'),
+        version: databus.version
+      },
+      success(data) {
+        databus.energySysModal = 3
+        databus.openBoxData = data.body.info
+        databus.boxNum = data.body.info.boxnum
+        if(databus.shareflag){
+          if(_.random(0, 10) >= (1 - this.sharerate) * 10){
+            databus.showOpenBoxAd()
+          }
+        }
+        databus.getUserInfo()
       }
     })
   }

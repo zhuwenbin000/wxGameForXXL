@@ -53,6 +53,7 @@ export default class Main {
     if(res && res.query && res.query.fatherId){
       wx.setStorageSync('fatherId', res.query.fatherId)
       wx.setStorageSync('sharetype', res.query.sharetype)
+      console.log(JSON.stringify(res))
     }
 
     let loginflag = wx.getStorageSync('loginflag')
@@ -277,7 +278,8 @@ export default class Main {
 
         databus.sharerate = data.body.version.sharerate
         databus.nogoldsharerate = data.body.version.nogoldsharerate
-
+        databus.boxbannerrate = data.body.version.boxbannerrate
+        databus.sharetime = data.body.version.sharetime
         if(shareflag){
 
           const openid = wx.getStorageSync('openId')
