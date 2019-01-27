@@ -266,6 +266,7 @@ export default class Main {
 
         databus.sharerate = data.body.version.sharerate
         databus.nogoldsharerate = data.body.version.nogoldsharerate
+        databus.boxbannerrate = data.body.version.boxbannerrate
 
         if(shareflag){
 

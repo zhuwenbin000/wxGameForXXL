@@ -745,7 +745,7 @@ export default class Index {
           //按钮按下音效
           this.music.playMusic('btnDown')
         }
-        if(databus.shareflag){
+        if(!databus.shareflag){
           // 战报icon事件
           if (x >= bic.x && x <= bic.x + bic.w && y >= bic.y && y <= bic.y + bic.h) {
             //按钮按下音效

@@ -90,7 +90,7 @@ export default class GameEnd {
     }
     //游戏结束再来一局
     ctx.drawImage(Robj["tryAgain"], 0, 0, Robj["tryAgain"].width, Robj["tryAgain"].height, tac.x, tac.y, tac.w, tac.h);
-    if(databus.shareflag){
+    if(!databus.shareflag){
       //战报icon
       ctx.drawImage(Robj["battleReportIcon"], 0, 0, Robj["battleReportIcon"].width, Robj["battleReportIcon"].height, bic.x , bic.y, bic.w, bic.h);
     }

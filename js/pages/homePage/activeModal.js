@@ -194,15 +194,20 @@ export default class ActiveModal {
       ctx.drawImage(Img["battleProcess"], 0, 0, Img["battleProcess"].width, Img["battleProcess"].height, 56 * ratio, 1180 * ratio, 716 * ratio, 80 * ratio);
       //大赛框
       ctx.drawImage(Img["battleBorder"], 0, 0, Img["battleBorder"].width, Img["battleBorder"].height, 54 * ratio, 300 * ratio, 720 * ratio, 960 * ratio);
-      //大赛进度
+      //分享组战队
       ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 60 * ratio, 1300 * ratio, 305 * ratio, 115 * ratio);
-      //大赛进度
+      //最新赛况
       ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 415 * ratio, 1300 * ratio, 350 * ratio, 115 * ratio);
       //分享组战队
       ctx.drawImage(Img["battleShare"], 0, 0, Img["battleShare"].width, Img["battleShare"].height, 110 * ratio, 1330 * ratio, 200 * ratio, 40 * ratio);
       //最新赛况
       ctx.drawImage(Img["battleInfo"], 0, 0, Img["battleInfo"].width, Img["battleInfo"].height, 470 * ratio, 1325 * ratio, 232 * ratio, 52 * ratio);
 
+      //大赛进度
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#fff';
+      ctx.font = 40 * ratio + 'px Arial';
+      ctx.fillText(databus.battlePastDays + ' / ' + databus.battleDays, 655 * ratio, 1230 * ratio);
     }
 
     //签到
@@ -373,11 +378,13 @@ export default class ActiveModal {
         ctx.fillText(databus.getRemainTime(), 685 * ratio, 430 * ratio);
       }
       //偷取记录
-      for (let i = 0; i < 3; i++) {
-        ctx.textAlign = 'left';
-        ctx.fillStyle = '#ffe739';
-        ctx.font = 28 * ratio + 'px Arial';
-        ctx.fillText('好友' + plunderRecord[i].nickname + '，' + plunderRecord[i].stealtime + '小时前搜刮了你的精力' + plunderRecord[i].penrgy + '点。', 80 * ratio, (470 + 45 * (i + 1)) * ratio);
+      if(plunderRecord.length > 0){
+        for (let i = 0; i < 3; i++) {
+          ctx.textAlign = 'left';
+          ctx.fillStyle = '#ffe739';
+          ctx.font = 28 * ratio + 'px Arial';
+          ctx.fillText('好友' + plunderRecord[i].nickname + '，' + databus.getStealTime(plunderRecord[i].stealtime) + '前搜刮了你的精力' + plunderRecord[i].penrgy + '点。', 80 * ratio, (470 + 45 * (i + 1)) * ratio);
+        }
       }
       //宝箱投影
       ctx.drawImage(Img["boxShadow"], 0, 0, Img["boxShadow"].width, Img["boxShadow"].height, 200 * ratio, 920 * ratio, 430 * ratio, 106 * ratio);
@@ -398,7 +405,27 @@ export default class ActiveModal {
       ctx.drawImage(Img["boxProcessWrap"], 0, 0, Img["boxProcessWrap"].width, Img["boxProcessWrap"].height, 214 * ratio, 1043 * ratio, 400 * ratio, 28 * ratio);
       //箱子精力进度条内层
       if(databus.exchangeBoxAni){
-        ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * ((databus.boxEnergy + databus.myEnergy * (databus.exchangeBoxAniTime / 30)) / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * ((databus.boxEnergy + databus.myEnergy * (databus.exchangeBoxAniTime / 30)) / 50) * ratio, 16 * ratio);
+        if(databus.boxEnergy + databus.myEnergy < 50){
+          ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * ((databus.boxEnergy + databus.myEnergy * (databus.exchangeBoxAniTime / 30)) / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * ((databus.boxEnergy + databus.myEnergy * (databus.exchangeBoxAniTime / 30)) / 50) * ratio, 16 * ratio);
+        }
+
+        if(databus.boxEnergy + databus.myEnergy >= 50 && databus.boxEnergy + databus.myEnergy < 100){
+          if(databus.exchangeBoxAniTime < 15){
+            ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * ((databus.boxEnergy + (50 - databus.boxEnergy) * (databus.exchangeBoxAniTime / 15)) / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * ((databus.boxEnergy + (50 - databus.boxEnergy) * (databus.exchangeBoxAniTime / 15)) / 50) * ratio, 16 * ratio);
+          }else{
+            ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * (((databus.boxEnergy  + databus.myEnergy - 50 ) * (databus.exchangeBoxAniTime - 15) / 15) / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * (((databus.boxEnergy  + databus.myEnergy - 50 ) * (databus.exchangeBoxAniTime - 15) / 15) / 50) * ratio, 16 * ratio);
+          }
+        }
+
+        if(databus.boxEnergy + databus.myEnergy >= 100){
+          if(databus.exchangeBoxAniTime < 10){
+            ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * ((databus.boxEnergy + (50 - databus.boxEnergy) * (databus.exchangeBoxAniTime / 10)) / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * ((databus.boxEnergy + (50 - databus.boxEnergy) * (databus.exchangeBoxAniTime / 10)) / 50) * ratio, 16 * ratio);
+          }else if(databus.exchangeBoxAniTime >= 10 && databus.exchangeBoxAniTime < 20){
+            ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * (50 * (databus.exchangeBoxAniTime - 10) / 10 / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * (50 * (databus.exchangeBoxAniTime - 10) / 10 / 50) * ratio, 16 * ratio);
+          }else{
+            ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * (((databus.boxEnergy  + databus.myEnergy - 100 ) * (databus.exchangeBoxAniTime - 20) / 10) / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * (((databus.boxEnergy  + databus.myEnergy - 100 ) * (databus.exchangeBoxAniTime - 20) / 10) / 50) * ratio, 16 * ratio);
+          }
+        }
       }else{
         ctx.drawImage(Img["boxProcess"], 0, 0, Img["boxProcess"].width * (databus.boxEnergy / 50), Img["boxProcess"].height, 222 * ratio, 1049 * ratio, 384 * (databus.boxEnergy / 50) * ratio, 16 * ratio);
       }
@@ -414,7 +441,7 @@ export default class ActiveModal {
 
       //头像
       let headimg = wx.createImage();
-      headimg.src = "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132"
+      headimg.src = databus.userinfo.userInfo.avatarUrl
       databus.circleImg(ctx, headimg, 110 * ratio, 348 * ratio, 40 * ratio)
 
       //开箱成功弹框
