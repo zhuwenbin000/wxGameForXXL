@@ -220,9 +220,6 @@ export default class DataBus {
     this.daysinfo = [] //签到页数据
     this.signData = {} //当前签到奖励
     this.signType = 0 //补签条件 0金币1分享2视频
-<<<<<<< HEAD
-    this.sharerate = 0
-    this.nogoldsharerate = 0
     //抽奖部分
     this.plunderRecord = [//搜刮记录
       {
@@ -244,14 +241,12 @@ export default class DataBus {
         stealtime: '1'
       }
     ]
-=======
     this.sharerate = 0 
     this.nogoldsharerate = 0 
     this.boxbannerrate = 0
     //抽奖部分
     this.plunderRecord = []//搜刮记录
     
->>>>>>> ed932eeaa0b2bc59ef9a41a2d097fc45dd22e579
     this.boxNum = 0 //拥有箱子的数量
     this.myEnergy = 0 //个人精力
     this.boxEnergy = 0 //箱子精力
@@ -1104,9 +1099,6 @@ export default class DataBus {
     return hour + ":" + minute + ":" + second
   }
 
-<<<<<<< HEAD
-  getGameTime(start, end) {
-=======
   getDurDays(start,end){
     var day = 0;
     var times = Math.floor((end - start) / 1000)
@@ -1135,7 +1127,6 @@ export default class DataBus {
   }
 
   getGameTime(start,end){
->>>>>>> ed932eeaa0b2bc59ef9a41a2d097fc45dd22e579
     var day = 0, hour = 0, minute = 0, second = 0;//时间默认值
     var times = (end - start) / 1000
     if (times > 0) {
@@ -1190,7 +1181,6 @@ export default class DataBus {
       }
     })
   }
-<<<<<<< HEAD
   getFriendsList() {
     let self = this;
     ajax({
@@ -1207,8 +1197,7 @@ export default class DataBus {
         self.ji_totlePage = parseInt(self.jl_list.length/6)+1 
       }
     })
-=======
-
+  }
   getUserInfo() { //获取个人信息
     let self = this;
     let options = {
@@ -1232,7 +1221,6 @@ export default class DataBus {
       }
     }
     ajax(options)
->>>>>>> ed932eeaa0b2bc59ef9a41a2d097fc45dd22e579
   }
 }
 
