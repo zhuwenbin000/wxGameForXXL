@@ -80,6 +80,10 @@ let R = {
   "sgcg": "energySys/img/reward/sgcg.png",
   "sgsb": "energySys/img/reward/sgsb.png",
   "sgcg_b": "energySys/img/plunder/sgcg.png",
+  'htsx':'energySys/img/plunder/htsx.png',
+  'ysj':'energySys/img/plunder/ysj.png',
+  'htsx_pic': 'energySys/img/plunder/htsx_pic.png',
+  'htsx_txt': 'energySys/img/plunder/htsx_txt.png'
 }
 
 let Img = {};
@@ -87,8 +91,6 @@ for (var k in R) {
   Img[k] = wx.createImage();
   Img[k].src = R[k];
 }
-
-
 export default class ActiveModal {
   render(ctx) {
     const signXY = databus.signXY
@@ -452,64 +454,47 @@ export default class ActiveModal {
       ctx.fillStyle = '#fff';
       ctx.font = '18px Arial';
       ctx.textAlign = 'left';
-      ctx.fillText(databus.frinendCount, 160 * ratio, 355 * ratio);
+      ctx.fillText(databus.jl_list.length, 160 * ratio, 355 * ratio);
       ctx.drawImage(Img["yaoqing"], 0, 0, Img["yaoqing"].width, Img["yaoqing"].height, 230 * ratio, 295 * ratio, 194 * ratio, 88 * ratio);
       ctx.drawImage(Img["group30"], 0, 0, Img["group30"].width, Img["group30"].height, 460 * ratio, 1300 * ratio, 258 * ratio, 130 * ratio);
       ctx.drawImage(Img["group31"], 0, 0, Img["group31"].width, Img["group31"].height, 110 * ratio, 1300 * ratio, 258 * ratio, 130 * ratio);
-      ctx.fillText('1/3', 390 * ratio, 1370 * ratio);
-      this.initRanklist(ctx, databus.jl_list, 1)
+      let pageCount = databus.ji_pageindex+'/'+databus.ji_totlePage
+      ctx.fillText(pageCount, 390 * ratio, 1370 * ratio);
+      this.initRanklist(ctx)
     }
-
-
   }
-
-  //签到部分
-
   //搜刮部分
-  initRanklist = (ctx, list, page, type) => {
+  initRanklist = (ctx) => {
     let me = this;
-    // 至少绘制6个
-
-    list = list.slice(6 * (page - 1), 6 * (page))
-    if (type == 'add' && list.length > 0) { //如果是正向翻页且有数据
-      nowpage++
-    } else if (type == 'reduce' && list.length > 0 && nowpage > 0) {
-      nowpage--
-    }
-    if (list.length > 0) { //有数据才渲染
+    // 至少绘制6个  
       let length = 6
       let itemHeight = 917 * ratio / 6;
       var w = (750 * ratio - 20 * ratio );
       var h = itemHeight * length;
       for (let i = 0; i < length; i++) {
         ctx.drawImage(Img["list_bg"], 50*ratio, i * itemHeight + mt, w, itemHeight);
-            
-        if (i == 5) {  
-          me.drawrank(ctx, list, page)  
-        }
       }
-    }
+    me.drawrank(ctx) 
   }
-  drawrank = (ctx, list, page) => {
-    if (list && list.length > 0) {
-      let allNum = 0;
+  drawrank = (ctx) => { 
+    let list = databus.jl_list.slice((databus.ji_pageindex - 1) * 6, databus.ji_pageindex*6); 
+    if (list && list.length) {
       let avatarList = []
       list.map((item, index) => {
-        avatarList[index] = wx.createImage();
-        avatarList[index].src = item.avatarUrl;
-       
-        allNum++
-        if (allNum == list.length) {
-          this.drawList(ctx, avatarList, list, page)
-        }
-       
+        if (item.logopath){
+          let picboj = wx.createImage();
+          picboj.src = item.logopath;
+          avatarList.push(picboj)
+        }else{
+          avatarList.push(null)
+        }  
       });
+      this.drawList(ctx, avatarList, list)
     } else {
       // 没有数据
     }
   }
   drawList = (ctx, avatarList, list, page) => {
-    
     let length = 6
     let itemHeight = 917 * ratio / 6;
     var w = (750 * ratio - 50 * ratio * 2);
@@ -519,30 +504,51 @@ export default class ActiveModal {
     var avatarurl_x = 115*ratio;   //绘制的头像在画布上的位置
     
     list.map((item, index) => { 
-      ctx.drawImage(avatarList[index], avatarurl_x, index * itemHeight + (405 * ratio), avatarurl_width, avatarurl_heigth)    
-      
-      ctx.fillStyle = '#fff';
-      ctx.font = '12px Arial';
-      ctx.textAlign = 'left';
-      item.nickname = item.nickname.length > 5 ? item.nickname.substring(0, 6) + '..' : item.nickname
-     
-      ctx.fillText(item.nickname, 205 * ratio, index * itemHeight+(460*ratio)); 
-      ctx.fillText(item.penrgy+'g', 485 * ratio, index * itemHeight + (496 * ratio));//能量几克
-      var jd = item.penrgy/100
-      ctx.drawImage(Img["jd"], 420 * ratio, index * itemHeight + (430 * ratio), Img["jd"].width * ratio, Img["jd"].height * ratio) 
-      ctx.drawImage(Img["jdbg"], 432 * ratio, index * itemHeight + (441 * ratio), Img["jdbg"].width * ratio * jd, Img["jdbg"].height * ratio*0.8) 
-      if (item.cansteal == 1){
-        ctx.drawImage(Img["sj"], 632 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9  * ratio, Img["sj"].height*0.9  * ratio)
+      if (avatarList[index]){
+        ctx.drawImage(avatarList[index], avatarurl_x, index * itemHeight + (405 * ratio), avatarurl_width, avatarurl_heigth)
+        ctx.fillStyle = '#fff';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'left';
+        item.nickname = item.nickname ? decodeURIComponent(item.nickname).length > 5 ? decodeURIComponent(item.nickname).substring(0, 6) + '..' : decodeURIComponent(item.nickname) : ''
+        item.nickname = decodeURIComponent(item.nickname)
+        ctx.fillText(item.nickname, 205 * ratio, index * itemHeight + (460 * ratio));
+        ctx.fillText(item.penrgy ? item.penrgy + 'g' : '', 485 * ratio, index * itemHeight + (496 * ratio));//能量几克
+        var jd = item.penrgy ? item.penrgy / 100 : 0
+        ctx.drawImage(Img["jd"], 420 * ratio, index * itemHeight + (430 * ratio), Img["jd"].width * ratio, Img["jd"].height * ratio)
+        ctx.drawImage(Img["jdbg"], 432 * ratio, index * itemHeight + (441 * ratio), Img["jdbg"].width * ratio * jd, Img["jdbg"].height * ratio * 0.8)
+        if (item.cansteal == 1) {
+          if (item.penrgy){
+            ctx.drawImage(Img["sj"], 632 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9 * ratio, Img["sj"].height * 0.9 * ratio)
+          }else{
+            ctx.drawImage(Img["htsx"], 632 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9 * ratio, Img["htsx"].height * 0.9 * ratio)
+          }
+         
+        }else{
+          ctx.drawImage(Img["ysj"], 632 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9 * ratio, Img["ysj"].height * 0.9 * ratio)
+        }
       }
+     
     })
     if (databus.tip_success){
       ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
       ctx.drawImage(Img["tip"], 0, 0, Img["tip"].width, Img["tip"].height, 80 * ratio, 400 * ratio, 672 * ratio, 384 * ratio);
       ctx.drawImage(Img["sgcg"], 0, 0, Img["sgcg"].width, Img["sgcg"].height, 92 * ratio, 412 * ratio, 648 * ratio, 360 * ratio);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#fff';
+      ctx.font = 48 * ratio + 'px Arial';
+      ctx.fillText(databus.getScore, 450 * ratio, 720 * ratio);
       ctx.drawImage(Img["reward4"], 0, 0, Img["reward4"].width, Img["reward4"].height * 0.7, 262 * ratio, 432 * ratio, 400 * ratio * 0.8, 400 * ratio * 0.56);
       //弹框关闭
       ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 45 * ratio, 365 * ratio, 80 * ratio, 80 * ratio);
+      
       ctx.drawImage(Img["sgcg_b"], 0, 0, Img["sgcg_b"].width, Img["sgcg_b"].height, 155 * ratio, 825 * ratio, 512 * ratio, 200 * ratio);
+    }
+    if (databus.tip_flase){
+      ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 45 * ratio, 365 * ratio, 80 * ratio, 80 * ratio);
+
+      ctx.drawImage(Img["htsx_pic"], 0, 0, Img["htsx_pic"].width, Img["htsx_pic"].height, 84 * ratio, 525 * ratio, 662 * ratio, 200 * ratio);
+      ctx.drawImage(Img["htsx_txt"], 0, 0, Img["htsx_txt"].width, Img["htsx_txt"].height, 304 * ratio, 725 * ratio, 200 * ratio, 35 * ratio);
     }
   }
 }

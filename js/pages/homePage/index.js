@@ -225,7 +225,7 @@ export default class Index {
 
     } else if (databus.homeState == 4) {//精力系统弹框
       //精力系统tab弹框之后的点击事件 0非弹框状态 1签到 2补签 3开箱成功
-      
+     
       if (databus.energySysModal == 1) {
         if (x >= 190 * ratio && x <= (455 * ratio + 190 * ratio) && y >= 875 * ratio && y <= (875 * ratio + 170 * ratio)) {
           //关闭签到成功弹框
@@ -384,17 +384,42 @@ export default class Index {
             
             if (databus.jl_list.length>0){
               if (x >= 110 * ratio && x <= (110 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
-                console.log("上一页")
+                if (databus.ji_pageindex > 1){
+                  databus.ji_pageindex--
+                }
               }
             
               if (x >= 460 * ratio && x <= (460 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
-                console.log("下一页")
+                if (databus.ji_pageindex < databus.ji_totlePage) {
+                  databus.ji_pageindex++
+                }
               }
             }
             datalist.map((item,index) => {
               if (x >= 592 * ratio && x <= (592 * ratio) + (148 * ratio) && y >= index * itemHeight + (365 * ratio) && y <= index * itemHeight + (365 * ratio)+(156*ratio)) { //点击列表的搜刮精力
-                console.log(index)
-                databus.tip_success = true;
+                if (item.cansteal!= '0' && item.penrgy){
+                  ajax({
+                    tradecode: 'sys22',
+                    apiType: 'user',
+                    method: 'POST',
+                    data: {
+                      openid: wx.getStorageSync('openId'),
+                      lopenid: item.openid
+                    },
+                    success(data) {
+                      console.log(data)
+                      item.cansteal = 0;
+                      databus.getScore = data.body.info.propnum;
+                      item.penrgy = item.penrgy - data.body.info.propnum
+                      databus.tip_success = true;
+                    }
+                  })
+                 
+                } else if (item.cansteal == '1' && !item.penrgy){
+                  databus.tip_flase = true;
+                }else{
+                  wx.showToast({ title: "今日已经搜刮过了,明天再来噢~", icon: 'none' })
+                }
               }
             })
           }
@@ -403,6 +428,7 @@ export default class Index {
         //弹框关闭
         if (x >= 0 * ratio && x <= (0 * ratio + 80 * ratio) && y >= 100 * ratio && y <= (100 * ratio + 80 * ratio)) {
           //按钮按下音效
+          
           this.music.playMusic('btnDown')
           databus.homeState = 1;
           if(databus.battleInfo){//有无大赛判断
@@ -414,6 +440,7 @@ export default class Index {
         //大赛tab点击
         if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
           //按钮按下音效
+         
           this.music.playMusic('btnDown')
           if(databus.battleInfo){//有无大赛判断
             databus.energySysTab = 0;
@@ -434,11 +461,13 @@ export default class Index {
         //抽奖tab点击
         if (x >= 422 * ratio && x <= (422 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
           //按钮按下音效
+          databus.ji_pageindex = 1;
           this.music.playMusic('btnDown')
           if(databus.battleInfo){//有无大赛判断
             databus.energySysTab = 2;
           }else{
             databus.energySysTab = 3;
+            databus.getFriendsList()
           }
         }
 
@@ -446,8 +475,11 @@ export default class Index {
           //搜刮tab点击
           if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
             //按钮按下音效
+            databus.ji_pageindex = 1;
             this.music.playMusic('btnDown')
             databus.energySysTab = 3;
+            databus.getFriendsList()
+            console.log(112)
           }
         }
       } 

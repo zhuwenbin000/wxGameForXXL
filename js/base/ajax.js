@@ -121,7 +121,7 @@ export function userLogin(options) {
       let login = {
         tradecode: 'sys01',
         method: 'POST',
-        data: { "user": { "code": res.code, "dzopenid": fatherId } },
+        data: { "user": { "code": res.code, "dzopenid": 'oU1F75b9GwWFqKJ7C-j1C48AUlUA' } },
         success(data) {
           if (data.result.code == '0') {//处理成功
             wx.setStorageSync('loginflag', data.body.user.loginflag)

@@ -31,21 +31,21 @@ export default class DataBus {
 
     //判断是否是哪种设备 
     wx.getSystemInfo({
-      success: res=>{
+      success: res => {
         // console.log('手机信息res'+res.model)
         let modelmes = res.model;
         if (modelmes.search('iPhone X') != -1) {
           //适配iphonex 刘海屏
           this.gameTop = 80 * ratio
           this.gameEndTop = 80 * ratio
-        }else if(modelmes.search('iPhone 5') != -1){
+        } else if (modelmes.search('iPhone 5') != -1) {
           //适配iphone 5s
           // this.offsetTop = 60 * ratio
-        }else if(modelmes.search('vivo Y85') != -1){
+        } else if (modelmes.search('vivo Y85') != -1) {
           //适配vivo Y85
           this.gameTop = 80 * ratio
           this.gameEndTop = 80 * ratio
-        }else if(modelmes.search('huawei P20') != -1){
+        } else if (modelmes.search('huawei P20') != -1) {
           //适配华为P20
           this.gameTop = 80 * ratio
           this.gameEndTop = 80 * ratio
@@ -57,48 +57,14 @@ export default class DataBus {
   }
 
   reset() {
+    this.getScore = 0;
     this.tip_success = false
     this.tip_flase = false
+    this.share_success = false
+    this.share_flase = false
     this.ji_pageindex = 1
-    this.jl_list = [
-      {                                   avatarUrl:"https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
-        nickname:"Lemon＊",
-        openid:"oU1F75TOBNQnmpU0FM21o6JiyB1Y",
-        penrgy:20,
-        cansteal:1
-      },
-      {
-        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
-        nickname: "Lemon＊",
-        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
-        penrgy: 50,
-        cansteal: 1
-      }, {
-        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
-        nickname: "Lemon＊",
-        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
-        penrgy: 68,
-        cansteal: 2
-      }, {
-        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
-        nickname: "Lemon＊",
-        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
-        penrgy: 20,
-        cansteal: 1
-      }, {
-        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
-        nickname: "Lemon＊",
-        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
-        penrgy: 0,
-        cansteal: 1
-      }, {
-        avatarUrl: "https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83erm1XibgogmATqWxAVhGOCuWVeicNua02FcsVHZAicmmPrSriaY2oQvFLiacoico3ZhZVnTAG9DIQHJFSOg/132",
-        nickname: "Lemon＊",
-        openid: "oU1F75TOBNQnmpU0FM21o6JiyB1Y",
-        penrgy: 100,
-        cansteal: 1
-      }
-    ]
+    this.ji_totlePage = 1;
+    this.jl_list = []
     this.frinendCount = 18;//搜刮好友数量
     this.active_state = false;//活动按钮状态
     this.playbtn_state = false;//开始游戏按钮状态
@@ -129,7 +95,7 @@ export default class DataBus {
       x: 16 * ratio,
       y: 20 * ratio
     }
-    this.shareProv ={
+    this.shareProv = {
       x: 60 * ratio,
       y: 1320 * ratio,
       w: 258 * ratio,
@@ -141,7 +107,7 @@ export default class DataBus {
       w: 258 * ratio,
       h: 130 * ratio
     }
-  
+
     this.pagesize = {
       x: 20 * ratio,
       y: 250 * ratio,
@@ -252,27 +218,27 @@ export default class DataBus {
     this.daysinfo = [] //签到页数据
     this.signData = {} //当前签到奖励
     this.signType = 0 //补签条件 0金币1分享2视频
-    this.sharerate = 0 
-    this.nogoldsharerate = 0 
+    this.sharerate = 0
+    this.nogoldsharerate = 0
     //抽奖部分
     this.plunderRecord = [//搜刮记录
       {
-        logopath:'',
-        nickname:'林杰',
-        penrgy:'1',
-        stealtime:'1'
+        logopath: '',
+        nickname: '林杰',
+        penrgy: '1',
+        stealtime: '1'
       },
       {
-        logopath:'',
-        nickname:'林杰',
-        penrgy:'1',
-        stealtime:'1'
+        logopath: '',
+        nickname: '林杰',
+        penrgy: '1',
+        stealtime: '1'
       },
       {
-        logopath:'',
-        nickname:'林杰',
-        penrgy:'1',
-        stealtime:'1'
+        logopath: '',
+        nickname: '林杰',
+        penrgy: '1',
+        stealtime: '1'
       }
     ]
     this.boxNum = 0 //拥有箱子的数量
@@ -321,7 +287,7 @@ export default class DataBus {
     this.activityData = null //活动数据
     //游戏页的UI值（比如：宽高，边距）
     this.GameUI = {
-      boardToTOP: 254 * ratio  + this.gameTop, //棋盘到顶部的距离
+      boardToTOP: 254 * ratio + this.gameTop, //棋盘到顶部的距离
       boardToLR: 34 * ratio, //棋盘左右两边间距
       boardInner: 8 * ratio, //棋盘内边框
       piecesMargin: 8 * ratio, //棋子边距
@@ -561,7 +527,7 @@ export default class DataBus {
     //棋子宽高
     this.GameUI.piecesWH = ((canvas.width - 2 * this.GameUI.boardToLR - 2 * this.GameUI.boardInner - this.rowNum * this.GameUI.piecesMargin) / this.rowNum)//棋子宽高
 
-    
+
   }
 
   /**
@@ -576,7 +542,7 @@ export default class DataBus {
       }
     }
   }
-  
+
   /**
    * 根据配置棋子level随机生成函数
    */
@@ -681,7 +647,7 @@ export default class DataBus {
     this.bananaClick = false //香蕉是否被点击
     this.crazyMusic = true //crazy music
     this.bananaMovingType = 0 //香蕉移动类型
-    
+
   }
 
   //获取棋子所在中心的坐标
@@ -740,15 +706,15 @@ export default class DataBus {
   }
 
   //续命接口
-  continueGame(type,steps) {
+  continueGame(type, steps) {
     var self = this;
     let options = {
       tradecode: 'game04',
       apiType: 'user',
       method: 'POST',
-      data:{
-        "gameid": this.gameId, 
-        "continuetype": type, 
+      data: {
+        "gameid": this.gameId,
+        "continuetype": type,
         "stageno": this.checkPoint
       },
       success(data) {
@@ -774,7 +740,7 @@ export default class DataBus {
     archiveData.selfHighScore = this.selfHighScore //个人历史最高分
     archiveData.isShare = this.isShare //本局游戏是否分享过
     archiveData.isLookVideo = this.isLookVideo //本局游戏是否观看过视频
-    
+
     archiveData.passScore = this.passScore //过关分数
     archiveData.gameId = this.gameId //本轮游戏id
     archiveData.rewardstep = this.rewardstep //过关奖励步数
@@ -794,7 +760,7 @@ export default class DataBus {
   }
 
   getWXFunction(name) {
-    if(typeof(wx) == 'undefined' || wx == null) {
+    if (typeof (wx) == 'undefined' || wx == null) {
       return null;
     }
     return wx[name];
@@ -803,7 +769,7 @@ export default class DataBus {
     this.bannerAd && this.bannerAd.destroy();
     var wxFunc = this.getWXFunction('createBannerAd');
     var isOver = false
-    if(typeof(wxFunc) != 'undefined' && wxFunc != null) {
+    if (typeof (wxFunc) != 'undefined' && wxFunc != null) {
       var phone = wx.getSystemInfoSync();
       var w = phone.screenWidth / 2;
       var h = phone.screenHeight;
@@ -815,27 +781,27 @@ export default class DataBus {
           left: 0
         }
       });
-      this.bannerAd.onResize(()=> {
+      this.bannerAd.onResize(() => {
         this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
         this.bannerAd.style.top = h - this.bannerAd.style.realHeight + 0.1;
-        if(this.bannerAd.style.top > 1220 * ratio){
+        if (this.bannerAd.style.top > 1220 * ratio) {
           this.bannerOver = true
-          if(this.gameState == 8){
+          if (this.gameState == 8) {
             this.bannerAd.hide();
-          }else{
+          } else {
             this.bannerAd.show();
           }
-        }else{
+        } else {
           this.bannerAd.hide();
         }
       })
-    } 
+    }
   }
 
   showOpenBoxAd() {
     this.bannerAd && this.bannerAd.destroy();
     var wxFunc = this.getWXFunction('createBannerAd');
-    if(typeof(wxFunc) != 'undefined' && wxFunc != null) {
+    if (typeof (wxFunc) != 'undefined' && wxFunc != null) {
       var phone = wx.getSystemInfoSync();
       var w = phone.screenWidth / 2;
       var h = phone.screenHeight;
@@ -847,17 +813,17 @@ export default class DataBus {
           left: 0
         }
       });
-      this.bannerAd.onResize(()=> {
+      this.bannerAd.onResize(() => {
         this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
         this.bannerAd.style.top = h - this.bannerAd.style.realHeight + 0.1;
-        if(this.energySysModal == 3){
+        if (this.energySysModal == 3) {
           this.bannerAd.show();
         }
       })
-    } 
+    }
   }
 
-  createVideoAd(){
+  createVideoAd() {
     this.videoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-64e0388ba29c2725'
     })
@@ -868,12 +834,12 @@ export default class DataBus {
         this.getVideoReward()
       }
       else {
-          // 播放中途退出，不下发游戏奖励
+        // 播放中途退出，不下发游戏奖励
       }
     })
   }
 
-  creatAarchiveVideoAd(){
+  creatAarchiveVideoAd() {
     this.archiveVideoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-7db4ea2fa1cd4854'
     })
@@ -889,7 +855,7 @@ export default class DataBus {
     // })
   }
 
-  creatCrazyVideoAd(){
+  creatCrazyVideoAd() {
     this.crazyVideoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-5d837d2cf40a537f'
     })
@@ -906,7 +872,7 @@ export default class DataBus {
     // })
   }
 
-  creatSignVideoAd(){
+  creatSignVideoAd() {
     this.signVideoAd = wx.createRewardedVideoAd({
       adUnitId: 'adunit-5d837d2cf40a537f'
     })
@@ -923,23 +889,23 @@ export default class DataBus {
     // })
   }
 
-  hasNoVideo(coin){
-    if(coin){
+  hasNoVideo(coin) {
+    if (coin) {
       this.gameState = 17
       this.videoCoin = coin
-    }else{
+    } else {
       //如果补签没有视频
-      if(this.energySysModal == 2){
-        if(this.usergold > 50){
-          if(_.random(0, 10) >= (1 - this.sharerate) * 10){
+      if (this.energySysModal == 2) {
+        if (this.usergold > 50) {
+          if (_.random(0, 10) >= (1 - this.sharerate) * 10) {
             this.signType = 1
-          }else{
+          } else {
             this.signType = 0
           }
-        }else{
-          if(_.random(0, 10) >= (1 - this.nogoldsharerate) * 10){
+        } else {
+          if (_.random(0, 10) >= (1 - this.nogoldsharerate) * 10) {
             this.signType = 1
-          }else{
+          } else {
             this.signType = 0
           }
         }
@@ -947,18 +913,18 @@ export default class DataBus {
     }
   }
 
-  getVideoReward(){
+  getVideoReward() {
 
-    if(this.energySysModal == 2){
+    if (this.energySysModal == 2) {
       this.goSign({
-        openid:wx.getStorageSync('openId'),
-        day:this.signData.day,
-        isoverday:1,
-        gold:0
+        openid: wx.getStorageSync('openId'),
+        day: this.signData.day,
+        isoverday: 1,
+        gold: 0
       })
     }
 
-    if(this.gameState == 15 || this.videoCoin == 150){
+    if (this.gameState == 15 || this.videoCoin == 150) {
 
       //开始crazy
       this.gameState = 1
@@ -968,12 +934,12 @@ export default class DataBus {
 
     }
 
-    if(this.gameState == 13 || this.videoCoin == 100){
+    if (this.gameState == 13 || this.videoCoin == 100) {
       //存档
       this.saveGame()
     }
 
-    if(this.gameState == 2){
+    if (this.gameState == 2) {
 
       this.continueGame(1, 5)
       this.isLookVideo = true
@@ -985,17 +951,17 @@ export default class DataBus {
       this.musicBg = true
       this.musicBgChange = false
     }
-    
+
   }
 
-  showAarchiveVideoAd(){
+  showAarchiveVideoAd() {
     this.archiveVideoAd.load()
-    .then(() => {
-      this.archiveVideoAd.show()
-    })
-    .catch(err => {
-      // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
-    })
+      .then(() => {
+        this.archiveVideoAd.show()
+      })
+      .catch(err => {
+        // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+      })
 
     this.archiveVideoAd.onError(err => {
       this.hasNoVideo(100)
@@ -1003,48 +969,48 @@ export default class DataBus {
     })
   }
 
-  showCrazyVideoAd(){
+  showCrazyVideoAd() {
     this.crazyVideoAd.load()
-    .then(() => {
-      this.crazyVideoAd.show()
-    })
-    .catch(err => {
-      // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
-    })
-    
+      .then(() => {
+        this.crazyVideoAd.show()
+      })
+      .catch(err => {
+        // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+      })
+
     this.crazyVideoAd.onError(err => {
       this.hasNoVideo(150)
       this.crazyVideoAd.offError(this.hasNoVideo())
     })
   }
 
-  showSignVideoAd(){
+  showSignVideoAd() {
     this.signVideoAd.load()
-    .then(() => {
-      this.signVideoAd.show()
-    })
-    .catch(err => {
-      // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
-    })
-    
+      .then(() => {
+        this.signVideoAd.show()
+      })
+      .catch(err => {
+        // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
+      })
+
     this.signVideoAd.onError(err => {
       this.hasNoVideo()
       this.signVideoAd.offError(this.hasNoVideo())
     })
   }
 
-  showVideoAd(){
+  showVideoAd() {
     this.videoAd.load()
-    .then(() => {
-      this.videoAd.show()
       .then(() => {
+        this.videoAd.show()
+          .then(() => {
+            this.isVideoing = false
+          })
+      })
+      .catch(err => {
+        wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon: 'none' })
         this.isVideoing = false
       })
-    })
-    .catch(err => {
-      wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
-      this.isVideoing = false
-    })
 
   }
 
@@ -1054,67 +1020,67 @@ export default class DataBus {
     var month = "";
     var day = "";
     var now = date;
-    year = ""+now.getFullYear();
-    if((now.getMonth()+1)<10){
-        month = "0"+(now.getMonth()+1);
-    }else{
-        month = ""+(now.getMonth()+1);
+    year = "" + now.getFullYear();
+    if ((now.getMonth() + 1) < 10) {
+      month = "0" + (now.getMonth() + 1);
+    } else {
+      month = "" + (now.getMonth() + 1);
     }
-    if((now.getDate())<10){
-        day = "0"+(now.getDate());
-    }else{
-        day = ""+(now.getDate());
+    if ((now.getDate()) < 10) {
+      day = "0" + (now.getDate());
+    } else {
+      day = "" + (now.getDate());
     }
-    return year+month+day;
+    return year + month + day;
   }
   getNowTimeStr() {
     var year = "";
     var month = "";
     var day = "";
     var now = new Date();
-    year = ""+now.getFullYear();
-    if((now.getMonth()+1)<10){
-        month = "0"+(now.getMonth()+1);
-    }else{
-        month = ""+(now.getMonth()+1);
+    year = "" + now.getFullYear();
+    if ((now.getMonth() + 1) < 10) {
+      month = "0" + (now.getMonth() + 1);
+    } else {
+      month = "" + (now.getMonth() + 1);
     }
-    if((now.getDate())<10){
-        day = "0"+(now.getDate());
-    }else{
-        day = ""+(now.getDate());
+    if ((now.getDate()) < 10) {
+      day = "0" + (now.getDate());
+    } else {
+      day = "" + (now.getDate());
     }
-    return year+month+day;
+    return year + month + day;
   }
-  getWeekStartAndEnd(AddWeekCount) { 
+  getWeekStartAndEnd(AddWeekCount) {
     //起止日期数组   
-    var startStop = new Array(); 
+    var startStop = new Array();
     //一天的毫秒数   
-    var millisecond = 1000 * 60 * 60 * 24; 
+    var millisecond = 1000 * 60 * 60 * 24;
     //获取当前时间   
     var currentDate = new Date();
     //相对于当前日期AddWeekCount个周的日期
-    currentDate = new Date(currentDate.getTime() + (millisecond * 7*AddWeekCount));
+    currentDate = new Date(currentDate.getTime() + (millisecond * 7 * AddWeekCount));
     //返回date是一周中的某一天
-    var week = currentDate.getDay(); 
+    var week = currentDate.getDay();
     //返回date是一个月中的某一天   
     var month = currentDate.getDate();
     //减去的天数   
-    var minusDay = week != 0 ? week - 1 : 6; 
+    var minusDay = week != 0 ? week - 1 : 6;
     //获得当前周的第一天   
-    var currentWeekFirstDay = new Date(currentDate.getTime() - (millisecond * minusDay)); 
+    var currentWeekFirstDay = new Date(currentDate.getTime() - (millisecond * minusDay));
     //获得当前周的最后一天
-     var currentWeekLastDay = new Date(currentWeekFirstDay.getTime() + (millisecond * 6));
+    var currentWeekLastDay = new Date(currentWeekFirstDay.getTime() + (millisecond * 6));
     //添加至数组   
-    startStop.push(this.getDateStr(currentWeekFirstDay)); 
-    startStop.push(this.getDateStr(currentWeekLastDay)); 
-   
-    return startStop; 
+    startStop.push(this.getDateStr(currentWeekFirstDay));
+    startStop.push(this.getDateStr(currentWeekLastDay));
+
+    return startStop;
   }
 
-  getRemainTime(){
+  getRemainTime() {
     var day = 0, hour = 0, minute = 0, second = 0;//时间默认值
     var times = Math.floor((this.boxExchangeTime + 10 * 60 * 60 * 1000 - (new Date()).getTime()) / 1000)
-    if(times > 0){
+    if (times > 0) {
       day = Math.floor(times / (60 * 60 * 24));
       hour = Math.floor(times / (60 * 60)) - (day * 24);
       minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
@@ -1123,14 +1089,14 @@ export default class DataBus {
     if (hour <= 9) hour = '0' + hour;
     if (minute <= 9) minute = '0' + minute;
     if (second <= 9) second = '0' + second;
-    
-    return hour + ":" + minute + ":" + second 
+
+    return hour + ":" + minute + ":" + second
   }
 
-  getGameTime(start,end){
+  getGameTime(start, end) {
     var day = 0, hour = 0, minute = 0, second = 0;//时间默认值
     var times = (end - start) / 1000
-    if(times > 0){
+    if (times > 0) {
       day = Math.floor(times / (60 * 60 * 24));
       hour = Math.floor(times / (60 * 60)) - (day * 24);
       minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
@@ -1139,11 +1105,11 @@ export default class DataBus {
     if (hour <= 9) hour = '0' + hour;
     if (minute <= 9) minute = '0' + minute;
     if (second <= 9) second = '0' + second;
-    
-    return hour + "时" + minute + "分" + second  + "秒"
+
+    return hour + "时" + minute + "分" + second + "秒"
   }
 
-  getSignInfo(){
+  getSignInfo() {
     let self = this
     //获取签到信息
     ajax({
@@ -1151,9 +1117,9 @@ export default class DataBus {
       apiType: 'week',
       method: 'POST',
       data: {
-        startday:this.getWeekStartAndEnd(0)[0],
-        endday:this.getWeekStartAndEnd(0)[1],
-        openid:wx.getStorageSync('openId')
+        startday: this.getWeekStartAndEnd(0)[0],
+        endday: this.getWeekStartAndEnd(0)[1],
+        openid: wx.getStorageSync('openId')
       },
       success(data) {
         self.daysinfo = data.body.daysinfo
@@ -1179,6 +1145,23 @@ export default class DataBus {
         // if(data.signtype == 2){
         //   databus.energySysModal = 2;
         // }
+      }
+    })
+  }
+  getFriendsList() {
+    let self = this;
+    ajax({
+      tradecode: 'sys19',
+      apiType: 'user',
+      method: 'POST',
+      data: {
+        start: 0,
+        pagesize: 200,
+        openid: wx.getStorageSync('openId')
+      },
+      success(data) {
+        self.jl_list = data.body.infos
+        self.ji_totlePage = parseInt(self.jl_list.length/6)+1 
       }
     })
   }
