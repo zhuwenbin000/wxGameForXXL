@@ -1208,6 +1208,7 @@ export default class DataBus {
         version:self.version
       },
       success(data) {
+
         //精力系统相关
         self.boxExchangeTime = data.body.user.lastzhtime;
         self.boxNum = data.body.user.boxnum;
@@ -1217,6 +1218,8 @@ export default class DataBus {
         
         if((new Date()).getTime() > self.boxExchangeTime + 10 * 60 * 60 * 1000){
           self.canExchangeBox = true
+        }else{
+          self.canExchangeBox = false
         }
       }
     }

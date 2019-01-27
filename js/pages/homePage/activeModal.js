@@ -2,97 +2,105 @@ import DataBus from '../../databus'
 let databus = new DataBus()
 let uiWidth = 828;
 let ratio = canvas.width / uiWidth //设计稿宽度
+let comimgofgame = null
 const mt = 373*ratio;
-let R = {
-  //其他部分
-  "bg": "images/gameEnd/gameEndBg.png",
-  "modalBg": "energySys/img/tabs/bg.png",
-  "close": "energySys/img/tabs/close.png",
-  "redPoint": "energySys/img/tabs/redPoint.png",
-  "battle": "energySys/img/tabs/battle.png",
-  "battleDown": "energySys/img/tabs/battleDown.png",
-  "lottery": "energySys/img/tabs/lottery.png",
-  "lotteryDown": "energySys/img/tabs/lotteryDown.png",
-  "plunder": "energySys/img/tabs/plunder.png",
-  "plunderDown": "energySys/img/tabs/plunderDown.png",
-  "sign": "energySys/img/tabs/sign.png",
-  "signDown": "energySys/img/tabs/signDown.png",
-  //大赛部分
-  "battleBorder": "energySys/img/tabs/battleBorder.png",
-  "battleInfo": "energySys/img/tabs/battleInfo.png",
-  "battleProcess": "energySys/img/tabs/battleProcess.png",
-  "battleShare": "energySys/img/tabs/battleShare.png",
-
-  //签到部分
-  "btnY": "energySys/img/sign/btn_y.png",
-  "coinToSign": "energySys/img/sign/coinToSign.png",
-  "lightBg": "energySys/img/sign/lightBg.png",
-  "pending": "energySys/img/sign/pending.png",
-  "received": "energySys/img/sign/received.png",
-  "receivedBg": "energySys/img/sign/receivedBg.png",
-  "shareToSign": "energySys/img/sign/shareToSign.png",
-  "signBtn": "energySys/img/sign/sign.png",
-  "signBar": "energySys/img/sign/signBar.png",
-  "signBg": "energySys/img/sign/signBg.png",
-  "signPic": "energySys/img/sign/signPic.png",
-  "signSuc": "energySys/img/sign/signSuc.png",
-  "signTips": "energySys/img/sign/signTips.png",
-  "signTodayBg": "energySys/img/sign/signTodayBg.png",
-  "videoToSign": "energySys/img/sign/videoToSign.png",
-  "waitSign": "energySys/img/sign/waitSign.png",
-  "week1": "energySys/img/sign/week1.png",
-  "week2": "energySys/img/sign/week2.png",
-  "week3": "energySys/img/sign/week3.png",
-  "week4": "energySys/img/sign/week4.png",
-  "week5": "energySys/img/sign/week5.png",
-  "week6": "energySys/img/sign/week6.png",
-  "week7": "energySys/img/sign/week7.png",
-  "rewardBg": "energySys/img/reward/rewardBg.png",
-  "reward1": "energySys/img/reward/reward1.png",
-  "reward2": "energySys/img/reward/reward2.png",
-  "reward3": "energySys/img/reward/reward3.png",
-  "reward4": "energySys/img/reward/reward4.png",
-  "reward6": "energySys/img/reward/reward6.png",
-  //抽奖部分
-  "boxShadow": "energySys/img/openbox/boxShadow.png",
-  "box": "energySys/img/openbox/box.png",
-  "boxNum": "energySys/img/openbox/boxNum.png",
-  "openBoxTxt": "energySys/img/openbox/openBoxTxt.png",
-  "openBtn": "energySys/img/openbox/openBtn.png",
-  "boxMask": "energySys/img/openbox/boxMask.png",
-  "boxProcessWrap": "energySys/img/openbox/boxProcessWrap.png",
-  "boxProcess": "energySys/img/openbox/boxProcess.png",
-  "myProcessWrap": "energySys/img/openbox/myProcessWrap.png",
-  "myProcess": "energySys/img/openbox/myProcess.png",
-  "exchangeTime": "energySys/img/plunder/exchangeTime.png",
-  
-  //搜刮部分
-  'friend': 'energySys/img/plunder/friend.png',
-  'yaoqing': 'energySys/img/plunder/yaoqing.png',
-  'list_bg':'energySys/img/plunder/sgjl.png',
-  'jdbg':'energySys/img/plunder/jdbg.png',
-  'jd': 'energySys/img/plunder/jd.png',
-  'sj': 'energySys/img/plunder/sj.png',
-  'ysj': 'energySys/img/plunder/ysj.png',
-  'group30':'energySys/img/plunder/group30.png',
-  'group31': 'energySys/img/plunder/group31.png',
-  "tip": "energySys/img/reward/tip.png",
-  "sgcg": "energySys/img/reward/sgcg.png",
-  "sgsb": "energySys/img/reward/sgsb.png",
-  "sgcg_b": "energySys/img/plunder/sgcg.png",
-  'htsx':'energySys/img/plunder/htsx.png',
-  'ysj':'energySys/img/plunder/ysj.png',
-  'htsx_pic': 'energySys/img/plunder/htsx_pic.png',
-  'htsx_txt': 'energySys/img/plunder/htsx_txt.png'
-}
+let R = null
 
 let Img = {};
-for (var k in R) {
-  Img[k] = wx.createImage();
-  Img[k].src = R[k];
-}
+
 export default class ActiveModal {
   render(ctx) {
+
+    if(!R){
+      R = {
+        //其他部分
+        "bg": "images/gameEnd/gameEndBg.png",
+        "modalBg": "energySys/img/tabs/bg.png",
+        "close": "energySys/img/tabs/close.png",
+        "redPoint": "energySys/img/tabs/redPoint.png",
+        "battle": "energySys/img/tabs/battle.png",
+        "battleDown": "energySys/img/tabs/battleDown.png",
+        "lottery": "energySys/img/tabs/lottery.png",
+        "lotteryDown": "energySys/img/tabs/lotteryDown.png",
+        "plunder": "energySys/img/tabs/plunder.png",
+        "plunderDown": "energySys/img/tabs/plunderDown.png",
+        "sign": "energySys/img/tabs/sign.png",
+        "signDown": "energySys/img/tabs/signDown.png",
+        //大赛部分
+        "battleBorder": "energySys/img/tabs/battleBorder.png",
+        "battleInfo": "energySys/img/tabs/battleInfo.png",
+        "battleProcess": "energySys/img/tabs/battleProcess.png",
+        "battleShare": "energySys/img/tabs/battleShare.png",
+      
+        //签到部分
+        "btnY": "energySys/img/sign/btn_y.png",
+        "coinToSign": "energySys/img/sign/coinToSign.png",
+        "lightBg": "energySys/img/sign/lightBg.png",
+        "pending": "energySys/img/sign/pending.png",
+        "received": "energySys/img/sign/received.png",
+        "receivedBg": "energySys/img/sign/receivedBg.png",
+        "shareToSign": "energySys/img/sign/shareToSign.png",
+        "signBtn": "energySys/img/sign/sign.png",
+        "signBar": "energySys/img/sign/signBar.png",
+        "signBg": "energySys/img/sign/signBg.png",
+        "signPic": "energySys/img/sign/signPic.png",
+        "signSuc": "energySys/img/sign/signSuc.png",
+        "signTips": "energySys/img/sign/signTips.png",
+        "signTodayBg": "energySys/img/sign/signTodayBg.png",
+        "videoToSign": "energySys/img/sign/videoToSign.png",
+        "waitSign": "energySys/img/sign/waitSign.png",
+        "week1": "energySys/img/sign/week1.png",
+        "week2": "energySys/img/sign/week2.png",
+        "week3": "energySys/img/sign/week3.png",
+        "week4": "energySys/img/sign/week4.png",
+        "week5": "energySys/img/sign/week5.png",
+        "week6": "energySys/img/sign/week6.png",
+        "week7": "energySys/img/sign/week7.png",
+        "rewardBg": "energySys/img/reward/rewardBg.png",
+        "reward1": "energySys/img/reward/reward1.png",
+        "reward2": "energySys/img/reward/reward2.png",
+        "reward3": "energySys/img/reward/reward3.png",
+        "reward4": "energySys/img/reward/reward4.png",
+        "reward6": "energySys/img/reward/reward6.png",
+        //抽奖部分
+        "boxShadow": "energySys/img/openbox/boxShadow.png",
+        "box": "energySys/img/openbox/box.png",
+        "boxNum": "energySys/img/openbox/boxNum.png",
+        "openBoxTxt": "energySys/img/openbox/openBoxTxt.png",
+        "openBtn": "energySys/img/openbox/openBtn.png",
+        "boxMask": "energySys/img/openbox/boxMask.png",
+        "boxProcessWrap": "energySys/img/openbox/boxProcessWrap.png",
+        "boxProcess": "energySys/img/openbox/boxProcess.png",
+        "myProcessWrap": "energySys/img/openbox/myProcessWrap.png",
+        "myProcess": "energySys/img/openbox/myProcess.png",
+        "exchangeTime": "energySys/img/plunder/exchangeTime.png",
+        
+        //搜刮部分
+        'friend': 'energySys/img/plunder/friend.png',
+        'yaoqing': 'energySys/img/plunder/yaoqing.png',
+        'list_bg':'energySys/img/plunder/sgjl.png',
+        'jdbg':'energySys/img/plunder/jdbg.png',
+        'jd': 'energySys/img/plunder/jd.png',
+        'sj': 'energySys/img/plunder/sj.png',
+        'ysj': 'energySys/img/plunder/ysj.png',
+        'group30':'energySys/img/plunder/group30.png',
+        'group31': 'energySys/img/plunder/group31.png',
+        "tip": "energySys/img/reward/tip.png",
+        "sgcg": "energySys/img/reward/sgcg.png",
+        "sgsb": "energySys/img/reward/sgsb.png",
+        "sgcg_b": "energySys/img/plunder/sgcg.png",
+        'htsx':'energySys/img/plunder/htsx.png',
+        'ysj':'energySys/img/plunder/ysj.png',
+        'htsx_pic': 'energySys/img/plunder/htsx_pic.png',
+        'htsx_txt': 'energySys/img/plunder/htsx_txt.png'
+      }
+
+      for (var k in R) {
+        Img[k] = wx.createImage();
+        Img[k].src = R[k];
+      }
+    }
+
     const signXY = databus.signXY
     const daysinfo = databus.daysinfo
     const plunderRecord = databus.plunderRecord
@@ -192,6 +200,16 @@ export default class ActiveModal {
 
       //大赛进度
       ctx.drawImage(Img["battleProcess"], 0, 0, Img["battleProcess"].width, Img["battleProcess"].height, 56 * ratio, 1180 * ratio, 716 * ratio, 80 * ratio);
+
+      if(databus.battleInfo){
+        //大赛海报
+        if(!comimgofgame){
+          comimgofgame= wx.createImage();
+          comimgofgame.src = databus.battleInfo.comimgofgame
+        }
+
+        ctx.drawImage(comimgofgame, 0, 0, comimgofgame.width, comimgofgame.height, 60 * ratio, 306 * ratio, 708 * ratio, 948 * ratio);
+      }
       //大赛框
       ctx.drawImage(Img["battleBorder"], 0, 0, Img["battleBorder"].width, Img["battleBorder"].height, 54 * ratio, 300 * ratio, 720 * ratio, 960 * ratio);
       //分享组战队

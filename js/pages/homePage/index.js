@@ -24,6 +24,7 @@ export default class Index {
       },
       success(data) {
         databus.bestscore = data.body.user.bestscore;
+        databus.usergold = data.body.user.glod; //用户拥有金币
         databus.updateMaxScore(databus.bestscore)
         //精力系统相关
         databus.boxExchangeTime = data.body.user.lastzhtime;
@@ -251,10 +252,10 @@ export default class Index {
             databus.showSignVideoAd()
           }
           if(databus.signType == 0){
-            if(databus.usergold > 50){
+            if(parseInt(databus.usergold) > 50){
               this.goSign({
                 openid:wx.getStorageSync('openId'),
-                day:databus.signData,
+                day:databus.signData.day,
                 isoverday:1,
                 gold:50
               })
@@ -307,10 +308,9 @@ export default class Index {
           if (x >= 60 * ratio && x <= (60 * ratio + 305 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio + 115 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
-            console.log("分享组战队")
-            wx.shareAppMessage({ 
-              'title': databus.shareConfig.info, 
-              'imageUrl': databus.shareConfig.url,
+            wx.shareAppMessage({
+              'title': databus.battleInfo.sharetextofgame, 
+              'imageUrl': databus.battleInfo.shareimgofgame,
               'query':'fatherId=' + wx.getStorageSync('openId')
             })
           }
@@ -331,6 +331,23 @@ export default class Index {
               }
             })
           }
+          //海报点击
+          if (x >= 54 * ratio && x <= (54 * ratio + 720 * ratio) && y >= 300 * ratio && y <= (300 * ratio + 960 * ratio)) {
+            //按钮按下音效
+            this.music.playMusic('btnDown')
+            const pageurl = encodeURIComponent(databus.activityData.url + "?openid=" + wx.getStorageSync('openId'))
+            wx.navigateToMiniProgram({
+              appId: 'wx470a8b0b3f90857b',
+              path: 'pages/webview/webview?pageurl=' + pageurl,
+              envVersion: 'trial',
+              success(res) {
+                // 打开成功
+                // console.log("成功")
+                // console.log(res)
+              }
+            })
+          }
+
         } else if (databus.energySysTab == 1) {
           //签到部分点击事件
           for (let i = 0; i < databus.daysinfo.length; i++) {
@@ -595,7 +612,7 @@ export default class Index {
       data: data,
       success(data) {
         databus.signData = data.body.info;
-        databus.energySysModal = data.body.info.signtype == '1' ? data.body.info.signtype : '0';
+        databus.energySysModal = 1;
         databus.getSignInfo()
         // if(data.signtype == 1){
         //   databus.energySysModal = 1;
