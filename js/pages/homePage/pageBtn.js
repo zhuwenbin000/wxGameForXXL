@@ -166,6 +166,8 @@ export default class PageBtn {
 
         }
       }
+
+
       //抖m
       if(this.logoTime % 20 == 0){
         //中心点变化
@@ -403,7 +405,8 @@ export default class PageBtn {
           left: ml,
           top: nmt + (300 * ratio),
           width: 590 * ratio,
-          height: 226 * ratio,      
+          height: 226 * ratio,
+          
           lineHeight: 40,
           backgroundColor: '#ff0000',
           color: '#ffffff',
@@ -433,6 +436,7 @@ export default class PageBtn {
 
   }
   loginfriendsRankBtn(ctx) { //好友排行榜
+   
     if (!databus.friendbtn_state){
       ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 16 * ratio, nmt - nb * ratio, 280 * ratio, 138 * ratio)
    }else{

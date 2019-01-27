@@ -52,7 +52,6 @@ export default class Main {
 
     if(res && res.query && res.query.fatherId){
       wx.setStorageSync('fatherId', res.query.fatherId)
-      wx.setStorageSync('sharetype', res.query.sharetype)
     }
 
     let loginflag = wx.getStorageSync('loginflag')
@@ -80,12 +79,6 @@ export default class Main {
       },
       fail(res) {
           // 分包加载失败通过 fail 回调
-      }
-    })
-
-    wx.onShow(()=>{
-      if(wx.getStorageSync('shareStart')){
-        wx.setStorageSync('shareEnd', (new Date()).getTime())
       }
     })
 
@@ -249,17 +242,13 @@ export default class Main {
 
   getBaseInfo() {
     var me = this;
-    
     //分享文案
     ajax({
       tradecode: 'sys05',
       apiType: 'user',
       method: 'POST',
       success(data) {
-        data.body.sharelist && data.body.sharelist.map((item,index)=>{
-          databus.shareConfig[item.sharetype] = item
-        })
-        databus.onShareAppMessage()
+        databus.shareConfig = data.body.share;
       }
     })
 
@@ -277,6 +266,7 @@ export default class Main {
 
         databus.sharerate = data.body.version.sharerate
         databus.nogoldsharerate = data.body.version.nogoldsharerate
+        databus.boxbannerrate = data.body.version.boxbannerrate
 
         if(shareflag){
 
