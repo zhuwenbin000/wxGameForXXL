@@ -33,11 +33,17 @@ export default class Index {
         databus.boxEnergy = data.body.user.boxengry;
         databus.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
         
+        if(parseInt(databus.boxNum) > 0){
+          databus.lotteryPoint = true
+        }
+
         if(!databus.boxExchangeTime){
           databus.canExchangeBox = true
+          databus.lotteryPoint = true
         }else{
           if((new Date()).getTime() > databus.boxExchangeTime + 10 * 60 * 60 * 1000){
             databus.canExchangeBox = true
+            databus.lotteryPoint = true
           }
         }
       }
@@ -125,16 +131,11 @@ export default class Index {
           databus.active_state = true;
           this.music.playMusic('btnDown')
           setTimeout(()=>{
-
-            const battlePoint = wx.getStorageSync('battlePoint')
-            if(battlePoint != databus.getNowTimeStr()){
-              databus.battlePoint = true
-            }
             databus.homeState = 4;
             databus.active_state = false;
             databus.gameClubbutton.destroy() //游戏圈按钮销毁
             databus.gameClubbutton = null;
-          },databus.laterTime)   
+          },databus.laterTime)
         }
       }
       if (databus.shareflag) {//如果是非审核模式
@@ -339,7 +340,7 @@ export default class Index {
             this.music.playMusic('btnDown')
             wx.setStorageSync('battlePoint', databus.getNowTimeStr())
             databus.battlePoint = false
-            const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
+            const pageurl = encodeURIComponent(databus.battleInfo.tosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
               path: 'pages/webview/webview?pageurl=' + pageurl,
@@ -357,7 +358,7 @@ export default class Index {
             this.music.playMusic('btnDown')
             wx.setStorageSync('battlePoint', databus.getNowTimeStr())
             databus.battlePoint = false
-            const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
+            const pageurl = encodeURIComponent(databus.battleInfo.tosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
               path: 'pages/webview/webview?pageurl=' + pageurl,
@@ -613,6 +614,13 @@ export default class Index {
     this.getBattleInfo()
     this.getPlunderList()
     databus.getSignInfo()
+
+
+    const battlePoint = wx.getStorageSync('battlePoint')
+    if(battlePoint != databus.getNowTimeStr()){
+      databus.battlePoint = true
+    }
+
   }
 
   getBattleInfo() {
@@ -626,10 +634,12 @@ export default class Index {
         openid:wx.getStorageSync('openId')
       },
       success(data) {
-        databus.battleInfo = data.body.info
-        databus.energySysTab = 0
-        databus.battleDays = databus.getDurDays(data.body.info.starttime,data.body.info.endtime)//大赛总天数
-        databus.battlePastDays = databus.getDurDays(data.body.info.starttime,(new Date()).getTime()) //大赛进行天数
+        if(JSON.stringify(data.body.info).length > 2){
+          databus.battleInfo = data.body.info
+          databus.energySysTab = 0
+          databus.battleDays = databus.getDurDays(data.body.info.starttime,data.body.info.endtime)//大赛总天数
+          databus.battlePastDays = databus.getDurDays(data.body.info.starttime,(new Date()).getTime()) //大赛进行天数
+        }
       }
     })
 
@@ -662,7 +672,7 @@ export default class Index {
       data: data,
       success(data) {
 
-        self.music.playMusic('NewRecord')
+        self.music.playMusic('passPoint')
 
         databus.signData = data.body.info;
         databus.energySysModal = 1;
@@ -711,7 +721,7 @@ export default class Index {
       },
       success(data) {
 
-        self.music.playMusic('NewRecord')
+        self.music.playMusic('passPoint')
 
         databus.energySysModal = 3
         databus.openBoxData = data.body.info

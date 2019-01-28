@@ -1154,6 +1154,14 @@ export default class DataBus {
       },
       success(data) {
         self.daysinfo = data.body.daysinfo
+
+        for (let i = 0; i < self.daysinfo.length; i++) {
+          if (parseInt(self.daysinfo[i].day) == parseInt(self.getNowTimeStr())) {
+            if (self.daysinfo[i].isdone == '1') {}else{
+              self.signPoint = true
+            }
+          }
+        }
       }
     })
   }
@@ -1214,10 +1222,18 @@ export default class DataBus {
         self.boxEnergy = data.body.user.boxengry;
         self.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
         
-        if((new Date()).getTime() > self.boxExchangeTime + 10 * 60 * 60 * 1000){
+        if(parseInt(self.boxNum) > 0){
+          self.lotteryPoint = true
+        }
+
+        if(!self.boxExchangeTime){
           self.canExchangeBox = true
+          self.lotteryPoint = true
         }else{
-          self.canExchangeBox = false
+          if((new Date()).getTime() > self.boxExchangeTime + 10 * 60 * 60 * 1000){
+            self.canExchangeBox = true
+            self.lotteryPoint = true
+          }
         }
       }
     }
