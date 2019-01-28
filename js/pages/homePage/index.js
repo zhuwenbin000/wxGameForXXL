@@ -453,14 +453,21 @@ export default class Index {
             }
            
             if ((x >= 84 * ratio && x <= (84 * ratio + 662 * ratio) && y >= 825 * ratio && y <= (825 * ratio) + (200 * ratio)) && databus.tip_flase) {
-             
-              databus.wxShare('1')
+              
+                databus.wxShare('1')
+                     
             }
             
           }else{
             if (x >= 230 * ratio && x <= (230 * ratio + 194 * ratio) && y >= 295 * ratio && y <= (295 * ratio) + (88 * ratio)) {
-             
-              databus.wxShare('4')
+              this.music.playMusic('btnDown')
+              databus.shareState = false;
+
+              setTimeout(() => {
+                databus.shareState = true;
+                databus.wxShare('4')
+              }, 200)
+              
             }
             const datalist = databus.jl_list.slice((databus.ji_pageindex-1)*6,databus.ji_pageindex*6)
             const itemHeight = 917 * ratio / 6;
@@ -468,13 +475,23 @@ export default class Index {
             if (databus.jl_list.length>0){
               if (x >= 110 * ratio && x <= (110 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
                 if (databus.ji_pageindex > 1){
-                  databus.ji_pageindex--
+                  this.music.playMusic('btnDown')
+                  databus.provState = false;
+                  setTimeout(() => {
+                    databus.provState = true
+                    databus.ji_pageindex--
+                  }, 200)
                 }
               }
             
               if (x >= 460 * ratio && x <= (460 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
                 if (databus.ji_pageindex < databus.ji_totlePage) {
-                  databus.ji_pageindex++
+                  this.music.playMusic('btnDown')
+                  databus.nextState = false
+                  setTimeout(()=>{
+                    databus.nextState = true
+                    databus.ji_pageindex++
+                  },200)
                 }
               }
             }
@@ -503,6 +520,7 @@ export default class Index {
                   })
                  
                 } else if (item.cansteal == '1' && !item.penrgy){
+                  this.music.playMusic('btnDown')
                   databus.tip_flase = true;
                 }else{
                   wx.showToast({ title: "今日已经搜刮过了,明天再来噢~", icon: 'none' })

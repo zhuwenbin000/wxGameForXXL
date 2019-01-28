@@ -65,6 +65,9 @@ export default class DataBus {
     this.ji_totlePage = 1;
     this.jl_list = []
     this.avatarList = []
+    this.nextState = true;
+    this.provState = true;
+    this.shareState = true;
     this.frinendCount = 18;//搜刮好友数量
     this.active_state = false;//活动按钮状态
     this.playbtn_state = false;//开始游戏按钮状态
