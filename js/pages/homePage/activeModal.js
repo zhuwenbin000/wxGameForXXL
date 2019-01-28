@@ -185,7 +185,7 @@ export default class ActiveModal {
         ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
       } else {
         ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-        if (databus.lotteryPoint) {
+        if (databus.plunderPoint) {
           //红点
           ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
         }

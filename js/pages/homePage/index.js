@@ -325,7 +325,7 @@ export default class Index {
           if (x >= 415 * ratio && x <= (415 * ratio + 350 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio + 115 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
-            const pageurl = encodeURIComponent(databus.activityData.url + "?openid=" + wx.getStorageSync('openId'))
+            const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
               path: 'pages/webview/webview?pageurl=' + pageurl,
@@ -341,7 +341,7 @@ export default class Index {
           if (x >= 54 * ratio && x <= (54 * ratio + 720 * ratio) && y >= 300 * ratio && y <= (300 * ratio + 960 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
-            const pageurl = encodeURIComponent(databus.activityData.url + "?openid=" + wx.getStorageSync('openId'))
+            const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
               path: 'pages/webview/webview?pageurl=' + pageurl,

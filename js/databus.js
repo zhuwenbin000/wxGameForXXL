@@ -1229,8 +1229,12 @@ export default class DataBus {
       'query':'fatherId=' + wx.getStorageSync('openId') + '&shareType=' + shareType
     })
     callback && setTimeout(()=>{
-      if(wx.getStorageSync('shareEnd') > wx.getStorageSync('shareStart') + this.sharetime * 1000){
-        callback()
+      if(wx.getStorageSync('shareEnd') && wx.getStorageSync('shareStart')){
+        if(wx.getStorageSync('shareEnd') > wx.getStorageSync('shareStart') + this.sharetime * 1000){
+          callback()
+        }else{
+          wx.showToast({ title: '请分享游戏到群', icon:'none'})
+        }
       }
       wx.removeStorage({key: 'shareStart'})
       wx.removeStorage({key: 'shareEnd'})
