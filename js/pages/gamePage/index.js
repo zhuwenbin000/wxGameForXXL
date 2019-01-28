@@ -750,6 +750,84 @@ export default class Index {
           if (x >= bic.x && x <= bic.x + bic.w && y >= bic.y && y <= bic.y + bic.h) {
             //按钮按下音效
             this.music.playMusic('btnDown')
+            if(databus.gameDoubleHit < 10){
+              databus.doubleHitStars = 0
+            } else if(databus.gameDoubleHit >= 10 && databus.gameDoubleHit < 20) {
+              databus.doubleHitStars = 1
+            }else if(databus.gameDoubleHit >= 20 && databus.gameDoubleHit < 40) {
+              databus.doubleHitStars = 2
+            }else if(databus.gameDoubleHit >= 40 && databus.gameDoubleHit < 80) {
+              databus.doubleHitStars = 3
+            }else if(databus.gameDoubleHit >= 80 && databus.gameDoubleHit < 120) {
+              databus.doubleHitStars = 4
+            }else if(databus.gameDoubleHit >= 120) {
+              databus.doubleHitStars = 5
+            }
+
+            if(databus.gameCrazyTime < 3000){
+              databus.crazyTimeStars = 0
+            } else if(databus.gameCrazyTime >= 3000 && databus.gameCrazyTime < 10000) {
+              databus.crazyTimeStars = 1
+            }else if(databus.gameCrazyTime >= 10000 && databus.gameCrazyTime < 30000) {
+              databus.crazyTimeStars = 2
+            }else if(databus.gameCrazyTime >= 30000 && databus.gameCrazyTime < 80000) {
+              databus.crazyTimeStars = 3
+            }else if(databus.gameCrazyTime >= 80000 && databus.gameCrazyTime < 150000) {
+              databus.crazyTimeStars = 4
+            }else if(databus.gameCrazyTime >= 150000) {
+              databus.crazyTimeStars = 5
+            }
+
+            const startEndTime = databus.gameEndTime - databus.gameStartTime;
+
+            if(startEndTime < 2 * 60 * 1000){
+              databus.gameTimeStars = 0
+            } else if(startEndTime >= 2 * 60 * 1000 && startEndTime < 10 * 60 * 1000) {
+              databus.gameTimeStars = 1
+            }else if(startEndTime >= 10 * 60 * 1000 && startEndTime < 15 * 60 * 1000) {
+              databus.gameTimeStars = 2
+            }else if(startEndTime >= 15 * 60 * 1000 && startEndTime < 20 * 60 * 1000) {
+              databus.gameTimeStars = 3
+            }else if(startEndTime >= 20 * 60 * 1000 && startEndTime < 40 * 60 * 1000) {
+              databus.gameTimeStars = 4
+            }else if(startEndTime >= 40 * 60 * 1000) {
+              databus.gameTimeStars = 5
+            }
+            const totalStars = databus.doubleHitStars + databus.crazyTimeStars + databus.gameTimeStars
+            if(databus.battlePrecent < 10){
+              databus.gameLevel = 'c'
+            } else if(databus.battlePrecent >= 10 && databus.battlePrecent < 50) {
+              if(totalStars <= 5){
+                databus.gameLevel = 'b'
+              }else if(totalStars > 5 && totalStars <= 10){
+                databus.gameLevel = 'a'
+              }else if(totalStars > 10){
+                databus.gameLevel = 's'
+              }
+            }else if(databus.battlePrecent >= 50 && databus.battlePrecent < 80) {
+              if(totalStars <= 5){
+                databus.gameLevel = 'a'
+              }else if(totalStars > 5 && totalStars <= 10){
+                databus.gameLevel = 's'
+              }else if(totalStars > 10){
+                databus.gameLevel = 'ss'
+              }
+            }else if(databus.battlePrecent >= 80 && databus.battlePrecent < 95) {
+              if(totalStars <= 5){
+                databus.gameLevel = 's'
+              }else if(totalStars > 5 && totalStars <= 10){
+                databus.gameLevel = 'ss'
+              }else if(totalStars > 10){
+                databus.gameLevel = 'sss'
+              }
+            }else if(databus.battlePrecent >= 95) {
+              if(totalStars <= 8){
+                databus.gameLevel = 'ss'
+              }else if(totalStars > 8){
+                databus.gameLevel = 'sss'
+              }
+            }
+
             databus.gameEndState = 1
             databus.bannerAd.hide()
             setTimeout(()=>{

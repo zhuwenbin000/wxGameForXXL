@@ -528,6 +528,7 @@ export default class Map {
         databus.gameEndTime = (new Date()).getTime() 
         databus.gameState = 2
         databus.battlePrecent = data.body.game.rpercent
+        databus.obtainpengry = data.body.game.obtainpengry
 
         if (databus.musicBg) {
           //暂停音乐

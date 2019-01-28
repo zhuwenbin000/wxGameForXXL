@@ -8,6 +8,12 @@ let R = null
 
 let Img = {};
 
+
+
+const endTime = 120;
+const totalRotateTime = 120;
+let rotateTime = 0
+
 export default class ActiveModal {
   render(ctx) {
 
@@ -119,10 +125,10 @@ export default class ActiveModal {
         ctx.drawImage(Img["battleDown"], 0, 0, Img["battleDown"].width, Img["battleDown"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
       } else {
         ctx.drawImage(Img["battle"], 0, 0, Img["battle"].width, Img["battle"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-        if (databus.battlePoint) {
-          //红点
-          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-        }
+      }
+      if (databus.battlePoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
       }
 
       //签到
@@ -130,10 +136,10 @@ export default class ActiveModal {
         ctx.drawImage(Img["signDown"], 0, 0, Img["signDown"].width, Img["signDown"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
       } else {
         ctx.drawImage(Img["sign"], 0, 0, Img["sign"].width, Img["sign"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-        if (databus.signPoint) {
-          //红点
-          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-        }
+      }
+      if (databus.signPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
       }
 
       //抽奖
@@ -141,10 +147,10 @@ export default class ActiveModal {
         ctx.drawImage(Img["lotteryDown"], 0, 0, Img["lotteryDown"].width, Img["lotteryDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
       } else {
         ctx.drawImage(Img["lottery"], 0, 0, Img["lottery"].width, Img["lottery"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-        if (databus.lotteryPoint) {
-          //红点
-          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-        }
+      }
+      if (databus.lotteryPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
       }
 
       //搜刮好友
@@ -152,10 +158,10 @@ export default class ActiveModal {
         ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
       } else {
         ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-        if (databus.plunderPoint) {
-          //红点
-          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 715 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-        }
+      }
+      if (databus.plunderPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 715 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
       }
     } else { //无大赛
       //签到
@@ -163,10 +169,10 @@ export default class ActiveModal {
         ctx.drawImage(Img["signDown"], 0, 0, Img["signDown"].width, Img["signDown"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
       } else {
         ctx.drawImage(Img["sign"], 0, 0, Img["sign"].width, Img["sign"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-        if (databus.signPoint) {
-          //红点
-          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-        }
+      }
+      if (databus.signPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
       }
 
       //抽奖
@@ -174,10 +180,10 @@ export default class ActiveModal {
         ctx.drawImage(Img["lotteryDown"], 0, 0, Img["lotteryDown"].width, Img["lotteryDown"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
       } else {
         ctx.drawImage(Img["lottery"], 0, 0, Img["lottery"].width, Img["lottery"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-        if (databus.lotteryPoint) {
-          //红点
-          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-        }
+      }
+      if (databus.lotteryPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
       }
 
       //搜刮好友
@@ -185,10 +191,10 @@ export default class ActiveModal {
         ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
       } else {
         ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-        if (databus.plunderPoint) {
-          //红点
-          ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-        }
+      }
+      if (databus.plunderPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
       }
 
     }
@@ -212,9 +218,9 @@ export default class ActiveModal {
       //大赛框
       ctx.drawImage(Img["battleBorder"], 0, 0, Img["battleBorder"].width, Img["battleBorder"].height, 54 * ratio, 300 * ratio, 720 * ratio, 960 * ratio);
       //大赛进度
-      ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 60 * ratio, 1300 * ratio, 305 * ratio, 115 * ratio);
+      ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 60 * ratio, 1285 * ratio, 305 * ratio, 145 * ratio);
       //大赛进度
-      ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 415 * ratio, 1300 * ratio, 350 * ratio, 115 * ratio);
+      ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 415 * ratio, 1285 * ratio, 350 * ratio, 145 * ratio);
       //分享组战队
       ctx.drawImage(Img["battleShare"], 0, 0, Img["battleShare"].width, Img["battleShare"].height, 110 * ratio, 1330 * ratio, 200 * ratio, 40 * ratio);
       //最新赛况
@@ -224,6 +230,12 @@ export default class ActiveModal {
       ctx.fillStyle = '#fff';
       ctx.font = 40 * ratio + 'px Arial';
       ctx.fillText(databus.battlePastDays + ' / ' + databus.battleDays, 655 * ratio, 1230 * ratio);
+
+
+      if (databus.battlePoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 700 * ratio, 1280 * ratio, 60 * ratio, 60 * ratio);
+      }
     
     }
 
@@ -295,8 +307,25 @@ export default class ActiveModal {
 
       //签到成功弹框
       if (databus.energySysModal == 1) {
+
+        if (rotateTime > endTime - 1){
+          rotateTime = 0
+        }
+        rotateTime++
+
         //绘制背景
         ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
+
+        //中心点变化
+        ctx.translate(414 * ratio, 644 * ratio)
+        //旋转
+        ctx.rotate(Math.PI * rotateTime / totalRotateTime)
+        //过关光图
+        ctx.drawImage(Img["lightBg"], 0, 0, Img["lightBg"].width, Img["lightBg"].height, -644 * ratio, -644 * ratio, 1288 * ratio, 1288 * ratio);
+        //复位旋转和中心点以及透明度
+        ctx.rotate(-Math.PI * rotateTime / totalRotateTime)
+        ctx.translate(-414 * ratio, -644 * ratio)
+        
         //弹框背景
         ctx.drawImage(Img["rewardBg"], 0, 0, Img["rewardBg"].width, Img["rewardBg"].height, 210 * ratio, 400 * ratio, 428 * ratio, 428 * ratio);
         //弹框关闭
@@ -464,8 +493,24 @@ export default class ActiveModal {
 
       //开箱成功弹框
       if (databus.energySysModal == 3) {
+        if (rotateTime > endTime - 1){
+          rotateTime = 0
+        }
+        rotateTime++
+
         //绘制背景
         ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
+
+        //中心点变化
+        ctx.translate(414 * ratio, 644 * ratio)
+        //旋转
+        ctx.rotate(Math.PI * rotateTime / totalRotateTime)
+        //过关光图
+        ctx.drawImage(Img["lightBg"], 0, 0, Img["lightBg"].width, Img["lightBg"].height, -644 * ratio, -644 * ratio, 1288 * ratio, 1288 * ratio);
+        //复位旋转和中心点以及透明度
+        ctx.rotate(-Math.PI * rotateTime / totalRotateTime)
+        ctx.translate(-414 * ratio, -644 * ratio)
+
         //弹框背景
         ctx.drawImage(Img["rewardBg"], 0, 0, Img["rewardBg"].width, Img["rewardBg"].height, 210 * ratio, 400 * ratio, 428 * ratio, 428 * ratio);
         //弹框关闭

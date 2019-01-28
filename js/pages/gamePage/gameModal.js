@@ -9,47 +9,51 @@ let rulec = databus.GameUI.ruleCoordinates //规则按钮坐标宽高
 let hc = databus.GameUI.homeCoordinates //首页按钮坐标宽高
 let mc = databus.GameUI.musicCoordinates //音乐按钮坐标宽高
 
-let R = {
-  "gameEndBg": "images/gameEnd/gameEndBg.png",
-  "addSteps": "images/gameModal/add_steps.png",
-  "colorTool": "images/gameModal/color_tool.png",
-  "modalBg": "images/gameModal/modal_bg.png",
-  "modalClose": "images/gameModal/modal_close.png",
-  "modalSubmit": "images/gameModal/modal_submit.png",
-  "musicBgFalse": "images/gameModal/music_bg_false.png",
-  "musicBgTrue": "images/gameModal/music_bg_true.png",
-  "musicSoundFalse": "images/gameModal/music_sound_false.png",
-  "musicSoundTrue": "images/gameModal/music_sound_true.png",
-  "passState": "images/gamePage/passState.png",
-  "ruleCon": "images/gameModal/rule.png",
-  "finger": "images/gameModal/finger.png",
-  "nextStage": "images/gameModal/next_stage.png",
-  "iknow": "images/gameModal/iknow.png",
-  "passStateBg": "images/gamePage/passStateBg.png",
-  "buy": "images/gameModal/icon_buy.png",
-  "coin": "images/gameModal/coin.png",
-  "saveModal": "images/gamePage/archive/save_modal.png",
-  "saveBtn": "images/gamePage/archive/save_game.png",
-  "rule": "images/gamePage/gameBtn/rule.png",
-  "home": "images/gamePage/gameBtn/home.png",
-  "music": "images/gamePage/gameBtn/music.png",
-  "crazyBtnFree": "images/gamePage/crazyTime/crazy_btn_free.png",
-  "crazyBtnVideo": "images/gamePage/crazyTime/crazy_btn_video.png",
-  "crazyEndModal": "images/gamePage/crazyTime/endModal.png",
-  "crazyStartModal": "images/gamePage/crazyTime/startModal.png",
-  "okBtn": "images/gamePage/crazyTime/ok_btn.png",
-}
+let R = null
 
 //把所有的图片放到一个对象中
 let Robj = {};	//两个对象有相同的k
 // 遍历R对象，把真实image对象，放入Robj中
-for (var k in R) {
-  Robj[k] = wx.createImage();
-  Robj[k].src = R[k];
-}
 
 export default class GameModal {
   render(ctx) {
+
+    if(!R){
+      R = {
+        "gameEndBg": "images/gameEnd/gameEndBg.png",
+        "addSteps": "energySys/img/gameModal/add_steps.png",
+        "colorTool": "energySys/img/gameModal/color_tool.png",
+        "modalBg": "energySys/img/gameModal/modal_bg.png",
+        "modalClose": "energySys/img/gameModal/modal_close.png",
+        "modalSubmit": "energySys/img/gameModal/modal_submit.png",
+        "musicBgFalse": "energySys/img/gameModal/music_bg_false.png",
+        "musicBgTrue": "energySys/img/gameModal/music_bg_true.png",
+        "musicSoundFalse": "energySys/img/gameModal/music_sound_false.png",
+        "musicSoundTrue": "energySys/img/gameModal/music_sound_true.png",
+        "passState": "images/gamePage/passState.png",
+        "ruleCon": "energySys/img/gameModal/rule.png",
+        "finger": "energySys/img/gameModal/finger.png",
+        "nextStage": "energySys/img/gameModal/next_stage.png",
+        "iknow": "energySys/img/gameModal/iknow.png",
+        "passStateBg": "images/gamePage/passStateBg.png",
+        "buy": "energySys/img/gameModal/icon_buy.png",
+        "coin": "energySys/img/gameModal/coin.png",
+        "saveModal": "images/gamePage/archive/save_modal.png",
+        "saveBtn": "images/gamePage/archive/save_game.png",
+        "rule": "images/gamePage/gameBtn/rule.png",
+        "home": "images/gamePage/gameBtn/home.png",
+        "music": "images/gamePage/gameBtn/music.png",
+        "crazyBtnFree": "images/gamePage/crazyTime/crazy_btn_free.png",
+        "crazyBtnVideo": "images/gamePage/crazyTime/crazy_btn_video.png",
+        "crazyEndModal": "images/gamePage/crazyTime/endModal.png",
+        "crazyStartModal": "images/gamePage/crazyTime/startModal.png",
+        "okBtn": "images/gamePage/crazyTime/ok_btn.png",
+      }
+      for (var k in R) {
+        Robj[k] = wx.createImage();
+        Robj[k].src = R[k];
+      }
+    }
     this.ctx = ctx;
     //3:音乐弹框
     if (databus.gameState == 3) {

@@ -558,10 +558,15 @@ export default class DataBus {
    */
   gameInfoReset() {
     this.gameDoubleHit = 0 //本局总连击数
+    this.doubleHitStars = 0 //连击星星等级
     this.gameCrazyTime = 0 //本局总crazyTime分数
+    this.crazyTimeStars = 0 //crazyTime星星等级
     this.gameStartTime = 0 //本局开始时间
     this.gameEndTime = 0 //本局结束时间
+    this.gameTimeStars = 0 //时间星星等级
     this.battlePrecent = 0 //本局结束打败了多少玩家
+    this.gameLevel = 'c' //结束评分
+    this.obtainpengry = 0 //游戏结束获得的精力
     this.combo = 0 //combo数
     this.prevSelectBlocks = [] //上次爆炸棋子数组
     this.selectBlocks = [] //连线棋子数组
@@ -588,7 +593,7 @@ export default class DataBus {
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 0 //当前关卡过关分数
     this.gameId = '' //本轮游戏id
-    this.steps = 1 //总步步数
+    this.steps = 10 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 4 //棋子种类

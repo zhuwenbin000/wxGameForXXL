@@ -37,6 +37,13 @@ let R = {
   "battleReportIcon": "images/gameEnd/battleReportIcon.png",
   "battleReportBg": "images/gameEnd/battleReportBg.png",
   "modalClose": "images/gameModal/modal_close.png",
+  "star": "images/gameEnd/star.png",
+  "stars": "images/gameEnd/stars.png",
+  "levela": "images/gameEnd/a.png",
+  "levelb": "images/gameEnd/b.png",
+  "levelc": "images/gameEnd/c.png",
+  "levels": "images/gameEnd/s.png",
+  "levelsss": "images/gameEnd/sss.png",
 }
 
 //把所有的图片放到一个对象中
@@ -104,7 +111,7 @@ export default class GameEnd {
     ctx.fillText(databus.userinfo.userInfo.nickName, unc.x, unc.y);
     //增加精力数字
     ctx.font = aenc.font;
-    ctx.fillText('+18', aenc.x, aenc.y);
+    ctx.fillText('+' + databus.obtainpengry, aenc.x, aenc.y);
     //历史最高分
     ctx.font = ssc.font;
     if (databus.isNewScore) {
@@ -129,6 +136,40 @@ export default class GameEnd {
       //弹框关闭
       ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 85 * ratio, 150 * ratio, 162 * ratio);
       
+      for (let i = 0; i < 5; i++) {
+        if(i < databus.doubleHitStars){
+          ctx.drawImage(Robj["stars"], 0, 0, Robj["stars"].width, Robj["stars"].height, (525 + i * 40) * ratio, 700 * ratio, 40 * ratio, 38 * ratio);
+        }else{
+          ctx.drawImage(Robj["star"], 0, 0, Robj["star"].width, Robj["star"].height, (525 + i * 40) * ratio, 700 * ratio, 40 * ratio, 38 * ratio);
+        }
+      }
+
+      for (let i = 0; i < 5; i++) {
+        if(i < databus.crazyTimeStars){
+          ctx.drawImage(Robj["stars"], 0, 0, Robj["stars"].width, Robj["stars"].height, (525 + i * 40) * ratio, 760 * ratio, 40 * ratio, 38 * ratio);
+        }else{
+          ctx.drawImage(Robj["star"], 0, 0, Robj["star"].width, Robj["star"].height, (525 + i * 40) * ratio, 760 * ratio, 40 * ratio, 38 * ratio);
+        }
+      }
+
+      for (let i = 0; i < 5; i++) {
+        if(i < databus.gameTimeStars){
+          ctx.drawImage(Robj["stars"], 0, 0, Robj["stars"].width, Robj["stars"].height, (525 + i * 40) * ratio, 820 * ratio, 40 * ratio, 38 * ratio);
+        }else{
+          ctx.drawImage(Robj["star"], 0, 0, Robj["star"].width, Robj["star"].height, (525 + i * 40) * ratio, 820 * ratio, 40 * ratio, 38 * ratio);
+        }
+      }
+
+      //评分
+      if(databus.gameLevel == 'sss'){
+        ctx.drawImage(Robj["level" + databus.gameLevel], 0, 0, Robj["level" + databus.gameLevel].width, Robj["level" + databus.gameLevel].height, 470 * ratio, 1000 * ratio, 272 * ratio, 138 * ratio);
+      }else if(databus.gameLevel == 'ss'){
+        ctx.drawImage(Robj["levels"], 0, 0, Robj["levels"].width, Robj["levels"].height, 470 * ratio, 1000 * ratio, 98 * ratio, 140 * ratio);
+        ctx.drawImage(Robj["levels"], 0, 0, Robj["levels"].width, Robj["levels"].height, 570 * ratio, 1000 * ratio, 98 * ratio, 140 * ratio);
+      }else{
+        ctx.drawImage(Robj["level" + databus.gameLevel], 0, 0, Robj["level" + databus.gameLevel].width, Robj["level" + databus.gameLevel].height, 470 * ratio, 1000 * ratio, 110 * ratio, 140 * ratio);
+      }
+            
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff323';
       ctx.font = 30 * ratio + 'px Arial';
@@ -163,8 +204,8 @@ export default class GameEnd {
 
       let wxaqrcodeurl = wx.createImage();
       wxaqrcodeurl.src = databus.wxaqrcodeurl
-      //弹框关闭
-      ctx.drawImage(wxaqrcodeurl, 0, 0, wxaqrcodeurl.width, wxaqrcodeurl.height, 90 * ratio, 1185 * ratio, 130 * ratio, 125 * ratio);
+      databus.circleImg(ctx, wxaqrcodeurl, 80 * ratio, 1175 * ratio, 65 * ratio)
+      // ctx.drawImage(wxaqrcodeurl, 0, 0, wxaqrcodeurl.width, wxaqrcodeurl.height, 90 * ratio, 1185 * ratio, 130 * ratio, 125 * ratio);
     }
   }
 }

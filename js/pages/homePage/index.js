@@ -125,6 +125,11 @@ export default class Index {
           databus.active_state = true;
           this.music.playMusic('btnDown')
           setTimeout(()=>{
+
+            const battlePoint = wx.getStorageSync('battlePoint')
+            if(battlePoint != databus.getNowTimeStr()){
+              databus.battlePoint = true
+            }
             databus.homeState = 4;
             databus.active_state = false;
             databus.gameClubbutton.destroy() //游戏圈按钮销毁
@@ -268,7 +273,14 @@ export default class Index {
             }
           }
           if(databus.signType == 1){
-            console.log("分享补签")
+            databus.wxShare('3',()=>{
+              this.goSign({
+                openid:wx.getStorageSync('openId'),
+                day:databus.signData.day,
+                isoverday:1,
+                gold:0
+              })
+            })
           }
           
         }
@@ -309,7 +321,7 @@ export default class Index {
         if (databus.energySysTab == 0) {
           //大赛部分点击事件
           //分享
-          if (x >= 60 * ratio && x <= (60 * ratio + 305 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio + 115 * ratio)) {
+          if (x >= 60 * ratio && x <= (60 * ratio + 305 * ratio) && y >= 1300 * ratio && y <= (1285 * ratio + 145 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
             // wx.shareAppMessage({
@@ -322,9 +334,11 @@ export default class Index {
           }
 
           //大赛详情
-          if (x >= 415 * ratio && x <= (415 * ratio + 350 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio + 115 * ratio)) {
+          if (x >= 415 * ratio && x <= (415 * ratio + 350 * ratio) && y >= 1300 * ratio && y <= (1285 * ratio + 145 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
+            wx.setStorageSync('battlePoint', databus.getNowTimeStr())
+            databus.battlePoint = false
             const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
@@ -341,6 +355,8 @@ export default class Index {
           if (x >= 54 * ratio && x <= (54 * ratio + 720 * ratio) && y >= 300 * ratio && y <= (300 * ratio + 960 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
+            wx.setStorageSync('battlePoint', databus.getNowTimeStr())
+            databus.battlePoint = false
             const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
@@ -645,6 +661,9 @@ export default class Index {
       method: 'POST',
       data: data,
       success(data) {
+
+        self.music.playMusic('NewRecord')
+
         databus.signData = data.body.info;
         databus.energySysModal = 1;
         databus.getSignInfo()
@@ -672,12 +691,15 @@ export default class Index {
         // wx.showToast({ title: "成功换取精力啦~", icon:'none'})
         databus.exchangeBoxAni = true
         databus.exchangeBoxAniTime = 0
-        databus.getUserInfo()
+        setTimeout(()=>{
+          databus.getUserInfo()
+        },500)
       }
     })
   }
 
   openBox() {
+    let self = this;
     //开箱
     ajax({
       tradecode: 'sys21',
@@ -688,6 +710,9 @@ export default class Index {
         version: databus.version
       },
       success(data) {
+
+        self.music.playMusic('NewRecord')
+
         databus.energySysModal = 3
         databus.openBoxData = data.body.info
         databus.boxNum = data.body.info.boxnum
@@ -699,5 +724,6 @@ export default class Index {
         databus.getUserInfo()
       }
     })
+
   }
 }
