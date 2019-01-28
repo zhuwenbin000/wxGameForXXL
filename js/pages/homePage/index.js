@@ -404,6 +404,7 @@ export default class Index {
                     day:databus.daysinfo[i].day,
                     isoverday:0,
                   })
+                  databus.signPoint = false
                 }
               }
             }
