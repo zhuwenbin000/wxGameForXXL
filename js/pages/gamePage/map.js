@@ -546,6 +546,8 @@ export default class Map {
           //结束音
           self.music.playMusic('noNewRecord')
         }
+
+        databus.showGameEndAd()
       }
     }
     ajax(options)

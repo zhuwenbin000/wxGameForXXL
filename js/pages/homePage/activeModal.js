@@ -74,6 +74,7 @@ export default class ActiveModal {
         "boxNum": "energySys/img/openbox/boxNum.png",
         "openBoxTxt": "energySys/img/openbox/openBoxTxt.png",
         "openBtn": "energySys/img/openbox/openBtn.png",
+        "openBtnGrey": "energySys/img/openbox/openBtn-grey.png",
         "boxMask": "energySys/img/openbox/boxMask.png",
         "boxProcessWrap": "energySys/img/openbox/boxProcessWrap.png",
         "boxProcess": "energySys/img/openbox/boxProcess.png",
@@ -483,7 +484,11 @@ export default class ActiveModal {
       ctx.font = 30 * ratio + 'px Arial';
       ctx.fillText('箱子精力：' + databus.boxEnergy + '/50', 414 * ratio, 1120 * ratio);
       //开箱按钮
-      ctx.drawImage(Img["openBtn"], 0, 0, Img["openBtn"].width, Img["openBtn"].height, 255 * ratio, 1170 * ratio, 312 * ratio, 138 * ratio);
+      if(parseInt(databus.boxNum) > 0){
+        ctx.drawImage(Img["openBtn"], 0, 0, Img["openBtn"].width, Img["openBtn"].height, 255 * ratio, 1170 * ratio, 312 * ratio, 138 * ratio);
+      }else{
+        ctx.drawImage(Img["openBtnGrey"], 0, 0, Img["openBtnGrey"].width, Img["openBtnGrey"].height, 255 * ratio, 1170 * ratio, 312 * ratio, 138 * ratio);
+      }
       //连续点击
       ctx.drawImage(Img["openBoxTxt"], 0, 0, Img["openBoxTxt"].width, Img["openBoxTxt"].height, 306 * ratio, 1310 * ratio, 216 * ratio, 74 * ratio);
 
