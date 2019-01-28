@@ -98,7 +98,8 @@ export default class ActiveModal {
         'htsx':'energySys/img/plunder/htsx.png',
         'ysj':'energySys/img/plunder/ysj.png',
         'htsx_pic': 'energySys/img/plunder/htsx_pic.png',
-        'htsx_txt': 'energySys/img/plunder/htsx_txt.png'
+        'htsx_txt': 'energySys/img/plunder/htsx_txt.png',
+        'bg_white':'energySys/img/plunder/bg_white.png'
       }
 
       for (var k in R) {
@@ -569,16 +570,7 @@ export default class ActiveModal {
   drawrank = (ctx) => {
     let list = databus.jl_list.slice((databus.ji_pageindex - 1) * 6, databus.ji_pageindex * 6);
     if (list && list.length) {
-      let avatarList = []
-      list.map((item, index) => {
-        if (item.logopath) {
-          let picboj = wx.createImage();
-          picboj.src = item.logopath;
-          avatarList.push(picboj)
-        } else {
-          avatarList.push(null)
-        }
-      });
+      let avatarList = databus.avatarList.slice((databus.ji_pageindex - 1) * 6, databus.ji_pageindex * 6);
       this.drawList(ctx, avatarList, list)
     } else {
       // 没有数据
@@ -591,51 +583,55 @@ export default class ActiveModal {
     var h = itemHeight * length;
     var avatarurl_width = 80 * ratio; //绘制的头像宽度
     var avatarurl_heigth = 80 * ratio; //绘制的头像高度
-    var avatarurl_x = 115 * ratio; //绘制的头像在画布上的位置
+    var avatarurl_x = 80 * ratio; //绘制的头像在画布上的位置
     list.map((item, index) => {
       if (avatarList[index]) {
+        
+        ctx.drawImage(Img['bg_white'], avatarurl_x-2, index * itemHeight + (405 * ratio)-2, avatarurl_width+4, avatarurl_heigth+4)
+        
         ctx.drawImage(avatarList[index], avatarurl_x, index * itemHeight + (405 * ratio), avatarurl_width, avatarurl_heigth)
         ctx.fillStyle = '#fff';
-        ctx.font = '12px Arial';
+        ctx.font = '11pt Arial';
         ctx.textAlign = 'left';
         item.nickname = item.nickname ? decodeURIComponent(item.nickname).length > 5 ? decodeURIComponent(item.nickname).substring(0, 6) + '..' : decodeURIComponent(item.nickname) : ''
         item.nickname = decodeURIComponent(item.nickname)
-        ctx.fillText(item.nickname, 205 * ratio, index * itemHeight + (460 * ratio));
-        ctx.fillText(item.penrgy ? item.penrgy + 'g' : '', 485 * ratio, index * itemHeight + (496 * ratio)); //能量几克
+        ctx.fillText(item.nickname, 185 * ratio, index * itemHeight + (460 * ratio));
+        ctx.fillText(item.penrgy ? item.penrgy + 'g' : '0g', 485 * ratio, index * itemHeight + (496 * ratio)); //能量几克
         var jd = item.penrgy ? item.penrgy / 100 : 0
-        ctx.drawImage(Img["jd"], 420 * ratio, index * itemHeight + (430 * ratio), Img["jd"].width * ratio, Img["jd"].height * ratio)
-        ctx.drawImage(Img["jdbg"], 432 * ratio, index * itemHeight + (441 * ratio), Img["jdbg"].width * ratio * jd, Img["jdbg"].height * ratio * 0.8)
+        ctx.drawImage(Img["jd"], 410 * ratio, index * itemHeight + (430 * ratio), Img["jd"].width * ratio, Img["jd"].height*1.1 * ratio)
+        ctx.drawImage(Img["jdbg"], 422 * ratio, index * itemHeight + (441 * ratio), Img["jdbg"].width * ratio * jd, Img["jdbg"].height * ratio * 0.9)
         if (item.cansteal == 1) {
           if (item.penrgy) {
-            ctx.drawImage(Img["sj"], 632 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9 * ratio, Img["sj"].height * 0.9 * ratio)
+            ctx.drawImage(Img["sj"], 605 * ratio, index * itemHeight + (350 * ratio), Img["sj"].width*0.95  * ratio, Img["sj"].height  * ratio)
+            ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 720 * ratio, index * itemHeight + (390 * ratio), 40 * ratio, 40 * ratio);
           } else {
-            ctx.drawImage(Img["htsx"], 632 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9 * ratio, Img["htsx"].height * 0.9 * ratio)
+            ctx.drawImage(Img["htsx"], 605 * ratio, index * itemHeight + (350 * ratio), Img["sj"].width * 0.95  * ratio, Img["htsx"].height  * ratio)
           }
         } else {
-          ctx.drawImage(Img["ysj"], 632 * ratio, index * itemHeight + (365 * ratio), Img["sj"].width * 0.9 * ratio, Img["ysj"].height * 0.9 * ratio)
+          ctx.drawImage(Img["ysj"], 605 * ratio, index * itemHeight + (350 * ratio), Img["sj"].width * 0.95  * ratio, Img["ysj"].height  * ratio)
         }
       }
     })
     if (databus.tip_success) {
       ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
-      ctx.drawImage(Img["tip"], 0, 0, Img["tip"].width, Img["tip"].height, 80 * ratio, 400 * ratio, 672 * ratio, 384 * ratio);
-      ctx.drawImage(Img["sgcg"], 0, 0, Img["sgcg"].width, Img["sgcg"].height, 92 * ratio, 412 * ratio, 648 * ratio, 360 * ratio);
+      ctx.drawImage(Img["tip"], 0, 0, Img["tip"].width, Img["tip"].height, 80 * ratio, 450 * ratio, 672 * ratio, 384 * ratio);
+      ctx.drawImage(Img["sgcg"], 0, 0, Img["sgcg"].width, Img["sgcg"].height, 92 * ratio, 462 * ratio, 648 * ratio, 360 * ratio);
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
       ctx.font = 48 * ratio + 'px Arial';
-      ctx.fillText(databus.getScore, 450 * ratio, 720 * ratio);
-      ctx.drawImage(Img["reward4"], 0, 0, Img["reward4"].width, Img["reward4"].height * 0.7, 262 * ratio, 432 * ratio, 400 * ratio * 0.8, 400 * ratio * 0.56);
+      ctx.fillText(databus.getScore, 450 * ratio, 770 * ratio);
+      ctx.drawImage(Img["reward4"], 0, 0, Img["reward4"].width, Img["reward4"].height * 0.7, 262 * ratio, 482 * ratio, 400 * ratio * 0.8, 400 * ratio * 0.56);
       //弹框关闭
-      ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 45 * ratio, 365 * ratio, 80 * ratio, 80 * ratio);
-      ctx.drawImage(Img["sgcg_b"], 0, 0, Img["sgcg_b"].width, Img["sgcg_b"].height, 155 * ratio, 825 * ratio, 512 * ratio, 200 * ratio);
+      ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 45 * ratio, 415 * ratio, 80 * ratio, 80 * ratio);
+      ctx.drawImage(Img["sgcg_b"], 0, 0, Img["sgcg_b"].width, Img["sgcg_b"].height, 155 * ratio, 875 * ratio, 512 * ratio, 200 * ratio);
     }
     if (databus.tip_flase) {
       ctx.drawImage(Img["bg"], 0, 0, canvas.width, canvas.height);
-      ctx.drawImage(Img["tip"], 0, 0, Img["tip"].width, Img["tip"].height, 80 * ratio, 400 * ratio, 672 * ratio, 384 * ratio);
-      ctx.drawImage(Img["sgsb"], 0, 0, Img["sgsb"].width, Img["sgsb"].height, 92 * ratio, 412 * ratio, 648 * ratio, 360 * ratio); //弹框关闭
-      ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 45 * ratio, 365 * ratio, 80 * ratio, 80 * ratio);
-      ctx.drawImage(Img["htsx_pic"], 0, 0, Img["htsx_pic"].width, Img["htsx_pic"].height, 84 * ratio, 825 * ratio, 662 * ratio, 200 * ratio);
-      ctx.drawImage(Img["htsx_txt"], 0, 0, Img["htsx_txt"].width, Img["htsx_txt"].height, 204 * ratio, 1025 * ratio, 400 * ratio, 70 * ratio);
+      ctx.drawImage(Img["tip"], 0, 0, Img["tip"].width, Img["tip"].height, 80 * ratio, 450 * ratio, 672 * ratio, 384 * ratio);
+      ctx.drawImage(Img["sgsb"], 0, 0, Img["sgsb"].width, Img["sgsb"].height, 92 * ratio, 462 * ratio, 648 * ratio, 360 * ratio); //弹框关闭
+      ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 45 * ratio, 415 * ratio, 80 * ratio, 80 * ratio);
+      ctx.drawImage(Img["htsx_pic"], 0, 0, Img["htsx_pic"].width, Img["htsx_pic"].height, 84 * ratio, 875 * ratio, 662 * ratio, 200 * ratio);
+      ctx.drawImage(Img["htsx_txt"], 0, 0, Img["htsx_txt"].width, Img["htsx_txt"].height, 204 * ratio, 1075 * ratio, 400 * ratio, 70 * ratio);
     }
   }
 }

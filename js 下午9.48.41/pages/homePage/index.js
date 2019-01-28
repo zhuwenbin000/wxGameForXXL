@@ -4,12 +4,21 @@ import DataBus from '../../databus'
 let ratio = canvas.width / 828 //设计稿宽度
 import { ajax } from '../../base/ajax'
 let databus = new DataBus()
+const ratios = wx.getSystemInfoSync().pixelRatio;
+const screenWidth = window.innerWidth;
+const screenHeight = window.innerHeight;
 /**
  * 首页
  */
 export default class Index {
-  constructor() {
+  constructor(ctx) {
     // 维护当前requestAnimationFrame的id
+    canvas.width = screenWidth * ratios;
+    canvas.height = screenHeight * ratios;
+    ctx.scale(ratios, ratios);
+    ctx.scale(ratio, ratio);
+    console.log(ratio,'12345')
+    this.ctx = ctx;
     this.aniId = 0
     this.f = 0
   }
@@ -45,9 +54,8 @@ export default class Index {
     ajax(options)
   }
 
-  restart(ctx) {
+  restart(ctx) {   
     var me = this;
-    this.ctx = ctx
     this.pageBtn = new PageBtn(ctx)
     this.music = new Music()
     this.music.playIndexBgm()
@@ -72,7 +80,6 @@ export default class Index {
   }
   // 首页按钮事件处理逻辑
   touchHomePage(e) {
-    let self = this;
     //wx.offTouchStart();
     e.preventDefault()
     let x = e.touches[0].clientX
@@ -113,11 +120,9 @@ export default class Index {
           this.music.playMusic('btnDown')
           setTimeout(() => {
             this.finish()
-            databus.scene = 2
-           
+            databus.scene = 2          
               databus.gameClubbutton.destroy() //游戏圈按钮销毁
-              databus.gameClubbutton = null;
-            
+              databus.gameClubbutton = null;         
           }, databus.laterTime)
         }
       }
@@ -126,11 +131,6 @@ export default class Index {
           databus.active_state = true;
           this.music.playMusic('btnDown')
           setTimeout(()=>{
-
-            const battlePoint = wx.getStorageSync('battlePoint')
-            if(battlePoint != databus.getNowTimeStr()){
-              databus.battlePoint = true
-            }
             databus.homeState = 4;
             databus.active_state = false;
             databus.gameClubbutton.destroy() //游戏圈按钮销毁
@@ -151,7 +151,6 @@ export default class Index {
           this.pageBtn.bannerButton && this.pageBtn.bannerButton.show()
           this.pageBtn.createbutton && this.pageBtn.createbutton.hide()
           this.pageBtn.friendbutton && this.pageBtn.friendbutton.hide()
-
         }
       }
 
@@ -274,14 +273,7 @@ export default class Index {
             }
           }
           if(databus.signType == 1){
-            databus.wxShare('3',()=>{
-              this.goSign({
-                openid:wx.getStorageSync('openId'),
-                day:databus.signData.day,
-                isoverday:1,
-                gold:0
-              })
-            })
+            console.log("分享补签")
           }
           
         }
@@ -322,33 +314,21 @@ export default class Index {
         if (databus.energySysTab == 0) {
           //大赛部分点击事件
           //分享
-          if (x >= 60 * ratio && x <= (60 * ratio + 305 * ratio) && y >= 1300 * ratio && y <= (1285 * ratio + 145 * ratio)) {
+          if (x >= 60 * ratio && x <= (60 * ratio + 305 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio + 115 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
-            // wx.shareAppMessage({
-            //   'title': databus.battleInfo.sharetextofgame, 
-            //   'imageUrl': databus.battleInfo.shareimgofgame,
-            //   'query':'fatherId=' + wx.getStorageSync('openId')
-            // })
-
             databus.wxShare('2')
           }
-
           //大赛详情
-          if (x >= 415 * ratio && x <= (415 * ratio + 350 * ratio) && y >= 1300 * ratio && y <= (1285 * ratio + 145 * ratio)) {
+          if (x >= 415 * ratio && x <= (415 * ratio + 350 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio + 115 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
-            wx.setStorageSync('battlePoint', databus.getNowTimeStr())
-            databus.battlePoint = false
             const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
               path: 'pages/webview/webview?pageurl=' + pageurl,
               envVersion: 'trial',
               success(res) {
-                // 打开成功
-                // console.log("成功")
-                // console.log(res)
               }
             })
           }
@@ -356,8 +336,6 @@ export default class Index {
           if (x >= 54 * ratio && x <= (54 * ratio + 720 * ratio) && y >= 300 * ratio && y <= (300 * ratio + 960 * ratio)) {
             //按钮按下音效
             this.music.playMusic('btnDown')
-            wx.setStorageSync('battlePoint', databus.getNowTimeStr())
-            databus.battlePoint = false
             const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
@@ -441,23 +419,23 @@ export default class Index {
         } else if (databus.energySysTab == 3){ //搜刮事件绑定
           if (databus.tip_success || databus.tip_flase){
            
-            if (x >= 45 * ratio && x <= (45 * ratio + 80 * ratio) && y >= 415 * ratio && y <= (415 * ratio) + (80 * ratio)) {
-              databus.tip_success = false;
-              databus.tip_flase = false;
-            }
-            if (x >= 155 * ratio && x <= (155 * ratio + 512 * ratio) && y >= 875 * ratio && y <= (875 * ratio) + (200 * ratio)) {
+            if (x >= 45 * ratio && x <= (45 * ratio + 80 * ratio) && y >= 365 * ratio && y <= (365 * ratio) + (80 * ratio)) {
               databus.tip_success = false;
               databus.tip_flase = false;
             }
            
+           
             if ((x >= 84 * ratio && x <= (84 * ratio + 662 * ratio) && y >= 825 * ratio && y <= (825 * ratio) + (200 * ratio)) && databus.tip_flase) {
-             
               databus.wxShare('1')
             }
-            
           }else{
             if (x >= 230 * ratio && x <= (230 * ratio + 194 * ratio) && y >= 295 * ratio && y <= (295 * ratio) + (88 * ratio)) {
-             
+              // console.log(1)
+              // wx.shareAppMessage({
+              //   'title': databus.shareConfig.info,
+              //   'imageUrl': databus.shareConfig.url,
+              //   'query': 'fatherId=' + wx.getStorageSync('openId')
+              // })
               databus.wxShare('4')
             }
             const datalist = databus.jl_list.slice((databus.ji_pageindex-1)*6,databus.ji_pageindex*6)
@@ -490,7 +468,6 @@ export default class Index {
                       lopenid: item.openid
                     },
                     success(data) {
-                      self.music.playMusic('passPoint')
                       databus.tip_loan = false;
                       console.log(data)
                       item.cansteal = 0;
@@ -608,7 +585,6 @@ export default class Index {
   getEngerySysInfo(){
     this.getBattleInfo()
     this.getPlunderList()
-    databus.getFriendsList()
     databus.getSignInfo()
   }
 
@@ -658,9 +634,6 @@ export default class Index {
       method: 'POST',
       data: data,
       success(data) {
-
-        self.music.playMusic('NewRecord')
-
         databus.signData = data.body.info;
         databus.energySysModal = 1;
         databus.getSignInfo()
@@ -688,15 +661,12 @@ export default class Index {
         // wx.showToast({ title: "成功换取精力啦~", icon:'none'})
         databus.exchangeBoxAni = true
         databus.exchangeBoxAniTime = 0
-        setTimeout(()=>{
-          databus.getUserInfo()
-        },500)
+        databus.getUserInfo()
       }
     })
   }
 
   openBox() {
-    let self = this;
     //开箱
     ajax({
       tradecode: 'sys21',
@@ -707,9 +677,6 @@ export default class Index {
         version: databus.version
       },
       success(data) {
-
-        self.music.playMusic('NewRecord')
-
         databus.energySysModal = 3
         databus.openBoxData = data.body.info
         databus.boxNum = data.body.info.boxnum
@@ -721,6 +688,5 @@ export default class Index {
         databus.getUserInfo()
       }
     })
-
   }
 }
