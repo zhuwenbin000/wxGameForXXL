@@ -546,9 +546,23 @@ export default class ActiveModal {
       ctx.font = '18px Arial';
       ctx.textAlign = 'left';
       ctx.fillText(databus.jl_list.length, 160 * ratio, 355 * ratio);
-      ctx.drawImage(Img["yaoqing"], 0, 0, Img["yaoqing"].width, Img["yaoqing"].height, 230 * ratio, 295 * ratio, 194 * ratio, 88 * ratio);
-      ctx.drawImage(Img["group30"], 0, 0, Img["group30"].width, Img["group30"].height, 460 * ratio, 1300 * ratio, 258 * ratio, 130 * ratio);
-      ctx.drawImage(Img["group31"], 0, 0, Img["group31"].width, Img["group31"].height, 110 * ratio, 1300 * ratio, 258 * ratio, 130 * ratio);
+      if (databus.shareState){
+        ctx.drawImage(Img["yaoqing"], 0, 0, Img["yaoqing"].width, Img["yaoqing"].height, 230 * ratio, 295 * ratio, 194 * ratio, 88 * ratio);
+      }else{
+        ctx.drawImage(Img["yaoqing"], 0, 0, Img["yaoqing"].width, Img["yaoqing"].height, 230 * ratio*0.95, 295 * ratio*0.98, 194 * ratio*1.1, 88 * ratio*1.1);
+      }
+     
+      if(databus.nextState){
+        ctx.drawImage(Img["group30"], 0, 0, Img["group30"].width, Img["group30"].height, 460 * ratio, 1300 * ratio, 258 * ratio, 130 * ratio);
+      }else{
+        ctx.drawImage(Img["group30"], 0, 0, Img["group30"].width, Img["group30"].height, 460 * ratio*0.98, 1290 * ratio, 258 * ratio*1.1, 130 * ratio*1.1);
+      }
+      if (databus.provState){
+        ctx.drawImage(Img["group31"], 0, 0, Img["group31"].width, Img["group31"].height, 110 * ratio, 1300 * ratio, 258 * ratio, 130 * ratio);
+      }else{
+        ctx.drawImage(Img["group31"], 0, 0, Img["group31"].width, Img["group31"].height, 110 * ratio * 0.97, 1290 * ratio , 258 * ratio*1.1, 130 * ratio*1.1);
+      }
+      
       let pageCount = databus.ji_pageindex + '/' + databus.ji_totlePage
       ctx.fillText(pageCount, 390 * ratio, 1370 * ratio);
       this.initRanklist(ctx)

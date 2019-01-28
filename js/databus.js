@@ -65,6 +65,9 @@ export default class DataBus {
     this.ji_totlePage = 1;
     this.jl_list = []
     this.avatarList = []
+    this.nextState = true;
+    this.provState = true;
+    this.shareState = true;
     this.frinendCount = 18;//搜刮好友数量
     this.active_state = false;//活动按钮状态
     this.playbtn_state = false;//开始游戏按钮状态
@@ -1155,14 +1158,6 @@ export default class DataBus {
       },
       success(data) {
         self.daysinfo = data.body.daysinfo
-
-        for (let i = 0; i < self.daysinfo.length; i++) {
-          if (parseInt(self.daysinfo[i].day) == parseInt(self.getNowTimeStr())) {
-            if (self.daysinfo[i].isdone == '1') {}else{
-              self.signPoint = true
-            }
-          }
-        }
       }
     })
   }
@@ -1211,8 +1206,7 @@ export default class DataBus {
           }
           if (item.cansteal == '1' && item.penrgy){
             self.plunderPoint = true
-          }
-          
+          }   
         });
         self.ji_totlePage = parseInt(self.jl_list.length/6)+1 
       }
@@ -1236,18 +1230,10 @@ export default class DataBus {
         self.boxEnergy = data.body.user.boxengry;
         self.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
         
-        if(parseInt(self.boxNum) > 0){
-          self.lotteryPoint = true
-        }
-
-        if(!self.boxExchangeTime){
+        if((new Date()).getTime() > self.boxExchangeTime + 10 * 60 * 60 * 1000){
           self.canExchangeBox = true
-          self.lotteryPoint = true
         }else{
-          if((new Date()).getTime() > self.boxExchangeTime + 10 * 60 * 60 * 1000){
-            self.canExchangeBox = true
-            self.lotteryPoint = true
-          }
+          self.canExchangeBox = false
         }
       }
     }

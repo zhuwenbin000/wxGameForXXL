@@ -61,8 +61,7 @@ let R = {
   "archiveModal":"images/gamePage/archive/archive_modal.png",
   "newGame":"images/gamePage/archive/new_game.png",
   "ddBtn":"images/gamePage/archive/dd_btn.png",
-  'active':'images/home/active.png',
-  'redPoint':'images/home/redPoint.png'
+  'active':'images/home/active.png'
 }
 
 //把所有的图片放到一个对象中
@@ -549,9 +548,7 @@ export default class PageBtn {
     }else{
       ctx.drawImage(activeBtn, 0, 0, 590, 226, ml_big, nmt_big + (110 * ratio), 590 * ratio * 1.1, 226 * ratio * 1.1 )
     }
-    if(databus.battlePoint || databus.signPoint || databus.lotteryPoint || databus.plunderPoint){
-      ctx.drawImage(Robj["redPoint"], 0, 0, Robj["redPoint"].width, Robj["redPoint"].height, 620 * ratio, 1020 * ratio, 60 * ratio, 60 * ratio);
-    }
+   
   }
   share_button(ctx) {
     if (!this.activeBtn) {

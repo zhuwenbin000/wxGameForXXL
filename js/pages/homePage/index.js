@@ -33,17 +33,11 @@ export default class Index {
         databus.boxEnergy = data.body.user.boxengry;
         databus.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
         
-        if(parseInt(databus.boxNum) > 0){
-          databus.lotteryPoint = true
-        }
-
         if(!databus.boxExchangeTime){
           databus.canExchangeBox = true
-          databus.lotteryPoint = true
         }else{
           if((new Date()).getTime() > databus.boxExchangeTime + 10 * 60 * 60 * 1000){
             databus.canExchangeBox = true
-            databus.lotteryPoint = true
           }
         }
       }
@@ -132,11 +126,16 @@ export default class Index {
           databus.active_state = true;
           this.music.playMusic('btnDown')
           setTimeout(()=>{
+
+            const battlePoint = wx.getStorageSync('battlePoint')
+            if(battlePoint != databus.getNowTimeStr()){
+              databus.battlePoint = true
+            }
             databus.homeState = 4;
             databus.active_state = false;
             databus.gameClubbutton.destroy() //游戏圈按钮销毁
             databus.gameClubbutton = null;
-          },databus.laterTime)
+          },databus.laterTime)   
         }
       }
       if (databus.shareflag) {//如果是非审核模式
@@ -341,7 +340,7 @@ export default class Index {
             this.music.playMusic('btnDown')
             wx.setStorageSync('battlePoint', databus.getNowTimeStr())
             databus.battlePoint = false
-            const pageurl = encodeURIComponent(databus.battleInfo.tosprourl + "?openid=" + wx.getStorageSync('openId'))
+            const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
               path: 'pages/webview/webview?pageurl=' + pageurl,
@@ -359,7 +358,7 @@ export default class Index {
             this.music.playMusic('btnDown')
             wx.setStorageSync('battlePoint', databus.getNowTimeStr())
             databus.battlePoint = false
-            const pageurl = encodeURIComponent(databus.battleInfo.tosprourl + "?openid=" + wx.getStorageSync('openId'))
+            const pageurl = encodeURIComponent(databus.battleInfo.tostosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',
               path: 'pages/webview/webview?pageurl=' + pageurl,
@@ -404,7 +403,6 @@ export default class Index {
                     day:databus.daysinfo[i].day,
                     isoverday:0,
                   })
-                  databus.signPoint = false
                 }
               }
             }
@@ -453,14 +451,21 @@ export default class Index {
             }
            
             if ((x >= 84 * ratio && x <= (84 * ratio + 662 * ratio) && y >= 825 * ratio && y <= (825 * ratio) + (200 * ratio)) && databus.tip_flase) {
-             
-              databus.wxShare('1')
+              
+                databus.wxShare('1')
+                     
             }
             
           }else{
             if (x >= 230 * ratio && x <= (230 * ratio + 194 * ratio) && y >= 295 * ratio && y <= (295 * ratio) + (88 * ratio)) {
-             
-              databus.wxShare('4')
+              this.music.playMusic('btnDown')
+              databus.shareState = false;
+
+              setTimeout(() => {
+                databus.shareState = true;
+                databus.wxShare('4')
+              }, 200)
+              
             }
             const datalist = databus.jl_list.slice((databus.ji_pageindex-1)*6,databus.ji_pageindex*6)
             const itemHeight = 917 * ratio / 6;
@@ -468,13 +473,23 @@ export default class Index {
             if (databus.jl_list.length>0){
               if (x >= 110 * ratio && x <= (110 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
                 if (databus.ji_pageindex > 1){
-                  databus.ji_pageindex--
+                  this.music.playMusic('btnDown')
+                  databus.provState = false;
+                  setTimeout(() => {
+                    databus.provState = true
+                    databus.ji_pageindex--
+                  }, 200)
                 }
               }
             
               if (x >= 460 * ratio && x <= (460 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
                 if (databus.ji_pageindex < databus.ji_totlePage) {
-                  databus.ji_pageindex++
+                  this.music.playMusic('btnDown')
+                  databus.nextState = false
+                  setTimeout(()=>{
+                    databus.nextState = true
+                    databus.ji_pageindex++
+                  },200)
                 }
               }
             }
@@ -503,6 +518,7 @@ export default class Index {
                   })
                  
                 } else if (item.cansteal == '1' && !item.penrgy){
+                  this.music.playMusic('btnDown')
                   databus.tip_flase = true;
                 }else{
                   wx.showToast({ title: "今日已经搜刮过了,明天再来噢~", icon: 'none' })
@@ -612,13 +628,6 @@ export default class Index {
     this.getPlunderList()
     databus.getFriendsList()
     databus.getSignInfo()
-
-
-    const battlePoint = wx.getStorageSync('battlePoint')
-    if(battlePoint != databus.getNowTimeStr()){
-      databus.battlePoint = true
-    }
-
   }
 
   getBattleInfo() {
@@ -632,12 +641,10 @@ export default class Index {
         openid:wx.getStorageSync('openId')
       },
       success(data) {
-        if(JSON.stringify(data.body.info).length > 2){
-          databus.battleInfo = data.body.info
-          databus.energySysTab = 0
-          databus.battleDays = databus.getDurDays(data.body.info.starttime,data.body.info.endtime)//大赛总天数
-          databus.battlePastDays = databus.getDurDays(data.body.info.starttime,(new Date()).getTime()) //大赛进行天数
-        }
+        databus.battleInfo = data.body.info
+        databus.energySysTab = 0
+        databus.battleDays = databus.getDurDays(data.body.info.starttime,data.body.info.endtime)//大赛总天数
+        databus.battlePastDays = databus.getDurDays(data.body.info.starttime,(new Date()).getTime()) //大赛进行天数
       }
     })
 
@@ -670,7 +677,7 @@ export default class Index {
       data: data,
       success(data) {
 
-        self.music.playMusic('passPoint')
+        self.music.playMusic('NewRecord')
 
         databus.signData = data.body.info;
         databus.energySysModal = 1;
@@ -719,7 +726,7 @@ export default class Index {
       },
       success(data) {
 
-        self.music.playMusic('passPoint')
+        self.music.playMusic('NewRecord')
 
         databus.energySysModal = 3
         databus.openBoxData = data.body.info
