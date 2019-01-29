@@ -57,6 +57,7 @@ export default class DataBus {
   }
 
   reset() {
+    this.clickTimes = 1;//点击次数
     this.getScore = 0;
     this.tip_success = false
     this.tip_flase = false

@@ -444,14 +444,16 @@ export default class Index {
             if (x >= 45 * ratio && x <= (45 * ratio + 80 * ratio) && y >= 415 * ratio && y <= (415 * ratio) + (80 * ratio)) {
               databus.tip_success = false;
               databus.tip_flase = false;
+              this.music.playMusic('btnDown')
             }
-            if (x >= 155 * ratio && x <= (155 * ratio + 512 * ratio) && y >= 875 * ratio && y <= (875 * ratio) + (200 * ratio)) {
+            if (x >= 155 * ratio && x <= (155 * ratio + 512 * ratio) && y >= 875 * ratio && y <= (875 * ratio) + (200 * ratio) && databus.tip_success) {
               databus.tip_success = false;
               databus.tip_flase = false;
+              this.music.playMusic('btnDown')
             }
            
             if ((x >= 84 * ratio && x <= (84 * ratio + 662 * ratio) && y >= 825 * ratio && y <= (825 * ratio) + (200 * ratio)) && databus.tip_flase) {
-              
+              this.music.playMusic('btnDown')
                 databus.wxShare('1')
                      
             }
@@ -460,12 +462,10 @@ export default class Index {
             if (x >= 230 * ratio && x <= (230 * ratio + 194 * ratio) && y >= 295 * ratio && y <= (295 * ratio) + (88 * ratio)) {
               this.music.playMusic('btnDown')
               databus.shareState = false;
-
               setTimeout(() => {
                 databus.shareState = true;
                 databus.wxShare('4')
-              }, 200)
-              
+              }, 200)        
             }
             const datalist = databus.jl_list.slice((databus.ji_pageindex-1)*6,databus.ji_pageindex*6)
             const itemHeight = 917 * ratio / 6;
@@ -481,7 +481,6 @@ export default class Index {
                   }, 200)
                 }
               }
-            
               if (x >= 460 * ratio && x <= (460 * ratio + 258 * ratio) && y >= 1300 * ratio && y <= (1300 * ratio) + (130 * ratio)) {
                 if (databus.ji_pageindex < databus.ji_totlePage) {
                   this.music.playMusic('btnDown')
@@ -494,8 +493,7 @@ export default class Index {
               }
             }
             datalist.map((item,index) => {
-              if (x >= 592 * ratio && x <= (592 * ratio) + (148 * ratio) && y >= index * itemHeight + (365 * ratio) && y <= index * itemHeight + (365 * ratio)+(156*ratio)) { //点击列表的搜刮精力
-              
+              if (x >= 592 * ratio && x <= (592 * ratio) + (148 * ratio) && y >= index * itemHeight + (365 * ratio) && y <= index * itemHeight + (365 * ratio)+(156*ratio)) { //点击列表的搜刮精力       
                 if (item.cansteal != '0' && item.penrgy && !databus.tip_loan){
                   databus.tip_loan = true;
                   ajax({
@@ -515,23 +513,21 @@ export default class Index {
                       item.penrgy = item.penrgy - data.body.info.propnum
                       databus.tip_success = true;
                     }
-                  })
-                 
+                  })      
                 } else if (item.cansteal == '1' && !item.penrgy){
                   this.music.playMusic('btnDown')
                   databus.tip_flase = true;
                 }else{
+                  this.music.playMusic('btnDown')
                   wx.showToast({ title: "今日已经搜刮过了,明天再来噢~", icon: 'none' })
                 }
               }
             })
           }
         }
-
         //弹框关闭
         if (x >= 0 * ratio && x <= (0 * ratio + 80 * ratio) && y >= 100 * ratio && y <= (100 * ratio + 80 * ratio)) {
           //按钮按下音效
-          
           this.music.playMusic('btnDown')
           databus.homeState = 1;
           if(databus.battleInfo){//有无大赛判断
@@ -542,8 +538,7 @@ export default class Index {
         }
         //大赛tab点击
         if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-          //按钮按下音效
-         
+          //按钮按下音效     
           this.music.playMusic('btnDown')
           if(databus.battleInfo){//有无大赛判断
             databus.energySysTab = 0;
@@ -572,7 +567,11 @@ export default class Index {
             databus.energySysTab = 2;
           }else{
             databus.energySysTab = 3;
-            databus.getFriendsList()
+            if(databus.clickTimes > 1){
+              databus.getFriendsList()      
+            }else{
+              databus.clickTimes++
+            }
           }
         }
 
@@ -585,8 +584,12 @@ export default class Index {
             databus.tip_success = false;
             this.music.playMusic('btnDown')
             databus.energySysTab = 3;
-            databus.getFriendsList()
-            console.log(112)
+            console.log(databus.clickTimes)
+            if (databus.clickTimes > 1) {
+              databus.getFriendsList()
+            }else{
+              databus.clickTimes++
+            }
           }
         }
       } 
@@ -628,6 +631,7 @@ export default class Index {
     this.getPlunderList()
     databus.getFriendsList()
     databus.getSignInfo()
+    databus.clickTimes = 1;
   }
 
   getBattleInfo() {

@@ -555,7 +555,7 @@ export default class ActiveModal {
       if(databus.nextState){
         ctx.drawImage(Img["group30"], 0, 0, Img["group30"].width, Img["group30"].height, 460 * ratio, 1300 * ratio, 258 * ratio, 130 * ratio);
       }else{
-        ctx.drawImage(Img["group30"], 0, 0, Img["group30"].width, Img["group30"].height, 460 * ratio*0.98, 1290 * ratio, 258 * ratio*1.1, 130 * ratio*1.1);
+        ctx.drawImage(Img["group30"], 0, 0, Img["group30"].width, Img["group30"].height, 460 * ratio*0.98, 1295 * ratio, 258 * ratio*1.1, 130 * ratio*1.1);
       }
       if (databus.provState){
         ctx.drawImage(Img["group31"], 0, 0, Img["group31"].width, Img["group31"].height, 110 * ratio, 1300 * ratio, 258 * ratio, 130 * ratio);
