@@ -635,17 +635,11 @@ export default class Index {
     this.getPlunderList()
     databus.getFriendsList()
     databus.getSignInfo()
-<<<<<<< HEAD
     databus.clickTimes = 1;
-=======
-
-
     const battlePoint = wx.getStorageSync('battlePoint')
     if(battlePoint != databus.getNowTimeStr()){
       databus.battlePoint = true
     }
-
->>>>>>> ea7d475f77cdab028baa203498cc7b4e1c58000c
   }
 
   getBattleInfo() {
