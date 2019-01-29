@@ -4,6 +4,9 @@ let databus = new DataBus()
 let uiWidth = 828;
 let ratio = canvas.width / uiWidth //设计稿宽度
 
+let phone = wx.getSystemInfoSync();
+let phoneh = phone.screenHeight;
+
 //统一配置UI值
 let gsc = databus.GameUI.getScoreCoordinates //本次得分坐标
 let nrc = databus.GameUI.newRecordCoordinates //游戏结束新纪录
@@ -127,6 +130,13 @@ export default class GameEnd {
     let headimg = wx.createImage();
     headimg.src = databus.userinfo.userInfo.avatarUrl
     databus.circleImg(ctx, headimg, ac.x, ac.y, ac.r)
+
+    if(phoneh > 1200 * ratio && databus.isEndBanner == 1){
+      //头像
+      let gameendbanner = wx.createImage();
+      gameendbanner.src = databus.gameendbanner
+      ctx.drawImage(gameendbanner, 0, 0, gameendbanner.width, gameendbanner.height, 147 * ratio, 1250 * ratio, 533 * ratio, 226 * ratio);
+    }
 
     if(databus.gameEndState == 1){
       //绘制背景

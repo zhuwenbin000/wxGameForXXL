@@ -61,7 +61,8 @@ let R = {
   "archiveModal":"images/gamePage/archive/archive_modal.png",
   "newGame":"images/gamePage/archive/new_game.png",
   "ddBtn":"images/gamePage/archive/dd_btn.png",
-  'active':'images/home/active.png'
+  'active':'images/home/active.png',
+  'redPoint':'images/home/redPoint.png'
 }
 
 //把所有的图片放到一个对象中
@@ -146,14 +147,14 @@ export default class PageBtn {
       ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 300 * ratio, 150 * ratio, 162 * ratio);
     }
 
-    if(databus.homeState == 4){ //精力系统
+    // if(databus.homeState == 4){ //精力系统
       
       if(databus.energySysLoad){//精力系统资源加载完毕才绘制
         this.activeModal.render(ctx)
       }else{
-        wx.showToast({title: '资源加载中～', icon: 'none' })
+        // wx.showToast({title: '资源加载中～', icon: 'none' })
       }
-    }
+    // }
         
     if (databus.shareflag) {
       if(!databus.activityData){
@@ -548,7 +549,9 @@ export default class PageBtn {
     }else{
       ctx.drawImage(activeBtn, 0, 0, 590, 226, ml_big, nmt_big + (110 * ratio), 590 * ratio * 1.1, 226 * ratio * 1.1 )
     }
-   
+    if(databus.battlePoint || databus.signPoint || databus.lotteryPoint || databus.plunderPoint){
+      ctx.drawImage(Robj["redPoint"], 0, 0, Robj["redPoint"].width, Robj["redPoint"].height, 620 * ratio, 1020 * ratio, 60 * ratio, 60 * ratio);
+    }
   }
   share_button(ctx) {
     if (!this.activeBtn) {

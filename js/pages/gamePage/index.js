@@ -5,6 +5,8 @@ import GameModal from './gameModal'
 import DataBus from '../../databus'
 import { ajax } from '../../base/ajax'
 
+let phone = wx.getSystemInfoSync();
+let phoneh = phone.screenHeight;
 let databus = new DataBus()
 
 let uiWidth = 828;
@@ -926,6 +928,22 @@ export default class Index {
         //   //按钮按下音效
         //   this.music.playMusic('btnDown')
         // }
+
+        if(phoneh > 1200 * ratio && databus.isEndBanner == 1){
+          if (x >= 0 * ratio && x <= ( 0 + 150 ) * ratio && y >= 85 * ratio && y <= ( 85 + 162) * ratio) {
+            const pageurl = encodeURIComponent(databus.battleInfo.tosprourl + "?openid=" + wx.getStorageSync('openId'))
+            wx.navigateToMiniProgram({
+              appId: 'wx470a8b0b3f90857b',
+              path: 'pages/webview/webview?pageurl=' + pageurl,
+              envVersion: 'trial',
+              success(res) {
+                // 打开成功
+                // console.log("成功")
+                // console.log(res)
+              }
+            })
+          }
+        }
       }
 
       if(databus.gameEndState == 1){

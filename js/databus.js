@@ -158,6 +158,9 @@ export default class DataBus {
       w: 258 * ratio,
       h: 130 * ratio
     }
+    this.gameendbanner = null //结算页banner
+    this.gameendbannerurl = null //结算页跳转地址
+    this.isEndBanner = 0 //结算页是否显示大赛banner 1是0否 0显示微信广告banner
     this.sharetime = 0 //有效分享的最短时间
     this.battleDays = 0 //大赛总天数
     this.battlePastDays = 0 //大赛进行天数
@@ -598,7 +601,7 @@ export default class DataBus {
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 0 //当前关卡过关分数
     this.gameId = '' //本轮游戏id
-    this.steps = 10 //总步步数
+    this.steps = 1 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 4 //棋子种类
@@ -787,6 +790,33 @@ export default class DataBus {
         } else {
           this.bannerAd.hide();
         }
+      })
+    }
+  }
+
+  showGameEndAd() {
+    this.bannerAd && this.bannerAd.destroy();
+    var wxFunc = this.getWXFunction('createBannerAd');
+    if (typeof (wxFunc) != 'undefined' && wxFunc != null) {
+      var phone = wx.getSystemInfoSync();
+      var w = phone.screenWidth / 2;
+      var h = phone.screenHeight;
+      this.bannerAd = wxFunc({
+        adUnitId: 'adunit-550eb97eb726418a',
+        style: {
+          width: 300,
+          top: 0,
+          left: 0
+        }
+      });
+      this.bannerAd.onResize(() => {
+        this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
+        this.bannerAd.style.top = h - this.bannerAd.style.realHeight + 0.1;
+        
+        if (this.bannerAd.style.top > 1220 * ratio) {
+          this.bannerAd.show();
+        }
+        
       })
     }
   }
@@ -1138,11 +1168,25 @@ export default class DataBus {
       minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
       second = Math.floor(times) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
     }
-    if (hour <= 9) hour = '0' + hour;
-    if (minute <= 9) minute = '0' + minute;
-    if (second <= 9) second = '0' + second;
-    
-    return hour + "时" + minute + "分" + second  + "秒"
+    if(hour == 0){
+      hour = ''
+    }else{
+      if (hour <= 9) hour = '0' + hour + "时";
+    }
+
+    if(minute == 0){
+      minute = ''
+    }else{
+      if (minute <= 9) minute = '0' + minute + "分";
+    }
+
+    if(second == 0){
+      second = ''
+    }else{
+      if (second <= 9) second = '0' + second + "秒";
+    }
+
+    return hour + minute + second
   }
 
   getSignInfo() {
@@ -1159,6 +1203,14 @@ export default class DataBus {
       },
       success(data) {
         self.daysinfo = data.body.daysinfo
+
+        for (let i = 0; i < self.daysinfo.length; i++) {
+          if (parseInt(self.daysinfo[i].day) == parseInt(self.getNowTimeStr())) {
+            if (self.daysinfo[i].isdone == '1') {}else{
+              self.signPoint = true
+            }
+          }
+        }
       }
     })
   }
@@ -1207,7 +1259,8 @@ export default class DataBus {
           }
           if (item.cansteal == '1' && item.penrgy){
             self.plunderPoint = true
-          }   
+          }
+          
         });
         self.ji_totlePage = parseInt(self.jl_list.length/6)+1 
       }
@@ -1231,10 +1284,20 @@ export default class DataBus {
         self.boxEnergy = data.body.user.boxengry;
         self.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
         
-        if((new Date()).getTime() > self.boxExchangeTime + 10 * 60 * 60 * 1000){
+        if(parseInt(self.boxNum) > 0){
+          self.lotteryPoint = true
+        }
+
+        if(!self.boxExchangeTime){
           self.canExchangeBox = true
+          self.lotteryPoint = true
         }else{
-          self.canExchangeBox = false
+          if((new Date()).getTime() > self.boxExchangeTime + 10 * 60 * 60 * 1000){
+            self.canExchangeBox = true
+            self.lotteryPoint = true
+          }else{
+            self.canExchangeBox = false
+          }
         }
       }
     }
