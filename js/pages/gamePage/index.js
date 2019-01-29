@@ -831,7 +831,6 @@ export default class Index {
             }
 
             databus.gameEndState = 1
-            databus.bannerAd.hide()
             setTimeout(()=>{
               const tempFilePath = canvas.toTempFilePathSync({
                 x: 0,
@@ -848,7 +847,11 @@ export default class Index {
                   console.log(data);
                 }
               })
+              
             },500)
+
+            databus.bannerAd.hide()
+
           }
         }
         // 再来一局事件
@@ -930,7 +933,7 @@ export default class Index {
         // }
 
         if(phoneh > 1200 * ratio && databus.isEndBanner == 1){
-          if (x >= 0 * ratio && x <= ( 0 + 150 ) * ratio && y >= 85 * ratio && y <= ( 85 + 162) * ratio) {
+          if (x >= 147 * ratio && x <= ( 147 + 533 ) * ratio && y >= 1250 * ratio && y <= ( 1250 + 226) * ratio) {
             const pageurl = encodeURIComponent(databus.battleInfo.tosprourl + "?openid=" + wx.getStorageSync('openId'))
             wx.navigateToMiniProgram({
               appId: 'wx470a8b0b3f90857b',

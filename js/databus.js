@@ -1171,19 +1171,22 @@ export default class DataBus {
     if(hour == 0){
       hour = ''
     }else{
-      if (hour <= 9) hour = '0' + hour + "时";
+      if (hour <= 9) hour = '0' + hour;
+      hour = hour + "时";
     }
 
     if(minute == 0){
       minute = ''
     }else{
-      if (minute <= 9) minute = '0' + minute + "分";
+      if (minute <= 9) minute = '0' + minute;
+      minute = minute + "分";
     }
 
     if(second == 0){
       second = ''
     }else{
-      if (second <= 9) second = '0' + second + "秒";
+      if (second <= 9) second = '0' + second;
+      second = second + "秒";
     }
 
     return hour + minute + second
@@ -1297,6 +1300,9 @@ export default class DataBus {
             self.lotteryPoint = true
           }else{
             self.canExchangeBox = false
+            if(parseInt(self.boxNum) == 0){
+              self.lotteryPoint = false
+            }
           }
         }
       }

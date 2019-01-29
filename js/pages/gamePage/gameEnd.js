@@ -132,7 +132,7 @@ export default class GameEnd {
     databus.circleImg(ctx, headimg, ac.x, ac.y, ac.r)
 
     if(phoneh > 1200 * ratio && databus.isEndBanner == 1){
-      //头像
+      //海报
       let gameendbanner = wx.createImage();
       gameendbanner.src = databus.gameendbanner
       ctx.drawImage(gameendbanner, 0, 0, gameendbanner.width, gameendbanner.height, 147 * ratio, 1250 * ratio, 533 * ratio, 226 * ratio);

@@ -617,7 +617,7 @@ export default class Index {
       if(databus.exchangeBoxAniTime < 30){
         databus.exchangeBoxAniTime++
       }else{
-        // databus.exchangeBoxAni = false
+        databus.exchangeBoxAni = false
       }
     }
   }
