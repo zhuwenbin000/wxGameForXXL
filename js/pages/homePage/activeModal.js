@@ -74,7 +74,6 @@ export default class ActiveModal {
         "boxNum": "energySys/img/openbox/boxNum.png",
         "openBoxTxt": "energySys/img/openbox/openBoxTxt.png",
         "openBtn": "energySys/img/openbox/openBtn.png",
-        "openBtnGrey": "energySys/img/openbox/openBtn-grey.png",
         "boxMask": "energySys/img/openbox/boxMask.png",
         "boxProcessWrap": "energySys/img/openbox/boxProcessWrap.png",
         "boxProcess": "energySys/img/openbox/boxProcess.png",
@@ -108,15 +107,6 @@ export default class ActiveModal {
         Img[k].src = R[k];
       }
     }
-
-    if(databus.battleInfo){
-      if(!comimgofgame){
-        comimgofgame= wx.createImage();
-        comimgofgame.src = databus.battleInfo.comimgofgame
-      }
-    }
-
-    if(databus.homeState != 4) return
 
     const signXY = databus.signXY
     const daysinfo = databus.daysinfo
@@ -217,6 +207,11 @@ export default class ActiveModal {
 
       if(databus.battleInfo){
         //大赛海报
+        if(!comimgofgame){
+          comimgofgame= wx.createImage();
+          comimgofgame.src = databus.battleInfo.comimgofgame
+        }
+
         ctx.drawImage(comimgofgame, 0, 0, comimgofgame.width, comimgofgame.height, 60 * ratio, 306 * ratio, 708 * ratio, 948 * ratio);
       }
       //大赛进度
@@ -488,16 +483,9 @@ export default class ActiveModal {
       ctx.font = 30 * ratio + 'px Arial';
       ctx.fillText('箱子精力：' + databus.boxEnergy + '/50', 414 * ratio, 1120 * ratio);
       //开箱按钮
-      if(parseInt(databus.boxNum) > 0){
-        ctx.drawImage(Img["openBtn"], 0, 0, Img["openBtn"].width, Img["openBtn"].height, 255 * ratio, 1170 * ratio, 312 * ratio, 138 * ratio);
-      }else{
-        ctx.drawImage(Img["openBtnGrey"], 0, 0, Img["openBtnGrey"].width, Img["openBtnGrey"].height, 255 * ratio, 1170 * ratio, 312 * ratio, 138 * ratio);
-      }
+      ctx.drawImage(Img["openBtn"], 0, 0, Img["openBtn"].width, Img["openBtn"].height, 255 * ratio, 1170 * ratio, 312 * ratio, 138 * ratio);
       //连续点击
-
-      if(parseInt(databus.boxNum) > 0){
-        ctx.drawImage(Img["openBoxTxt"], 0, 0, Img["openBoxTxt"].width, Img["openBoxTxt"].height, 306 * ratio, 1310 * ratio, 216 * ratio, 74 * ratio);
-      }
+      ctx.drawImage(Img["openBoxTxt"], 0, 0, Img["openBoxTxt"].width, Img["openBoxTxt"].height, 306 * ratio, 1310 * ratio, 216 * ratio, 74 * ratio);
 
       //头像
       let headimg = wx.createImage();

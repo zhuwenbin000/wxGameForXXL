@@ -546,14 +546,6 @@ export default class Map {
           //结束音
           self.music.playMusic('noNewRecord')
         }
-
-        if(databus.gameendbanner && databus.gameendbannerurl){
-          databus.isEndBanner = 1
-          databus.bannerAd && databus.bannerAd.hide()
-        }else{
-          databus.isEndBanner = 0
-          databus.showGameEndAd()
-        }
       }
     }
     ajax(options)

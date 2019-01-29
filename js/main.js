@@ -257,8 +257,12 @@ export default class Main {
       apiType: 'user',
       method: 'POST',
       success(data) {
+        databus.shareConfig[1] = []
+        databus.shareConfig[2] = [] 
+        databus.shareConfig[3] = [] 
+        databus.shareConfig[4] = []  
         data.body.sharelist && data.body.sharelist.map((item,index)=>{
-          databus.shareConfig[item.sharetype] = item
+          databus.shareConfig[item.sharetype].push(item)
         })
         databus.onShareAppMessage()
       }
