@@ -147,14 +147,14 @@ export default class PageBtn {
       ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 300 * ratio, 150 * ratio, 162 * ratio);
     }
 
-    if(databus.homeState == 4){ //精力系统
+    // if(databus.homeState == 4){ //精力系统
       
       if(databus.energySysLoad){//精力系统资源加载完毕才绘制
         this.activeModal.render(ctx)
       }else{
-        wx.showToast({title: '资源加载中～', icon: 'none' })
+        // wx.showToast({title: '资源加载中～', icon: 'none' })
       }
-    }
+    // }
         
     if (databus.shareflag) {
       if(!databus.activityData){

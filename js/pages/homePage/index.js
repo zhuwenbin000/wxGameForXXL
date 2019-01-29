@@ -27,6 +27,8 @@ export default class Index {
         databus.usergold = data.body.user.glod; //用户拥有金币
         databus.updateMaxScore(databus.bestscore)
         //精力系统相关
+        databus.gameendbanner = data.body.user.gameendbanner;
+        databus.gameendbannerurl = data.body.user.gameendbannerurl;
         databus.boxExchangeTime = data.body.user.lastzhtime;
         databus.boxNum = data.body.user.boxnum;
         databus.myEnergy = data.body.user.pengry;

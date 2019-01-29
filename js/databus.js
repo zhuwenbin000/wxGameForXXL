@@ -157,6 +157,9 @@ export default class DataBus {
       w: 258 * ratio,
       h: 130 * ratio
     }
+    this.gameendbanner = null //结算页banner
+    this.gameendbannerurl = null //结算页跳转地址
+    this.isEndBanner = 0 //结算页是否显示大赛banner 1是0否 0显示微信广告banner
     this.sharetime = 0 //有效分享的最短时间
     this.battleDays = 0 //大赛总天数
     this.battlePastDays = 0 //大赛进行天数
@@ -1291,6 +1294,8 @@ export default class DataBus {
           if((new Date()).getTime() > self.boxExchangeTime + 10 * 60 * 60 * 1000){
             self.canExchangeBox = true
             self.lotteryPoint = true
+          }else{
+            self.canExchangeBox = false
           }
         }
       }
