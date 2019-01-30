@@ -436,7 +436,8 @@ export default class ActiveModal {
           ctx.textAlign = 'left';
           ctx.fillStyle = '#ffe739';
           ctx.font = 28 * ratio + 'px Arial';
-          ctx.fillText('好友' + decodeURIComponent(plunderRecord[i].nickname) + '，' + databus.getStealTime(plunderRecord[i].stealtime) + '前搜刮了你的精力' + plunderRecord[i].penrgy + '点。', 80 * ratio, (470 + 45 * (i + 1)) * ratio);
+          const nickname = decodeURIComponent(plunderRecord[i].nickname).length > 7 ? decodeURIComponent(plunderRecord[i].nickname).substring(0,7) + '...' : decodeURIComponent(plunderRecord[i].nickname)
+          ctx.fillText('好友' + nickname + '，' + databus.getStealTime(plunderRecord[i].stealtime) + '前搜刮了你的精力' + plunderRecord[i].penrgy + '点。', 80 * ratio, (470 + 45 * (i + 1)) * ratio);
         }
       }
       //宝箱投影

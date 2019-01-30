@@ -838,7 +838,7 @@ export default class DataBus {
       });
       this.bannerAd.onResize(() => {
         this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
-        this.bannerAd.style.top = h - this.bannerAd.style.realHeight + 0.1;
+        this.bannerAd.style.top = 1170 * ratio;
         if (this.energySysModal == 3) {
           this.bannerAd.show();
         }
@@ -1309,19 +1309,26 @@ export default class DataBus {
     }
     ajax(options)
   }
+  getRandomNum(Max) {
+    var Range = Max - 0;
+    var Rand = Math.random();
+    return (0 + Math.round(Rand * Range));
+  }
 
   wxShare(shareType, callback) {
-    
     callback && wx.setStorageSync('shareStart', (new Date()).getTime())
+    const randomNum = this.shareConfig[shareType].length == 1 ? 0 : this.getRandomNum(this.shareConfig[shareType].length-1)
+    console.log(randomNum,shareType)
+    
     wx.shareAppMessage({
-      'title': this.shareConfig[shareType].info, 
-      'imageUrl': this.shareConfig[shareType].url,
-      'imageUrlId': this.shareConfig[shareType].imgid,
+      'title': this.shareConfig[shareType][randomNum].info, 
+      'imageUrl': this.shareConfig[shareType][randomNum].url,
+      'imageUrlId': this.shareConfig[shareType][randomNum].imgid,
       'query':'fatherId=' + wx.getStorageSync('openId') + '&shareType=' + shareType
     })
     callback && setTimeout(()=>{
       if(wx.getStorageSync('shareEnd') && wx.getStorageSync('shareStart')){
-        if(wx.getStorageSync('shareEnd') > wx.getStorageSync('shareStart') + this.sharetime * 1000){
+        if(parseInt(wx.getStorageSync('shareEnd')) > parseInt(wx.getStorageSync('shareStart')) + this.sharetime * 1000){
           callback()
         }else{
           wx.showToast({ title: '请分享游戏到群', icon:'none'})

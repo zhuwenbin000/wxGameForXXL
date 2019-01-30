@@ -746,7 +746,7 @@ export default class Index {
         databus.openBoxData = data.body.info
         databus.boxNum = data.body.info.boxnum
         if(databus.shareflag){
-          if(_.random(0, 10) >= (1 - this.sharerate) * 10){
+          if(_.random(0, 10) >= (1 - databus.sharerate) * 10){
             databus.showOpenBoxAd()
           }
         }
