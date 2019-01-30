@@ -29,11 +29,17 @@ export default class Index {
         //精力系统相关
         databus.gameendbanner = data.body.user.gameendbanner;
         databus.gameendbannerurl = data.body.user.gameendbannerurl;
+        let gameendbannerObj = wx.createImage();
+        gameendbannerObj.src = databus.gameendbanner
+        databus.gameendbannerObj = gameendbannerObj
+
         databus.boxExchangeTime = data.body.user.lastzhtime;
         databus.boxNum = data.body.user.boxnum;
         databus.myEnergy = data.body.user.pengry;
         databus.boxEnergy = data.body.user.boxengry;
         databus.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
+        databus.wxaqrcodeurlObj = wx.createImage();
+        databus.wxaqrcodeurlObj.src = databus.wxaqrcodeurl
         
         if(parseInt(databus.boxNum) > 0){
           databus.lotteryPoint = true
@@ -247,6 +253,7 @@ export default class Index {
           this.music.playMusic('btnDown')
           //补签弹框
           databus.energySysModal = 0
+          databus.onMusic = true
         }
         if (x >= 185 * ratio && x <= (185 * ratio + 80 * ratio) && y >= 365 * ratio && y <= (365 * ratio + 80 * ratio)) {
           //关闭签到成功弹框
@@ -254,6 +261,7 @@ export default class Index {
           this.music.playMusic('btnDown')
           //补签弹框
           databus.energySysModal = 0
+          databus.onMusic = true
         }
       } else if (databus.energySysModal == 2) {
         if (x >= 190 * ratio && x <= (455 * ratio + 190 * ratio) && y >= 875 * ratio && y <= (875 * ratio + 170 * ratio)) {
@@ -296,17 +304,19 @@ export default class Index {
           databus.energySysModal = 0
         }
       } else if (databus.energySysModal == 3) {
-        // if (x >= 190 * ratio && x <= (455 * ratio + 190 * ratio) && y >= 875 * ratio && y <= (875 * ratio + 170 * ratio)) {
-        //   //关闭开箱成功弹框
-        //   //按钮按下音效
-        //   this.music.playMusic('btnDown')
-        //   //补签弹框
-        //   databus.energySysModal = 0
-        //   //reset开箱相关数据
-        //   databus.boxOpenStart = false
-        //   databus.boxOpenNeedClickNum = 0
-        //   databus.boxOpenClickNum = 0
-        // }
+        if (x >= 190 * ratio && x <= (455 * ratio + 190 * ratio) && y >= 875 * ratio && y <= (875 * ratio + 170 * ratio)) {
+          //关闭开箱成功弹框
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          //补签弹框
+          databus.energySysModal = 0
+          //reset开箱相关数据
+          databus.boxOpenStart = false
+          databus.boxOpenNeedClickNum = 0
+          databus.boxOpenClickNum = 0
+          //关闭广告
+          databus.bannerAd && databus.bannerAd.hide();
+        }
         if (x >= 185 * ratio && x <= (185 * ratio + 80 * ratio) && y >= 365 * ratio && y <= (365 * ratio + 80 * ratio)) {
           //关闭开箱成功弹框
           //按钮按下音效
@@ -339,6 +349,7 @@ export default class Index {
 
           //大赛详情
           if (x >= 415 * ratio && x <= (415 * ratio + 350 * ratio) && y >= 1300 * ratio && y <= (1285 * ratio + 145 * ratio)) {
+            if(!databus.battleInfo.tosprourl) return
             //按钮按下音效
             this.music.playMusic('btnDown')
             wx.setStorageSync('battlePoint', databus.getNowTimeStr())
@@ -357,6 +368,7 @@ export default class Index {
           }
           //海报点击
           if (x >= 54 * ratio && x <= (54 * ratio + 720 * ratio) && y >= 300 * ratio && y <= (300 * ratio + 960 * ratio)) {
+            if(!databus.battleInfo.tosprourl) return
             //按钮按下音效
             this.music.playMusic('btnDown')
             wx.setStorageSync('battlePoint', databus.getNowTimeStr())
@@ -558,6 +570,8 @@ export default class Index {
             databus.energySysTab = 1;
           }else{
             databus.energySysTab = 2;
+            databus.getUserInfo()
+            databus.showOpenBoxAd()
           }
         }
         //抽奖tab点击
@@ -569,6 +583,8 @@ export default class Index {
           this.music.playMusic('btnDown')
           if(databus.battleInfo){//有无大赛判断
             databus.energySysTab = 2;
+            databus.getUserInfo()
+            databus.showOpenBoxAd()
           }else{
             databus.energySysTab = 3;
             if(databus.clickTimes > 1){
@@ -691,7 +707,6 @@ export default class Index {
       data: data,
       success(data) {
 
-        self.music.playMusic('passPoint')
 
         databus.signData = data.body.info;
         databus.energySysModal = 1;
@@ -747,12 +762,12 @@ export default class Index {
         databus.boxNum = data.body.info.boxnum
         if(databus.shareflag){
           if(_.random(0, 10) >= (1 - databus.sharerate) * 10){
-            databus.showOpenBoxAd()
+            // databus.showOpenBoxAd()
+            databus.bannerAd && databus.bannerAd.show()
           }
         }
         databus.getUserInfo()
       }
     })
-
   }
 }

@@ -39,6 +39,12 @@ export default class Main {
 
     this.f = 0
 
+    wx.onShow(()=>{
+      if(wx.getStorageSync('shareStart')){
+        wx.setStorageSync('shareEnd', (new Date()).getTime())
+      }
+    })
+
     const res = wx.getLaunchOptionsSync()
     if(res && res.query && res.query.scene){
       wx.setStorageSync('fatherId', res.query.scene)
@@ -83,12 +89,7 @@ export default class Main {
           // 分包加载失败通过 fail 回调
       }
     })
-
-    wx.onShow(()=>{
-      if(wx.getStorageSync('shareStart')){
-        wx.setStorageSync('shareEnd', (new Date()).getTime())
-      }
-    })
+    
 
   }
   renderPage() {

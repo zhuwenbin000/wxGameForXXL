@@ -1,4 +1,5 @@
 import DataBus from '../../databus'
+import Music from '../../music/music'
 let databus = new DataBus()
 let uiWidth = 828;
 let ratio = canvas.width / uiWidth //设计稿宽度
@@ -8,6 +9,7 @@ let R = null
 
 let Img = {};
 
+let onMusic = new Music()
 
 
 const endTime = 120;
@@ -81,6 +83,7 @@ export default class ActiveModal {
         "myProcessWrap": "energySys/img/openbox/myProcessWrap.png",
         "myProcess": "energySys/img/openbox/myProcess.png",
         "exchangeTime": "energySys/img/plunder/exchangeTime.png",
+        "thanksBtn": "energySys/img/openbox/thanksBtn.png",
         
         //搜刮部分
         'friend': 'energySys/img/plunder/friend.png',
@@ -313,6 +316,10 @@ export default class ActiveModal {
 
       //签到成功弹框
       if (databus.energySysModal == 1) {
+        if(databus.onMusic){
+          databus.onMusic = false
+          onMusic.playMusic('passPoint')
+        }
 
         if (rotateTime > endTime - 1){
           rotateTime = 0
@@ -544,10 +551,10 @@ export default class ActiveModal {
           ctx.font = 50 * ratio + 'px Arial';
           ctx.fillText(databus.openBoxData.propnum, 525 * ratio, 785 * ratio);
         }
-        // //按钮背景
-        // ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 195 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
-        // //开箱成功
-        // ctx.drawImage(Img["signSuc"], 0, 0, Img["signSuc"].width, Img["signSuc"].height, 300 * ratio, 920 * ratio, 236 * ratio, 58 * ratio);
+        //按钮背景
+        ctx.drawImage(Img["btnY"], 0, 0, Img["btnY"].width, Img["btnY"].height, 195 * ratio, 875 * ratio, 455 * ratio, 170 * ratio);
+        //开箱成功
+        ctx.drawImage(Img["thanksBtn"], 0, 0, Img["thanksBtn"].width, Img["thanksBtn"].height, 300 * ratio, 920 * ratio, 236 * ratio, 58 * ratio);
       }
     }
 

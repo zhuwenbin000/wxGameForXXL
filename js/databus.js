@@ -159,6 +159,7 @@ export default class DataBus {
       h: 130 * ratio
     }
     this.gameendbanner = null //结算页banner
+    this.gameendbannerObj = null
     this.gameendbannerurl = null //结算页跳转地址
     this.isEndBanner = 0 //结算页是否显示大赛banner 1是0否 0显示微信广告banner
     this.sharetime = 0 //有效分享的最短时间
@@ -227,6 +228,7 @@ export default class DataBus {
     this.daysinfo = [] //签到页数据
     this.signData = {} //当前签到奖励
     this.signType = 0 //补签条件 0金币1分享2视频
+    this.onMusic = true
     this.sharerate = 0
     this.nogoldsharerate = 0
     this.boxbannerrate = 0
@@ -236,6 +238,7 @@ export default class DataBus {
     this.myEnergy = 0 //个人精力
     this.boxEnergy = 0 //箱子精力
     this.wxaqrcodeurl = '' //个人小游戏二维码地址
+    this.wxaqrcodeurlObj = null
     this.boxExchangeTime = 0 //上次换取宝箱时间
     this.canExchangeBox = false //上次换取宝箱时间
     this.boxOpenStart = false //开箱状态 
@@ -601,7 +604,7 @@ export default class DataBus {
     this.checkPoint = 1 //当前关卡  默认为1
     this.passScore = 0 //当前关卡过关分数
     this.gameId = '' //本轮游戏id
-    this.steps = 1 //总步步数
+    this.steps = 10 //总步步数
     this.useSteps = 0 //使用步数
     this.rewardstep = 0 //过关奖励步数
     this.piecesType = 4 //棋子种类
@@ -839,9 +842,10 @@ export default class DataBus {
       this.bannerAd.onResize(() => {
         this.bannerAd.style.left = w - this.bannerAd.style.realWidth / 2 + 0.1;
         this.bannerAd.style.top = 1170 * ratio;
-        if (this.energySysModal == 3) {
-          this.bannerAd.show();
-        }
+        this.bannerAd.hide();
+        // if (this.energySysModal == 3) {
+        //   this.bannerAd.show();
+        // }
       })
     }
   }
@@ -1227,6 +1231,8 @@ export default class DataBus {
       method: 'POST',
       data: data,
       success(data) {
+        // self.music.playMusic('passPoint')
+
         self.signData = data.body.info;
         self.energySysModal = 1;
         self.getSignInfo()
@@ -1286,7 +1292,6 @@ export default class DataBus {
         self.myEnergy = data.body.user.pengry;
         self.boxEnergy = data.body.user.boxengry;
         self.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
-        
         if(parseInt(self.boxNum) > 0){
           self.lotteryPoint = true
         }
@@ -1308,6 +1313,7 @@ export default class DataBus {
       }
     }
     ajax(options)
+
   }
   getRandomNum(Max) {
     var Range = Max - 0;
@@ -1326,13 +1332,22 @@ export default class DataBus {
       'imageUrlId': this.shareConfig[shareType][randomNum].imgid,
       'query':'fatherId=' + wx.getStorageSync('openId') + '&shareType=' + shareType
     })
+    console.log('分享最短时间：' + this.sharetime)
+    
     callback && setTimeout(()=>{
-      if(wx.getStorageSync('shareEnd') && wx.getStorageSync('shareStart')){
+    console.log('分享开始时间：' + parseInt(wx.getStorageSync('shareStart')))
+    console.log('分享结束时间：' + parseInt(wx.getStorageSync('shareEnd')))
+      if(wx.getStorageSync('shareEnd')){
         if(parseInt(wx.getStorageSync('shareEnd')) > parseInt(wx.getStorageSync('shareStart')) + this.sharetime * 1000){
+          console.log('分享成功')
           callback()
         }else{
+          console.log('分享时间太短')
           wx.showToast({ title: '请分享游戏到群', icon:'none'})
         }
+      }else{
+        console.log('分享成功')
+        callback()
       }
       wx.removeStorage({key: 'shareStart'})
       wx.removeStorage({key: 'shareEnd'})
@@ -1341,10 +1356,12 @@ export default class DataBus {
 
   onShareAppMessage() {
     const shareType = '3';
+    const randomNum = this.shareConfig[shareType].length == 1 ? 0 : this.getRandomNum(this.shareConfig[shareType].length-1)
+
     wx.onShareAppMessage({
-      'title': this.shareConfig[shareType].info, 
-      'imageUrl': this.shareConfig[shareType].url,
-      'imageUrlId': this.shareConfig[shareType].imgid,
+      'title': this.shareConfig[shareType][randomNum].info, 
+      'imageUrl': this.shareConfig[shareType][randomNum].url,
+      'imageUrlId': this.shareConfig[shareType][randomNum].imgid,
       'query':'fatherId=' + wx.getStorageSync('openId') + '&shareType=' + shareType
     })
   }

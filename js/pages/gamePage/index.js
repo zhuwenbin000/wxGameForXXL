@@ -831,14 +831,24 @@ export default class Index {
             }
 
             databus.gameEndState = 1
+            const bl = canvas.width / uiWidth;
+            console.log(bl)
+            const imgh = 1200 * bl
+            
             setTimeout(()=>{
               const tempFilePath = canvas.toTempFilePathSync({
-                x: 0,
-                y: 0,
-                width: canvas.width,
-                height: canvas.height,
-                destWidth: canvas.width,
-                destHeight: canvas.height
+                x: 50 * bl,
+                y: 140 * bl,
+                width: 720 * bl,
+                height: 1200 * bl,
+                destWidth: 720 * bl,
+                destHeight: 1200 * bl
+                // x: 0,
+                // y: 140 * ratio,
+                // width: canvas.width,
+                // height: canvas.height - 70 * ratio,
+                // destWidth: canvas.width,
+                // destHeight: canvas.height
               })
   
               wx.saveImageToPhotosAlbum({

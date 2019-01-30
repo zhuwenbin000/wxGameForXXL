@@ -42,8 +42,8 @@ let R = {
   "modalClose": "images/gameModal/modal_close.png",
   "star": "images/gameEnd/star.png",
   "stars": "images/gameEnd/stars.png",
-  "levela": "images/gameEnd/a.png",
-  "levelb": "images/gameEnd/b.png",
+  "levela": "images/gameEnd/A.png",
+  "levelb": "images/gameEnd/B.png",
   "levelc": "images/gameEnd/c.png",
   "levels": "images/gameEnd/s.png",
   "levelsss": "images/gameEnd/sss.png",
@@ -133,9 +133,7 @@ export default class GameEnd {
 
     if(phoneh > 1200 * ratio && databus.isEndBanner == 1){
       //海报
-      let gameendbanner = wx.createImage();
-      gameendbanner.src = databus.gameendbanner
-      ctx.drawImage(gameendbanner, 0, 0, gameendbanner.width, gameendbanner.height, 147 * ratio, 1250 * ratio, 533 * ratio, 226 * ratio);
+      ctx.drawImage(databus.gameendbannerObj, 0, 0, databus.gameendbannerObj.width, databus.gameendbannerObj.height, 147 * ratio, 1250 * ratio, 533 * ratio, 226 * ratio);
     }
 
     if(databus.gameEndState == 1){
@@ -212,9 +210,7 @@ export default class GameEnd {
       ctx.font = 50 * ratio + 'px Arial';
       ctx.fillText(databus.userinfo.userInfo.nickName, 414 * ratio, 570 * ratio);
 
-      let wxaqrcodeurl = wx.createImage();
-      wxaqrcodeurl.src = databus.wxaqrcodeurl
-      databus.circleImg(ctx, wxaqrcodeurl, 80 * ratio, 1175 * ratio, 65 * ratio)
+      databus.circleImg(ctx, databus.wxaqrcodeurlObj, 80 * ratio, 1175 * ratio, 65 * ratio)
       // ctx.drawImage(wxaqrcodeurl, 0, 0, wxaqrcodeurl.width, wxaqrcodeurl.height, 90 * ratio, 1185 * ratio, 130 * ratio, 125 * ratio);
     }
   }
