@@ -41,9 +41,9 @@ export default class Index {
         databus.wxaqrcodeurlObj = wx.createImage();
         databus.wxaqrcodeurlObj.src = databus.wxaqrcodeurl
         
-        if(parseInt(databus.boxNum) > 0){
-          databus.lotteryPoint = true
-        }
+        // if(parseInt(databus.boxNum) > 0){
+        //   databus.lotteryPoint = true
+        // }
 
         if(!databus.boxExchangeTime){
           databus.canExchangeBox = true

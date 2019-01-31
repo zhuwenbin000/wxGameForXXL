@@ -1292,9 +1292,9 @@ export default class DataBus {
         self.myEnergy = data.body.user.pengry;
         self.boxEnergy = data.body.user.boxengry;
         self.wxaqrcodeurl = 'http://3break-1257630833.file.myqcloud.com' + data.body.user.wxaqrcodeurl;
-        if(parseInt(self.boxNum) > 0){
-          self.lotteryPoint = true
-        }
+        // if(parseInt(self.boxNum) > 0){
+        //   self.lotteryPoint = true
+        // }
 
         if(!self.boxExchangeTime){
           self.canExchangeBox = true
@@ -1305,9 +1305,9 @@ export default class DataBus {
             self.lotteryPoint = true
           }else{
             self.canExchangeBox = false
-            if(parseInt(self.boxNum) == 0){
-              self.lotteryPoint = false
-            }
+            // if(parseInt(self.boxNum) == 0){
+            //   self.lotteryPoint = false
+            // }
           }
         }
       }
