@@ -26,7 +26,10 @@ let myInfo = {}; //用户的基本信息
 let userArr = []
 let myScore = undefined;
 let myRank = undefined;
-
+let threeImage = wx.createImage();
+threeImage.src = 'images/rank/firstthree.png';
+let lessIamge = wx.createImage()
+lessIamge.src = "images/rank/icon_three.png"
 initRanklist([], nowpage)
 getUserInfo();
 
@@ -81,27 +84,24 @@ function initRanklist(list, page, type) {
     context.clearRect(0, 0, sharedCanvas.width, sharedCanvas.height);
 
     for (let i = 0; i < length; i++) {
-      let threeImage = wx.createImage();
-      threeImage.src = 'images/rank/firstthree.png';
-      let lessIamge = wx.createImage()
-      lessIamge.src = "images/rank/icon_three.png"
+      
       let meIamge = wx.createImage()
       meIamge.src = "images/rank/me.png"
       if (page == 1) {
         if (i < 3) {
-          threeImage.onload = function () {
+         
             context.drawImage(threeImage, 40, i * itemHeight + mt, w, itemHeight);
-          }
+          
         }
         if (i >= 3 && i < 6) {
-          lessIamge.onload = function () {
+        
             context.drawImage(lessIamge, 40, i * itemHeight + mt, w, itemHeight);
-          }
+          
         }
       } else {
-        lessIamge.onload = function () {
+        
           context.drawImage(lessIamge, 40, i * itemHeight + mt, w, itemHeight);
-        }
+        
       }
       if (i == 6) {
         meIamge.onload = function () {
