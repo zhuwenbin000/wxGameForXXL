@@ -9,9 +9,14 @@ import { ajax, userLogin } from '/base/ajax'
 import DataStore from '/base/helper';
 let ctx = canvas.getContext('2d')
 let databus = new DataBus()
+const SystemInfo = wx.getSystemInfoSync();
 const screenWidth = window.innerWidth;
 const screenHeight = window.innerHeight;
-const ratio = wx.getSystemInfoSync().pixelRatio;
+const ratio = SystemInfo.pixelRatio;
+
+// canvas.width = SystemInfo.screenWidth * ratio; 
+// canvas.height = SystemInfo.screenHeight * ratio;
+
 const uiRatio = canvas.width / 828 //设计稿宽度
 //游戏页离屏canvas
 // let gameCanvas = wx.createCanvas()
