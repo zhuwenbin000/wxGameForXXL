@@ -249,7 +249,7 @@ export default class DataBus {
     this.exchangeBoxAniTime = 0 //换取动画帧
 
     this.energySysLoad = false //精力系统加载状态
-    this.version = '0.0.2.4';
+    this.version = '0.0.2.5';
     this.shareflag = false; //true为非审核模式
     this.showRule = true;
     this.scene = 0 //场景id
@@ -1148,17 +1148,22 @@ export default class DataBus {
   }
 
   getStealTime(time){
-    var day = 0, hour = 0;//时间默认值
+    var day = 0, hour = 0, minute = 0;//时间默认值
     var times = Math.floor(((new Date()).getTime() - time) / 1000)
     if(times > 0){
       day = Math.floor(times / (60 * 60 * 24));
       hour = Math.floor(times / (60 * 60)) - (day * 24);
+      minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
     }
     
     if(day > 0){
       return day + "天"
-    }else{
+    }
+    if(hour > 0){
       return hour + "小时"
+    }
+    if(minute > 0){
+      return minute + "分钟"
     }
     
   }

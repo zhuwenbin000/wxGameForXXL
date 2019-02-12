@@ -39,13 +39,26 @@ export default class Main {
 
     this.f = 0
 
-    wx.onShow(()=>{
+    wx.onShow((res)=>{
+      console.log(res)
       if(wx.getStorageSync('shareStart')){
         wx.setStorageSync('shareEnd', (new Date()).getTime())
       }
+
+      if(res && res.query && res.query.scene){
+        wx.setStorageSync('fatherId', res.query.scene)
+        
+        userLogin({
+          callback:()=>{
+            console.log('login')
+          }
+        })
+      }
+      
     })
 
     const res = wx.getLaunchOptionsSync()
+    console.log(res)
     if(res && res.query && res.query.scene){
       wx.setStorageSync('fatherId', res.query.scene)
     }

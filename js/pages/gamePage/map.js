@@ -361,7 +361,7 @@ export default class Map {
     if(databus.isCrazy){
       databus.crazyScore = databus.crazyScore + databus.crazyBombScore + bombScore * doubleHit * multiplyBy
       databus.crazyBombScore = databus.crazyBombScore + bombScore * doubleHit * multiplyBy
-      databus.gameCrazyTime = databus.gameCrazyTime + databus.crazyScore
+      databus.gameCrazyTime = databus.gameCrazyTime + databus.crazyBombScore + bombScore * doubleHit * multiplyBy
     }
 
     //得分音效

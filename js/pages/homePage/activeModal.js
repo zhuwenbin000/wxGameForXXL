@@ -267,16 +267,16 @@ export default class ActiveModal {
         ctx.drawImage(Img["reward" + daysinfo[i].proptype], 0, 0, Img["reward" + daysinfo[i].proptype].width, Img["reward" + daysinfo[i].proptype].height, signXY[i].rewardBg.x * ratio, signXY[i].rewardBg.y * ratio, 200 * ratio, 200 * ratio);
         if (daysinfo[i].proptype == '2' || daysinfo[i].proptype == '3' || daysinfo[i].proptype == '6') { //判断道具名字长度
           //奖品数量
-          ctx.textAlign = 'center';
+          ctx.textAlign = 'left';
           ctx.fillStyle = '#fff';
           ctx.font = 28 * ratio + 'px Arial';
-          ctx.fillText(daysinfo[i].propnum, (signXY[i].signBg.x + 165) * ratio, (signXY[i].signBg.y + 230) * ratio);
+          ctx.fillText(daysinfo[i].propnum, (signXY[i].signBg.x + 160) * ratio, (signXY[i].signBg.y + 230) * ratio);
         } else {
           //奖品数量
-          ctx.textAlign = 'center';
+          ctx.textAlign = 'left';
           ctx.fillStyle = '#fff';
           ctx.font = 28 * ratio + 'px Arial';
-          ctx.fillText(daysinfo[i].propnum, (signXY[i].signBg.x + 150) * ratio, (signXY[i].signBg.y + 230) * ratio);
+          ctx.fillText(daysinfo[i].propnum, (signXY[i].signBg.x + 140) * ratio, (signXY[i].signBg.y + 230) * ratio);
         }
 
         if (parseInt(daysinfo[i].day) < parseInt(databus.getNowTimeStr())) { //当日之前的天数

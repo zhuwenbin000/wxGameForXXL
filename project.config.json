@@ -27,9 +27,19 @@
 			"current": -1,
 			"list": []
 		},
-		"game": {
-			"currentL": -1,
+		"plugin": {
+			"current": -1,
 			"list": []
+		},
+		"game": {
+			"current": 0,
+			"list": [
+				{
+					"id": -1,
+					"name": "saoma",
+					"query": "scene=123"
+				}
+			]
 		},
 		"miniprogram": {
 			"current": -1,
