@@ -48,6 +48,12 @@ export default class GameModal {
         "crazyEndModal": "images/gamePage/crazyTime/endModal.png",
         "crazyStartModal": "images/gamePage/crazyTime/startModal.png",
         "okBtn": "images/gamePage/crazyTime/ok_btn.png",
+        "onestep": "energySys/img/pic/oneStep.png",
+        "share3": "energySys/img/pic/share3.png",
+        "video5": "energySys/img/pic/video5.png",
+        "crazyBtnShare": "energySys/img/pic/startCrazy.png",
+        "leftArea": "images/news/leftArea.png",
+        "recommendPoster": "images/news/recommend_poster.png",
       }
       for (var k in R) {
         Robj[k] = wx.createImage();
@@ -183,8 +189,8 @@ export default class GameModal {
     }
     //7:过关
     if (databus.gameState == 7) {
-      const endTime = 120;
-      const rotateTime = 120;
+      const endTime = 60;
+      const rotateTime = 60;
       const aniTime = 10;
       // const endTime = 180;
       if (databus.passStateTime > endTime - 1){
@@ -358,7 +364,7 @@ export default class GameModal {
 
     //10:闯关动画
     if (databus.gameState == 10) {
-      const endTime = 80;
+      const endTime = 40;
       const aniTime = 10;
       if (databus.passStateTime > endTime - 1){
         databus.passStateTime = 0
@@ -383,7 +389,7 @@ export default class GameModal {
           //过关分数
           ctx.fillText(databus.passScore, 440 * ratio, 665 * ratio);
         }
-      } else if (databus.passStateTime > aniTime && databus.passStateTime < 60 + aniTime) {
+      } else if (databus.passStateTime > aniTime && databus.passStateTime < 20 + aniTime) {
         //绘制背景
         ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
         //关卡
@@ -456,20 +462,22 @@ export default class GameModal {
       
       if (databus.btnPlus > 0 && databus.btnPlus < 10) {
         databus.btnPlus++
-        if(databus.crazyTimes < 1){
-          //弹框确认
+        //crazy按钮
+        if(databus.crazyTimeCost == 1){
           ctx.drawImage(Robj["crazyBtnFree"], 0, 0, Robj["crazyBtnFree"].width, Robj["crazyBtnFree"].height, (198 - 21.6) * ratio, (790 - 8.7) * ratio, 432 * 1.1 * ratio, 174 * 1.1 * ratio);
-        }else{
-          //弹框确认
+        }else if(databus.crazyTimeCost == 2){
+          ctx.drawImage(Robj["crazyBtnShare"], 0, 0, Robj["crazyBtnShare"].width, Robj["crazyBtnShare"].height, (198 - 21.6) * ratio, (790 - 8.7) * ratio, 432 * 1.1 * ratio, 174 * 1.1 * ratio);
+        }else if(databus.crazyTimeCost == 3){
           ctx.drawImage(Robj["crazyBtnVideo"], 0, 0, Robj["crazyBtnVideo"].width, Robj["crazyBtnVideo"].height, (198 - 21.6) * ratio, (790 - 7.2) * ratio, 432 * 1.1 * ratio, 174 * 1.1 * ratio);
         }
       } else {
         databus.btnPlus = 0
-        if(databus.crazyTimes < 1){
-          //弹框确认
+        //crazy按钮
+        if(databus.crazyTimeCost == 1){
           ctx.drawImage(Robj["crazyBtnFree"], 0, 0, Robj["crazyBtnFree"].width, Robj["crazyBtnFree"].height, 198 * ratio, 790 * ratio, 432 * ratio, 174 * ratio);
-        }else{
-          //弹框确认
+        }else if(databus.crazyTimeCost == 2){
+          ctx.drawImage(Robj["crazyBtnShare"], 0, 0, Robj["crazyBtnShare"].width, Robj["crazyBtnShare"].height, 198 * ratio, 790 * ratio, 432 * ratio, 174 * ratio);
+        }else if(databus.crazyTimeCost == 3){
           ctx.drawImage(Robj["crazyBtnVideo"], 0, 0, Robj["crazyBtnVideo"].width, Robj["crazyBtnVideo"].height, 198 * ratio, 790 * ratio, 432 * ratio, 174 * ratio);
         }
       }
@@ -478,6 +486,10 @@ export default class GameModal {
 
     //16:crazy结束
     if (databus.gameState == 16) {
+
+      if(databus.crazyTimeCost == 1){
+        wx.setStorageSync('hasCrazyTime','true')
+      }
       //绘制背景
       ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
       //弹框
@@ -528,5 +540,54 @@ export default class GameModal {
       
     }
 
+    //18:剩余最后一步时提示分享
+    if (databus.gameState == 18) {
+      //弹框背景
+      ctx.drawImage(Robj["onestep"], 0, 0, Robj["onestep"].width, Robj["onestep"].height, 30 * ratio, 490 * ratio, 768 * ratio, 476 * ratio);
+      //弹框关闭
+      ctx.drawImage(Robj["modalClose"], 0, 0, Robj["modalClose"].width, Robj["modalClose"].height, 0 * ratio, 450 * ratio, 150 * ratio, 162 * ratio);
+      //弹框确认
+      // if (databus.btnPlus > 0 && databus.btnPlus < 10) {
+      //   databus.btnPlus++
+      //   //弹框确认
+      //   ctx.drawImage(Robj["share3"], 0, 0, Robj["share3"].width, Robj["share3"].height, (250 - 17) * ratio, (1030 - 8.4) * ratio, 340 * 1.1 * ratio, 168 * 1.1 * ratio);
+      // } else {
+      //   databus.btnPlus = 0
+      //   //弹框确认
+      //   ctx.drawImage(Robj["share3"], 0, 0, Robj["share3"].width, Robj["share3"].height, 250 * ratio, 1030 * ratio, 340 * ratio, 168 * ratio);
+      // }
+      if(databus.oneStepShare){
+        ctx.drawImage(Robj["share3"], 0, 0, Robj["share3"].width, Robj["share3"].height, 220 * ratio, 780 * ratio, 390 * ratio, 142 * ratio);
+      }else{
+        ctx.drawImage(Robj["video5"], 0, 0, Robj["video5"].width, Robj["video5"].height, 220 * ratio, 780 * ratio, 390 * ratio, 142 * ratio);
+      }
+    }
+
+    //19:游戏页推荐位展开
+    if (databus.gameState == 19) {
+      //绘制背景
+      ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
+      //弹框背景
+      ctx.drawImage(Robj["leftArea"], 0, 0, Robj["leftArea"].width, Robj["leftArea"].height, 0 * ratio, 205 * ratio, 560 * ratio, 420 * ratio);
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#0a4d82';
+      ctx.font = 17 * ratio + 'px Arial';
+      //推荐位
+      for (let i = 0; i < 10; i++) {
+        if(i < 4){
+          ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, 30 * ratio + (i * 115) * ratio, 250 * ratio, 76 * ratio, 76 * ratio);
+          ctx.fillText('双枪射击', 68 * ratio + (i * 115) * ratio, 350 * ratio);
+        }else if(i >= 4 && i < 8){
+          ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, 30 * ratio + ((i - 4) * 115) * ratio, 370 * ratio, 76 * ratio, 76 * ratio);
+          ctx.fillText('双枪射击', 68 * ratio + ((i - 4) * 115) * ratio, 470 * ratio);
+        }else{
+          ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, 30 * ratio + ((i - 8) * 115) * ratio, 487 * ratio, 76 * ratio, 76 * ratio);
+          ctx.fillText('双枪射击', 68 * ratio + ((i - 8) * 115) * ratio, 585 * ratio);
+        }
+      }
+      
+    }
+    
   }
 }

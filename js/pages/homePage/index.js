@@ -100,7 +100,11 @@ export default class Index {
 
       if (startBtnArea) {
         if (x >= startBtnArea.startX && x <= startBtnArea.endX && y >= startBtnArea.startY && y <= startBtnArea.endY) {
+          wx.aldSendEvent('首页icon点击',{'按钮' : '开始游戏'})
+          console.log("首页点击")
           if (databus.archiveState) {
+            wx.aldSendEvent('进度',{'按钮' : '重新开始保存的游戏'})
+
             //存档弹框
             databus.homeState = 3;
             //弹框音效
@@ -120,9 +124,10 @@ export default class Index {
           }
         }
       }
-      // 开始游戏按钮事件
+      // 排行榜按钮事件
       if (friendsBtnArea) {
         if (x >= friendsBtnArea.startX && x <= friendsBtnArea.endX && y >= friendsBtnArea.startY && y <= friendsBtnArea.endY) {
+          wx.aldSendEvent('首页icon点击',{'按钮' : '排行榜'})
           databus.friendbtn_state = true;
           this.music.playMusic('btnDown')
           setTimeout(() => {
@@ -135,17 +140,108 @@ export default class Index {
           }, databus.laterTime)
         }
       }
-      if (activeBtnArea) {
-        if (x >= activeBtnArea.startX && x <= activeBtnArea.endX && y >= activeBtnArea.startY && y <= activeBtnArea.endY) {
-          databus.active_state = true;
-          this.music.playMusic('btnDown')
-          setTimeout(()=>{
-            databus.homeState = 4;
-            databus.active_state = false;
-            databus.gameClubbutton.destroy() //游戏圈按钮销毁
-            databus.gameClubbutton = null;
-          },databus.laterTime)
+
+      //签到按钮点击
+      if (x >= 0 && x <= 0 + 140 * ratio && y >= 450 * ratio && y <= 450 * ratio + 152 * ratio) {
+        console.log("签到")
+        wx.aldSendEvent('首页icon点击',{'按钮' : '签到'})
+        databus.homeState = 4
+        databus.energySysTab = 1
+        databus.gameClubbutton.destroy(); //游戏圈按钮销毁
+        databus.gameClubbutton = null
+      }
+
+      //抽奖按钮点击
+      if (x >= 0 && x <= 0 + 140 * ratio && y >= 630 * ratio && y <= 630 * ratio + 152 * ratio) {
+        console.log("抽奖")
+        wx.aldSendEvent('首页icon点击',{'按钮' : '抽奖'})
+        databus.homeState = 4
+        databus.energySysTab = 2
+        databus.gameClubbutton.destroy(); //游戏圈按钮销毁
+        databus.gameClubbutton = null
+        databus.getUserInfo()
+        databus.showOpenBoxAd()
+      }
+
+      //搜刮按钮点击
+      if (x >= 0 && x <= 0 + 140 * ratio && y >= 800 * ratio && y <= 800 * ratio + 152 * ratio) {
+        console.log("搜刮")
+        wx.aldSendEvent('首页icon点击',{'按钮' : '搜刮'})
+        databus.homeState = 4
+        databus.energySysTab = 3
+        databus.gameClubbutton.destroy(); //游戏圈按钮销毁
+        databus.gameClubbutton = null
+        //按钮按下音效
+        databus.ji_pageindex = 1;
+        databus.tip_flase = false;
+        databus.tip_success = false;
+        this.music.playMusic('btnDown')
+        databus.energySysTab = 3;
+        if (databus.clickTimes > 1) {
+          databus.getFriendsList()
+        }else{
+          databus.clickTimes++
         }
+      }
+
+      if (databus.battleInfo) { //有大赛
+        //大赛按钮点击
+        if (x >= 688 * ratio && x <= 688 * ratio + 140 * ratio && y >= 450 * ratio && y <= 450 * ratio + 152 * ratio) {
+          console.log("大赛")
+          wx.aldSendEvent('首页icon点击',{'按钮' : '大赛'})
+          databus.homeState = 4
+          databus.energySysTab = 0
+          databus.gameClubbutton.destroy(); //游戏圈按钮销毁
+          databus.gameClubbutton = null
+        }
+      }
+
+      //分享按钮点击
+      if (x >= 688 * ratio && x <= 688 * ratio + 140 * ratio && y >= 630 * ratio && y <= 630 * ratio + 152 * ratio) {
+        console.log("分享")
+        wx.aldSendEvent('首页icon点击',{'按钮' : '分享'})
+        databus.wxShare('5')
+      }
+
+      //捐赠按钮点击
+      if (x >= 688 * ratio && x <= 688 * ratio + 140 * ratio && y >= 800 * ratio && y <= 800 * ratio + 152 * ratio) {
+        console.log("捐赠")
+        wx.aldSendEvent('首页icon点击',{'按钮' : '捐赠'})
+        databus.showSignVideoAd()
+      }
+
+      //推荐位点击区域
+      for (let i = 0; i < databus.recommendInfoList.length; i++) {
+        if(i > 9) return;
+        if(i < 5){
+          var rpx = databus.GameUI.recommendHomeCoordinates.x + (i * 150) * ratio
+          var rpy = databus.GameUI.recommendHomeCoordinates.y
+          var rpw = 118 * ratio
+          var rph = 144 * ratio
+        }else{
+          var rpx = databus.GameUI.recommendHomeCoordinates.x + ((i - 5) * 150) * ratio
+          var rpy = databus.GameUI.recommendHomeCoordinates.y + 160 * ratio
+          var rpw = 118 * ratio
+          var rph = 144 * ratio
+        }
+
+        if (x >= rpx && x <= rpx + rpw && y >= rpy && y <= rpy + rph) {
+          console.log(i)
+          wx.aldSendEvent('游戏推荐点击',{'按钮' : databus.recommendInfoList[i].name + '-首页'})
+        }
+      }
+      
+      if (activeBtnArea) {
+        // if (x >= activeBtnArea.startX && x <= activeBtnArea.endX && y >= activeBtnArea.startY && y <= activeBtnArea.endY) {
+        //   databus.active_state = true;
+        //   this.music.playMusic('btnDown')
+        //   setTimeout(()=>{
+        //     databus.homeState = 4;
+        //     databus.active_state = false;
+        //     databus.gameClubbutton.destroy() //游戏圈按钮销毁
+        //     databus.gameClubbutton = null;
+        //   },databus.laterTime)
+        // }
       }
       if (databus.shareflag) {//如果是非审核模式
         if (!databus.activityData) {//如果没有获得banner数据就return
@@ -271,6 +367,8 @@ export default class Index {
           //补签弹框
           if(databus.signType == 2){
             databus.showSignVideoAd()
+
+            wx.aldSendEvent('补签',{'事件' : databus.signData.day + "-视频"})
           }
           if(databus.signType == 0){
             if(parseInt(databus.usergold) > 50){
@@ -280,11 +378,14 @@ export default class Index {
                 isoverday:1,
                 gold:50
               })
+
+              wx.aldSendEvent('补签',{'事件' : databus.signData.day + "-金币"})
             }else{
               wx.showToast({ title: "金币不足", icon:'none'})
             }
           }
           if(databus.signType == 1){
+
             databus.wxShare('3',()=>{
               this.goSign({
                 openid:wx.getStorageSync('openId'),
@@ -293,6 +394,8 @@ export default class Index {
                 gold:0
               })
             })
+
+            wx.aldSendEvent('补签',{'事件' : databus.signData.day + "-分享"})
           }
           
         }
@@ -419,6 +522,8 @@ export default class Index {
                     isoverday:0,
                   })
                   databus.signPoint = false
+
+                  wx.aldSendEvent('签到',{'事件' : databus.daysinfo[i].day})
                 }
               }
             }
@@ -431,6 +536,8 @@ export default class Index {
               //按钮按下音效
               this.music.playMusic('btnDown')
               this.enchangeEngery()
+
+              wx.aldSendEvent('宝箱',{'事件' : "个人精力转化箱子精力"})
             }
           }
 
@@ -528,6 +635,7 @@ export default class Index {
                       databus.getScore = data.body.info.propnum;
                       item.penrgy = item.penrgy - data.body.info.propnum
                       databus.tip_success = true;
+                      wx.aldSendEvent('搜刮',{'事件' : "搜刮好友"})
                     }
                   })      
                 } else if (item.cansteal == '1' && !item.penrgy){
@@ -553,65 +661,65 @@ export default class Index {
           }
         }
         //大赛tab点击
-        if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-          //按钮按下音效     
-          this.music.playMusic('btnDown')
-          if(databus.battleInfo){//有无大赛判断
-            databus.energySysTab = 0;
-          }else{
-            databus.energySysTab = 1;
-          }
-        }
-        //签到tab点击
-        if (x >= 242 * ratio && x <= (242 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-          //按钮按下音效
-          this.music.playMusic('btnDown')
-          if(databus.battleInfo){//有无大赛判断
-            databus.energySysTab = 1;
-          }else{
-            databus.energySysTab = 2;
-            databus.getUserInfo()
-            databus.showOpenBoxAd()
-          }
-        }
-        //抽奖tab点击
-        if (x >= 422 * ratio && x <= (422 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-          //按钮按下音效
-          databus.ji_pageindex = 1;
-          databus.tip_flase = false;
-         databus.tip_success = false;
-          this.music.playMusic('btnDown')
-          if(databus.battleInfo){//有无大赛判断
-            databus.energySysTab = 2;
-            databus.getUserInfo()
-            databus.showOpenBoxAd()
-          }else{
-            databus.energySysTab = 3;
-            if(databus.clickTimes > 1){
-              databus.getFriendsList()      
-            }else{
-              databus.clickTimes++
-            }
-          }
-        }
+        // if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+        //   //按钮按下音效     
+        //   this.music.playMusic('btnDown')
+        //   if(databus.battleInfo){//有无大赛判断
+        //     databus.energySysTab = 0;
+        //   }else{
+        //     databus.energySysTab = 1;
+        //   }
+        // }
+        // //签到tab点击
+        // if (x >= 242 * ratio && x <= (242 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+        //   //按钮按下音效
+        //   this.music.playMusic('btnDown')
+        //   if(databus.battleInfo){//有无大赛判断
+        //     databus.energySysTab = 1;
+        //   }else{
+        //     databus.energySysTab = 2;
+        //     databus.getUserInfo()
+        //     databus.showOpenBoxAd()
+        //   }
+        // }
+        // //抽奖tab点击
+        // if (x >= 422 * ratio && x <= (422 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+        //   //按钮按下音效
+        //   databus.ji_pageindex = 1;
+        //   databus.tip_flase = false;
+        //  databus.tip_success = false;
+        //   this.music.playMusic('btnDown')
+        //   if(databus.battleInfo){//有无大赛判断
+        //     databus.energySysTab = 2;
+        //     databus.getUserInfo()
+        //     databus.showOpenBoxAd()
+        //   }else{
+        //     databus.energySysTab = 3;
+        //     if(databus.clickTimes > 1){
+        //       databus.getFriendsList()      
+        //     }else{
+        //       databus.clickTimes++
+        //     }
+        //   }
+        // }
 
-        if(databus.battleInfo){//有无大赛判断
-          //搜刮tab点击
-          if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-            //按钮按下音效
-            databus.ji_pageindex = 1;
-            databus.tip_flase = false;
-            databus.tip_success = false;
-            this.music.playMusic('btnDown')
-            databus.energySysTab = 3;
-            console.log(databus.clickTimes)
-            if (databus.clickTimes > 1) {
-              databus.getFriendsList()
-            }else{
-              databus.clickTimes++
-            }
-          }
-        }
+        // if(databus.battleInfo){//有无大赛判断
+        //   //搜刮tab点击
+        //   if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+        //     //按钮按下音效
+        //     databus.ji_pageindex = 1;
+        //     databus.tip_flase = false;
+        //     databus.tip_success = false;
+        //     this.music.playMusic('btnDown')
+        //     databus.energySysTab = 3;
+        //     console.log(databus.clickTimes)
+        //     if (databus.clickTimes > 1) {
+        //       databus.getFriendsList()
+        //     }else{
+        //       databus.clickTimes++
+        //     }
+        //   }
+        // }
       } 
     } 
   }

@@ -5,6 +5,10 @@ import DataBus from '../../databus'
 let databus = new DataBus()
 import { ajax } from '../../base/ajax'
 import ActiveModal from './activeModal'
+
+let ylc = databus.GameUI.youlikeHomeCoordinates //猜你喜欢
+let rpc = databus.GameUI.recommendHomeCoordinates //推荐位
+
 let onget = false;//接口正在调用中
 let startBtn = wx.createImage();
 
@@ -62,7 +66,16 @@ let R = {
   "newGame":"images/gamePage/archive/new_game.png",
   "ddBtn":"images/gamePage/archive/dd_btn.png",
   'active':'images/home/active.png',
-  'redPoint':'images/home/redPoint.png'
+  'redPoint':'images/home/redPoint.png',
+  "youlike": "images/news/youlike.png",
+  "recommendPoster": "images/news/recommend_poster.png",
+  "recommendBg": "images/news/recommend_bg.png",
+  "icon_lottery": "images/news/icon_lottery.png",
+  "icon_battle": "images/news/icon_battle.png",
+  "icon_sign": "images/news/icon_sign.png",
+  "icon_share": "images/news/icon_share.png",
+  "icon_donate": "images/news/icon_donate.png",
+  "icon_plunder": "images/news/icon_plunder.png",
 }
 
 //把所有的图片放到一个对象中
@@ -109,12 +122,12 @@ export default class PageBtn {
       this.drawhead(ctx)//画头像
     } else { //未授权
       this.startBtn(ctx)
-      this.friendsRankBtn(ctx)
+      // this.friendsRankBtn(ctx)
 
-      this.render_btn(ctx)
-      this.loginauthor(ctx)
-      this.share_button(ctx)
-      this.bannerBtn(ctx)
+      // this.render_btn(ctx)
+      // this.loginauthor(ctx)
+      // this.share_button(ctx)
+      // this.bannerBtn(ctx)
     }
 
     if(databus.homeState == 2){
@@ -237,24 +250,25 @@ export default class PageBtn {
   }
   getBtnposition(){
     if (databus.pownstate == 1) { //按钮位置
-      this.activeBtnArea= {
+      this.activeBtnArea = {
         startX: ml,
         startY: nmt + (110 * ratio),
         endX: ml + 590 * ratio,
         endY: nmt + (110 * ratio) + (226 * ratio)
       }
      
-      this.startBtnArea ={
-        startX: ml,
-        startY: nmt + (300 * ratio),
-        endX: ml + 590 * ratio,
-        endY: nmt + (300 * ratio) + (226 * ratio)
+      this.startBtnArea = {
+        startX: ml + 590 * ratio * 0.2 / 2,
+        startY: nmt - nb * ratio - 30 * ratio + 226 * ratio * 0.2 / 2,
+        endX: ml + 590 * ratio * 0.8 + 590 * ratio * 0.2 / 2,
+        endY: nmt - nb * ratio - 30 * ratio + (226 * ratio * 0.8) + 226 * ratio * 0.2 / 2
       }
+
       this.friendsBtnArea = {
-        startX: ml + 16 * ratio,
-        startY: nmt - nb * ratio,
-        endX: ml + 16 * ratio+280 * ratio,
-        endY: nmt - nb * ratio + 138 * ratio
+        startX: ml+ 30 * ratio + 282 * ratio * 0.2 / 2,
+        startY: nmt + 145 * ratio + 138 * ratio * 0.2 / 2,
+        endX: ml + 30 * ratio + 282 * ratio * 0.2 / 2 + 280 * ratio * 0.8,
+        endY: nmt + 145 * ratio + 138 * ratio * 0.2 / 2 + 138 * ratio * 0.8
       } 
     } else {
       
@@ -367,7 +381,11 @@ export default class PageBtn {
     this.loginstartBtn(ctx)
     this.loginfriendsRankBtn(ctx)
     this.loginauthor(ctx)
-    this.login_share_button(ctx)
+    // this.login_share_button(ctx)
+
+    //画两侧按钮
+    this.renderSildeBtn(ctx)
+
     //画分数
     if (bestscore) {
       this.drawscore(ctx, bestscore)
@@ -375,34 +393,34 @@ export default class PageBtn {
 
   }
   drawlogo(ctx) {
-    ctx.drawImage(Robj["logo" + this.logoTime % 7], 0, 0, 800, 500, (window.innerWidth - 800 * ratio) / 2, 120 * ratio, 800 * ratio, 500 * ratio)
+    ctx.drawImage(Robj["logo" + this.logoTime % 7], 0, 0, 800, 500, (window.innerWidth - 800 * ratio) / 2, 30 * ratio, 800 * ratio, 500 * ratio)
     //开始游戏按钮区域
 
   }
   loginstartBtn(ctx) {
     if(databus.archiveState){
-      if (!databus.playbtn_state){
-        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml, nmt + (300 * ratio), 590 * ratio, 226 * ratio ) 
-      }else{
-        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml * 0.8, nmt + (300 * ratio * 0.98), 590 * ratio * 1.1, 226 * ratio * 1.1 )
-      } 
+      // if (!databus.playbtn_state){
+        ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml + 590 * ratio * 0.2 / 2, nmt - nb * ratio - 30 * ratio + 226 * ratio * 0.2 / 2, 590 * ratio * 0.8, 226 * ratio * 0.8) 
+      // }else{
+        // ctx.drawImage(loginstartBtn2, 0, 0, 590, 226, ml - 29.5 * ratio, nmt - (nb * ratio + 30 * ratio) - 11.3 * ratio, 590 * ratio * 1.1, 226 * ratio * 1.1 )
+      // } 
     }else{
-      if (!databus.playbtn_state){
-        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml, nmt + (300 * ratio), 590 * ratio, 226 * ratio) 
-      }else{
-        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml * 0.8, nmt + (300 * ratio * 0.98), 590 * ratio * 1.1, 226 * ratio * 1.1)
-      } 
+      // if (!databus.playbtn_state){
+        ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml + 590 * ratio * 0.2 / 2, nmt - nb * ratio - 30 * ratio + 226 * ratio * 0.2 / 2, 590 * ratio * 0.8, 226 * ratio * 0.8) 
+      // }else{
+        // ctx.drawImage(loginstartBtn, 0, 0, 590, 226, ml - 29.5 * ratio, nmt - (nb * ratio + 30 * ratio) - 11.3 * ratio, 590 * ratio * 1.1, 226 * ratio * 1.1)
+      // }
     }
   }
 
-  startBtn(ctx) { //活动按钮
+  startBtn(ctx) { //
     if (!this.createbutton) {
       this.createbutton = wx.createUserInfoButton({
         type: 'image',
         image: 'images/home/start.png',
         style: {
           left: ml,
-          top: nmt + (300 * ratio),
+          top: nmt - nb * ratio - 30 * ratio,
           width: 590 * ratio,
           height: 226 * ratio,      
           lineHeight: 40,
@@ -419,10 +437,10 @@ export default class PageBtn {
       this.createbutton.onTap((res) => {
         if (res.rawData)//授权成功
         {
-          this.activeBtn.destroy()
+          // this.activeBtn.destroy()
           this.createbutton.destroy()
-          this.friendbutton.destroy()
-          this.bannerButton.destroy()
+          // this.friendbutton.destroy()
+          // this.bannerButton.destroy()
           databus.pownstate = 1;
           this.getBtnposition()
           this.render(ctx)
@@ -434,91 +452,92 @@ export default class PageBtn {
 
   }
   loginfriendsRankBtn(ctx) { //好友排行榜
-    if (!databus.friendbtn_state){
-      ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 16 * ratio, nmt - nb * ratio, 280 * ratio, 138 * ratio)
-   }else{
-      ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 16 * ratio*0.3, nmt - nb * ratio*2, 280 * ratio*1.1, 138 * ratio*1.1)
-   } 
+    // if (!databus.friendbtn_state){
+      ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 30 * ratio + 282 * ratio * 0.2 / 2, nmt + 145 * ratio + 138 * ratio * 0.2 / 2, 280 * ratio * 0.8, 138 * ratio * 0.8)
+  //  }else{
+      // ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 30 * ratio - 14 * ratio, nmt + 145 * ratio - 6.9 * ratio, 280 * ratio*1.1, 138 * ratio*1.1)
+  //  } 
   }
-  friendsRankBtn(ctx) { //好友排行榜
-    if (!this.friendbutton) {
-      this.friendbutton = wx.createUserInfoButton({
-        type: 'image',
-        image: 'images/home/newrank.png',
-        style: {
-          left: ml+16*ratio,
-          top: nmt  - nb*ratio,
-          width: 280 * ratio,
-          height: 138 * ratio,
-          lineHeight: 40,
-          backgroundColor: '#ff0000',
-          color: '#ffffff',
-          textAlign: 'center',
-          fontSize: 16,
-          borderRadius: 4
-        }
-      })
+  
+  // friendsRankBtn(ctx) { //好友排行榜
+  //   if (!this.friendbutton) {
+  //     this.friendbutton = wx.createUserInfoButton({
+  //       type: 'image',
+  //       image: 'images/home/newrank.png',
+  //       style: {
+  //         left: ml+16*ratio,
+  //         top: nmt + 155 * ratio,
+  //         width: 280 * ratio,
+  //         height: 138 * ratio,
+  //         lineHeight: 40,
+  //         backgroundColor: '#ff0000',
+  //         color: '#ffffff',
+  //         textAlign: 'center',
+  //         fontSize: 16,
+  //         borderRadius: 4
+  //       }
+  //     })
 
-      if(databus.homeState == 2){
-        this.friendbutton.hide()
-      }
+  //     if(databus.homeState == 2){
+  //       this.friendbutton.hide()
+  //     }
 
-      this.friendbutton.onTap((res) => {
-        if (res.rawData)//授权成功
-        {
+  //     this.friendbutton.onTap((res) => {
+  //       if (res.rawData)//授权成功
+  //       {
           
-          this.createbutton.destroy()
-          this.friendbutton.destroy()
-          this.bannerButton.destroy()
-          this.activeBtn.destroy()
-          databus.pownstate = 1;
-          this.getBtnposition()
-          this.render(ctx)
-        }
-      })
-    }
-  }
-  bannerBtn(ctx) { //banner按钮
-    if (!this.bannerButton) {
-      this.bannerButton = wx.createUserInfoButton({
-        type: 'image',
-        image: 'images/home/bannerbtn.png',
-        style: {
+  //         this.createbutton.destroy()
+  //         this.friendbutton.destroy()
+  //         this.bannerButton.destroy()
+  //         this.activeBtn.destroy()
+  //         databus.pownstate = 1;
+  //         this.getBtnposition()
+  //         this.render(ctx)
+  //       }
+  //     })
+  //   }
+  // }
+  // bannerBtn(ctx) { //banner按钮
+  //   if (!this.bannerButton) {
+  //     this.bannerButton = wx.createUserInfoButton({
+  //       type: 'image',
+  //       image: 'images/home/bannerbtn.png',
+  //       style: {
          
-          left: 94 * ratio,
-          top: 420 * ratio,
-          width: 640 * ratio,
-          height: 900 * ratio,
-          lineHeight: 40,
-          backgroundColor: '#ff0000',
-          color: '#ffffff',
-          textAlign: 'center',
-          fontSize: 16,
-          borderRadius: 4
-        }
-      })
+  //         left: 94 * ratio,
+  //         top: 420 * ratio,
+  //         width: 640 * ratio,
+  //         height: 900 * ratio,
+  //         lineHeight: 40,
+  //         backgroundColor: '#ff0000',
+  //         color: '#ffffff',
+  //         textAlign: 'center',
+  //         fontSize: 16,
+  //         borderRadius: 4
+  //       }
+  //     })
 
 
-      if(databus.homeState == 1){
-        this.bannerButton.hide()
-      }
+  //     if(databus.homeState == 1){
+  //       this.bannerButton.hide()
+  //     }
 
 
-      this.bannerButton.onTap((res) => {
-        if (res.rawData)//授权成功
-        {
-          this.createbutton.destroy()
-          this.friendbutton.destroy()
-          this.bannerButton.destroy()
-          this.activeBtn.destroy()
-          databus.pownstate = 1;
-          databus.homeState = 1;
-          this.getBtnposition()
-          this.render(ctx)
-        }
-      })
-    }
-  }
+  //     this.bannerButton.onTap((res) => {
+  //       if (res.rawData)//授权成功
+  //       {
+  //         this.createbutton.destroy()
+  //         this.friendbutton.destroy()
+  //         this.bannerButton.destroy()
+  //         this.activeBtn.destroy()
+  //         databus.pownstate = 1;
+  //         databus.homeState = 1;
+  //         this.getBtnposition()
+  //         this.render(ctx)
+  //       }
+  //     })
+  //   }
+  // }
   loginauthor(ctx) {
     if(databus.homeState != 1){
       databus.gameClubbutton && databus.gameClubbutton.hide()
@@ -535,60 +554,115 @@ export default class PageBtn {
         type: 'image',
         image: 'images/home/newidea.png',
         style: {
-          left: sml2,
-          top: nmt  - nb*ratio ,
-          width: 282 * ratio,
-          height: 138 * ratio
+          left: sml2 - 14 * ratio + 282 * ratio * 0.2 / 2,
+          top: nmt + 145 * ratio + 138 * ratio * 0.2 / 2,
+          width: 282 * ratio * 0.8,
+          height: 138 * ratio * 0.8
         }
       })
+      
     } 
   }
-  login_share_button(ctx){
-    if (!databus.active_state) {
-      ctx.drawImage(activeBtn, 0, 0, 590, 226, ml, nmt + (110 * ratio), 590 * ratio, 226 * ratio)
-    }else{
-      ctx.drawImage(activeBtn, 0, 0, 590, 226, ml_big, nmt_big + (110 * ratio), 590 * ratio * 1.1, 226 * ratio * 1.1 )
+  // login_share_button(ctx){
+  //   if (!databus.active_state) {
+  //     ctx.drawImage(activeBtn, 0, 0, 590, 226, ml, nmt + (110 * ratio), 590 * ratio, 226 * ratio)
+  //   }else{
+  //     ctx.drawImage(activeBtn, 0, 0, 590, 226, ml_big, nmt_big + (110 * ratio), 590 * ratio * 1.1, 226 * ratio * 1.1 )
+  //   }
+  //   if(databus.battlePoint || databus.signPoint || databus.lotteryPoint || databus.plunderPoint){
+  //     ctx.drawImage(Robj["redPoint"], 0, 0, Robj["redPoint"].width, Robj["redPoint"].height, 620 * ratio, 1020 * ratio, 60 * ratio, 60 * ratio);
+  //   }
+  // }
+  // share_button(ctx) {
+  //   if (!this.activeBtn) {
+  //     this.activeBtn = wx.createUserInfoButton({
+  //       type: 'image',
+  //       image: 'images/home/active.png',
+  //       style: {
+  //        left: ml,
+  //         top: nmt+(110*ratio),
+  //         width: 590 * ratio,
+  //         height: 226 * ratio,
+  //         lineHeight: 40,
+  //         backgroundColor: '#ff0000',
+  //         color: '#ffffff',
+  //         textAlign: 'center',
+  //         fontSize: 16,
+  //         borderRadius: 4
+  //       }
+  //     })
+  //     if (databus.homeState == 2) {
+  //       this.activeBtn.hide()
+  //     }
+  //     this.activeBtn.onTap((res) => {
+  //       if (res.rawData)//授权成功
+  //       {
+  //         this.createbutton.destroy()
+  //         this.friendbutton.destroy()
+  //         this.bannerButton.destroy()
+  //         this.activeBtn.destroy()
+  //         databus.homeState = 4;
+  //         databus.pownstate = 1;
+  //         this.getBtnposition()
+  //         this.render(ctx)
+  //       } else {
+  //         wx.showToast({ title: '授权才能参加活动噢～', icon: 'none' })
+  //       }
+  //     })
+  //   }
+  // }
+
+  renderSildeBtn(ctx) {
+    
+    //签到
+    ctx.drawImage(Robj["icon_sign"], 0, 0, Robj["icon_sign"].width, Robj["icon_sign"].height, 0, 450 * ratio, 140 * ratio, 152 * ratio);
+    if (databus.signPoint) {
+      ctx.drawImage(Robj["redPoint"], 0, 0, Robj["redPoint"].width, Robj["redPoint"].height, 140 * ratio, 545 * ratio, 40 * ratio, 40 * ratio);
     }
-    if(databus.battlePoint || databus.signPoint || databus.lotteryPoint || databus.plunderPoint){
-      ctx.drawImage(Robj["redPoint"], 0, 0, Robj["redPoint"].width, Robj["redPoint"].height, 620 * ratio, 1020 * ratio, 60 * ratio, 60 * ratio);
+
+    //抽奖
+    ctx.drawImage(Robj["icon_lottery"], 0, 0, Robj["icon_lottery"].width, Robj["icon_lottery"].height, 0, 630 * ratio, 140 * ratio, 152 * ratio);
+    if (databus.lotteryPoint) {
+      ctx.drawImage(Robj["redPoint"], 0, 0, Robj["redPoint"].width, Robj["redPoint"].height, 140 * ratio, 733 * ratio, 40 * ratio, 40 * ratio);
     }
-  }
-  share_button(ctx) {
-    if (!this.activeBtn) {
-      this.activeBtn = wx.createUserInfoButton({
-        type: 'image',
-        image: 'images/home/active.png',
-        style: {
-         left: ml,
-          top: nmt+(110*ratio),
-          width: 590 * ratio,
-          height: 226 * ratio,
-          lineHeight: 40,
-          backgroundColor: '#ff0000',
-          color: '#ffffff',
-          textAlign: 'center',
-          fontSize: 16,
-          borderRadius: 4
-        }
-      })
-      if (databus.homeState == 2) {
-        this.activeBtn.hide()
+
+    //搜刮
+    ctx.drawImage(Robj["icon_plunder"], 0, 0, Robj["icon_plunder"].width, Robj["icon_plunder"].height, 0, 800 * ratio, 140 * ratio, 152 * ratio);
+    if (databus.plunderPoint) {
+      ctx.drawImage(Robj["redPoint"], 0, 0, Robj["redPoint"].width, Robj["redPoint"].height, 140 * ratio, 896 * ratio, 40 * ratio, 40 * ratio);
+    }
+
+    if (databus.battleInfo) { //有大赛
+      //大赛
+      ctx.drawImage(Robj["icon_battle"], 0, 0, Robj["icon_battle"].width, Robj["icon_battle"].height, 688 * ratio, 450 * ratio, 140 * ratio, 152 * ratio);
+      
+      if (databus.battlePoint) {
+        ctx.drawImage(Robj["redPoint"], 0, 0, Robj["redPoint"].width, Robj["redPoint"].height, 640 * ratio, 545 * ratio, 40 * ratio, 40 * ratio);
       }
-      this.activeBtn.onTap((res) => {
-        if (res.rawData)//授权成功
-        {
-          this.createbutton.destroy()
-          this.friendbutton.destroy()
-          this.bannerButton.destroy()
-          this.activeBtn.destroy()
-          databus.homeState = 4;
-          databus.pownstate = 1;
-          this.getBtnposition()
-          this.render(ctx)
-        } else {
-          wx.showToast({ title: '授权才能参加活动噢～', icon: 'none' })
-        }
-      })
+    }
+    
+    //分享
+    ctx.drawImage(Robj["icon_share"], 0, 0, Robj["icon_share"].width, Robj["icon_share"].height, 688 * ratio, 630 * ratio, 140 * ratio, 152 * ratio);
+
+    //捐赠
+    ctx.drawImage(Robj["icon_donate"], 0, 0, Robj["icon_donate"].width, Robj["icon_donate"].height, 688 * ratio, 800 * ratio, 140 * ratio, 152 * ratio);
+
+    //猜你喜欢
+    ctx.drawImage(Robj["youlike"], 0, 0, Robj["youlike"].width, Robj["youlike"].height, ylc.x , ylc.y, ylc.w, ylc.h);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#000000';
+    ctx.font = 17 * ratio + 'px Arial';
+    //推荐位
+    for (let i = 0; i < 10; i++) {
+      if(i < 5){
+        ctx.drawImage(Robj["recommendBg"], 0, 0, Robj["recommendBg"].width, Robj["recommendBg"].height, rpc.x + (i * 150) * ratio, rpc.y, 118 * ratio, 144 * ratio);
+        ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, rpc.x + (i * 150 + 14) * ratio, rpc.y + 14 * ratio, 92 * ratio, 92 * ratio);
+        ctx.fillText('双枪射击', rpc.x + (i * 150) * ratio + 60 * ratio, rpc.y + 132 * ratio);
+      }else{
+        ctx.drawImage(Robj["recommendBg"], 0, 0, Robj["recommendBg"].width, Robj["recommendBg"].height, rpc.x + ((i - 5) * 150) * ratio, rpc.y + 160 * ratio, 118 * ratio, 144 * ratio);
+        ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, rpc.x + ((i - 5) * 150 + 14) * ratio, rpc.y + 160 * ratio + 14 * ratio, 92 * ratio, 92 * ratio);
+        ctx.fillText('双枪射击', rpc.x + ((i - 5) * 150) * ratio + 60 * ratio, rpc.y + 160 * ratio + 132 * ratio);
+      }
     }
   }
 }

@@ -505,6 +505,34 @@ export default class Map {
         databus.updateMaxScore(databus.gameScore + databus.score)
         this.gameEnd()
       }
+
+      if (databus.steps == 1){
+        if(databus.isLookVideo && databus.isShare){
+
+        }else{
+          if( _.random(0, 9) >= databus.goldrate * 10){
+            databus.oneStepShare = false
+            if(!databus.isLookVideo){
+              databus.gameState = 18
+            }else{
+              if(!databus.isShare){
+                databus.oneStepShare = true
+                databus.gameState = 18
+              }
+            }
+          }else{
+            databus.oneStepShare = true
+            if(!databus.isShare){
+              databus.gameState = 18
+            }else{
+              if(!databus.isLookVideo){
+                databus.oneStepShare = false
+                databus.gameState = 18
+              }
+            }
+          }
+        }
+      }
     }
   }
 
@@ -525,6 +553,8 @@ export default class Map {
         'gamegold': databus.gamegold + databus.stagegold,//本次游戏获得总金币数
       },
       success(data) {
+        wx.aldSendEvent('进度',{'事件' : '游戏结束'})
+
         databus.gameEndTime = (new Date()).getTime() 
         databus.gameState = 2
         databus.battlePrecent = data.body.game.rpercent
@@ -547,12 +577,36 @@ export default class Map {
           self.music.playMusic('noNewRecord')
         }
 
-        if(databus.gameendbanner && databus.gameendbannerurl){
-          databus.isEndBanner = 1
-          databus.bannerAd && databus.bannerAd.hide()
+        // if(databus.gameendbanner && databus.gameendbannerurl){
+        //   databus.isEndBanner = 1
+        //   databus.bannerAd && databus.bannerAd.hide()
+        // }else{
+        //   databus.isEndBanner = 0
+        //   databus.showGameEndAd()
+        // }
+
+        databus.bannerAd && databus.bannerAd.hide()
+        //生成游戏提示概率
+        if( _.random(0, 9) >= databus.goldrate * 10){
+          databus.gameEndOperState = 1
+          if(databus.isLookVideo){
+            if(!databus.isShare){
+              if(databus.shareflag){
+                databus.gameEndOperState = 2
+              }
+            }
+          }
         }else{
-          databus.isEndBanner = 0
-          databus.showGameEndAd()
+          databus.gameEndOperState = 2
+          if(databus.shareflag){
+            if(databus.isShare){
+              if(!databus.isLookVideo){
+                databus.gameEndOperState = 1
+              }
+            }
+          }else{
+            databus.gameEndOperState = 1
+          }
         }
       }
     }

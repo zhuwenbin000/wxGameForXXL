@@ -147,6 +147,11 @@ export default class Index {
 
     ctx.drawImage(shareNext, databus.share_next.x, databus.share_next.y, databus.share_next.w, databus.share_next.h);
 
+    // let shareNext = wx.createImage();
+    // shareNext.src = 'images/battle_friend.png';
+
+    // ctx.drawImage(shareNext, databus.battle_friend.x, databus.battle_friend.y, databus.battle_friend.w, databus.battle_friend.h);
+
 
     // 按钮点击事件,只绑定一次
     if (!this.touchEvent) {

@@ -82,10 +82,10 @@ export default class DataBus {
     this.userinfo = null;//用户的头像等信息
     this.pownstate = 3 //是否授权 1同意 2.拒绝 3.未询问
     this.bestscore = 0;//最高分数
-    this.mt = 610; //头像到顶部的距离 
+    this.mt = 520; //头像到顶部的距离 
     this.br = 80; //头像的半径 
-    this.nmt = 900; //置灰状态下按钮到顶部的距离 
-    this.pmt = 361; //授权状态下按钮到顶部的距离
+    this.nmt = 810; //置灰状态下按钮到顶部的距离 
+    this.pmt = 271; //授权状态下按钮到顶部的距离
     this.nb = 10; //置灰状态下按钮间距
     this.toptxt = {
       w: 718 * ratio,
@@ -100,16 +100,16 @@ export default class DataBus {
       y: 20 * ratio
     }
     this.shareProv = {
-      x: 60 * ratio,
+      x: 25 * ratio,
       y: 1320 * ratio,
-      w: 258 * ratio,
-      h: 130 * ratio
+      w: 238 * ratio,
+      h: 110 * ratio
     }
     this.shareNext = {
-      x: 500 * ratio,
+      x: 260 * ratio,
       y: 1320 * ratio,
-      w: 258 * ratio,
-      h: 130 * ratio
+      w: 238 * ratio,
+      h: 110 * ratio
     }
 
     this.pagesize = {
@@ -147,16 +147,22 @@ export default class DataBus {
       h: 165 * ratio2
     }
     this.share_prev = {
-      x: 60 * ratio,
+      x: 40 * ratio,
       y: 1310 * ratio,
       w: 258 * ratio,
       h: 130 * ratio
     }
     this.share_next = {
-      x: 505 * ratio,
+      x: 260 * ratio,
       y: 1310 * ratio,
       w: 258 * ratio,
       h: 130 * ratio
+    }
+    this.battleFriend = {
+      x: 520 * ratio,
+      y: 1325 * ratio,
+      w: 288 * ratio,
+      h: 100 * ratio
     }
     this.gameendbanner = null //结算页banner
     this.gameendbannerObj = null
@@ -230,8 +236,13 @@ export default class DataBus {
     this.signType = 0 //补签条件 0金币1分享2视频
     this.onMusic = true
     this.sharerate = 0
+    this.goldrate = 0
+    this.crazytimerate = 0
     this.nogoldsharerate = 0
     this.boxbannerrate = 0
+    this.oneStepShare = true
+    this.crazyTimeCost = 1 //1免费 2分享 3视频
+
     //抽奖部分
     this.plunderRecord = []//搜刮记录
     this.boxNum = 0 //拥有箱子的数量
@@ -263,12 +274,14 @@ export default class DataBus {
     }
     this.gameState = 0 //1:游戏中2:游戏结束3:音乐弹框4:彩色道具弹框5:增加步数弹框,6::返回首页,7:游戏过关,8:规则弹框
     this.gameEndState = 0 //0结束 1战报
+    this.gameEndOperState = 1 //1视频 2分享
     this.musicBg = true //背景音默认开
     this.musicSound = true //音效默认开
     this.musicBgState = true //背景音状态
     this.musicSoundState = true //音效默状态
     this.musicBgChange = false //是否结束音效改变
     this.shareConfig = {} //分享配置
+    this.recommendInfoList = [] //推荐位配置
     this.btnPlus = 0 //按钮变大效果
     this.fingerAniTime = 0 //手指滑动动画
     this.firstRule = false //首次进入规则页
@@ -429,25 +442,25 @@ export default class DataBus {
       },
       getScoreCoordinates: { //游戏结束得分
         x: 14 * ratio,
-        y: 150 * ratio + this.gameEndTop,
+        y: 50 * ratio + this.gameEndTop,
         w: 800 * ratio,
         h: 482 * ratio,
       },
       newRecordCoordinates: { //游戏结束新纪录
         x: 560 * ratio,
-        y: 240 * ratio + this.gameEndTop,
+        y: 140 * ratio + this.gameEndTop,
         w: 278 * ratio,
         h: 224 * ratio,
       },
       tipsCoordinates: { //游戏结束提示
         x: 68 * ratio,
-        y: 676 * ratio + this.gameEndTop,
+        y: 596 * ratio + this.gameEndTop,
         w: 692 * ratio,
         h: 248 * ratio,
       },
       shareCoordinates: { //游戏结束分享
         x: (uiWidth - 318) / 2 * ratio,
-        y: 790 * ratio + this.gameEndTop,
+        y: 710 * ratio + this.gameEndTop,
         w: 318 * ratio,
         h: 120 * ratio,
       },
@@ -457,41 +470,41 @@ export default class DataBus {
         // w: 318 * ratio,
         // h: 120 * ratio,
         x: (uiWidth - 318) / 2 * ratio,
-        y: 790 * ratio + this.gameEndTop,
+        y: 710 * ratio + this.gameEndTop,
         w: 318 * ratio,
         h: 120 * ratio,
       },
       indexCoordinates: { //游戏结束首页
-        x: 95 * ratio,
-        y: 1070 * ratio + this.gameEndTop,
-        w: 166 * ratio,
-        h: 166 * ratio,
+        x: 60 * ratio,
+        y: 900 * ratio + this.gameEndTop,
+        w: 128 * ratio,
+        h: 128 * ratio,
       },
       tryAgainCoordinates: { //游戏结束再来一局
-        x: 300 * ratio,
-        y: 1055 * ratio + this.gameEndTop,
-        w: 496 * ratio,
-        h: 200 * ratio,
+        x: 220 * ratio,
+        y: 900 * ratio + this.gameEndTop,
+        w: 128 * ratio,
+        h: 128 * ratio,
       },
       battleIconCoordinates: { //战报icon
-        x: 120 * ratio,
-        y: 940 * ratio + this.gameEndTop,
-        w: 110 * ratio,
-        h: 110 * ratio,
+        x: 390 * ratio,
+        y: 905 * ratio + this.gameEndTop,
+        w: 104 * ratio,
+        h: 104 * ratio,
       },
       addEngCoordinates: { //增加精力
-        x: 315 * ratio,
-        y: 940 * ratio + this.gameEndTop,
-        w: 166 * ratio,
-        h: 106 * ratio,
+        x: 540 * ratio,
+        y: 920 * ratio + this.gameEndTop,
+        w: 150 * ratio,
+        h: 86 * ratio,
       },
       addEngNumCoordinates: { //增加精力数字
-        x: 410 * ratio,
-        y: 1030 * ratio + this.gameEndTop,
+        x: 745 * ratio,
+        y: 980 * ratio + this.gameEndTop,
         font: 36 * ratio + 'px Arial'
       },
       stageScoreCoordinates: { //游戏结束分数
-        x: 325 * ratio,
+        x: 225 * ratio,
         y: 250 * ratio + this.gameEndTop,
         font: 'bold ' + 40 * ratio + 'px Arial'
       },
@@ -507,13 +520,33 @@ export default class DataBus {
       },
       bestScoreCoordinates: { //游戏结束最高得分
         x: (uiWidth / 2) * ratio,
-        y: 530 * ratio + this.gameEndTop,
+        y: 430 * ratio + this.gameEndTop,
         font: 'bold ' + 55 * ratio + 'px Arial'
       },
       preScoreCoordinates: { //预得分
         x: (uiWidth / 2 + 40) * ratio,
         y: 165 * ratio + this.gameTop,
         font: 'bold ' + 40 * ratio + 'px Arial'
+      },
+      youlikeCoordinates: { //猜你喜欢
+        x: 0 * ratio,
+        y: 1035 * ratio + this.gameEndTop,
+        w: 828 * ratio,
+        h: 28 * ratio,
+      },
+      recommendPosterCoordinates: { //推荐位
+        x: 57 * ratio,
+        y: 1095 * ratio + this.gameEndTop,
+      },
+      youlikeHomeCoordinates: { //猜你喜欢
+        x: 0 * ratio,
+        y: canvas.height - 380 * ratio,
+        w: 828 * ratio,
+        h: 28 * ratio,
+      },
+      recommendHomeCoordinates: { //推荐位
+        x: 57 * ratio,
+        y: canvas.height - 330 * ratio,
       },
     }
     //棋盘宽高
@@ -756,6 +789,8 @@ export default class DataBus {
 
     this.gameState = 0
     this.archiveState = true
+
+    wx.aldSendEvent('进度',{'按钮' : '成功保存游戏'})
   }
 
   getWXFunction(name) {
@@ -949,6 +984,7 @@ export default class DataBus {
         isoverday: 1,
         gold: 0
       })
+      wx.aldSendEvent('视频广告成功',{'进度' : '场景-签到'})
     }
 
     if (this.gameState == 15 || this.videoCoin == 150) {
@@ -959,18 +995,35 @@ export default class DataBus {
       this.crazyScore = 0
       this.crazyBombScore = 0
 
+      if(this.videoCoin == 150){
+        wx.aldSendEvent('进入疯狂时刻',{'进度' : '付费方式-金币'})
+      }else{
+        wx.aldSendEvent('进入疯狂时刻',{'进度' : '付费方式-视频'})
+        wx.aldSendEvent('视频广告成功',{'进度' : '场景-进入疯狂时刻'})
+      }
     }
 
     if (this.gameState == 13 || this.videoCoin == 100) {
       //存档
       this.saveGame()
+
+      if(this.videoCoin == 100){
+        wx.aldSendEvent('存档',{'进度' : '付费方式-金币'})
+      }else{
+        wx.aldSendEvent('存档',{'进度' : '付费方式-视频'})
+        wx.aldSendEvent('视频广告成功',{'进度' : '场景-存档'})
+      }
     }
 
-    if (this.gameState == 2) {
+    if (this.gameState == 2 || this.gameState == 18) {
 
       this.continueGame(1, 5)
       this.isLookVideo = true
-
+      if(this.gameState == 18){
+        wx.aldSendEvent('视频广告成功',{'进度' : '场景-剩余1步'})
+      }else{
+        wx.aldSendEvent('视频广告成功',{'进度' : '场景-游戏结束'})
+      }
     }
 
     if (this.musicBgChange) {
@@ -985,6 +1038,7 @@ export default class DataBus {
     this.archiveVideoAd.load()
       .then(() => {
         this.archiveVideoAd.show()
+        wx.aldSendEvent('视频广告触发',{'进度' : '场景-存档'})
       })
       .catch(err => {
         // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
@@ -1000,6 +1054,7 @@ export default class DataBus {
     this.crazyVideoAd.load()
       .then(() => {
         this.crazyVideoAd.show()
+        wx.aldSendEvent('视频广告触发',{'进度' : '场景-进入疯狂时刻'})
       })
       .catch(err => {
         // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
@@ -1015,6 +1070,7 @@ export default class DataBus {
     this.signVideoAd.load()
       .then(() => {
         this.signVideoAd.show()
+        wx.aldSendEvent('视频广告触发',{'进度' : '场景-签到'})
       })
       .catch(err => {
         // wx.showToast({ title: '暂时没有视频广告，过段时间再试试', icon:'none'})
@@ -1220,8 +1276,24 @@ export default class DataBus {
 
         for (let i = 0; i < self.daysinfo.length; i++) {
           if (parseInt(self.daysinfo[i].day) == parseInt(self.getNowTimeStr())) {
-            if (self.daysinfo[i].isdone == '1') {}else{
-              self.signPoint = true
+            if (self.daysinfo[i].isdone == '1') {
+
+            }else{
+              //如果是有活动则展示活动
+              if(self.homeState == 2) return;
+
+              self.homeState = 4
+              self.energySysTab = 1
+              self.gameClubbutton.destroy(); //游戏圈按钮销毁
+              self.gameClubbutton = null
+              self.goSign({
+                openid:wx.getStorageSync('openId'),
+                day:self.daysinfo[i].day,
+                isoverday:0,
+              })
+              self.signPoint = false
+
+              wx.aldSendEvent('签到',{'事件' : databus.daysinfo[i].day})
             }
           }
         }
@@ -1333,11 +1405,13 @@ export default class DataBus {
     const randomNum = this.shareConfig[shareType].length == 1 ? 0 : this.getRandomNum(this.shareConfig[shareType].length-1)
     console.log(randomNum,shareType)
     
+    wx.aldSendEvent('触发分享',{'事件' : "场景-" + shareType})
+
     wx.shareAppMessage({
       'title': this.shareConfig[shareType][randomNum].info, 
       'imageUrl': this.shareConfig[shareType][randomNum].url,
       'imageUrlId': this.shareConfig[shareType][randomNum].imgid,
-      'query':'fatherId=' + wx.getStorageSync('openId') + '&shareType=' + shareType
+      'query':'fatherId=' + wx.getStorageSync('openId') + '&shareType=' + shareType + '&shareMsg=' + this.shareConfig[shareType][randomNum].info
     })
     console.log('分享最短时间：' + this.sharetime)
     
@@ -1347,6 +1421,7 @@ export default class DataBus {
       if(wx.getStorageSync('shareEnd')){
         if(parseInt(wx.getStorageSync('shareEnd')) > parseInt(wx.getStorageSync('shareStart')) + this.sharetime * 1000){
           console.log('分享成功')
+          wx.aldSendEvent('分享成功',{'事件' : "场景-" + shareType})
           callback()
         }else{
           console.log('分享时间太短')

@@ -77,6 +77,9 @@ export default class Main {
     if(res && res.query && res.query.fatherId){
       wx.setStorageSync('fatherId', res.query.fatherId)
       wx.setStorageSync('sharetype', res.query.sharetype)
+      
+      res.query.shareMsg && wx.aldSendEvent('分享卡片',{'文案' : "文案-" + res.query.shareMsg})
+
       console.log(JSON.stringify(res))
     }
 
@@ -281,11 +284,24 @@ export default class Main {
         databus.shareConfig[2] = [] 
         databus.shareConfig[3] = [] 
         databus.shareConfig[4] = [] 
+        databus.shareConfig[5] = [] 
+        databus.shareConfig[6] = [] 
+        databus.shareConfig[7] = [] 
 
         data.body.sharelist && data.body.sharelist.map((item,index)=>{
           databus.shareConfig[item.sharetype].push(item)
         })
         databus.onShareAppMessage()
+      }
+    })
+
+    //推荐位数据
+    ajax({
+      tradecode: 'sys24',
+      apiType: 'user',
+      method: 'POST',
+      success(data) {
+        databus.recommendInfoList = data.body.recommendInfoList
       }
     })
 
@@ -305,6 +321,9 @@ export default class Main {
         databus.nogoldsharerate = data.body.version.nogoldsharerate
         databus.boxbannerrate = data.body.version.boxbannerrate
         databus.sharetime = data.body.version.sharetime
+        databus.goldrate = data.body.version.goldrate
+        databus.crazytimerate = data.body.version.crazytimerate
+        
         if(shareflag){
 
           const openid = wx.getStorageSync('openId')

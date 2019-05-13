@@ -22,6 +22,9 @@ let ssc = databus.GameUI.stageScoreCoordinates //游戏结束最高得分
 let bic = databus.GameUI.battleIconCoordinates //战报icon
 let aec = databus.GameUI.addEngCoordinates //增加精力
 let aenc = databus.GameUI.addEngNumCoordinates //增加精力数字
+let ylc = databus.GameUI.youlikeCoordinates //猜你喜欢
+let rpc = databus.GameUI.recommendPosterCoordinates //推荐位
+
 
 
 let R = {
@@ -35,9 +38,12 @@ let R = {
   "shareToQunGrey": "images/gameEnd/shareToQun-grey.png",
   "tips": "images/gameEnd/tips.png",
   "tips2": "images/gameEnd/tips2.png",
-  "tryAgain": "images/gameEnd/tryAgain.png",
-  "addEnergy": "images/gameEnd/addEnergy.png",
-  "battleReportIcon": "images/gameEnd/battleReportIcon.png",
+  // "tryAgain": "images/gameEnd/tryAgain.png",
+  "tryAgain": "images/news/again.png",
+  // "addEnergy": "images/gameEnd/energ.png",
+  "addEnergy": "images/news/energ.png",
+  // "battleReportIcon": "images/gameEnd/battleReportIcon.png",
+  "battleReportIcon": "images/news/record.png",
   "battleReportBg": "images/gameEnd/battleReportBg.png",
   "modalClose": "images/gameModal/modal_close.png",
   "star": "images/gameEnd/star.png",
@@ -47,6 +53,9 @@ let R = {
   "levelc": "images/gameEnd/c.png",
   "levels": "images/gameEnd/s.png",
   "levelsss": "images/gameEnd/sss.png",
+  "youlike": "images/news/youlike.png",
+  "recommendPoster": "images/news/recommend_poster.png",
+  "recommendBg": "images/news/recommend_bg.png",
 }
 
 //把所有的图片放到一个对象中
@@ -66,24 +75,8 @@ export default class GameEnd {
     ctx.drawImage(Robj["getScore"], 0, 0, Robj["getScore"].width, Robj["getScore"].height, gsc.x, gsc.y, gsc.w, gsc.h);
     //游戏结束首页
     ctx.drawImage(Robj["index"], 0, 0, Robj["index"].width, Robj["index"].height, ic.x, ic.y, ic.w, ic.h);
-    if (databus.shareflag) {//审核模式
-        //游戏结束提示
-        ctx.drawImage(Robj["tips2"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
-      if (!databus.isShare) {
-        //游戏结束分享-未分享
-        ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, 85 * ratio, sc.y, sc.w, sc.h);
-      } else {
-        //游戏结束分享-已分享
-        ctx.drawImage(Robj["shareToQunGrey"], 0, 0, Robj["shareToQunGrey"].width, Robj["shareToQunGrey"].height, 85 * ratio, sc.y, sc.w, sc.h);
-      }
-      if(!databus.isLookVideo){
-        //游戏看视频-未观看
-        ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, 425 * ratio, sc.y, sc.w, sc.h);
-      }else{
-        //游戏看视频-已观看
-        ctx.drawImage(Robj["lookVideoGrey"], 0, 0, Robj["lookVideoGrey"].width, Robj["lookVideoGrey"].height, 425 * ratio, sc.y, sc.w, sc.h);
-      }
-    } else {//非审核模式
+
+    if(databus.gameEndOperState == 1){//显示视频
       //游戏结束提示
       ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
       if(!databus.isLookVideo){
@@ -94,6 +87,48 @@ export default class GameEnd {
         ctx.drawImage(Robj["lookVideoGrey"], 0, 0, Robj["lookVideoGrey"].width, Robj["lookVideoGrey"].height, sc.x, sc.y, sc.w, sc.h);
       }
     }
+
+    if(databus.gameEndOperState == 2){//显示分享
+      //游戏结束提示
+      ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
+      if(!databus.isShare){
+        //游戏结束分享-未观看
+        ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, sc.x, sc.y, sc.w, sc.h);
+      }else{
+        //游戏结束分享-已观看
+        ctx.drawImage(Robj["shareToQunGrey"], 0, 0, Robj["shareToQunGrey"].width, Robj["shareToQunGrey"].height, sc.x, sc.y, sc.w, sc.h);
+      }
+    }
+
+    // if (databus.shareflag) {//非审核模式
+    //     //游戏结束提示
+    //     ctx.drawImage(Robj["tips2"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
+    //   if (!databus.isShare) {
+    //     //游戏结束分享-未分享
+    //     ctx.drawImage(Robj["shareToQun"], 0, 0, Robj["shareToQun"].width, Robj["shareToQun"].height, 85 * ratio, sc.y, sc.w, sc.h);
+    //   } else {
+    //     //游戏结束分享-已分享
+    //     ctx.drawImage(Robj["shareToQunGrey"], 0, 0, Robj["shareToQunGrey"].width, Robj["shareToQunGrey"].height, 85 * ratio, sc.y, sc.w, sc.h);
+    //   }
+    //   if(!databus.isLookVideo){
+    //     //游戏看视频-未观看
+    //     ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, 425 * ratio, sc.y, sc.w, sc.h);
+    //   }else{
+    //     //游戏看视频-已观看
+    //     ctx.drawImage(Robj["lookVideoGrey"], 0, 0, Robj["lookVideoGrey"].width, Robj["lookVideoGrey"].height, 425 * ratio, sc.y, sc.w, sc.h);
+    //   }
+    // } else {//审核模式
+    //   //游戏结束提示
+    //   ctx.drawImage(Robj["tips"], 0, 0, Robj["tips"].width, Robj["tips"].height, tc.x, tc.y, tc.w, tc.h);
+    //   if(!databus.isLookVideo){
+    //     //游戏看视频-未观看
+    //     ctx.drawImage(Robj["lookVideo"], 0, 0, Robj["lookVideo"].width, Robj["lookVideo"].height, sc.x, sc.y, sc.w, sc.h);
+    //   }else{
+    //     //游戏看视频-已观看
+    //     ctx.drawImage(Robj["lookVideoGrey"], 0, 0, Robj["lookVideoGrey"].width, Robj["lookVideoGrey"].height, sc.x, sc.y, sc.w, sc.h);
+    //   }
+    // }
+
     if(databus.isNewScore){
       //游戏结束新纪录
       ctx.drawImage(Robj["newRecord"], 0, 0, Robj["newRecord"].width, Robj["newRecord"].height, nrc.x, nrc.y, nrc.w, nrc.h);
@@ -107,29 +142,47 @@ export default class GameEnd {
     //增加精力
     ctx.drawImage(Robj["addEnergy"], 0, 0, Robj["addEnergy"].width, Robj["addEnergy"].height, aec.x, aec.y, aec.w, aec.h);
     
-    // 昵称
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#fff';
-    ctx.font = unc.font;
-    ctx.fillText(databus.userinfo.userInfo.nickName, unc.x, unc.y);
+    // // 昵称
+    // ctx.textAlign = 'left';
+    // ctx.fillStyle = '#fff';
+    // ctx.font = unc.font;
+    // ctx.fillText(databus.userinfo.userInfo.nickName, unc.x, unc.y);
     //增加精力数字
     ctx.font = aenc.font;
     ctx.fillText('+' + databus.obtainpengry, aenc.x, aenc.y);
-    //历史最高分
-    ctx.font = ssc.font;
-    if (databus.isNewScore) {
-      ctx.fillText('最高得分：' + parseInt(databus.gameScore + databus.score) + '分', ssc.x, ssc.y);
-    }else{
-      ctx.fillText('最高得分：' + databus.bestscore + '分', ssc.x, ssc.y);
-    }
+    // //历史最高分
+    // ctx.font = ssc.font;
+    // if (databus.isNewScore) {
+    //   ctx.fillText('最高得分：' + parseInt(databus.gameScore + databus.score) + '分', ssc.x, ssc.y);
+    // }else{
+    //   ctx.fillText('最高得分：' + databus.bestscore + '分', ssc.x, ssc.y);
+    // }
     //本局分数
     ctx.textAlign = 'center';
     ctx.font = bsc.font;
     ctx.fillText(databus.gameScore + databus.score, bsc.x, bsc.y);
-    //头像
-    let headimg = wx.createImage();
-    headimg.src = databus.userinfo.userInfo.avatarUrl
-    databus.circleImg(ctx, headimg, ac.x, ac.y, ac.r)
+    // //头像
+    // let headimg = wx.createImage();
+    // headimg.src = databus.userinfo.userInfo.avatarUrl
+    // databus.circleImg(ctx, headimg, ac.x, ac.y, ac.r)
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#000000';
+    ctx.font = 17 * ratio + 'px Arial';
+    //猜你喜欢
+    ctx.drawImage(Robj["youlike"], 0, 0, Robj["youlike"].width, Robj["youlike"].height, ylc.x , ylc.y, ylc.w, ylc.h);
+    //推荐位
+    for (let i = 0; i < 10; i++) {
+      if(i < 5){
+        ctx.drawImage(Robj["recommendBg"], 0, 0, Robj["recommendBg"].width, Robj["recommendBg"].height, rpc.x + (i * 150) * ratio, rpc.y, 118 * ratio, 144 * ratio);
+        ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, rpc.x + (i * 150 + 14) * ratio, rpc.y + 14 * ratio, 92 * ratio, 92 * ratio);
+        ctx.fillText('双枪射击', rpc.x + (i * 150) * ratio + 60 * ratio, rpc.y + 132 * ratio);
+      }else{
+        ctx.drawImage(Robj["recommendBg"], 0, 0, Robj["recommendBg"].width, Robj["recommendBg"].height, rpc.x + ((i - 5) * 150) * ratio, rpc.y + 160 * ratio, 118 * ratio, 144 * ratio);
+        ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, rpc.x + ((i - 5) * 150 + 14) * ratio, rpc.y + 160 * ratio + 14 * ratio, 92 * ratio, 92 * ratio);
+        ctx.fillText('双枪射击', rpc.x + ((i - 5) * 150) * ratio + 60 * ratio, rpc.y + 160 * ratio + 132 * ratio);
+      }
+    }
 
     if(phoneh > 1200 * ratio && databus.isEndBanner == 1){
       //海报

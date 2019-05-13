@@ -23,6 +23,8 @@ let shareProv = wx.createImage();
 shareProv.src = 'images/rank/share_prev.png';
 let shareNext = wx.createImage();
 shareNext.src = 'images/rank/share_next.png';
+let battleFriend = wx.createImage();
+battleFriend.src = 'images/rank/battleFriend.png';
 let pageindex = 1;
 const homeimg = wx.createImage();
 homeimg.src = 'images/rank/home.png';
@@ -80,6 +82,9 @@ export default class Index {
     } else {
       ctx.drawImage(shareNext, databus.shareNext.x - (databus.shareNext.w * 0.05), databus.shareNext.y - (databus.shareNext.h * 0.05), databus.shareNext.w * 1.1, databus.shareNext.h * 1.1);
     }
+
+    ctx.drawImage(battleFriend, databus.battleFriend.x, databus.battleFriend.y, databus.battleFriend.w, databus.battleFriend.h);
+    
   }
   messageSharecanvas(type, text) {
     // 排行榜也应该是实时的，所以需要sharedCanvas 绘制新的排行榜
@@ -236,6 +241,11 @@ export default class Index {
           text: ''
         });
       }
+    }
+    if (x >= databus.battleFriend.x && x <= databus.battleFriend.x + databus.battleFriend.w && y >= databus.battleFriend.y && y <= databus.battleFriend.h + databus.battleFriend.y) {
+      this.music.playMusic('btnDown')
+      //排行榜分享
+      databus.wxShare('6')
     }
 
     //页面结束事件
