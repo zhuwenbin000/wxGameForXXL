@@ -253,9 +253,10 @@ export default class Index {
         }
       }
 
-      //推荐位按钮
-      ctx.drawImage(this.Robj["leftRecomd"], 0, 0, this.Robj["leftRecomd"].width, this.Robj["leftRecomd"].height, 0 * ratio, 200 * ratio, 68 * ratio, 76 * ratio);
-      
+      if(databus.shareflag){
+        //推荐位按钮
+        ctx.drawImage(this.Robj["leftRecomd"], 0, 0, this.Robj["leftRecomd"].width, this.Robj["leftRecomd"].height, 0 * ratio, 200 * ratio, 68 * ratio, 76 * ratio);
+      }
       //绘制空进度条
       ctx.drawImage(this.Robj["progressEmpty"], 0, 0, this.Robj["progressEmpty"].width, this.Robj["progressEmpty"].height, pec.x, pec.y, pec.w, pec.h);
 
@@ -730,15 +731,22 @@ export default class Index {
     }
 
     if(x >= databus.bananaX && x <= databus.bananaX + 200 * ratio && y >= databus.bananaY && y <= databus.bananaY + 200 * ratio){
-      
+      if(databus.gameState != 1){
+        return
+      }
 
       if(wx.getStorageSync('hasCrazyTime')){
         if(_.random(0, 9) >= databus.crazytimerate * 10){
           databus.crazyTimeCost = 3
           wx.aldSendEvent('点击疯狂时刻香蕉',{'进度' : '付费方式-视频'})
         }else{
-          databus.crazyTimeCost = 2
-          wx.aldSendEvent('点击疯狂时刻香蕉',{'进度' : '付费方式-分享'})
+          if(!databus.shareflag){
+            databus.crazyTimeCost = 3
+            wx.aldSendEvent('点击疯狂时刻香蕉',{'进度' : '付费方式-视频'})
+          }else{
+            databus.crazyTimeCost = 2
+            wx.aldSendEvent('点击疯狂时刻香蕉',{'进度' : '付费方式-分享'})
+          }
         }
       }else{
         databus.crazyTimeCost = 1
@@ -767,7 +775,7 @@ export default class Index {
           //按钮按下音效
           this.music.playMusic('btnDown')
         }
-        if(databus.shareflag){
+        // if(databus.shareflag){
           // 战报icon事件
           if (x >= bic.x && x <= bic.x + bic.w && y >= bic.y && y <= bic.y + bic.h) {
             //按钮按下音效
@@ -883,7 +891,7 @@ export default class Index {
             databus.bannerAd.hide()
 
           }
-        }
+        // }
         // 再来一局事件
         if (x >= tac.x && x <= tac.x + tac.w && y >= tac.y && y <= tac.y + tac.h) {
           databus.gameState = 1
@@ -992,24 +1000,36 @@ export default class Index {
         }
 
 
-        //推荐位点击区域
-        for (let i = 0; i < databus.recommendInfoList.length; i++) {
-          if(i > 9) return;
-          if(i < 5){
-            var rpx = databus.GameUI.recommendPosterCoordinates.x + (i * 150) * ratio
-            var rpy = databus.GameUI.recommendPosterCoordinates.y
-            var rpw = 118 * ratio
-            var rph = 144 * ratio
-          }else{
-            var rpx = databus.GameUI.recommendPosterCoordinates.x + ((i - 5) * 150) * ratio
-            var rpy = databus.GameUI.recommendPosterCoordinates.y + 160 * ratio
-            var rpw = 118 * ratio
-            var rph = 144 * ratio
-          }
-
-          if (x >= rpx && x <= rpx + rpw && y >= rpy && y <= rpy + rph) {
-            console.log(i)
-            wx.aldSendEvent('游戏推荐点击',{'按钮' : databus.recommendInfoList[i].name + '-结果页'})
+        if(databus.shareflag){
+          //推荐位点击区域
+          for (let i = 0; i < databus.recommendInfoList.length; i++) {
+            if(i > 9) return;
+            if(i < 5){
+              var rpx = databus.GameUI.recommendPosterCoordinates.x + (i * 150) * ratio
+              var rpy = databus.GameUI.recommendPosterCoordinates.y
+              var rpw = 118 * ratio
+              var rph = 144 * ratio
+            }else{
+              var rpx = databus.GameUI.recommendPosterCoordinates.x + ((i - 5) * 150) * ratio
+              var rpy = databus.GameUI.recommendPosterCoordinates.y + 160 * ratio
+              var rpw = 118 * ratio
+              var rph = 144 * ratio
+            }
+  
+            if (x >= rpx && x <= rpx + rpw && y >= rpy && y <= rpy + rph) {
+              console.log(i)
+              wx.navigateToMiniProgram({
+                appId: databus.recommendInfoList[i].appid,
+                path: databus.recommendInfoList[i].jumpdata,
+                envVersion: 'trial',
+                success(res) {
+                  // 打开成功
+                  // console.log("成功")
+                  // console.log(res)
+                }
+              })
+              wx.aldSendEvent('游戏推荐点击',{'按钮' : databus.recommendInfoList[i].name + '-结果页'})
+            }
           }
         }
         
@@ -1363,7 +1383,7 @@ export default class Index {
                 databus.isShare = true
               }, 1000)
               //按钮按下音效
-              this.music.playMusic('btnDown')
+              this.music.playMusic('passPoint')
             })
           }else{
             databus.isVideoing = true
@@ -1430,11 +1450,13 @@ export default class Index {
         this.music.playMusic('btnDown')
       }
 
-      // 推荐位按钮
-      if (x >= 0 && x <= 68 * ratio && y >= 200 * ratio && y <= 200 * ratio + 76 * ratio) {
-        databus.gameState = 19
-        //按钮按下音效
-        this.music.playMusic('btnDown')
+      if(databus.shareflag){
+        // 推荐位按钮
+        if (x >= 0 && x <= 68 * ratio && y >= 200 * ratio && y <= 200 * ratio + 76 * ratio) {
+          databus.gameState = 19
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+        }
       }
 
       // 增加步数购买按钮事件

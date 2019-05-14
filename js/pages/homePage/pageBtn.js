@@ -444,6 +444,8 @@ export default class PageBtn {
           databus.pownstate = 1;
           this.getBtnposition()
           this.render(ctx)
+          databus.getSignInfo()
+
         } else {
           wx.showToast({title: '授权才能进入游戏哦～', icon: 'none' })
         }
@@ -453,7 +455,7 @@ export default class PageBtn {
   }
   loginfriendsRankBtn(ctx) { //好友排行榜
     // if (!databus.friendbtn_state){
-      ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 30 * ratio + 282 * ratio * 0.2 / 2, nmt + 145 * ratio + 138 * ratio * 0.2 / 2, 280 * ratio * 0.8, 138 * ratio * 0.8)
+      ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 46 * ratio + 282 * ratio * 0.2 / 2, nmt + 145 * ratio + 138 * ratio * 0.2 / 2, 280 * ratio * 0.8, 138 * ratio * 0.8)
   //  }else{
       // ctx.drawImage(loginfriendsRankBtn, 0, 0, 280, 138, ml + 30 * ratio - 14 * ratio, nmt + 145 * ratio - 6.9 * ratio, 280 * ratio*1.1, 138 * ratio*1.1)
   //  } 
@@ -554,7 +556,7 @@ export default class PageBtn {
         type: 'image',
         image: 'images/home/newidea.png',
         style: {
-          left: sml2 - 14 * ratio + 282 * ratio * 0.2 / 2,
+          left: sml2 - 30 * ratio + 282 * ratio * 0.2 / 2,
           top: nmt + 145 * ratio + 138 * ratio * 0.2 / 2,
           width: 282 * ratio * 0.8,
           height: 138 * ratio * 0.8
@@ -647,21 +649,24 @@ export default class PageBtn {
     //捐赠
     ctx.drawImage(Robj["icon_donate"], 0, 0, Robj["icon_donate"].width, Robj["icon_donate"].height, 688 * ratio, 800 * ratio, 140 * ratio, 152 * ratio);
 
-    //猜你喜欢
-    ctx.drawImage(Robj["youlike"], 0, 0, Robj["youlike"].width, Robj["youlike"].height, ylc.x , ylc.y, ylc.w, ylc.h);
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#000000';
-    ctx.font = 17 * ratio + 'px Arial';
-    //推荐位
-    for (let i = 0; i < 10; i++) {
-      if(i < 5){
-        ctx.drawImage(Robj["recommendBg"], 0, 0, Robj["recommendBg"].width, Robj["recommendBg"].height, rpc.x + (i * 150) * ratio, rpc.y, 118 * ratio, 144 * ratio);
-        ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, rpc.x + (i * 150 + 14) * ratio, rpc.y + 14 * ratio, 92 * ratio, 92 * ratio);
-        ctx.fillText('双枪射击', rpc.x + (i * 150) * ratio + 60 * ratio, rpc.y + 132 * ratio);
-      }else{
-        ctx.drawImage(Robj["recommendBg"], 0, 0, Robj["recommendBg"].width, Robj["recommendBg"].height, rpc.x + ((i - 5) * 150) * ratio, rpc.y + 160 * ratio, 118 * ratio, 144 * ratio);
-        ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, rpc.x + ((i - 5) * 150 + 14) * ratio, rpc.y + 160 * ratio + 14 * ratio, 92 * ratio, 92 * ratio);
-        ctx.fillText('双枪射击', rpc.x + ((i - 5) * 150) * ratio + 60 * ratio, rpc.y + 160 * ratio + 132 * ratio);
+
+    if(databus.shareflag){
+      //猜你喜欢
+      ctx.drawImage(Robj["youlike"], 0, 0, Robj["youlike"].width, Robj["youlike"].height, ylc.x , ylc.y, ylc.w, ylc.h);
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#000000';
+      ctx.font = 17 * ratio + 'px Arial';
+      //推荐位
+      for (let i = 0; i < databus.recommendInfoList.length; i++) {
+        if(i < 5){
+          ctx.drawImage(Robj["recommendBg"], 0, 0, Robj["recommendBg"].width, Robj["recommendBg"].height, rpc.x + (i * 150) * ratio, rpc.y, 118 * ratio, 144 * ratio);
+          ctx.drawImage(databus.recommendInfoList[i].rilImg, 0, 0, databus.recommendInfoList[i].rilImg.width, databus.recommendInfoList[i].rilImg.height, rpc.x + (i * 150 + 14) * ratio, rpc.y + 14 * ratio, 92 * ratio, 92 * ratio);
+          ctx.fillText(databus.recommendInfoList[i].gamename, rpc.x + (i * 150) * ratio + 60 * ratio, rpc.y + 132 * ratio);
+        }else{
+          ctx.drawImage(Robj["recommendBg"], 0, 0, Robj["recommendBg"].width, Robj["recommendBg"].height, rpc.x + ((i - 5) * 150) * ratio, rpc.y + 160 * ratio, 118 * ratio, 144 * ratio);
+          ctx.drawImage(databus.recommendInfoList[i].rilImg, 0, 0, databus.recommendInfoList[i].rilImg.width, databus.recommendInfoList[i].rilImg.height, rpc.x + ((i - 5) * 150 + 14) * ratio, rpc.y + 160 * ratio + 14 * ratio, 92 * ratio, 92 * ratio);
+          ctx.fillText(databus.recommendInfoList[i].gamename, rpc.x + ((i - 5) * 150) * ratio + 60 * ratio, rpc.y + 160 * ratio + 132 * ratio);
+        }
       }
     }
   }

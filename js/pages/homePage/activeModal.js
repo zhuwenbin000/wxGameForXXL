@@ -133,85 +133,85 @@ export default class ActiveModal {
     ctx.drawImage(Img["close"], 0, 0, Img["close"].width, Img["close"].height, 0 * ratio, 100 * ratio, 80 * ratio, 80 * ratio);
 
     //导航部分
-    // if (databus.battleInfo) { //有大赛
-    //   //大赛
-    //   if (databus.energySysTab == 0) {
-    //     ctx.drawImage(Img["battleDown"], 0, 0, Img["battleDown"].width, Img["battleDown"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   } else {
-    //     ctx.drawImage(Img["battle"], 0, 0, Img["battle"].width, Img["battle"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   }
-    //   if (databus.battlePoint) {
-    //     //红点
-    //     ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    //   }
+    if (databus.battleInfo) { //有大赛
+      //大赛
+      if (databus.energySysTab == 0) {
+        ctx.drawImage(Img["battleDown"], 0, 0, Img["battleDown"].width, Img["battleDown"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["battle"], 0, 0, Img["battle"].width, Img["battle"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      }
+      if (databus.battlePoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+      }
 
-    //   //签到
-    //   if (databus.energySysTab == 1) {
-    //     ctx.drawImage(Img["signDown"], 0, 0, Img["signDown"].width, Img["signDown"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   } else {
-    //     ctx.drawImage(Img["sign"], 0, 0, Img["sign"].width, Img["sign"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   }
-    //   if (databus.signPoint) {
-    //     //红点
-    //     ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    //   }
+      //签到
+      if (databus.energySysTab == 1) {
+        ctx.drawImage(Img["signDown"], 0, 0, Img["signDown"].width, Img["signDown"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["sign"], 0, 0, Img["sign"].width, Img["sign"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      }
+      if (databus.signPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+      }
 
-    //   //抽奖
-    //   if (databus.energySysTab == 2) {
-    //     ctx.drawImage(Img["lotteryDown"], 0, 0, Img["lotteryDown"].width, Img["lotteryDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   } else {
-    //     ctx.drawImage(Img["lottery"], 0, 0, Img["lottery"].width, Img["lottery"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   }
-    //   if (databus.lotteryPoint) {
-    //     //红点
-    //     ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    //   }
+      //抽奖
+      if (databus.energySysTab == 2) {
+        ctx.drawImage(Img["lotteryDown"], 0, 0, Img["lotteryDown"].width, Img["lotteryDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["lottery"], 0, 0, Img["lottery"].width, Img["lottery"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      }
+      if (databus.lotteryPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+      }
 
-    //   //搜刮好友
-    //   if (databus.energySysTab == 3) {
-    //     ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   } else {
-    //     ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   }
-    //   if (databus.plunderPoint) {
-    //     //红点
-    //     ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 715 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    //   }
-    // } else { //无大赛
-    //   //签到
-    //   if (databus.energySysTab == 1) {
-    //     ctx.drawImage(Img["signDown"], 0, 0, Img["signDown"].width, Img["signDown"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   } else {
-    //     ctx.drawImage(Img["sign"], 0, 0, Img["sign"].width, Img["sign"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   }
-    //   if (databus.signPoint) {
-    //     //红点
-    //     ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    //   }
+      //搜刮好友
+      if (databus.energySysTab == 3) {
+        ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 605 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      }
+      if (databus.plunderPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 715 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+      }
+    } else { //无大赛
+      //签到
+      if (databus.energySysTab == 1) {
+        ctx.drawImage(Img["signDown"], 0, 0, Img["signDown"].width, Img["signDown"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["sign"], 0, 0, Img["sign"].width, Img["sign"].height, 58 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      }
+      if (databus.signPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 168 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+      }
 
-    //   //抽奖
-    //   if (databus.energySysTab == 2) {
-    //     ctx.drawImage(Img["lotteryDown"], 0, 0, Img["lotteryDown"].width, Img["lotteryDown"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   } else {
-    //     ctx.drawImage(Img["lottery"], 0, 0, Img["lottery"].width, Img["lottery"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   }
-    //   if (databus.lotteryPoint) {
-    //     //红点
-    //     ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    //   }
+      //抽奖
+      if (databus.energySysTab == 2) {
+        ctx.drawImage(Img["lotteryDown"], 0, 0, Img["lotteryDown"].width, Img["lotteryDown"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["lottery"], 0, 0, Img["lottery"].width, Img["lottery"].height, 242 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      }
+      if (databus.lotteryPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 352 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+      }
 
-    //   //搜刮好友
-    //   if (databus.energySysTab == 3) {
-    //     ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   } else {
-    //     ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
-    //   }
-    //   if (databus.plunderPoint) {
-    //     //红点
-    //     ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
-    //   }
+      //搜刮好友
+      if (databus.energySysTab == 3) {
+        ctx.drawImage(Img["plunderDown"], 0, 0, Img["plunderDown"].width, Img["plunderDown"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      } else {
+        ctx.drawImage(Img["plunder"], 0, 0, Img["plunder"].width, Img["plunder"].height, 422 * ratio, 110 * ratio, 164 * ratio, 164 * ratio);
+      }
+      if (databus.plunderPoint) {
+        //红点
+        ctx.drawImage(Img["redPoint"], 0, 0, Img["redPoint"].width, Img["redPoint"].height, 532 * ratio, 110 * ratio, 60 * ratio, 60 * ratio);
+      }
 
-    // }
+    }
 
 
     //内容部分

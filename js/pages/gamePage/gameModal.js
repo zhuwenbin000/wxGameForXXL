@@ -364,8 +364,8 @@ export default class GameModal {
 
     //10:闯关动画
     if (databus.gameState == 10) {
-      const endTime = 40;
-      const aniTime = 10;
+      const endTime = 70;
+      const aniTime = 20;
       if (databus.passStateTime > endTime - 1){
         databus.passStateTime = 0
         databus.gameState = 1
@@ -389,7 +389,7 @@ export default class GameModal {
           //过关分数
           ctx.fillText(databus.passScore, 440 * ratio, 665 * ratio);
         }
-      } else if (databus.passStateTime > aniTime && databus.passStateTime < 20 + aniTime) {
+      } else if (databus.passStateTime > aniTime && databus.passStateTime < 30 + aniTime) {
         //绘制背景
         ctx.drawImage(Robj["gameEndBg"], 0, 0, canvas.width, canvas.height);
         //关卡
@@ -574,16 +574,16 @@ export default class GameModal {
       ctx.fillStyle = '#0a4d82';
       ctx.font = 17 * ratio + 'px Arial';
       //推荐位
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < databus.recommendInfoList.length; i++) {
         if(i < 4){
-          ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, 30 * ratio + (i * 115) * ratio, 250 * ratio, 76 * ratio, 76 * ratio);
-          ctx.fillText('双枪射击', 68 * ratio + (i * 115) * ratio, 350 * ratio);
+          ctx.drawImage(databus.recommendInfoList[i].rilImg, 0, 0, databus.recommendInfoList[i].rilImg.width, databus.recommendInfoList[i].rilImg.height, 30 * ratio + (i * 115) * ratio, 250 * ratio, 76 * ratio, 76 * ratio);
+          ctx.fillText(databus.recommendInfoList[i].gamename, 68 * ratio + (i * 115) * ratio, 350 * ratio);
         }else if(i >= 4 && i < 8){
-          ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, 30 * ratio + ((i - 4) * 115) * ratio, 370 * ratio, 76 * ratio, 76 * ratio);
-          ctx.fillText('双枪射击', 68 * ratio + ((i - 4) * 115) * ratio, 470 * ratio);
+          ctx.drawImage(databus.recommendInfoList[i].rilImg, 0, 0, databus.recommendInfoList[i].rilImg.width, databus.recommendInfoList[i].rilImg.height, 30 * ratio + ((i - 4) * 115) * ratio, 370 * ratio, 76 * ratio, 76 * ratio);
+          ctx.fillText(databus.recommendInfoList[i].gamename, 68 * ratio + ((i - 4) * 115) * ratio, 470 * ratio);
         }else{
-          ctx.drawImage(Robj["recommendPoster"], 0, 0, Robj["recommendPoster"].width, Robj["recommendPoster"].height, 30 * ratio + ((i - 8) * 115) * ratio, 487 * ratio, 76 * ratio, 76 * ratio);
-          ctx.fillText('双枪射击', 68 * ratio + ((i - 8) * 115) * ratio, 585 * ratio);
+          ctx.drawImage(databus.recommendInfoList[i].rilImg, 0, 0, databus.recommendInfoList[i].rilImg.width, databus.recommendInfoList[i].rilImg.height, 30 * ratio + ((i - 8) * 115) * ratio, 487 * ratio, 76 * ratio, 76 * ratio);
+          ctx.fillText(databus.recommendInfoList[i].gamename, 68 * ratio + ((i - 8) * 115) * ratio, 585 * ratio);
         }
       }
       

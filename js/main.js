@@ -301,7 +301,20 @@ export default class Main {
       apiType: 'user',
       method: 'POST',
       success(data) {
-        databus.recommendInfoList = data.body.recommendInfoList
+        var newArr = [];
+        var list = data.body.recommendInfoList;
+        for (let i = 0; i < list.length; i++) {
+          list[i].gamename = decodeURIComponent(list[i].gamename)
+          list[i].rilImg = wx.createImage()
+          list[i].rilImg.src = list[i].icon
+          if(list[i].gamename.length > 5){
+            list[i].gamename = list[i].gamename.slice(0,5) + '...'
+          }
+          if(databus.navigateToMiniProgramAppIdList.indexOf(list[i].appid) >= 0){
+            newArr.push(list[i])
+          }
+        }
+        databus.recommendInfoList = newArr.sort(databus.compare( 'sort', false ))
       }
     })
 
@@ -394,5 +407,6 @@ export default class Main {
         }
       }
     })
+    
   }
 }

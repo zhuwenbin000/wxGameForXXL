@@ -514,20 +514,24 @@ export default class Map {
             databus.oneStepShare = false
             if(!databus.isLookVideo){
               databus.gameState = 18
+              this.music.playMusic('modalShow')
             }else{
-              if(!databus.isShare){
-                databus.oneStepShare = true
+              if(!databus.isShare && databus.shareflag){
                 databus.gameState = 18
+                this.music.playMusic('modalShow')
+                databus.oneStepShare = true
               }
             }
           }else{
-            databus.oneStepShare = true
-            if(!databus.isShare){
+            if(!databus.isShare && databus.shareflag){
+              databus.oneStepShare = true
               databus.gameState = 18
+              this.music.playMusic('modalShow')
             }else{
               if(!databus.isLookVideo){
                 databus.oneStepShare = false
                 databus.gameState = 18
+                this.music.playMusic('modalShow')
               }
             }
           }

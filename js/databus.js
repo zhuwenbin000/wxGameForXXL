@@ -7,6 +7,7 @@ let uiWidth2 = 1242;//第二版的宽度
 let ratio = canvas.width / uiWidth //设计稿宽度
 let ratio2 = canvas.width / uiWidth2 //设计稿宽度
 
+
 /**
  * 全局状态管理器
  */
@@ -19,6 +20,9 @@ export default class DataBus {
     this.pool = new Pool()
     this.gameTop = 0 * ratio
     this.gameEndTop = 0 * ratio
+
+    this.passMusic = new Audio()
+    this.passMusic.src = 'audio/passPoint.mp3'
 
     //创建游戏视频
     this.createVideoAd()
@@ -57,6 +61,8 @@ export default class DataBus {
   }
 
   reset() {
+    this.navigateToMiniProgramAppIdList = ["wx93c5fb7591fe1aa3","wx6072d64c5a6c5d75","wx41b87faccf3d9f32","wxe36d35634952a02a","wx3efb95b9c5579418","wxabee9afe62d0b114","wx89efb2282d65a2d0","wxae33d68413f40641","wx9b6c1a58a63512f9","wx34b348b28b933474"],
+    
     this.clickTimes = 1;//点击次数
     this.getScore = 0;
     this.tip_success = false
@@ -530,13 +536,13 @@ export default class DataBus {
       },
       youlikeCoordinates: { //猜你喜欢
         x: 0 * ratio,
-        y: 1035 * ratio + this.gameEndTop,
+        y: canvas.height - 380 * ratio,
         w: 828 * ratio,
         h: 28 * ratio,
       },
       recommendPosterCoordinates: { //推荐位
         x: 57 * ratio,
-        y: 1095 * ratio + this.gameEndTop,
+        y: canvas.height - 330 * ratio,
       },
       youlikeHomeCoordinates: { //猜你喜欢
         x: 0 * ratio,
@@ -674,7 +680,7 @@ export default class DataBus {
     this.bananaY = 600 * ratio //香蕉的Y坐标
     this.crazyRemain = 20 //crazy20秒倒计时
     this.crazyRateInterval = 10 //时间间隔-秒
-    this.crazyStartInterval = 60 //时间间隔-秒
+    this.crazyStartInterval = 15 //时间间隔-秒
     this.bananaTime = 0 //香蕉的移动时间
     this.bananaClick = false //香蕉是否被点击
     this.crazyMusic = true //crazy music
@@ -1020,6 +1026,10 @@ export default class DataBus {
       this.continueGame(1, 5)
       this.isLookVideo = true
       if(this.gameState == 18){
+        //按钮按下音效
+        // this.music.playMusic('passPoint')
+        this.passMusic.currentTime = 0
+        this.passMusic.play()
         wx.aldSendEvent('视频广告成功',{'进度' : '场景-剩余1步'})
       }else{
         wx.aldSendEvent('视频广告成功',{'进度' : '场景-游戏结束'})
@@ -1279,6 +1289,7 @@ export default class DataBus {
             if (self.daysinfo[i].isdone == '1') {
 
             }else{
+              if(self.pownstate != 1) return;
               //如果是有活动则展示活动
               if(self.homeState == 2) return;
 
@@ -1286,14 +1297,14 @@ export default class DataBus {
               self.energySysTab = 1
               self.gameClubbutton.destroy(); //游戏圈按钮销毁
               self.gameClubbutton = null
-              self.goSign({
-                openid:wx.getStorageSync('openId'),
-                day:self.daysinfo[i].day,
-                isoverday:0,
-              })
-              self.signPoint = false
+              // self.goSign({
+              //   openid:wx.getStorageSync('openId'),
+              //   day:self.daysinfo[i].day,
+              //   isoverday:0,
+              // })
+              // self.signPoint = false
 
-              wx.aldSendEvent('签到',{'事件' : databus.daysinfo[i].day})
+              // wx.aldSendEvent('签到',{'事件' : databus.daysinfo[i].day})
             }
           }
         }
@@ -1398,6 +1409,18 @@ export default class DataBus {
     var Range = Max - 0;
     var Rand = Math.random();
     return (0 + Math.round(Rand * Range));
+  }
+
+  compare(property,desc) {
+    return function ( a, b ) {
+      var value1 = a[property];
+      var value2 = b[property];
+      if ( desc == true ) {
+        return value1 - value2;          
+      } else {                     
+        return value2 - value1;
+      }
+    }
   }
 
   wxShare(shareType, callback) {

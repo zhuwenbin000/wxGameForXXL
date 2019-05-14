@@ -210,24 +210,36 @@ export default class Index {
         databus.showSignVideoAd()
       }
 
-      //推荐位点击区域
-      for (let i = 0; i < databus.recommendInfoList.length; i++) {
-        if(i > 9) return;
-        if(i < 5){
-          var rpx = databus.GameUI.recommendHomeCoordinates.x + (i * 150) * ratio
-          var rpy = databus.GameUI.recommendHomeCoordinates.y
-          var rpw = 118 * ratio
-          var rph = 144 * ratio
-        }else{
-          var rpx = databus.GameUI.recommendHomeCoordinates.x + ((i - 5) * 150) * ratio
-          var rpy = databus.GameUI.recommendHomeCoordinates.y + 160 * ratio
-          var rpw = 118 * ratio
-          var rph = 144 * ratio
-        }
+      if(databus.shareflag){
+        //推荐位点击区域
+        for (let i = 0; i < databus.recommendInfoList.length; i++) {
+          if(i > 9) return;
+          if(i < 5){
+            var rpx = databus.GameUI.recommendHomeCoordinates.x + (i * 150) * ratio
+            var rpy = databus.GameUI.recommendHomeCoordinates.y
+            var rpw = 118 * ratio
+            var rph = 144 * ratio
+          }else{
+            var rpx = databus.GameUI.recommendHomeCoordinates.x + ((i - 5) * 150) * ratio
+            var rpy = databus.GameUI.recommendHomeCoordinates.y + 160 * ratio
+            var rpw = 118 * ratio
+            var rph = 144 * ratio
+          }
 
-        if (x >= rpx && x <= rpx + rpw && y >= rpy && y <= rpy + rph) {
-          console.log(i)
-          wx.aldSendEvent('游戏推荐点击',{'按钮' : databus.recommendInfoList[i].name + '-首页'})
+          if (x >= rpx && x <= rpx + rpw && y >= rpy && y <= rpy + rph) {
+            console.log(i)
+            wx.navigateToMiniProgram({
+              appId: databus.recommendInfoList[i].appid,
+              path: databus.recommendInfoList[i].jumpdata,
+              envVersion: 'trial',
+              success(res) {
+                // 打开成功
+                // console.log("成功")
+                // console.log(res)
+              }
+            })
+            wx.aldSendEvent('游戏推荐点击',{'按钮' : databus.recommendInfoList[i].gamename + '-首页'})
+          }
         }
       }
       
@@ -661,65 +673,65 @@ export default class Index {
           }
         }
         //大赛tab点击
-        // if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-        //   //按钮按下音效     
-        //   this.music.playMusic('btnDown')
-        //   if(databus.battleInfo){//有无大赛判断
-        //     databus.energySysTab = 0;
-        //   }else{
-        //     databus.energySysTab = 1;
-        //   }
-        // }
-        // //签到tab点击
-        // if (x >= 242 * ratio && x <= (242 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-        //   //按钮按下音效
-        //   this.music.playMusic('btnDown')
-        //   if(databus.battleInfo){//有无大赛判断
-        //     databus.energySysTab = 1;
-        //   }else{
-        //     databus.energySysTab = 2;
-        //     databus.getUserInfo()
-        //     databus.showOpenBoxAd()
-        //   }
-        // }
-        // //抽奖tab点击
-        // if (x >= 422 * ratio && x <= (422 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-        //   //按钮按下音效
-        //   databus.ji_pageindex = 1;
-        //   databus.tip_flase = false;
-        //  databus.tip_success = false;
-        //   this.music.playMusic('btnDown')
-        //   if(databus.battleInfo){//有无大赛判断
-        //     databus.energySysTab = 2;
-        //     databus.getUserInfo()
-        //     databus.showOpenBoxAd()
-        //   }else{
-        //     databus.energySysTab = 3;
-        //     if(databus.clickTimes > 1){
-        //       databus.getFriendsList()      
-        //     }else{
-        //       databus.clickTimes++
-        //     }
-        //   }
-        // }
+        if (x >= 80 * ratio && x <= (80 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+          //按钮按下音效     
+          this.music.playMusic('btnDown')
+          if(databus.battleInfo){//有无大赛判断
+            databus.energySysTab = 0;
+          }else{
+            databus.energySysTab = 1;
+          }
+        }
+        //签到tab点击
+        if (x >= 242 * ratio && x <= (242 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+          //按钮按下音效
+          this.music.playMusic('btnDown')
+          if(databus.battleInfo){//有无大赛判断
+            databus.energySysTab = 1;
+          }else{
+            databus.energySysTab = 2;
+            databus.getUserInfo()
+            databus.showOpenBoxAd()
+          }
+        }
+        //抽奖tab点击
+        if (x >= 422 * ratio && x <= (422 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+          //按钮按下音效
+          databus.ji_pageindex = 1;
+          databus.tip_flase = false;
+         databus.tip_success = false;
+          this.music.playMusic('btnDown')
+          if(databus.battleInfo){//有无大赛判断
+            databus.energySysTab = 2;
+            databus.getUserInfo()
+            databus.showOpenBoxAd()
+          }else{
+            databus.energySysTab = 3;
+            if(databus.clickTimes > 1){
+              databus.getFriendsList()      
+            }else{
+              databus.clickTimes++
+            }
+          }
+        }
 
-        // if(databus.battleInfo){//有无大赛判断
-        //   //搜刮tab点击
-        //   if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
-        //     //按钮按下音效
-        //     databus.ji_pageindex = 1;
-        //     databus.tip_flase = false;
-        //     databus.tip_success = false;
-        //     this.music.playMusic('btnDown')
-        //     databus.energySysTab = 3;
-        //     console.log(databus.clickTimes)
-        //     if (databus.clickTimes > 1) {
-        //       databus.getFriendsList()
-        //     }else{
-        //       databus.clickTimes++
-        //     }
-        //   }
-        // }
+        if(databus.battleInfo){//有无大赛判断
+          //搜刮tab点击
+          if (x >= 605 * ratio && x <= (605 * ratio + 164 * ratio) && y >= 110 * ratio && y <= (110 * ratio + 164 * ratio)) {
+            //按钮按下音效
+            databus.ji_pageindex = 1;
+            databus.tip_flase = false;
+            databus.tip_success = false;
+            this.music.playMusic('btnDown')
+            databus.energySysTab = 3;
+            console.log(databus.clickTimes)
+            if (databus.clickTimes > 1) {
+              databus.getFriendsList()
+            }else{
+              databus.clickTimes++
+            }
+          }
+        }
       } 
     } 
   }
