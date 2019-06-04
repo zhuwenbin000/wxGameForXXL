@@ -61,7 +61,7 @@ export default class DataBus {
   }
 
   reset() {
-    this.navigateToMiniProgramAppIdList = ["wx93c5fb7591fe1aa3","wx6072d64c5a6c5d75","wx41b87faccf3d9f32","wxe36d35634952a02a","wx3efb95b9c5579418","wxabee9afe62d0b114","wx89efb2282d65a2d0","wxae33d68413f40641","wx9b6c1a58a63512f9","wx34b348b28b933474"],
+    this.navigateToMiniProgramAppIdList = ["wx4521ea397f62fae6","wx2213e653be9376e3"],
     
     this.clickTimes = 1;//点击次数
     this.getScore = 0;
