@@ -266,7 +266,7 @@ export default class DataBus {
     this.exchangeBoxAniTime = 0 //换取动画帧
 
     this.energySysLoad = false //精力系统加载状态
-    this.version = '0.0.2.5';
+    this.version = '0.0.2.6';
     this.shareflag = false; //true为非审核模式
     this.showRule = true;
     this.scene = 0 //场景id
